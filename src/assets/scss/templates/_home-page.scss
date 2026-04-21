@@ -1,0 +1,32 @@
+.home-page__header {
+  margin-top: -65px;
+  color: var(--main-light);
+
+  &-wrapper {
+    padding: 103px 90px 45px;
+    background-color: var(--main-green-dark);
+    border-radius: 0 0 70px 70px;
+  }
+
+  h1 {
+    font-family: "Etude Noire", serif;
+    font-size: 100px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 10px;
+  }
+
+  &-text {
+    margin-bottom: 50px;
+    font-size: 24px;
+  }
+
+  &-button {
+    padding: 20px 150px;
+  }
+
+  &-img {
+    margin-top: -156px;
+  }
+}

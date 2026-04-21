@@ -1,0 +1,56 @@
+.city-switcher {
+  position: relative;
+
+  &__current {
+    display: flex;
+    align-items: center;
+    padding: 5px 5px 5px 20px;
+    border-radius: 100px;
+    background-color: var(--secondary-light-10);
+    color: var(--main-light);
+
+    &-btn {
+      display: flex;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--main-orange);
+      margin-left: 20px;
+      border-radius: 100%;
+    }
+
+    &-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--main-light);
+    }
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+    fill: var(--main-light);
+    margin-right: 5px;
+  }
+
+  &__dropdown {
+    position: absolute;
+    background-color: var(--main-green-dark);
+    top: calc(100% + 10px);
+    left: 0;
+    width: 100%;
+
+    li {
+      padding: 10px;
+
+      a {
+        color: var(--main-light);
+      }
+
+      span {
+        color: var(--secondary-light-30);
+      }
+    }
+  }
+}

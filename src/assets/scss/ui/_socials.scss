@@ -1,0 +1,30 @@
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  &__item {
+
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    border: 1.5px solid var(--main-light);
+    background-color: var(--secondary-light-30);
+    transition: 0.3s all;
+    overflow: hidden;
+
+    svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--main-light);
+    }
+
+    &:hover {}
+  }
+}

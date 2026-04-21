@@ -1,0 +1,22 @@
+html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  font-family: Manrope, serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+main {
+  overflow-x: hidden;
+  flex: 1 0 auto;
+  padding-top: 232px;
+}
+
