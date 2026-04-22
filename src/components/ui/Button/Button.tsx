@@ -25,7 +25,7 @@ export default function Button({
             <span className="button__text">{children}</span>
             {withArrow && (
                 <span className="button__arrow">
-                    <Icon name="arrow" />
+                    <Icon name="arrow-long" />
                 </span>
             )}
         </button>
