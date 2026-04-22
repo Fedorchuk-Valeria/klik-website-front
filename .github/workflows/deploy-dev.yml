@@ -1,0 +1,28 @@
+name: Deploy Front (dev)
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_KEY }}
+          script: |
+            cd /home/deploy/Klick2026Edtech-front
+            git fetch origin
+            git checkout -B develop origin/develop
+            git pull --ff-only
+            export $(cat .env.dev | xargs)
+            docker compose -p klick-front-dev --env-file=.env.dev build --no-cache
+            docker compose -p klick-front-dev --env-file=.env.dev up -d

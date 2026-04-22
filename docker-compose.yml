@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  react-app:
+    container_name: klick-front-${ENV_NAME}
+    build:
+      context: .
+      args:
+        ENV_NAME: ${ENV_NAME}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      dockerfile: Dockerfile
+    ports:
+      - "${REACT_PORT}:3000"
+    env_file:
+      - .env.${ENV_NAME}
+    networks:
+      - backend-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  backend-network:
+    name: klick-network-${ENV_NAME}
+    external: true
