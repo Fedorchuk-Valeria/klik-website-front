@@ -19,7 +19,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_KEY }}
           script: |
-            cd /home/deploy/Klick2026Edtech-front
+            cd /home/ontid/Klick2026Edtech-front
             git fetch origin
             git checkout -B main origin/main
             git pull --ff-only
