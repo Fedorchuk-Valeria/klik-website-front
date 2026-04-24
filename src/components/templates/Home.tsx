@@ -2,6 +2,7 @@ import {Page} from "@/src/lib/content/types";
 import Image from 'next/image';
 import headerImg from '@/src/assets/images/templates/homepage/header.png';
 import Button from "@/src/components/ui/Button/Button";
+import FAQ from "@/src/components/ui/Faq/Faq";
 
 type Props = {
     page: Page;
@@ -9,6 +10,7 @@ type Props = {
 export default function Home({ page }: Props) {
 
     const header = page?.content?.header;
+    const faq = page?.content?.faq;
 
     return (
         <main className='main home-page'>
@@ -49,11 +51,32 @@ export default function Home({ page }: Props) {
                     <h2>Отзывы</h2>
                 </div>
             </section>
-            <section style={{ padding: '150px 0' }} id='faq'>
-                <div className="container">
-                    <h2>Нас часто спрашивают</h2>
+            {faq ?
+            <section className='home-page__block home-page__faq' id='faq'>
+                <div className="home-page__container">
+                    <div className="home-page__faq-wrapper">
+                        <div className="home-page__faq-left">
+                            <div className="home-page__faq-top">
+                                {faq?.tag && <div className="home-page__tag">{faq.tag}</div>}
+                                {faq?.title && <h2 className="home-page__h2 home-page__faq-title">{faq.title}</h2>}
+                                {faq?.text && <div className="home-page__faq-text">{faq.text}</div>}
+                            </div>
+                            <div className="home-page__faq-bottom">
+                                <div className="home-page__faq-bottom_body">
+                                    {faq?.footer?.title && <div className="home-page__faq-bottom_title">{faq.footer.title}</div>}
+                                    {faq?.footer?.text && <div className="home-page__faq-bottom_text">{faq.footer.text}</div>}
+                                    {faq?.footer?.button?.title && faq?.footer?.button?.url && <Button className='home-page__faq-bottom_btn' withArrow={true}>{faq.footer.button.title}</Button>}
+                                </div>
+                            </div>
+                        </div>
+                        {faq?.items &&
+                            <div className="home-page__faq-right">
+                                <FAQ items={faq.items} />
+                            </div>
+                        }
+                    </div>
                 </div>
-            </section>
+            </section> : null}
         </main>
     );
 }

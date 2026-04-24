@@ -1,32 +1,152 @@
-.home-page__header {
-  margin-top: -65px;
-  color: var(--main-light);
-
-  &-wrapper {
-    padding: 103px 90px 45px;
-    background-color: var(--main-green-dark);
-    border-radius: 0 0 70px 70px;
+.home-page {
+  &__block {
+    padding-bottom: 180px;
   }
 
-  h1 {
+  &__h2 {
+    color: var(--main-green-dark);
     font-family: "Etude Noire", serif;
-    font-size: 100px;
-    font-style: normal;
+    font-size: 60px;
     font-weight: 500;
-    line-height: normal;
-    margin-bottom: 10px;
   }
 
-  &-text {
+  &__tag {
+    display: inline-flex;
+    height: 37px;
+    padding: 10px 30px 10px 14px;
+    border-radius: 100px;
+    background: var(--main-green-neon);
+    align-items: center;
+    gap: 30px;
+    color: var(--main-orange);
+    font-family: "Etude Noire", serif;
+    font-size: 16px;
+    font-weight: 500;
     margin-bottom: 50px;
-    font-size: 24px;
+
+    &:before {
+      content: '';
+      background-color: var(--main-light);
+      width: 10px;
+      height: 10px;
+      border-radius: 100%;
+    }
   }
 
-  &-button {
-    padding: 20px 150px;
+  &__container {
+    max-width: 1740px;
+    margin: 0 auto;
+    padding: 0 10px;
   }
 
-  &-img {
-    margin-top: -156px;
+  &__header {
+    margin-top: -65px;
+    color: var(--main-light);
+
+    &-wrapper {
+      padding: 103px 90px 45px;
+      background-color: var(--main-green-dark);
+      border-radius: 0 0 70px 70px;
+    }
+
+    h1 {
+      font-family: "Etude Noire", serif;
+      font-size: 100px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      margin-bottom: 10px;
+    }
+
+    &-text {
+      margin-bottom: 50px;
+      font-size: 24px;
+    }
+
+    &-button {
+      padding: 20px 150px;
+    }
+
+    &-img {
+      margin-top: -156px;
+    }
+  }
+
+  &__faq {
+    &-title {
+      margin-bottom: 30px;
+    }
+
+    &-text {
+      color: var(--main-black);
+      font-size: 24px;
+    }
+
+    &-wrapper {
+      display: flex;
+    }
+    &-left {
+      flex: 0 0 43%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    &-top {
+      max-width: 482px;
+    }
+    &-bottom {
+      padding: 50px;
+      border: 1.5px solid var(--main-orange);
+      border-radius: 70px 0 0 70px;
+      margin-right: -40px;
+      margin-bottom: 2px;
+      position: relative;
+      z-index: -1;
+
+      &:after {
+        content: '';
+        width: 4px;
+        height: 100%;
+        background-color: var(--main-bg);
+        position: absolute;
+        right: -2px;
+        top: 0;
+      }
+
+      &_body {
+        max-width: 463px;
+      }
+
+      &_title {
+        font-family: "Etude Noire", serif;
+        font-size: 40px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        margin-bottom: 20px;
+        color: var(--main-green-dark);
+      }
+
+      &_text {
+        color: var(--main-burgundy);
+        font-size: 20px;
+        margin-bottom: 60px;
+      }
+
+      &_btn {
+        padding: 20px 150px;
+
+        .button__arrow {
+          background-color: var(--main-green-dark);
+
+          svg {
+            fill: var(--main-light);
+          }
+        }
+      }
+    }
+    &-right {
+      flex: 0 0 57%;
+    }
   }
 }
