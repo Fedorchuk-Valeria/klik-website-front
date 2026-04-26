@@ -72,6 +72,21 @@
     }
   }
 
+  &__formats {
+    &-top {
+      display: flex;
+      gap: 39px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 100px;
+    }
+    &-text {
+      max-width: 728px;
+      font-size: 24px;
+      color: var(--main-black);
+    }
+  }
+
   &__faq {
     &-title {
       margin-bottom: 30px;
