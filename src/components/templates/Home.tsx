@@ -3,6 +3,7 @@ import Image from 'next/image';
 import headerImg from '@/src/assets/images/templates/homepage/header.png';
 import Button from "@/src/components/ui/Button/Button";
 import FAQ from "@/src/components/ui/Faq/Faq";
+import FormatsList from "@/src/components/template-parts/FormatsList/FormatsList";
 
 type Props = {
     page: Page;
@@ -11,6 +12,7 @@ export default function Home({ page }: Props) {
 
     const header = page?.content?.header;
     const faq = page?.content?.faq;
+    const formats = page?.content?.formats;
 
     return (
         <main className='main home-page'>
@@ -49,6 +51,20 @@ export default function Home({ page }: Props) {
             <section style={{ padding: '150px 0' }} id='reviews'>
                 <div className="container">
                     <h2>Отзывы</h2>
+                </div>
+            </section>
+            <section className='home-page__block home-page__formats' id='formats'>
+                <div className="home-page__container">
+                    <div className="home-page__formats-wrapper">
+                        {formats?.tag && <div className="home-page__tag">{formats.tag}</div>}
+                        <div className="home-page__formats-top">
+                            {formats?.title && <h2 className="home-page__h2 home-page__formats-title">{formats.title}</h2>}
+                            {formats?.text && <div className="home-page__formats-text">{formats.text}</div>}
+                        </div>
+                        <div className="home-page__formats-body">
+                            <FormatsList items={formats.items} />
+                        </div>
+                    </div>
                 </div>
             </section>
             {faq ?
