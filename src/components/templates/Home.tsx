@@ -4,15 +4,29 @@ import headerImg from '@/src/assets/images/templates/homepage/header.png';
 import Button from "@/src/components/ui/Button/Button";
 import FAQ from "@/src/components/ui/Faq/Faq";
 import FormatsList from "@/src/components/template-parts/FormatsList/FormatsList";
+import React from "react";
+import imgBlue from "@/src/assets/images/templates/homepage/programs/blue.jpg";
+import imgPink from "@/src/assets/images/templates/homepage/programs/pink.jpg";
+import imgGreen from "@/src/assets/images/templates/homepage/programs/green.jpg";
+import Link from "next/link";
+import Icon from "@/src/components/ui/Icon/Icon";
 
 type Props = {
     page: Page;
 };
+
+export const programImages: Record<string, string> = {
+    blue: imgBlue.src,
+    pink: imgPink.src,
+    green: imgGreen.src,
+};
+
 export default function Home({ page }: Props) {
 
     const header = page?.content?.header;
     const faq = page?.content?.faq;
     const formats = page?.content?.formats;
+    const programs = page?.content?.programs;
 
     return (
         <main className='main home-page'>
@@ -32,25 +46,33 @@ export default function Home({ page }: Props) {
                     </div>
                 </div>
             </section>
-
-            <section style={{ padding: '150px 0' }} id='about'>
-                <div className="container">
-                    <h2>О школе</h2>
-                </div>
-            </section>
-            <section style={{ padding: '150px 0' }} id='programms'>
-                <div className="container">
-                    <h2>Программ</h2>
-                </div>
-            </section>
-            <section style={{ padding: '150px 0' }} id='location'>
-                <div className="container">
-                    <h2>Локации</h2>
-                </div>
-            </section>
-            <section style={{ padding: '150px 0' }} id='reviews'>
-                <div className="container">
-                    <h2>Отзывы</h2>
+            <section className='home-page__block home-page__programs' id='programs'>
+                <div className="home-page__container">
+                    <div className="home-page__programs-wrapper">
+                        {programs?.tag && <div className="home-page__tag">{programs.tag}</div>}
+                        <div className="home-page__programs-top">
+                            {programs?.title && <h2 className="home-page__h2 home-page__programs-title">{programs.title}</h2>}
+                            {programs?.text && <div className="home-page__programs-text">{programs.text}</div>}
+                        </div>
+                        <div className="home-page__programs-body">
+                            {programs?.items.map((item: any, index: number) => {
+                                return (
+                                    <Link className={`home-page__programs-item ${item.class}`} key={index} href={'#'}>
+                                        <div className="home-page__programs-item_more">
+                                            <Icon className='home-page__programs-item_icon' name='arrow-long' />
+                                        </div>
+                                        <div className="home-page__programs-item_top">
+                                            {item?.tag && <div className="home-page__programs-item_tag">{item.tag}</div>}
+                                            {item?.class && <Image className='home-page__programs-item_image' src={programImages[item.class]} alt={item.title} width={253} height={193} />}
+                                            {item?.quote && <div className="home-page__programs-item_quote">{item.quote}</div>}
+                                        </div>
+                                        {item?.title && <div className="home-page__programs-item_title">{item.title}</div>}
+                                        {item?.text && <div className="home-page__programs-item_text">{item.text}</div>}
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    </div>
                 </div>
             </section>
             <section className='home-page__block home-page__formats' id='formats'>
