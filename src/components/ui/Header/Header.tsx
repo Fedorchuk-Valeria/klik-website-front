@@ -15,10 +15,7 @@ export default async function Header() {
     const slug = headersList.get('x-city');
 
     const currentCity =
-        cities.find(city => city.slug === slug) || cities[0];
-
-    console.log('slug=', slug);
-    console.log('currentCity=', currentCity);
+        cities.find(city => city.slug === slug) || cities[0];;
 
     const headerMenu: MenuItem[] = [
         {
