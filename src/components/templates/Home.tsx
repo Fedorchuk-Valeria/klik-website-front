@@ -1,15 +1,15 @@
-import {Page} from "@/src/lib/content/types";
-import Image from 'next/image';
 import headerImg from '@/src/assets/images/templates/homepage/header.png';
+import imgBlue from "@/src/assets/images/templates/homepage/programs/blue.jpg";
+import imgGreen from "@/src/assets/images/templates/homepage/programs/green.jpg";
+import imgPink from "@/src/assets/images/templates/homepage/programs/pink.jpg";
+import FormatsList from "@/src/components/template-parts/FormatsList/FormatsList";
 import Button from "@/src/components/ui/Button/Button";
 import FAQ from "@/src/components/ui/Faq/Faq";
-import FormatsList from "@/src/components/template-parts/FormatsList/FormatsList";
-import React from "react";
-import imgBlue from "@/src/assets/images/templates/homepage/programs/blue.jpg";
-import imgPink from "@/src/assets/images/templates/homepage/programs/pink.jpg";
-import imgGreen from "@/src/assets/images/templates/homepage/programs/green.jpg";
-import Link from "next/link";
 import Icon from "@/src/components/ui/Icon/Icon";
+import { Page } from "@/src/lib/content/types";
+import Image from 'next/image';
+import Link from "next/link";
+import WhatWeLearn from '../template-parts/WhatWeLearn';
 
 type Props = {
     page: Page;
@@ -27,6 +27,7 @@ export default function Home({ page }: Props) {
     const faq = page?.content?.faq;
     const formats = page?.content?.formats;
     const programs = page?.content?.programs;
+    const whatWeLearn = page?.content?.whatWeLearn;
 
     return (
         <main className='main home-page'>
@@ -46,18 +47,21 @@ export default function Home({ page }: Props) {
                     </div>
                 </div>
             </section>
+
             <section className='home-page__block home-page__programs' id='programs'>
                 <div className="home-page__container">
                     <div className="home-page__programs-wrapper">
                         {programs?.tag && <div className="home-page__tag">{programs.tag}</div>}
+
                         <div className="home-page__programs-top">
                             {programs?.title && <h2 className="home-page__h2 home-page__programs-title">{programs.title}</h2>}
                             {programs?.text && <div className="home-page__programs-text">{programs.text}</div>}
                         </div>
+
                         <div className="home-page__programs-body">
-                            {programs?.items.map((item: any, index: number) => {
+                            {programs?.items.map((item: Record<string, string>, index: number) => {
                                 return (
-                                    <Link className={`home-page__programs-item ${item.class}`} key={index} href={'#'}>
+                                    <Link className={`home-page__programs-item ${item?.class}`} key={index} href={'#'}>
                                         <div className="home-page__programs-item_more">
                                             <Icon className='home-page__programs-item_icon' name='arrow-long' />
                                         </div>
@@ -75,6 +79,7 @@ export default function Home({ page }: Props) {
                     </div>
                 </div>
             </section>
+
             <section className='home-page__block home-page__formats' id='formats'>
                 <div className="home-page__container">
                     <div className="home-page__formats-wrapper">
@@ -89,6 +94,7 @@ export default function Home({ page }: Props) {
                     </div>
                 </div>
             </section>
+
             {faq ?
             <section className='home-page__block home-page__faq' id='faq'>
                 <div className="home-page__container">
@@ -115,6 +121,8 @@ export default function Home({ page }: Props) {
                     </div>
                 </div>
             </section> : null}
+
+            <WhatWeLearn {...whatWeLearn} />
         </main>
     );
 }

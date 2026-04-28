@@ -5,23 +5,18 @@
 
   &__h2 {
     color: var(--main-green-dark);
-    font-family: "Etude Noire", serif;
-    font-size: 60px;
-    font-weight: 500;
+    @include fonts(60px, 500);
   }
 
   &__tag {
+    @include fonts(16px, 500);
     display: inline-flex;
-    height: 37px;
     padding: 10px 30px 10px 14px;
     border-radius: 100px;
     background: var(--main-green-neon);
     align-items: center;
     gap: 30px;
     color: var(--main-orange);
-    font-family: "Etude Noire", serif;
-    font-size: 16px;
-    font-weight: 500;
     margin-bottom: 50px;
 
     &:before {
@@ -50,10 +45,8 @@
     }
 
     h1 {
-      font-family: "Etude Noire", serif;
-      font-size: 100px;
+      @include fonts(100px, 500);
       font-style: normal;
-      font-weight: 500;
       line-height: normal;
       margin-bottom: 10px;
     }
@@ -74,12 +67,11 @@
 
   &__formats {
     &-top {
-      display: flex;
+      @include center-between;
       gap: 39px;
-      align-items: center;
-      justify-content: space-between;
       margin-bottom: 100px;
     }
+
     &-text {
       max-width: 728px;
       font-size: 24px;
