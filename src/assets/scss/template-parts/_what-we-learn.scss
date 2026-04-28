@@ -1,0 +1,148 @@
+.home-page__what-we-learn {
+  .home-page__what-we-learn-body {
+    display: flex;
+    gap: 50px;
+    margin-top: 100px;
+  }
+
+  .home-page__what-we-learn-accordion {
+    flex: 0 0 min(698px, 42%);
+    min-width: 0;
+
+    .home-page__what-we-learn-list {
+      @include flex-list(20px);
+      width: 100%;
+      margin: 0;
+      padding: 0;
+
+      .home-page__what-we-learn-item {
+        border: 2px solid var(--main-orange);
+        border-radius: 40px;
+        background: transparent;
+        overflow: hidden;
+      }
+
+      .home-page__what-we-learn-trigger {
+        @include center-between;
+        width: 100%;
+        gap: 16px;
+        padding: 10px 10px 10px 30px;
+        background: transparent;
+        color: var(--main-green-dark);
+        cursor: pointer;
+
+        .button__text {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .home-page__what-we-learn-trigger-icon {
+          @include icon(44px);
+          @include center;
+          border-radius: 50%;
+          background: var(--main-orange);
+          transition: 0.3s all;
+
+          svg {
+            @include icon(24px);
+          }
+        }
+
+        &:hover .home-page__what-we-learn-trigger-title {
+          color: var(--main-orange);
+        }
+
+        &.is-open .home-page__what-we-learn-trigger-icon {
+          transform: rotate(180deg);
+        }
+
+        .home-page__what-we-learn-trigger-title {
+          @include fonts(28px, 500);
+          line-height: normal;
+          font-style: normal;
+          color: var(--main-green-dark);
+        }
+      }
+
+      .home-page__what-we-learn-panel {
+        padding: 10px 30px 30px;
+        max-width: 480px;
+
+        &:not(.is-open) {
+          display: none;
+        }
+
+        .home-page__what-we-learn-panel-text {
+          @include fonts(18px, 600, "Manrope");
+          color: var(--main-black);
+        }
+
+        .home-page__what-we-learn-tags {
+          margin-top: 20px;
+
+          li {
+            @include fonts(18px, 400, "Manrope");
+            color: var(--main-black);
+          }
+        }
+      }
+    }
+  }
+
+  .home-page__what-we-learn-gallery {
+    flex: 1;
+    min-width: 0;
+    min-height: 420px;
+    pointer-events: none;
+    user-select: none;
+
+    .home-page__what-we-learn-swiper {
+      width: 100%;
+
+      .swiper-slide {
+        width: min(520px, 85vw);
+        height: auto;
+      }
+    }
+
+    .home-page__what-we-learn-slide {
+      height: auto;
+
+      &.swiper-slide-active {
+        .home-page__what-we-learn-slide-tag {
+          display: flex;
+        }
+      }
+    }
+
+    .home-page__what-we-learn-slide-frame {
+      position: relative;
+      max-height: 568px;
+      border-radius: 30px;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    .home-page__what-we-learn-slide-tag {
+      @include fonts(16px, 500, "Manrope");
+      text-transform: lowercase;
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 2;
+      padding: 10px 20px;
+      border-radius: 100px;
+      background: var(--main-green-neon);
+      color: var(--main-green-dark);
+      display: none;
+    }
+
+    .home-page__what-we-learn-slide-img {
+      @include perfect-img;
+      width: 100%;
+      max-height: 568px;
+      height: auto;
+      display: block;
+    }
+  }
+}

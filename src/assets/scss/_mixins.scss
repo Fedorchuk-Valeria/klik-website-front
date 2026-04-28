@@ -1,0 +1,56 @@
+@mixin center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin center-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-list($gap: 0) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+@mixin fonts($size: 16px, $weight: 400, $fontFamily: "Etude Noire") {
+  font-family: $fontFamily, serif;
+  font-size: $size;
+  font-weight: $weight;
+}
+
+@mixin icon($size) {
+  width: $size;
+  height: $size;
+}
+
+@mixin text-nowrap($textOverflow: ellipsis) {
+  white-space: nowrap;
+  text-overflow: $textOverflow;
+  overflow-x: hidden;
+}
+
+@mixin text-line-clamp($countLine: 2) {
+  -webkit-line-clamp: $countLine;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin user-select-none {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+@mixin perfect-img {
+  object-fit: cover;
+  overflow-clip-margin: unset;
+  transform: translate3d(0, 0, 1px);
+}
