@@ -12,6 +12,8 @@ import imgBusinessThinking from "@/src/assets/images/templates/homepage/whatWeLe
 import imgCybersecurity from "@/src/assets/images/templates/homepage/whatWeLearn/cybersecurity.png";
 import imgDesign from "@/src/assets/images/templates/homepage/whatWeLearn/design.png";
 import imgDevelopment from "@/src/assets/images/templates/homepage/whatWeLearn/development.png";
+import LineSvg from "@/src/assets/images/templates/homepage/whatWeLearn/line.svg";
+import MessageSvg from "@/src/assets/images/templates/homepage/whatWeLearn/message.svg";
 import imgNeuro from "@/src/assets/images/templates/homepage/whatWeLearn/neuro.png";
 import imgProgramming from "@/src/assets/images/templates/homepage/whatWeLearn/programming.png";
 
@@ -73,6 +75,14 @@ const WhatWeLearn: FC<PropTypes> = ({
   return (
     <section>
       <div className="home-page__block home-page__what-we-learn">
+        <span className="home-page__what-we-learn-line">
+          <LineSvg />
+
+          <span className="home-page__what-we-learn-line-message">
+          <MessageSvg />
+        </span>
+        </span>
+
         <div className="home-page__container">
           {tag && <div className="home-page__tag">{tag}</div>}
 
