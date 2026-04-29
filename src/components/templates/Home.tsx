@@ -10,6 +10,7 @@ import { Page } from "@/src/lib/content/types";
 import Image from 'next/image';
 import Link from "next/link";
 import WhatWeLearn from '../template-parts/WhatWeLearn';
+import WhyWeAre from '../template-parts/WhyWeAre';
 
 type Props = {
     page: Page;
@@ -27,7 +28,8 @@ export default function Home({ page }: Props) {
     const faq = page?.content?.faq;
     const formats = page?.content?.formats;
     const programs = page?.content?.programs;
-    const whatWeLearn = page?.content?.whatWeLearn;
+    const whatWeLearn = page?.content?.what_we_learn;
+    const whyWeAre = page?.content?.why_we_are;
 
     return (
         <main className='main home-page'>
@@ -95,6 +97,9 @@ export default function Home({ page }: Props) {
                 </div>
             </section>
 
+            <WhatWeLearn {...whatWeLearn} />
+            <WhyWeAre {...whyWeAre} />
+
             {faq ?
             <section className='home-page__block home-page__faq' id='faq'>
                 <div className="home-page__container">
@@ -121,8 +126,6 @@ export default function Home({ page }: Props) {
                     </div>
                 </div>
             </section> : null}
-
-            <WhatWeLearn {...whatWeLearn} />
         </main>
     );
 }
