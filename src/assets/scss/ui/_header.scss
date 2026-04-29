@@ -123,4 +123,9 @@
   &__call {
     padding: 20px 50px;
   }
+
+  // TODO fix
+  @media screen and (max-width: $desktop) {
+    display: none;
+  }
 }
