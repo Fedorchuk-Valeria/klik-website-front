@@ -17,8 +17,7 @@ import MessageSvg from "@/src/assets/images/templates/homepage/whatWeLearn/messa
 import imgNeuro from "@/src/assets/images/templates/homepage/whatWeLearn/neuro.png";
 import imgProgramming from "@/src/assets/images/templates/homepage/whatWeLearn/programming.png";
 
-import Button from "@/src/components/ui/Button/Button";
-import Icon from "@/src/components/ui/Icon/Icon";
+import WhatWeLearnAccordionItem from "./WhatWeLearnAaccordionItem";
 
 import "swiper/css";
 import "swiper/css/effect-coverflow";
@@ -34,7 +33,7 @@ const SLIDE_IMAGES: Record<string, StaticImageData> = {
   "business-thinking": imgBusinessThinking,
 };
 
-type PropTypes = {
+export type WhatWeLearnProps = {
   tag?: string;
   title?: string;
   text?: string;
@@ -46,7 +45,7 @@ type PropTypes = {
   }[];
 };
 
-const WhatWeLearn: FC<PropTypes> = ({
+const WhatWeLearn: FC<WhatWeLearnProps> = ({
   tag,
   title,
   text,
@@ -86,58 +85,26 @@ const WhatWeLearn: FC<PropTypes> = ({
         <div className="home-page__container">
           {tag && <div className="home-page__tag">{tag}</div>}
 
-          <div className="home-page__formats-top">
+          <div className={classNames("home-page__formats-top", "home-page__what-we-learn-top")}>
             {title && (
-              <h2 className="home-page__h2 home-page__formats-title">{title}</h2>
+              <h2 className={classNames("home-page__h2", "home-page__formats-title", "home-page__what-we-learn-title")}>{title}</h2>
             )}
 
-            {text && <div className="home-page__formats-text">{text}</div>}
+            {text && <div className={classNames("home-page__formats-text", "home-page__what-we-learn-text")}>{text}</div>}
           </div>
 
           <div className="home-page__what-we-learn-body">
             <div className="home-page__what-we-learn-accordion">
               <ul className="home-page__what-we-learn-list">
-                {(items || [])?.map((item, index) => {
-                  const isOpen = index === activeIndex;
-
-                  return (
-                    <li key={item.key || index} className="home-page__what-we-learn-item">
-                      <Button
-                        type="button"
-                        className={classNames("home-page__what-we-learn-trigger", { "is-open": isOpen })}
-                        aria-expanded={isOpen}
-                        onClick={() => goToSlide(index)}
-                      >
-                        <span className="home-page__what-we-learn-trigger-title">
-                          {item.title}
-                        </span>
-
-                        <span className="home-page__what-we-learn-trigger-icon">
-                          <Icon name="arrow" />
-                        </span>
-                      </Button>
-
-                      <div
-                        className={classNames("home-page__what-we-learn-panel", { "is-open": isOpen })}
-                        hidden={!isOpen}
-                      >
-                        {item?.text && (
-                          <p className="home-page__what-we-learn-panel-text">
-                            {item.text}
-                          </p>
-                        )}
-
-                        {!!item?.items?.length && (
-                          <ul className="home-page__what-we-learn-tags">
-                            {(item?.items || [])?.map((tag, tagIndex) => (
-                              <li key={tagIndex}>{tag}</li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    </li>
-                  );
-                })}
+                {(items || [])?.map((item, index) => (
+                  <WhatWeLearnAccordionItem
+                    key={item.key || index}
+                    item={item}
+                    index={index}
+                    isOpen={index === activeIndex}
+                    onSelect={goToSlide}
+                  />
+                ))}
               </ul>
             </div>
 
@@ -153,14 +120,23 @@ const WhatWeLearn: FC<PropTypes> = ({
                 loop={true}
                 onSwiper={onSwiper}
                 onRealIndexChange={onRealIndexChange}
-                coverflowEffect={{
-                  rotate: 50,
-                  stretch: 0,
-                  depth: 100,
-                  modifier: 1,
-                  slideShadows: true,
-                }}
                 modules={[EffectCoverflow]}
+                breakpoints={{
+                  1920: {
+                    coverflowEffect: {
+                    rotate: 15,
+                    stretch: 211,
+                    depth: 100,
+                    scale: 0.95,
+                    modifier: 1,
+                    slideShadows: false,
+                  }},
+                  1440: {
+                    coverflowEffect: {
+                      stretch: 278,
+                    }
+                  }
+                }}
               >
                 {items.map((item, index) => {
                   const src = SLIDE_IMAGES[item.key];
