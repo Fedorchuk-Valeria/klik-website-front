@@ -2,7 +2,7 @@
 
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
-import { Autoplay } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import WhyWeAreSVG from "@/src/assets/images/templates/homepage/whyWeAre/why_we_are.svg";
@@ -32,7 +32,7 @@ type PropTypes = {
   };
 }
 
-const AUTOPLAY_DELAY_MS = 400000;
+const AUTOPLAY_DELAY_MS = 4000;
 
 const WhyWeAre: FC<PropTypes> = ({
   tag,
@@ -127,7 +127,7 @@ const WhyWeAre: FC<PropTypes> = ({
 
         <div className="home-page__why-we-are-body">
           <Swiper
-            modules={[Autoplay]}
+            modules={[Autoplay, Pagination]}
             rewind
             grabCursor
             centeredSlides
@@ -145,20 +145,26 @@ const WhyWeAre: FC<PropTypes> = ({
             onSwiper={onSwiper}
             className="home-page__why-we-are-swiper"
             spaceBetween={10}
+            pagination={{
+              enabled: true,
+              clickable: true,
+              hideOnClick: false,
+              bulletClass: "home-page__why-we-are-pagination-bullet",
+              bulletActiveClass: "home-page__why-we-are-pagination-bullet--active",
+            }}
             breakpoints={{
-              1920: {
-                spaceBetween: 40,
-              },
-              1440: {
-                spaceBetween: 20,
+              801: {
+                pagination: { enabled: false },
+                spaceBetween: 0,
               },
               1024: {
                 spaceBetween: 10,
               },
-              // TODO
-              800: {
-                spaceBetween: 0,
-                modules: [Autoplay],
+              1440: {
+                spaceBetween: 20,
+              },
+              1920: {
+                spaceBetween: 40,
               },
             }}
           >
@@ -175,9 +181,9 @@ const WhyWeAre: FC<PropTypes> = ({
                       <p className="home-page__why-we-are-item--info-text">{item.fullName} | {item.position}</p>
                     </div>
 
-                    <div className='home-page__why-we-are-item--star'>
+                    <div className="home-page__why-we-are-item--star home-page__why-we-are-item--star-headline">
                       {Array.from({ length: item.star }).map((_, index) => (
-                        <Icon name="star" key={index} />
+                        <Icon name="star" key={`${key}-h-${index}`} />
                       ))}
                     </div>
                   </div>
@@ -186,8 +192,16 @@ const WhyWeAre: FC<PropTypes> = ({
                     {item.text}
                   </div>
 
-                  <div className='home-page__why-we-are-item--created-at'>
-                    {item.createdAt}
+                  <div className="home-page__why-we-are-item--meta">
+                    <div className='home-page__why-we-are-item--created-at'>
+                      {item.createdAt}
+                    </div>
+
+                    <div className="home-page__why-we-are-item--star home-page__why-we-are-item--star-meta">
+                      {Array.from({ length: item.star }).map((_, index) => (
+                        <Icon name="star" key={`${key}-m-${index}`} />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </SwiperSlide>
