@@ -4,6 +4,7 @@
   border-radius: 100px;
   font-size: 18px;
   transition: 0.3s all;
+  cursor: pointer;
 
   &__arrow {
     position: absolute;
@@ -29,7 +30,6 @@
     display: flex;
     gap: 5px;
     align-items: center;
-
   }
 
   &--orange {
@@ -62,4 +62,3 @@
     }
   }
 }
-

@@ -267,6 +267,133 @@
         "recommended": "98%",
         "format": "100%"
       }
+    },
+    "our_tutors": {
+      "tag": "Наставники",
+      "title": "Знакомьтесь\nс наставниками",
+      "text": "Наставники-практики, которые делают обучение понятным и интересным",
+      "items": [
+        {
+          "id": "1",
+          "name": "Артур Драгун",
+          "position": "Game & Python developer\nнаставник по разработке",
+          "text": "техник-программист, практик разработки на Python и Unity",
+          "location": "Барановичи",
+          "tags": [
+            "Unity", "Python", "Unreal Engine"
+          ]
+        },
+        {
+          "id": "2",
+          "name": "Антон Павлов",
+          "position": "Fullstack / Software\ndevelopment mentor",
+          "text": "разработчик цифровых проектов, практикующий Fullstack-наставник",
+          "location": "Барановичи",
+          "tags": [
+            "C#", "C++", "Python"
+          ]
+        },
+        {
+          "id": "3",
+          "name": "Илья Панкратов",
+          "position": "Mobile developer\n(Android / Kotlin)",
+          "text": "разработчик Android-приложений, практик мехатронных систем",
+          "location": "Борисов",
+          "tags": [
+            "Android", "Kotlin", "React Native"
+          ]
+        },
+        {
+          "id": "4",
+          "name": "Евгений\nМашковский",
+          "position": "AI & Data Science\nmentor",
+          "text": "разработчик в области машинного обучения и анализа данных",
+          "location": "Борисов",
+          "tags": [
+            "Machine Learning", "Python", "C#", "C++", "Работа с базами данных (MS SQL, T-SQL)"
+          ]
+        },
+        {
+          "id": "5",
+          "name": "Арина Жижо",
+          "position": "Web & UI\ndeveloper",
+          "text": "специалист по веб-разработке и UI-дизайну",
+          "location": "Минск",
+          "tags": [
+            "HTML", "CSS", "JavaScript", "Python", "Java", "Illustrator"
+          ]
+        },
+        {
+          "id": "6",
+          "name": "Кристина\nГодунова",
+          "position": "Game development mentor\n(Python / educational games)",
+          "text": "разработчик игровых и образовательных приложений",
+          "location": "Минск",
+          "tags": [
+            "Unity", "Python", "Unreal Engine"
+          ]
+        },
+        {
+          "id": "7",
+          "name": "Анна\nТрифонова",
+          "position": "Programming mentor\n(Fundamentals & Creative projects)",
+          "text": "наставник с опытом образовательных интенсивов и работы с детьми",
+          "location": "Минск",
+          "tags": [
+            "Figma", "Blender", "Illustrator"
+          ]
+        },
+        {
+          "id": "8",
+          "name": "Всеволод\nАдамович",
+          "position": "Fullstack developer\n(C++ / Web / Tools)",
+          "text": "разработчик, выпускник RS School и программы Яндекс C++",
+          "location": "Минск",
+          "tags": [
+            "C++", "Python", "JS", "Figma"
+          ]
+        },
+        {
+          "id": "9",
+          "name": "Анастасия\nПискунова",
+          "position": "Data Analytics &\nProgramming mentor",
+          "text": "специалист по анализу данных и программированию",
+          "location": "Минск",
+          "tags": [
+            "C#", "Python", "JS", "TS"
+          ]
+        },
+        {
+          "id": "10",
+          "name": "Виктория\nДенисевич",
+          "position": "lead mentor по программированию\nи цифровым продуктам",
+          "text": "практикующий разработчик цифровых решений и UI/UX-проектов, специалист с опытом полного цикла создания IT-продуктов — от идеи до реализации",
+          "location": "Минск",
+          "tags": [
+            "Python", "Java", "C++", "HTML/CSS", "JS", "SQL", "Figma", "Blender", "After Effects"
+          ]
+        },
+        {
+          "id": "11",
+          "name": "Кирилл Малькевич",
+          "position": "Cybersecurity\nmentor",
+          "text": "специалист по кибербезопасности, практикующий участник IT-хакатонов",
+          "location": "Минск",
+          "tags": [
+            "Python", "Java", "C++", "HTML/CSS", "JS", "SQL"
+          ]
+        },
+        {
+          "id": "12",
+          "name": "Артём\nГрибанов",
+          "position": "Algorithm & Competitive\nprogramming mentor",
+          "text": "выпускник ПГУ, призёр международных олимпиад и участник IT-форумов\nмеждународного уровня",
+          "location": "Новополоцк",
+          "tags": [
+            "Python", "Java", "C++", "HTML/CSS", "JS", "SQL"
+          ]
+        }
+      ]
     }
   }
 }
