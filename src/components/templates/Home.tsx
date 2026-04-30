@@ -9,6 +9,7 @@ import Icon from "@/src/components/ui/Icon/Icon";
 import { Page } from "@/src/lib/content/types";
 import Image from 'next/image';
 import Link from "next/link";
+import Tutors from '../template-parts/Tutors';
 import WhatWeLearn from '../template-parts/WhatWeLearn';
 import WhyWeAre from '../template-parts/WhyWeAre';
 
@@ -30,6 +31,7 @@ export default function Home({ page }: Props) {
     const programs = page?.content?.programs;
     const whatWeLearn = page?.content?.what_we_learn;
     const whyWeAre = page?.content?.why_we_are;
+    const tutors = page?.content?.our_tutors;
 
     return (
         <main className='main home-page'>
@@ -99,6 +101,7 @@ export default function Home({ page }: Props) {
 
             <WhatWeLearn {...whatWeLearn} />
             <WhyWeAre {...whyWeAre} />
+            <Tutors {...tutors} />
 
             {faq ?
             <section className='home-page__block home-page__faq' id='faq'>

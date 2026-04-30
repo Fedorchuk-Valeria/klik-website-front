@@ -1,0 +1,213 @@
+.home-page__tutors {
+  .home-page__tutors-top {
+    align-items: flex-end;
+
+    .home-page__tutors-title {
+      white-space: pre-wrap;
+    }
+
+    .home-page__tutors-text {
+      @include fonts(24px, 400, "Manrope");
+      max-width: 569px;
+      color: var(--main-black);
+      margin-bottom: 6px;
+    }
+  }
+
+  .home-page__tutors-body {
+    position: relative;
+    width: 100%;
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+
+  .home-page__tutors-carousel {
+    --tutors-viewport-w: 1720px;
+    --tutors-detail-spacer-w: 850px;
+
+    .home-page__tutors-slider-viewport {
+      position: relative;
+      width: min(100%, var(--tutors-viewport-w));
+      margin: 0 auto;
+      overflow: hidden;
+      box-sizing: border-box;
+      isolation: isolate;
+    }
+  }
+
+  .home-page__tutors-detail {
+    box-sizing: border-box;
+    position: absolute;
+    top: 20px;
+    left: calc(var(--tutors-detail-spacer-w) + 38px);
+    right: 0;
+    z-index: 2;
+    min-width: 0;
+
+    .home-page__tutors-detail__inner {
+      @include flex-list(20px);
+      min-height: 270px;
+      width: 100%;
+
+      .home-page__tutors-detail__text {
+        display: flex;
+        align-items: flex-end;
+        gap: 40px;
+
+        .home-page__tutors-detail__name {
+          @include fonts(50px, 500);
+          color: var(--main-orange);
+          margin: 0;
+          white-space: pre-wrap;
+          position: relative;
+
+          &::after {
+            content: "";
+            position: absolute;
+            display: block;
+            bottom: 7px;
+            right: -20px;
+            width: 2px;
+            height: 41px;
+            margin: auto;
+            background: var(--main-black);
+          }
+        }
+
+        .home-page__tutors-detail__position {
+          @include fonts(20px);
+          white-space: pre-wrap;
+          margin-bottom: 6px;
+        }
+      }
+
+      .home-page__tutors-detail__description {
+        @include fonts(20px, 400, "Manrope");
+      }
+
+      .home-page__tutors-detail__location {
+        @include fonts(16px, 500, "Manrope");
+        @include center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 100px;
+        border: 2px solid var(--main-orange);
+        color: var(--main-black);
+        width: fit-content;
+
+        svg {
+          @include icon(24px);
+        }
+      }
+
+      .home-page__tutors-detail__nav {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: auto;
+        position: absolute;
+        bottom: 20px;
+        right: 0;
+
+        .home-page__tutors-nav {
+          @include center;
+          @include icon(58px);
+
+          .home-page__tutors-nav-icon {
+            @include icon(24px);
+          }
+        }
+
+        .home-page__tutors-nav--prev {
+          transform: rotate(90deg);
+        }
+
+        .home-page__tutors-nav--next {
+          transform: rotate(270deg);
+        }
+      }
+    }
+  }
+
+  .home-page__tutors-swiper {
+    .swiper {
+      position: relative;
+      z-index: 0;
+      width: 100%;
+      overflow: visible;
+    }
+
+    .swiper-wrapper {
+      align-items: flex-end;
+      transition: none !important;
+    }
+
+    .home-page__tutors-slide {
+      &.swiper-slide {
+        box-sizing: border-box;
+        width: 270px !important;
+        max-width: 270px !important;
+        height: 400px;
+        position: relative;
+        flex-shrink: 0;
+        opacity: 0.5;
+        overflow: hidden;
+      }
+
+      &.swiper-slide-active {
+        width: 560px !important;
+        max-width: 560px !important;
+        height: 700px;
+        opacity: 1;
+
+        .home-page__tutors-thumb__img-wrap {
+          border: 2px solid var(--main-orange);
+        }
+      }
+    }
+  }
+
+  .home-page__tutors-thumb {
+    @include icon(100%);
+    @include user-select-none;
+    position: relative;
+
+    .home-page__tutors-thumb__tags {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .home-page__tutors-tag {
+      @include fonts(16px, 500, "Manrope");
+      padding: 10px 20px;
+      border-radius: 100px;
+      color: var(--main-green-dark);
+      background: var(--main-green-neon);
+    }
+
+    .home-page__tutors-thumb__img-wrap {
+      @include icon(100%);
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+    }
+
+    .home-page__tutors-thumb__img {
+      @include icon(100%);
+      object-fit: cover;
+    }
+  }
+
+  .swiper-slide:not(.swiper-slide-active) {
+    .home-page__tutors-thumb__tags {
+      display: none;
+    }
+  }
+}
