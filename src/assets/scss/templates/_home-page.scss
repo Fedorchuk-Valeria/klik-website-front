@@ -298,6 +298,12 @@
     &__container {
       max-width: 1280px;
     }
+
+    &__formats {
+      &-top {
+        margin-bottom: 50px;
+      }
+    }
   }
 
   @media screen and (max-width: $landscape-tablet-size) {
@@ -315,6 +321,12 @@
 
     &__container {
       max-width: 944px;
+    }
+
+    &__formats {
+      &-top {
+        margin-bottom: 30px;
+      }
     }
   }
 
