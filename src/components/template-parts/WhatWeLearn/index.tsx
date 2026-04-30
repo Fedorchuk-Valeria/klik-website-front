@@ -133,7 +133,12 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({
                   }},
                   1440: {
                     coverflowEffect: {
+                      rotate: 15,
                       stretch: 278,
+                      depth: 100,
+                      scale: 0.95,
+                      modifier: 1,
+                      slideShadows: false,
                     }
                   }
                 }}
