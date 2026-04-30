@@ -9,8 +9,8 @@
 
     .home-page__why-we-are-top-icon {
       position: absolute;
-      bottom: 10px;
-      right: -20px;
+      bottom: 15px;
+      right: -30px;
 
       svg {
         width: 105px;
@@ -178,7 +178,13 @@
       margin-bottom: 50px;
 
       .home-page__why-we-are-text {
+        margin-right: 0;
         font-size: 20px;
+      }
+
+      .home-page__why-we-are-top-icon {
+        right: -40px;
+        bottom: 25px;
       }
     }
 
