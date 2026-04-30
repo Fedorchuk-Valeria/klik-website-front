@@ -11,6 +11,11 @@
       position: absolute;
       bottom: 10px;
       right: -20px;
+
+      svg {
+        width: 105px;
+        height: 116px;
+      }
     }
   }
 
@@ -141,6 +146,10 @@
       .home-page__why-we-are-item--created-at {
         @include fonts(16px, 400, "Manrope");
         color: rgba(251, 255, 220, 0.5);
+      }
+
+      .home-page__why-we-are-item--star-meta {
+        display: none;
       }
     }
   }
@@ -273,15 +282,248 @@
     }
   }
 
-  // TODO
   @media screen and (max-width: $tablet-size) {
+    .home-page__why-we-are-top {
+      .home-page__why-we-are-text {
+        font-size: 20px;
+      }
+
+      .home-page__why-we-are-top-icon {
+        right: -12px;
+        bottom: auto;
+        top: -110px;
+      }
+    }
+
     .home-page__why-we-are-body {
       padding: 0 40px;
 
       .home-page__why-we-are-swiper {
+        padding-bottom: 0;
+
         .swiper-slide {
           min-width: 100%;
         }
+
+        &.swiper-pagination-disabled .swiper-pagination {
+          display: none;
+        }
+
+        .swiper-pagination {
+          position: relative;
+          bottom: auto;
+          left: auto;
+          top: auto;
+          right: auto;
+          transform: none;
+          margin-top: 24px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          width: 100%;
+          line-height: 0;
+        }
+
+        .swiper-pagination-clickable .home-page__why-we-are-pagination-bullet {
+          cursor: pointer;
+        }
+
+        .home-page__why-we-are-pagination-bullet {
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          margin: 0 !important;
+          border-radius: 50%;
+          background: var(--secondary-burgundy-40);
+          opacity: 1;
+          transition:
+            width 0.25s ease,
+            border-radius 0.25s ease,
+            background-color 0.25s ease;
+        }
+
+        .home-page__why-we-are-pagination-bullet--active {
+          width: 150px;
+          height: 10px;
+          border-radius: 999px;
+          background: var(--main-green-dark);
+        }
+      }
+
+      .home-page__why-we-are-item {
+        .home-page__why-we-are-item__headline {
+          gap: 20px;
+
+          .home-page__why-we-are-item--avatar {
+            @include icon(90px);
+            font-size: 30px;
+          }
+
+          .home-page__why-we-are-item--info {
+            gap: 5px;
+
+            .home-page__why-we-are-item--info-title {
+              font-size: 24px;
+            }
+
+            .home-page__why-we-are-item--info-text {
+              font-size: 16px;
+            }
+          }
+
+          .home-page__why-we-are-item--star {
+            svg {
+              @include icon(24px);
+            }
+          }
+        }
+
+        .home-page__why-we-are-item--text {
+          font-size: 20px;
+        }
+
+        .home-page__why-we-are-item--created-at {
+          font-size: 16px;
+        }
+      }
+    }
+
+    .home-page__why-we-are-info {
+      margin-top: 50px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 16px;
+      row-gap: 40px;
+      justify-content: stretch;
+      align-items: start;
+
+      .home-page__why-we-are-info-item {
+        &:nth-child(1) {
+          order: 0;
+        }
+
+        &:nth-child(2) {
+          order: 2;
+        }
+
+        &:nth-child(3) {
+          order: 3;
+        }
+
+        &:nth-child(4) {
+          order: 1;
+        }
+      }
+
+      .home-page__why-we-are-info-item-title {
+        font-size: 100px;
+      }
+
+      .home-page__why-we-are-info-item-subtitle {
+        font-size: 18px;
+        margin-top: -35px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    .home-page__why-we-are-top {
+      .home-page__why-we-are-text {
+        font-size: 20px;
+      }
+
+      .home-page__why-we-are-top-icon {
+        right: 4px;
+        top: -46px;
+
+        svg {
+          width: 87px;
+          height: 96px;
+        }
+      }
+    }
+
+    .home-page__why-we-are-title {
+      max-width: 280px;
+    }
+
+    .home-page__why-we-are-body {
+      padding: 0 10px;
+
+      .home-page__why-we-are-item {
+        padding: 20px;
+        border-radius: 40px;
+
+        .home-page__why-we-are-item__headline {
+          .home-page__why-we-are-item--avatar {
+            @include icon(50px);
+            font-size: 16px;
+          }
+
+          .home-page__why-we-are-item--info {
+            gap: 0;
+
+            .home-page__why-we-are-item--info-title {
+              font-size: 18px;
+            }
+
+            .home-page__why-we-are-item--info-text {
+              font-size: 12px;
+            }
+          }
+
+          .home-page__why-we-are-item--star-headline {
+            display: none;
+          }
+        }
+
+        .home-page__why-we-are-item--meta {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          align-items: center;
+          column-gap: 12px;
+          margin-top: 10px;
+        }
+
+        .home-page__why-we-are-item--star-meta {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          flex-shrink: 0;
+          order: 2;
+          margin-left: auto;
+
+          svg {
+            @include icon(18px);
+            color: var(--main-orange);
+          }
+        }
+
+        .home-page__why-we-are-item--text {
+          font-size: 14px;
+        }
+
+        .home-page__why-we-are-item--created-at {
+          font-size: 12px;
+          order: 1;
+        }
+      }
+    }
+
+    .home-page__why-we-are-info {
+      margin-top: 30px;
+      grid-template-columns: 1fr;
+      gap: 20px;
+
+      .home-page__why-we-are-info-item-title {
+        font-size: 60px;
+      }
+
+      .home-page__why-we-are-info-item-subtitle {
+        font-size: 14px;
+        margin-top: -24px;
       }
     }
   }
