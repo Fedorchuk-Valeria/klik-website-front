@@ -1,0 +1,24 @@
+.how-sign-up {
+  width: calc(100% - 20px);
+  margin: 0 auto;
+  padding: 50px 90px 90px;
+  background: var(--main-green-dark);
+  border-radius: 70px;
+
+  .home-page__tag {
+    &::before {
+      background: var(--main-green-dark);
+    }
+  }
+
+  .how-sign-up-top {
+    .how-sign-up__title {
+      color: var(--main-light);
+    }
+
+    .how-sign-up__text {
+      @include fonts(24px, 400, "Manrope");
+      color: var(--main-light);
+    }
+  }
+}
