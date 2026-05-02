@@ -1,7 +1,6 @@
 "use client";
 
 import classNames from "classnames";
-import Image, { type StaticImageData } from "next/image";
 import {
   FC,
   useCallback,
@@ -9,37 +8,18 @@ import {
   useMemo,
   useRef,
   useState,
-  type CSSProperties,
 } from "react";
 import type { Swiper as SwiperType } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
 
-import tutorImg1 from "@/src/assets/images/templates/homepage/tutors/tutor_1.jpg";
-import tutorImg10 from "@/src/assets/images/templates/homepage/tutors/tutor_10.jpg";
-import tutorImg11 from "@/src/assets/images/templates/homepage/tutors/tutor_11.jpg";
-import tutorImg12 from "@/src/assets/images/templates/homepage/tutors/tutor_12.jpg";
-import tutorImg2 from "@/src/assets/images/templates/homepage/tutors/tutor_2.jpg";
-import tutorImg3 from "@/src/assets/images/templates/homepage/tutors/tutor_3.jpg";
-import tutorImg4 from "@/src/assets/images/templates/homepage/tutors/tutor_4.jpg";
-import tutorImg5 from "@/src/assets/images/templates/homepage/tutors/tutor_5.jpg";
-import tutorImg6 from "@/src/assets/images/templates/homepage/tutors/tutor_6.jpg";
-import tutorImg7 from "@/src/assets/images/templates/homepage/tutors/tutor_7.jpg";
-import tutorImg8 from "@/src/assets/images/templates/homepage/tutors/tutor_8.jpg";
-import tutorImg9 from "@/src/assets/images/templates/homepage/tutors/tutor_9.jpg";
-
+import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 
-import "swiper/css";
-import Button from "../../ui/Button/Button";
+import TutorsSwiper from "./TutorsSwiper";
+import { TUTOR_IMAGES } from "./tutorImages";
 
-type TutorItem = {
-  id: string;
-  name: string;
-  position: string;
-  text: string;
-  location: string;
-  tags: string[];
-};
+import type { TutorItem } from "./types";
+
+import "swiper/css";
 
 type PropTypes = {
   tag?: string;
@@ -47,25 +27,6 @@ type PropTypes = {
   text?: string;
   items?: TutorItem[];
 };
-
-const TUTOR_IMAGES: Record<string, StaticImageData> = {
-  "1": tutorImg1,
-  "2": tutorImg2,
-  "3": tutorImg3,
-  "4": tutorImg4,
-  "5": tutorImg5,
-  "6": tutorImg6,
-  "7": tutorImg7,
-  "8": tutorImg8,
-  "9": tutorImg9,
-  "10": tutorImg10,
-  "11": tutorImg11,
-  "12": tutorImg12,
-};
-
-const SLIDE_INACTIVE_W = 270;
-const SLIDE_ACTIVE_W = 560;
-const SLIDE_GAP = 20;
 
 /** Чтобы активный всегда у левого края был один узкий превью-слайд. */
 function orderedTutorIndices(activeIndex: number, n: number): number[] {
@@ -78,15 +39,9 @@ function orderedTutorIndices(activeIndex: number, n: number): number[] {
   return [prevIdx, activeIndex, ...tail];
 }
 
-const SLIDES_OFFSET_BEFORE = SLIDE_INACTIVE_W + SLIDE_GAP;
-const SLIDES_OFFSET_AFTER = SLIDE_ACTIVE_W + SLIDE_INACTIVE_W * 2 + SLIDE_GAP * 2;
-const VIEWPORT_W = SLIDE_INACTIVE_W * 4 + SLIDE_ACTIVE_W + SLIDE_GAP * 4;
-const DETAIL_LEFT_SPACER_W = SLIDE_INACTIVE_W + SLIDE_GAP + SLIDE_ACTIVE_W;
-
 const AUTOPLAY_DELAY_MS = 4_000;
 const IDLE_RESUME_MS = 10_000;
 
-// TODO adaptive
 // TODO effects
 const Tutors: FC<PropTypes> = ({
   tag,
@@ -100,7 +55,11 @@ const Tutors: FC<PropTypes> = ({
   const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pausedRef = useRef(false);
   const inViewportRef = useRef(false);
+  const swiperRef = useRef<SwiperType | null>(null);
+  const tutorsPaginationElRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isTabletLandscapeTutors, setIsTabletLandscapeTutors] = useState(false);
+  const [isTutorsPagination, setIsTutorsPagination] = useState(false);
 
   const slidesWithImages = useMemo(
     () => items.filter((item) => TUTOR_IMAGES[item.id] != null),
@@ -120,6 +79,18 @@ const Tutors: FC<PropTypes> = ({
       tutorIdx,
     })),
     [orderedIndices, slidesWithImages],
+  );
+
+  const slidesForSwiper = useMemo(
+    () =>
+      isTabletLandscapeTutors
+        ? slidesWithImages.map((item, tutorIdx) => ({
+          item,
+          key: `compact-${item.id}-${tutorIdx}`,
+          tutorIdx,
+        }))
+        : orderedSlides,
+    [isTabletLandscapeTutors, orderedSlides, slidesWithImages],
   );
 
   const activeItem = useMemo(() => slidesWithImages[activeIndex] ?? slidesWithImages[0], [activeIndex, slidesWithImages]);
@@ -191,33 +162,38 @@ const Tutors: FC<PropTypes> = ({
 
   const onSwiper = useCallback(
     (swiper: SwiperType) => {
+      swiperRef.current = swiper;
       // Не сбрасывать паузу здесь: при смене activeIndex key пересоздаёт Swiper,
       // иначе onUserInteraction теряется (снова включается автоплей и сбрасывается 10s resume).
-      if (initialSlideMid === 1 && swiper.realIndex !== 1) {
+      if (!isTabletLandscapeTutors && initialSlideMid === 1 && swiper.realIndex !== 1) {
         swiper.slideTo(1, 0, false);
       }
       if (inViewportRef.current && !pausedRef.current) {
         scheduleAutoplayStep();
       }
     },
-    [initialSlideMid, scheduleAutoplayStep],
+    [initialSlideMid, isTabletLandscapeTutors, scheduleAutoplayStep],
   );
 
   const onSlideChange = useCallback((swiper: SwiperType) => {
     const slot = swiper.realIndex;
 
-    setActiveIndex((prev) => {
-      const ring = orderedTutorIndices(prev, tutorCountRef.current);
-      const next = ring[slot];
-      return next !== undefined ? next : prev;
-    });
+    if (isTabletLandscapeTutors) {
+      setActiveIndex(slot);
+    } else {
+      setActiveIndex((prev) => {
+        const ring = orderedTutorIndices(prev, tutorCountRef.current);
+        const next = ring[slot];
+        return next !== undefined ? next : prev;
+      });
+    }
 
     requestAnimationFrame(() => {
       if (swiper.destroyed) return;
       swiper.updateSlides();
       swiper.updateSlidesClasses();
     });
-  }, []);
+  }, [isTabletLandscapeTutors]);
 
   const onSwiperClick = useCallback(
     (swiper: SwiperType) => {
@@ -230,13 +206,17 @@ const Tutors: FC<PropTypes> = ({
       const n = tutorCountRef.current;
 
       onUserInteraction();
-      setActiveIndex((prev) => {
-        const ring = orderedTutorIndices(prev, n);
-        const tutorIdx = ring[slot];
-        return tutorIdx !== undefined ? tutorIdx : prev;
-      });
+      if (isTabletLandscapeTutors) {
+        setActiveIndex(slot);
+      } else {
+        setActiveIndex((prev) => {
+          const ring = orderedTutorIndices(prev, n);
+          const tutorIdx = ring[slot];
+          return tutorIdx !== undefined ? tutorIdx : prev;
+        });
+      }
     },
-    [onUserInteraction],
+    [isTabletLandscapeTutors, onUserInteraction],
   );
 
   const onSwiperSliderFirstMove = useCallback(() => {
@@ -246,6 +226,43 @@ const Tutors: FC<PropTypes> = ({
   useEffect(() => {
     tutorCountRef.current = tutorCount;
   }, [tutorCount]);
+
+  useEffect(() => {
+    const rootStyle = getComputedStyle(document.documentElement);
+    const landscapeMaxPx = Number.parseFloat(
+      rootStyle.getPropertyValue("--layout-landscape-tablet-max").trim(),
+    );
+    const tabletMaxPx = Number.parseFloat(
+      rootStyle.getPropertyValue("--layout-tablet-max").trim(),
+    );
+    if (!Number.isFinite(landscapeMaxPx) || !Number.isFinite(tabletMaxPx)) return;
+
+    const mqLandscape = window.matchMedia(`(max-width: ${landscapeMaxPx}px)`);
+    const mqTablet = window.matchMedia(`(max-width: ${tabletMaxPx}px)`);
+
+    const syncLandscape = () => setIsTabletLandscapeTutors(mqLandscape.matches);
+    const syncPagination = () => setIsTutorsPagination(mqTablet.matches);
+
+    syncLandscape();
+    syncPagination();
+
+    mqLandscape.addEventListener("change", syncLandscape);
+    mqTablet.addEventListener("change", syncPagination);
+
+    return () => {
+      mqLandscape.removeEventListener("change", syncLandscape);
+      mqTablet.removeEventListener("change", syncPagination);
+    };
+  }, []);
+
+  const tutorsPaginationEnabled = isTabletLandscapeTutors && isTutorsPagination;
+
+  useEffect(() => {
+    if (!isTabletLandscapeTutors) return;
+    const sw = swiperRef.current;
+    if (!sw || sw.destroyed || sw.realIndex === activeIndex) return;
+    sw.slideTo(activeIndex, 0, false);
+  }, [activeIndex, isTabletLandscapeTutors]);
 
   useEffect(
     () => () => {
@@ -302,13 +319,13 @@ const Tutors: FC<PropTypes> = ({
 
         <div className="home-page__tutors-body">
           <div className="home-page__tutors-carousel">
-            <div
-              className="home-page__tutors-slider-viewport"
-              style={{
-                "--tutors-viewport-w": `${VIEWPORT_W}px`,
-                "--tutors-detail-spacer-w": `${DETAIL_LEFT_SPACER_W}px`,
-              } as CSSProperties}
-            >
+            {isTabletLandscapeTutors ? (
+              <div
+                ref={tutorsPaginationElRef}
+                className="home-page__tutors-pagination-root"
+              />
+            ) : null}
+            <div className="home-page__tutors-slider-viewport">
               {activeItem && (
                 <aside
                   className="home-page__tutors-detail"
@@ -361,58 +378,19 @@ const Tutors: FC<PropTypes> = ({
                 </aside>
               )}
 
-              <Swiper
-                speed={0}
-                grabCursor
-                resizeObserver
-                watchSlidesProgress
-                slidesPerView="auto"
-                initialSlide={initialSlideMid}
-                key={`tutor-order-${activeIndex}`}
-                className="home-page__tutors-swiper"
-                spaceBetween={SLIDE_GAP}
-                slidesOffsetAfter={SLIDES_OFFSET_AFTER}
-                slidesOffsetBefore={SLIDES_OFFSET_BEFORE}
-                observer={false}
-                watchOverflow={false}
-                centeredSlides={false}
-                observeSlideChildren={false}
+              <TutorsSwiper
+                slidesForSwiper={slidesForSwiper}
+                isTabletLandscapeTutors={isTabletLandscapeTutors}
+                activeIndex={activeIndex}
+                initialSlideMid={initialSlideMid}
+                tutorCount={tutorCount}
+                tutorsPaginationEnabled={tutorsPaginationEnabled}
+                paginationElRef={tutorsPaginationElRef}
                 onSwiper={onSwiper}
-                onClick={onSwiperClick}
+                onSwiperClick={onSwiperClick}
                 onSlideChange={onSlideChange}
-                onSliderFirstMove={onSwiperSliderFirstMove}
-              >
-                {orderedSlides.map(({ item, key }) => {
-                  const img = item ? TUTOR_IMAGES[item.id] : undefined;
-                  if (!item || !img) return null;
-
-                  return (
-                    <SwiperSlide key={key} className="home-page__tutors-slide">
-                      <div className="home-page__tutors-thumb">
-                        <div className="home-page__tutors-thumb__tags" aria-hidden>
-                          {item.tags.map((tutorTag) => (
-                            <span className="home-page__tutors-tag" key={`${key}-${tutorTag}`}>
-                              {tutorTag}
-                            </span>
-                          ))}
-                        </div>
-
-                        <div className="home-page__tutors-thumb__img-wrap">
-                          <Image
-                            className="home-page__tutors-thumb__img"
-                            src={img}
-                            alt=""
-                            width={560}
-                            height={700}
-                            sizes="560px"
-                            draggable={false}
-                          />
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                  )
-                })}
-              </Swiper>
+                onSwiperSliderFirstMove={onSwiperSliderFirstMove}
+              />
             </div>
           </div>
         </div>
