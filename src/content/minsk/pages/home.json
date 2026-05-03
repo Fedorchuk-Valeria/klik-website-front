@@ -408,14 +408,14 @@
           "isButton": true,
           "button": {
             "title": "Оставить заявку",
-            "variant": "primary"
+            "variant": "main-green-dark"
           }
         },
         {
           "id": 2,
           "title": "Второй клик",
-          "subtitle": "выбрать программу",
-          "text": "Выберите программу, которая вам подходит",
+          "subtitle": "пробное занятие",
+          "text": "Познакомим ребёнка с наставником и атмосферой KLiK",
           "isButton": false,
           "isDropdown": true,
           "list": {
@@ -451,7 +451,7 @@
           },
           "button": {
             "title": "Узнать подробнее",
-            "variant": "secondary"
+            "variant": "main-light"
           }
         }
       ]

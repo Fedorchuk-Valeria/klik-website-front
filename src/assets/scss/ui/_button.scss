@@ -1,10 +1,10 @@
 .button {
-
   position: relative;
   border-radius: 100px;
   font-size: 18px;
   transition: 0.3s all;
   cursor: pointer;
+  padding: 20px;
 
   &__arrow {
     position: absolute;
@@ -33,7 +33,6 @@
   }
 
   &--orange {
-    padding: 20px;
     background-color: var(--main-orange);
     color: var(--main-light);
 
@@ -45,12 +44,12 @@
       svg {
         fill: var(--main-green-dark);
       }
+
       background-color: var(--main-light);
     }
   }
 
   &--main-light {
-    padding: 20px;
     background-color: var(--main-light);
     color: var(--main-green-dark);
 
@@ -58,7 +57,21 @@
       svg {
         fill: var(--main-light);
       }
-      background-color: var(--main-green-dark);
+
+      background-color: var(--main-orange);
+    }
+  }
+
+  &--main-green-dark {
+    background-color: var(--main-green-dark);
+    color: var(--main-light);
+
+    .button__arrow {
+      svg {
+        fill: var(--main-light);
+      }
+
+      background-color: var(--main-orange);
     }
   }
 }
