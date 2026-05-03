@@ -1,14 +1,19 @@
+import Image from 'next/image';
+import Link from "next/link";
+
 import headerImg from '@/src/assets/images/templates/homepage/header.png';
 import imgBlue from "@/src/assets/images/templates/homepage/programs/blue.jpg";
 import imgGreen from "@/src/assets/images/templates/homepage/programs/green.jpg";
 import imgPink from "@/src/assets/images/templates/homepage/programs/pink.jpg";
+
 import FormatsList from "@/src/components/template-parts/FormatsList/FormatsList";
 import Button from "@/src/components/ui/Button/Button";
 import FAQ from "@/src/components/ui/Faq/Faq";
 import Icon from "@/src/components/ui/Icon/Icon";
+
 import { Page } from "@/src/lib/content/types";
-import Image from 'next/image';
-import Link from "next/link";
+
+import HowSignUp from '../template-parts/HowSignUp';
 import Tutors from '../template-parts/Tutors';
 import WhatWeLearn from '../template-parts/WhatWeLearn';
 import WhyWeAre from '../template-parts/WhyWeAre';
@@ -24,7 +29,6 @@ export const programImages: Record<string, string> = {
 };
 
 export default function Home({ page }: Props) {
-
     const header = page?.content?.header;
     const faq = page?.content?.faq;
     const formats = page?.content?.formats;
@@ -32,6 +36,7 @@ export default function Home({ page }: Props) {
     const whatWeLearn = page?.content?.what_we_learn;
     const whyWeAre = page?.content?.why_we_are;
     const tutors = page?.content?.our_tutors;
+    const howSignUp = page?.content?.how_sign_up;
 
     return (
         <main className='main home-page'>
@@ -100,6 +105,7 @@ export default function Home({ page }: Props) {
             </section>
 
             <WhatWeLearn {...whatWeLearn} />
+            <HowSignUp {...howSignUp} />
             <WhyWeAre {...whyWeAre} />
             <Tutors {...tutors} />
 
