@@ -19,6 +19,9 @@ import DateInput from "@/src/components/ui/DateInput";
 import PhoneInput from "@/src/components/ui/PhoneInput";
 import TextInput from "@/src/components/ui/TextInput";
 
+import { ModalType } from "@/src/entities/common";
+import { useAppDispatch } from "@/src/store/hooks";
+import { showModal } from "@/src/store/slices/modalSlice";
 import { validationSchema } from "./validationSchema";
 
 function itemTitleWithThirdWordBold(title: string): ReactNode {
@@ -45,6 +48,7 @@ type PropTypes = {
 const MAX_TEXT_FIELD_LENGTH = 100;
 
 const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
+  const dispatch = useAppDispatch();
   const form = useFormik({
     initialValues: {
       parent: "",
@@ -56,6 +60,16 @@ const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
     validationSchema,
     onSubmit: (values) => {
       console.log(values);
+
+      dispatch(
+        showModal({
+          modalType: ModalType.NOTICE,
+          modalProps: {
+            title: "Заявка принята!",
+            description: "Менеджер свяжется с вами в ближайщее время",
+          },
+        })
+      );
     },
     validateOnChange: false,
     validateOnBlur: false,

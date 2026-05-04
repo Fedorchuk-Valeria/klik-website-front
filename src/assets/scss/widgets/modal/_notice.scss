@@ -1,0 +1,57 @@
+.modal-notice {
+  dialog {
+    @include center;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 560px;
+    width: 100%;
+  }
+
+  .modal-notice__title {
+    @include fonts(30px, 700);
+    color: var(--main-green-dark);
+  }
+
+  .modal-notice__description {
+    @include fonts(18px, 400, "Manrope");
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    gap: 10px;
+    max-width: 422px;
+
+    .modal-notice__title {
+      font-size: 26px;
+    }
+
+    .modal-notice__description {
+      font-size: 16px;
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    gap: 12px;
+    max-width: 480px;
+
+    .modal-notice__title {
+      font-size: 30px;
+    }
+
+    .modal-notice__description {
+      font-size: 18px;
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    gap: 10px;
+    max-width: 350px;
+
+    .modal-notice__title {
+      font-size: 24px;
+    }
+
+    .modal-notice__description {
+      font-size: 14px;
+    }
+  }
+}

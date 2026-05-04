@@ -1,0 +1,59 @@
+.modal {
+  overscroll-behavior: contain;
+
+  dialog,
+  ::backdrop {
+    opacity: 0;
+  }
+
+  dialog {
+    border: 2px solid var(--main-green-dark);
+    background: var(--main-bg);
+    border-radius: 50px;
+    padding: 50px 30px;
+    outline: none;
+    min-width: 300px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    max-height: 90vh;
+    position: fixed;
+    overflow: auto;
+    overscroll-behavior: contain;
+    touch-action: manipulation;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  ::backdrop {
+    background: var(--neutral-primary);
+    touch-action: none;
+  }
+
+  [open] {
+    opacity: 1;
+  }
+
+  [open]::backdrop {
+    opacity: 0.6;
+  }
+
+  @starting-style {
+    [open],
+    [open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    dialog {
+      padding: 30px;
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    dialog {
+      padding: 20px;
+    }
+  }
+}
