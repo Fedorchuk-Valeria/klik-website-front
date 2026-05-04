@@ -1,11 +1,15 @@
 "use client";
+
+import { useState } from "react";
+
+import imgGreen from "@/src/assets/images/templates/homepage/formats/green.jpg";
 import imgOrange from "@/src/assets/images/templates/homepage/formats/orange.jpg";
 import imgPink from "@/src/assets/images/templates/homepage/formats/pink.jpg";
-import imgGreen from "@/src/assets/images/templates/homepage/formats/green.jpg";
-import React, { useState } from "react";
-import { stripHtml } from "@/src/helper/stripHtml";
+
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
+
+import { stripHtml } from "@/src/helper/stripHtml";
 
 type ListItem = {
   icon: string;
@@ -15,7 +19,7 @@ type ListItem = {
 type FormatItem = {
   title: string;
   text: string;
-  image: string;
+  image?: string;
   class: string;
   tag?: string;
   list?: ListItem[];

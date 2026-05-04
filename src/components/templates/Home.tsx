@@ -30,15 +30,19 @@ export const programImages: Record<string, string> = {
 };
 
 export default function Home({ page }: Props) {
-  const header = page?.content?.header;
-  const faq = page?.content?.faq;
-  const formats = page?.content?.formats;
-  const programs = page?.content?.programs;
-  const whatWeLearn = page?.content?.what_we_learn;
-  const whyWeAre = page?.content?.why_we_are;
-  const tutors = page?.content?.our_tutors;
-  const howSignUp = page?.content?.how_sign_up;
-  const signUpFreeLesson = page?.content?.sign_up_free_lesson;
+  if (page.template !== "home") {
+    throw new Error('Home: ожидался template "home"');
+  }
+
+  const header = page.content.header;
+  const faq = page.content.faq;
+  const formats = page.content.formats;
+  const programs = page.content.programs;
+  const whatWeLearn = page.content.what_we_learn;
+  const whyWeAre = page.content.why_we_are;
+  const tutors = page.content.our_tutors;
+  const howSignUp = page.content.how_sign_up;
+  const signUpFreeLesson = page.content.sign_up_free_lesson;
 
   return (
     <main className="main home-page">
@@ -122,16 +126,16 @@ export default function Home({ page }: Props) {
               {formats?.text && <div className="home-page__formats-text">{formats.text}</div>}
             </div>
             <div className="home-page__formats-body">
-              <FormatsList items={formats.items} />
+              <FormatsList items={formats?.items ?? []} />
             </div>
           </div>
         </div>
       </section>
 
       <WhatWeLearn {...whatWeLearn} />
-      <HowSignUp {...howSignUp} />
-      <WhyWeAre {...whyWeAre} />
-      <SignUpFreeLesson {...signUpFreeLesson} />
+      {howSignUp ? <HowSignUp {...howSignUp} /> : null}
+      {whyWeAre ? <WhyWeAre {...whyWeAre} /> : null}
+      {signUpFreeLesson ? <SignUpFreeLesson {...signUpFreeLesson} /> : null}
       <Tutors {...tutors} />
 
       {faq ? (
