@@ -9,6 +9,49 @@
     padding: 50px 50px 50px 90px;
     border-radius: 50px;
     background: var(--main-green-neon);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sign-up-free-lesson__flower {
+    position: absolute;
+    left: 18px;
+    bottom: 31px;
+    z-index: 0;
+    display: flex;
+    width: 201px;
+    height: 203px;
+    color: var(--secondary-green-neon-50);
+    pointer-events: none;
+  }
+
+  .sign-up-free-lesson__spiral {
+    position: absolute;
+    left: 30px;
+    top: 0;
+    z-index: 0;
+    display: flex;
+    width: 1115px;
+    height: 638px;
+    color: var(--secondary-green-neon-50);
+    pointer-events: none;
+  }
+
+  .sign-up-free-lesson__eyes {
+    position: absolute;
+    left: 350px;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    width: 226px;
+    height: 176px;
+    pointer-events: none;
+  }
+
+  .sign-up-free-lesson__container {
+    position: relative;
+    z-index: 1;
+    min-width: 751px;
   }
 
   .sign-up-free-lesson__image {
@@ -70,6 +113,7 @@
     background: var(--main-blue);
     border-radius: 50px;
     padding: 100px;
+    z-index: 1;
 
     .sign-up-free-lesson__form-title {
       @include fonts(24px, 500, "Etude Noire");
@@ -84,12 +128,61 @@
     }
 
     .sign-up-free-lesson__form-body {
-      @include flex-list(20px);
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 20px;
+
+      > .sign-up-free-lesson__form-input:nth-child(1),
+      > .sign-up-free-lesson__form-input:nth-child(2),
+      > .sign-up-free-lesson__form-button,
+      > .sign-up-free-lesson__form-checkbox-container {
+        flex: 1 1 100%;
+        width: 100%;
+        min-width: 0;
+      }
+
+      > .sign-up-free-lesson__form-input:nth-child(3),
+      > .sign-up-free-lesson__form-input:nth-child(4) {
+        flex: 1 1 calc(50% - 10px);
+        min-width: 0;
+      }
 
       .sign-up-free-lesson__form-button {
         @include center;
         width: 100%;
         margin-top: 10px;
+      }
+
+      .sign-up-free-lesson__form-checkbox-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: 20px;
+
+        .sign-up-free-lesson__form-checkbox--text {
+          @include fonts(16px, 400, "Manrope");
+          color: var(--main-burgundy);
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+
+        .sign-up-free-lesson__form-checkbox--link {
+          font-weight: 600;
+          color: var(--main-green-dark);
+          position: relative;
+
+          &:after {
+            content: "";
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--main-orange);
+          }
+        }
       }
     }
   }

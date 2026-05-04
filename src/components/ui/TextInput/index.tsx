@@ -31,7 +31,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(function TextInpu
 
   return (
     <div
-      className={classNames("text-input", {
+      className={classNames("text-input", className, {
         "text-input--error": !!error,
       })}
     >
@@ -52,8 +52,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(function TextInpu
         type={type}
         className={classNames(
           "text-input__control",
-          isFilled && !error && "text-input__control--filled",
-          className
+          isFilled && !error && "text-input__control--filled"
         )}
         aria-invalid={!!error ? true : ariaInvalidProp}
         aria-describedby={ariaDescribedBy}

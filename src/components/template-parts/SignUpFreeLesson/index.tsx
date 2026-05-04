@@ -3,13 +3,20 @@
 import classNames from "classnames";
 import { useFormik } from "formik";
 import Image from "next/image";
+import Link from "next/link";
 import { FC, ReactNode } from "react";
 
 import image from "@/src/assets/images/templates/homepage/signUpFreeLesson/sign-up-for-free-lesson.png";
 
+import EyesSVG from "@/src/assets/images/templates/homepage/signUpFreeLesson/eyes.svg";
+import FlowerSVG from "@/src/assets/images/templates/homepage/signUpFreeLesson/flower.svg";
+import SpiralSVG from "@/src/assets/images/templates/homepage/signUpFreeLesson/spiral.svg";
 import UnderlineSVG from "@/src/assets/images/templates/homepage/signUpFreeLesson/underline.svg";
 
 import Button from "@/src/components/ui/Button/Button";
+import Checkbox from "@/src/components/ui/Checkbox";
+import DateInput from "@/src/components/ui/DateInput";
+import PhoneInput from "@/src/components/ui/PhoneInput";
 import TextInput from "@/src/components/ui/TextInput";
 
 import { validationSchema } from "./validationSchema";
@@ -35,13 +42,16 @@ type PropTypes = {
   }[];
 };
 
+const MAX_TEXT_FIELD_LENGTH = 100;
+
 const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
   const form = useFormik({
     initialValues: {
       parent: "",
       child: "",
       phone: "",
-      date: null,
+      date: "",
+      agreedment: false,
     },
     validationSchema,
     onSubmit: (values) => {
@@ -51,7 +61,19 @@ const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
 
   return (
     <section className={classNames("home-page__block", "sign-up-free-lesson")}>
-      <div className={"sign-up-free-lesson__block"}>
+      <div className="sign-up-free-lesson__block">
+        <span className="sign-up-free-lesson__flower">
+          <FlowerSVG />
+        </span>
+
+        <span className="sign-up-free-lesson__spiral">
+          <SpiralSVG />
+        </span>
+
+        <span className="sign-up-free-lesson__eyes">
+          <EyesSVG />
+        </span>
+
         <div className="sign-up-free-lesson__container">
           <div className="sign-up-free-lesson__image">
             <Image src={image} alt={"Форма заполнения контактов на бесплатное занятие"} fill />
@@ -89,6 +111,8 @@ const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
           <form className="sign-up-free-lesson__form-body" onSubmit={form.handleSubmit}>
             <TextInput
               required
+              max={MAX_TEXT_FIELD_LENGTH}
+              maxLength={MAX_TEXT_FIELD_LENGTH}
               name="parent"
               label="ФИО родителя"
               value={form.values.parent}
@@ -100,12 +124,35 @@ const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
 
             <TextInput
               required
+              max={MAX_TEXT_FIELD_LENGTH}
+              maxLength={MAX_TEXT_FIELD_LENGTH}
               name="child"
               label="ФИО ребенка"
               value={form.values.child}
               error={form.errors.child}
               onChange={form.handleChange}
               placeholder="Иванов Иван Иванович"
+              className="sign-up-free-lesson__form-input"
+            />
+
+            <PhoneInput
+              required
+              name="phone"
+              label="Телефон"
+              value={form.values.phone}
+              error={form.errors.phone}
+              onChange={form.handleChange}
+              placeholder="+375 (29) 123-45-67"
+              className="sign-up-free-lesson__form-input"
+            />
+
+            <DateInput
+              required
+              name="date"
+              label="Дата"
+              value={form.values.date}
+              error={form.errors.date}
+              onChange={form.handleChange}
               className="sign-up-free-lesson__form-input"
             />
 
@@ -117,6 +164,29 @@ const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
             >
               Оставить заявку
             </Button>
+
+            <div className="sign-up-free-lesson__form-checkbox-container">
+              <Checkbox
+                id="agreedment"
+                name="agreedment"
+                checked={form.values.agreedment}
+                error={form.errors.agreedment}
+                onChange={(checked) => form.setFieldValue("agreedment", checked)}
+                className="sign-up-free-lesson__form-checkbox"
+              />
+
+              <span className="sign-up-free-lesson__form-checkbox--text">
+                Я соглашаюсь с
+                <Link
+                  href="/privacy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="sign-up-free-lesson__form-checkbox--link"
+                >
+                  политикой обработки конфиденциальных данных
+                </Link>
+              </span>
+            </div>
           </form>
         </div>
       </div>

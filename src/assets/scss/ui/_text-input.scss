@@ -1,45 +1,34 @@
 .text-input {
-  display: flex;
-  flex-direction: column;
+  @include flex-list(10px);
   align-items: stretch;
-  gap: 10px;
   width: 100%;
-  max-width: 700px;
 
-  &__label {
-    font-family: inherit;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: normal;
+  .text-input__label {
+    @include fonts(16px, 400, "Manrope");
     color: var(--main-black);
+    margin-left: 30px;
   }
 
-  &__required {
+  .text-input__required {
     color: var(--main-orange);
   }
 
-  &__control {
+  .text-input__control {
+    @include fonts(20px, 400, "Manrope");
     box-sizing: border-box;
     display: flex;
     align-items: center;
     gap: 10px;
-
     width: 100%;
-    height: 65px;
     padding: 21px 30px 22px;
 
-    font-family: inherit;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: normal;
-    color: var(--main-black);
-
+    color: var(--main-burgundy);
     background: var(--secondary-white-80);
     border: none;
     border-radius: 100px;
 
     &::placeholder {
-      color: rgba(28, 26, 28, 0.45);
+      font-size: 16px;
     }
 
     &:focus {
@@ -47,28 +36,20 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--main-green-dark);
-      outline-offset: 2px;
-    }
-
-    &--filled {
-      background: var(--white);
+      outline: 1px solid var(--main-orange);
+      outline-offset: 1px;
     }
   }
 
-  &--error &__control {
-    background: color-mix(in srgb, var(--main-pink) 45%, var(--white));
+  &.text-input--error .text-input__control {
+    background: #f9d1d1;
   }
 
   &__error {
+    @include fonts(14px, 500, "Manrope");
     margin: 0;
-    padding: 0 4px;
-
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: normal;
-    color: var(--main-orange);
+    margin-right: 30px;
+    color: #e31b1b;
     text-align: right;
   }
 }
