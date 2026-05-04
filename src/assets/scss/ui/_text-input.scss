@@ -52,4 +52,34 @@
     color: #e31b1b;
     text-align: right;
   }
+
+  @media (max-width: $landscape-tablet-size) {
+    .text-input__label {
+      font-size: 14px;
+    }
+
+    .text-input__control {
+      padding: 16px 30px;
+    }
+  }
+
+  @media (max-width: $tablet-size) {
+    .text-input__label {
+      font-size: 16px;
+    }
+
+    .text-input__control {
+      padding: 21px 30px 22px;
+    }
+  }
+
+  @media (max-width: $mobile-size) {
+    .text-input__label {
+      font-size: 14px;
+    }
+
+    .text-input__control {
+      padding: 16px 30px;
+    }
+  }
 }

@@ -13,45 +13,10 @@
     overflow: hidden;
   }
 
-  .sign-up-free-lesson__flower {
-    position: absolute;
-    left: 18px;
-    bottom: 31px;
-    z-index: 0;
-    display: flex;
-    width: 201px;
-    height: 203px;
-    color: var(--secondary-green-neon-50);
-    pointer-events: none;
-  }
-
-  .sign-up-free-lesson__spiral {
-    position: absolute;
-    left: 30px;
-    top: 0;
-    z-index: 0;
-    display: flex;
-    width: 1115px;
-    height: 638px;
-    color: var(--secondary-green-neon-50);
-    pointer-events: none;
-  }
-
-  .sign-up-free-lesson__eyes {
-    position: absolute;
-    left: 350px;
-    top: 0;
-    z-index: 2;
-    display: flex;
-    width: 226px;
-    height: 176px;
-    pointer-events: none;
-  }
-
   .sign-up-free-lesson__container {
     position: relative;
     z-index: 1;
-    min-width: 751px;
+    min-width: 750px;
   }
 
   .sign-up-free-lesson__image {
@@ -156,32 +121,585 @@
 
       .sign-up-free-lesson__form-checkbox-container {
         display: flex;
-        align-items: center;
-        gap: 10px;
+        align-items: flex-start;
+        gap: 12px;
         margin-left: 20px;
+
+        .sign-up-free-lesson__form-checkbox {
+          flex-shrink: 0;
+          margin-top: 2px;
+        }
 
         .sign-up-free-lesson__form-checkbox--text {
           @include fonts(16px, 400, "Manrope");
           color: var(--main-burgundy);
-          display: flex;
-          align-items: center;
-          gap: 4px;
+          flex: 1 1 0%;
+          min-width: 0;
+          line-height: 1.5;
         }
 
         .sign-up-free-lesson__form-checkbox--link {
           font-weight: 600;
           color: var(--main-green-dark);
           position: relative;
+          text-decoration: underline;
+          text-decoration-thickness: 2px;
+          text-decoration-color: var(--main-orange);
+          text-underline-offset: 5px;
+          margin-left: 4px;
+        }
+      }
+    }
+  }
 
-          &:after {
-            content: "";
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background-color: var(--main-orange);
+  .sign-up-free-lesson__flower {
+    position: absolute;
+    left: 18px;
+    bottom: 31px;
+    z-index: 0;
+    display: flex;
+    width: 201px;
+    height: 203px;
+    color: var(--secondary-green-neon-50);
+    pointer-events: none;
+  }
+
+  .sign-up-free-lesson__spiral {
+    position: absolute;
+    left: 30px;
+    top: 0;
+    z-index: 0;
+    display: flex;
+    width: 1115px;
+    height: 638px;
+    color: var(--secondary-green-neon-50);
+    pointer-events: none;
+  }
+
+  .sign-up-free-lesson__eyes {
+    position: absolute;
+    left: 350px;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    width: 226px;
+    height: 176px;
+    pointer-events: none;
+  }
+
+  @media (max-width: $desktop) {
+    .sign-up-free-lesson__block {
+      gap: 20px;
+      padding: 50px 50px 50px 80px;
+    }
+
+    .sign-up-free-lesson__container {
+      min-width: 444px;
+    }
+
+    .sign-up-free-lesson__image {
+      margin-top: -41px;
+    }
+
+    .sign-up-free-lesson__title {
+      font-size: 30px;
+
+      .sign-up-free-lesson__title-underline {
+        left: 53px;
+        width: 226px;
+        height: 16px;
+      }
+    }
+
+    .sign-up-free-lesson__text {
+      font-size: 18px;
+      max-width: 444px;
+      margin-bottom: 50px;
+    }
+
+    .sign-up-free-lesson__items {
+      flex-wrap: wrap;
+      gap: 30px;
+
+      .sign-up-free-lesson__item {
+        &:nth-child(1) {
+          order: 1;
+        }
+
+        &:nth-child(2) {
+          flex: 1 1 100%;
+          width: 100%;
+          min-width: 0;
+          order: 3;
+        }
+
+        &:nth-child(3) {
+          order: 2;
+        }
+
+        .sign-up-free-lesson__item-title {
+          font-size: 40px;
+        }
+
+        .sign-up-free-lesson__item-text {
+          font-size: 16px;
+        }
+      }
+    }
+
+    .sign-up-free-lesson__form {
+      padding: 70px;
+
+      .sign-up-free-lesson__form-title {
+        font-size: 30px;
+      }
+
+      .sign-up-free-lesson__form-text {
+        font-size: 18px;
+      }
+    }
+
+    .sign-up-free-lesson__flower {
+      left: 28px;
+      bottom: 117px;
+      width: 159px;
+      height: 161px;
+    }
+
+    .sign-up-free-lesson__spiral {
+      left: 10px;
+      top: 170px;
+      width: 1106px;
+      height: 781px;
+      transform: rotate(30deg);
+    }
+
+    .sign-up-free-lesson__eyes {
+      left: 338px;
+      width: 183px;
+      height: 142px;
+    }
+  }
+
+  @media (max-width: $landscape-tablet-size) {
+    .sign-up-free-lesson__block {
+      gap: 20px;
+      padding: 0px 0px 0px 40px;
+      border-radius: 30px;
+    }
+
+    .sign-up-free-lesson__container {
+      min-width: 379px;
+    }
+
+    .sign-up-free-lesson__image {
+      width: 301px;
+      height: 329px;
+      margin-top: -11px;
+      margin-bottom: 21px;
+    }
+
+    .sign-up-free-lesson__title {
+      font-size: 26px;
+
+      .sign-up-free-lesson__title-underline {
+        left: 47px;
+        top: 42px;
+        height: 7px;
+        width: 189px;
+      }
+    }
+
+    .sign-up-free-lesson__text {
+      font-size: 14px;
+      max-width: 379px;
+      margin-bottom: 40px;
+    }
+
+    .sign-up-free-lesson__items {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px 50px;
+      align-items: start;
+
+      .sign-up-free-lesson__item {
+        gap: 6px;
+        min-width: 0;
+
+        &:nth-child(1) {
+          grid-column: 1;
+          grid-row: 1;
+        }
+
+        &:nth-child(3) {
+          grid-column: 2;
+          grid-row: 1;
+        }
+
+        &:nth-child(2) {
+          grid-column: 1 / -1;
+          grid-row: 2;
+        }
+
+        .sign-up-free-lesson__item-title {
+          font-size: 26px;
+        }
+
+        .sign-up-free-lesson__item-text {
+          font-size: 12px;
+          max-width: 133px;
+        }
+      }
+    }
+
+    .sign-up-free-lesson__form {
+      border-radius: 30px;
+      padding: 60px 40px;
+
+      .sign-up-free-lesson__form-title {
+        font-size: 28px;
+      }
+
+      .sign-up-free-lesson__form-text {
+        font-size: 16px;
+        margin-bottom: 30px;
+      }
+
+      .sign-up-free-lesson__form-body {
+        gap: 20px;
+
+        .sign-up-free-lesson__form-checkbox-container {
+          .sign-up-free-lesson__form-checkbox--text {
+            font-size: 14px;
           }
+        }
+      }
+
+      .sign-up-free-lesson__form-button {
+        padding: 16px 30px;
+        font-size: 16px;
+      }
+    }
+
+    .sign-up-free-lesson__flower {
+      left: 5px;
+      bottom: 86px;
+      width: 219px;
+      height: 121px;
+    }
+
+    .sign-up-free-lesson__spiral {
+      left: -70px;
+      top: 0px;
+      width: 720px;
+      height: 360px;
+      transform: rotate(10deg);
+    }
+
+    .sign-up-free-lesson__eyes {
+      left: 296px;
+      top: 72px;
+      width: 118px;
+      height: 92px;
+    }
+  }
+
+  @media (max-width: $tablet-size) {
+    width: 100%;
+
+    .sign-up-free-lesson__block {
+      flex-direction: column;
+      gap: 30px;
+      padding: 10px;
+      border-radius: 0;
+    }
+
+    .sign-up-free-lesson__container {
+      min-width: 528px;
+    }
+
+    .sign-up-free-lesson__image {
+      width: 352px;
+      height: 385px;
+      position: relative;
+      margin-top: 6px;
+      margin-bottom: 50px;
+      margin-left: 60px;
+    }
+
+    .sign-up-free-lesson__title {
+      font-size: 30px;
+      margin-left: 70px;
+      white-space: normal;
+      max-width: 528px;
+
+      .sign-up-free-lesson__title-underline {
+        top: 20px;
+        left: 292px;
+        height: 16px;
+        width: 226px;
+      }
+    }
+
+    .sign-up-free-lesson__text {
+      font-size: 18px;
+      max-width: 528px;
+      margin-bottom: 30px;
+      margin-left: 70px;
+    }
+
+    .sign-up-free-lesson__items {
+      display: flex;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-left: 70px;
+
+      .sign-up-free-lesson__item {
+        gap: 0;
+
+        &:nth-child(2) {
+          order: 3;
+          flex: 0 0 auto;
+          width: auto;
+        }
+
+        .sign-up-free-lesson__item-title {
+          font-size: 40px;
+        }
+
+        .sign-up-free-lesson__item-text {
+          font-size: 16px;
+          max-width: 100%;
+        }
+      }
+    }
+
+    .sign-up-free-lesson__form {
+      border-radius: 50px;
+      padding: 60px 30px;
+
+      .sign-up-free-lesson__form-title {
+        font-size: 30px;
+        margin-bottom: 5px;
+        max-width: 627px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .sign-up-free-lesson__form-text {
+        font-size: 18px;
+        max-width: 627px;
+        width: 100%;
+        padding-right: 130px;
+        margin: 0 auto 30px;
+      }
+
+      .sign-up-free-lesson__form-body {
+        max-width: 627px;
+        width: 100%;
+        margin: 0 auto;
+
+        .sign-up-free-lesson__form-button {
+          padding: 20px;
+        }
+
+        .sign-up-free-lesson__form-checkbox-container {
+          .sign-up-free-lesson__form-checkbox--text {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+
+    .sign-up-free-lesson__flower {
+      left: 12px;
+      top: 556px;
+      width: 159px;
+      height: 161px;
+    }
+
+    .sign-up-free-lesson__spiral {
+      left: auto;
+      right: -200px;
+      top: 0px;
+      width: 854px;
+      height: 613px;
+      transform: rotate(27deg);
+    }
+
+    .sign-up-free-lesson__eyes {
+      left: 392px;
+      top: 50px;
+      width: 182px;
+      height: 137px;
+    }
+
+    @media (max-width: 606px) {
+      .sign-up-free-lesson__title {
+        .sign-up-free-lesson__title-underline {
+          top: 49px;
+          left: 0px;
+          height: 16px;
+          width: 226px;
+        }
+      }
+    }
+
+    @media (max-width: $mobile-size) {
+      .sign-up-free-lesson__block {
+        padding: 10px 0 0;
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+      }
+
+      .sign-up-free-lesson__container {
+        min-width: 100%;
+      }
+
+      .sign-up-free-lesson__image {
+        margin-top: 20px;
+        margin-bottom: 40px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .sign-up-free-lesson__title {
+        font-size: 26px;
+        margin-left: 20px;
+        margin-right: 20px;
+        max-width: 100%;
+        margin-bottom: 10px;
+
+        .sign-up-free-lesson__title-underline {
+          top: 17px;
+          left: 255px;
+          height: 12px;
+          width: 190px;
+        }
+      }
+
+      .sign-up-free-lesson__text {
+        font-size: 16px;
+        max-width: 100%;
+        margin-bottom: 20px;
+        margin-left: 20px;
+        margin-right: 20px;
+      }
+
+      .sign-up-free-lesson__items {
+        gap: 30px;
+        margin-left: 20px;
+        margin-right: 20px;
+
+        .sign-up-free-lesson__item {
+          gap: 0;
+          align-items: center;
+
+          &:nth-child(1) {
+            margin-right: 20px;
+          }
+
+          &:nth-child(2) {
+            flex: 1 1 100%;
+            width: 100%;
+            min-width: 0;
+          }
+
+          .sign-up-free-lesson__item-title {
+            font-size: 40px;
+          }
+
+          .sign-up-free-lesson__item-text {
+            font-size: 14px;
+            max-width: 100%;
+          }
+        }
+      }
+
+      .sign-up-free-lesson__form {
+        border-radius: 30px;
+        padding: 30px;
+
+        .sign-up-free-lesson__form-title {
+          font-size: 24px;
+          margin-bottom: 10px;
+          max-width: 100%;
+        }
+
+        .sign-up-free-lesson__form-text {
+          font-size: 14px;
+          max-width: 100%;
+          padding-right: 0;
+          margin: 0 0 30px;
+        }
+
+        .sign-up-free-lesson__form-body {
+          max-width: 100%;
+          width: 100%;
+          gap: 12px;
+
+          > .sign-up-free-lesson__form-input:nth-child(1),
+          > .sign-up-free-lesson__form-input:nth-child(2),
+          > .sign-up-free-lesson__form-input:nth-child(3),
+          > .sign-up-free-lesson__form-input:nth-child(4),
+          > .sign-up-free-lesson__form-button,
+          > .sign-up-free-lesson__form-checkbox-container {
+            flex: 1 1 100%;
+            width: 100%;
+            min-width: 0;
+          }
+
+          .sign-up-free-lesson__form-button {
+            padding: 16px;
+            margin-top: 8px;
+          }
+
+          .sign-up-free-lesson__form-checkbox-container {
+            gap: 14px;
+            margin-left: 0;
+
+            .sign-up-free-lesson__form-checkbox--text {
+              font-size: 14px;
+            }
+
+            .sign-up-free-lesson__form-checkbox--link {
+              width: 100%;
+              max-width: 100%;
+            }
+          }
+        }
+      }
+
+      .sign-up-free-lesson__flower {
+        left: 12px;
+        top: 561px;
+        width: 127px;
+        height: 129px;
+      }
+
+      .sign-up-free-lesson__spiral {
+        right: auto;
+        left: -150px;
+        top: 0px;
+        width: 670px;
+        height: 400px;
+        transform: rotate(27deg);
+      }
+
+      .sign-up-free-lesson__eyes {
+        left: 261px;
+        top: 14px;
+        width: 130px;
+        height: 88px;
+      }
+    }
+
+    @media (max-width: 487px) {
+      .sign-up-free-lesson__title {
+        .sign-up-free-lesson__title-underline {
+          top: 45px;
+          left: 0;
         }
       }
     }

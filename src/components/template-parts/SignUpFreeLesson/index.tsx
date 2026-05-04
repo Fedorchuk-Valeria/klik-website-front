@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { useFormik } from "formik";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, ReactNode } from "react";
+import { ChangeEvent, FC, ReactNode } from "react";
 
 import image from "@/src/assets/images/templates/homepage/signUpFreeLesson/sign-up-for-free-lesson.png";
 
@@ -57,7 +57,15 @@ const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
     onSubmit: (values) => {
       console.log(values);
     },
+    validateOnChange: false,
+    validateOnBlur: false,
+    validateOnMount: false,
   });
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    form.handleChange(e);
+    form.validateField(e.target.name);
+  };
 
   return (
     <section className={classNames("home-page__block", "sign-up-free-lesson")}>
@@ -117,7 +125,7 @@ const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
               label="ФИО родителя"
               value={form.values.parent}
               error={form.errors.parent}
-              onChange={form.handleChange}
+              onChange={handleChange}
               placeholder="Иванов Иван Иванович"
               className="sign-up-free-lesson__form-input"
             />
@@ -130,7 +138,7 @@ const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
               label="ФИО ребенка"
               value={form.values.child}
               error={form.errors.child}
-              onChange={form.handleChange}
+              onChange={handleChange}
               placeholder="Иванов Иван Иванович"
               className="sign-up-free-lesson__form-input"
             />
@@ -141,18 +149,17 @@ const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
               label="Телефон"
               value={form.values.phone}
               error={form.errors.phone}
-              onChange={form.handleChange}
+              onChange={handleChange}
               placeholder="+375 (29) 123-45-67"
               className="sign-up-free-lesson__form-input"
             />
 
             <DateInput
-              required
               name="date"
-              label="Дата"
+              label="Дата рождения ребёнка"
               value={form.values.date}
               error={form.errors.date}
-              onChange={form.handleChange}
+              onChange={handleChange}
               className="sign-up-free-lesson__form-input"
             />
 

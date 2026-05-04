@@ -56,7 +56,6 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(function TextInpu
         )}
         aria-invalid={!!error ? true : ariaInvalidProp}
         aria-describedby={ariaDescribedBy}
-        required={required}
       />
 
       {!!error && (
