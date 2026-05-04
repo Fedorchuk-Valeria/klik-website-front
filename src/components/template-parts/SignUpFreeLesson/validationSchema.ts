@@ -1,8 +1,9 @@
 import * as Yup from "yup";
 
 export const validationSchema = Yup.object().shape({
-  parent: Yup.string().required("Имя обязательно для заполнения"),
-  child: Yup.string().required("Имя обязательно для заполнения"),
-  phone: Yup.string().required("Имя обязательно для заполнения"),
-  date: Yup.date().required("Имя обязательно для заполнения"),
+  parent: Yup.string().required("Пожалуйста, заполните поле"),
+  child: Yup.string().required("Пожалуйста, заполните поле"),
+  phone: Yup.string().required("Пожалуйста, заполните поле").min(19, "Пожалуйста, заполните поле"),
+  date: Yup.date().required("Пожалуйста, заполните поле").min(10, "Пожалуйста, заполните поле"),
+  agreedment: Yup.boolean().required("Пожалуйста, заполните поле"),
 });
