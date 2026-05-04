@@ -36,7 +36,7 @@ type PropTypes = {
       text: string;
     }[];
   }[];
-}
+};
 
 const HowSignUp: FC<PropTypes> = ({ tag, title, text, items }) => {
   return (
@@ -46,17 +46,24 @@ const HowSignUp: FC<PropTypes> = ({ tag, title, text, items }) => {
           {tag && <div className="home-page__tag">{tag}</div>}
 
           <div className={classNames("home-page__formats-top", "how-sign-up-top")}>
-            {title && <h2 className={classNames("home-page__h2", "how-sign-up__title")}>{title}</h2>}
-            {text && <div className={classNames("home-page__text", "how-sign-up__text")}>{text}</div>}
+            {title && (
+              <h2 className={classNames("home-page__h2", "how-sign-up__title")}>{title}</h2>
+            )}
+            {text && (
+              <div className={classNames("home-page__text", "how-sign-up__text")}>{text}</div>
+            )}
           </div>
         </div>
 
         <div className="how-sign-up-body">
           {items.map((item, index, array) => (
-            <div className={classNames("how-sign-up__card", {
-              "how-sign-up__card--last": index === array.length - 1,
-              "how-sign-up__card--second": index === 1,
-            })} key={item.id}>
+            <div
+              className={classNames("how-sign-up__card", {
+                "how-sign-up__card--last": index === array.length - 1,
+                "how-sign-up__card--second": index === 1,
+              })}
+              key={item.id}
+            >
               <span
                 className={classNames("how-sign-up__card-leaf", {
                   "how-sign-up__card-leaf--placement-first": index === 0,
@@ -85,15 +92,23 @@ const HowSignUp: FC<PropTypes> = ({ tag, title, text, items }) => {
 
               <div className="how-sign-up-item__text">{item.text}</div>
 
-              {item?.list?.items?.length && <ul className="how-sign-up__card-list">
-                {item.list.items.map((listItem, index) => (
-                  <li className="how-sign-up__card-list--item" key={index}>
-                    <Icon name="disk" className={classNames("how-sign-up__card-list--item-icon", `how-sign-up__card-list--item-icon--${item.list.icon_variant}`)} />
+              {item?.list?.items?.length && (
+                <ul className="how-sign-up__card-list">
+                  {item.list.items.map((listItem, index) => (
+                    <li className="how-sign-up__card-list--item" key={index}>
+                      <Icon
+                        name="disk"
+                        className={classNames(
+                          "how-sign-up__card-list--item-icon",
+                          `how-sign-up__card-list--item-icon--${item.list.icon_variant}`
+                        )}
+                      />
 
-                    <span className="how-sign-up__card-list--item-text">{listItem}</span>
-                  </li>
-                ))}
-              </ul>}
+                      <span className="how-sign-up__card-list--item-text">{listItem}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
 
               {item.isDropdown && (
                 <div className="how-sign-up__card-dropdown">
@@ -108,21 +123,29 @@ const HowSignUp: FC<PropTypes> = ({ tag, title, text, items }) => {
                 </div>
               )}
 
-              {item.isButton && <Button withArrow variant={item.button.variant as ButtonVariant} className="how-sign-up__card-button">{item.button.title}</Button>}
+              {item.isButton && (
+                <Button
+                  withArrow
+                  variant={item.button.variant as ButtonVariant}
+                  className="how-sign-up__card-button"
+                >
+                  {item.button.title}
+                </Button>
+              )}
             </div>
           ))}
         </div>
 
-        <div className={classNames('how-sign-up__icon', 'how-sign-up__icon--top')}>
+        <div className={classNames("how-sign-up__icon", "how-sign-up__icon--top")}>
           <TopSVG />
         </div>
 
-        <div className={classNames('how-sign-up__icon', 'how-sign-up__icon--bottom')}>
+        <div className={classNames("how-sign-up__icon", "how-sign-up__icon--bottom")}>
           <BottomSVG />
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default HowSignUp
+export default HowSignUp;

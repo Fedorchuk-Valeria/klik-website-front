@@ -45,12 +45,7 @@ export type WhatWeLearnProps = {
   }[];
 };
 
-const WhatWeLearn: FC<WhatWeLearnProps> = ({
-  tag,
-  title,
-  text,
-  items = [],
-}) => {
+const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => {
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -78,8 +73,8 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({
           <LineSvg />
 
           <span className="home-page__what-we-learn-line-message">
-          <MessageSvg />
-        </span>
+            <MessageSvg />
+          </span>
         </span>
 
         <div className="home-page__container">
@@ -87,10 +82,24 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({
 
           <div className={classNames("home-page__formats-top", "home-page__what-we-learn-top")}>
             {title && (
-              <h2 className={classNames("home-page__h2", "home-page__formats-title", "home-page__what-we-learn-title")}>{title}</h2>
+              <h2
+                className={classNames(
+                  "home-page__h2",
+                  "home-page__formats-title",
+                  "home-page__what-we-learn-title"
+                )}
+              >
+                {title}
+              </h2>
             )}
 
-            {text && <div className={classNames("home-page__formats-text", "home-page__what-we-learn-text")}>{text}</div>}
+            {text && (
+              <div
+                className={classNames("home-page__formats-text", "home-page__what-we-learn-text")}
+              >
+                {text}
+              </div>
+            )}
           </div>
 
           <div className="home-page__what-we-learn-body">
@@ -124,13 +133,14 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({
                 breakpoints={{
                   1920: {
                     coverflowEffect: {
-                    rotate: 15,
-                    stretch: 211,
-                    depth: 100,
-                    scale: 0.95,
-                    modifier: 1,
-                    slideShadows: false,
-                  }},
+                      rotate: 15,
+                      stretch: 211,
+                      depth: 100,
+                      scale: 0.95,
+                      modifier: 1,
+                      slideShadows: false,
+                    },
+                  },
                   1440: {
                     coverflowEffect: {
                       rotate: 15,
@@ -139,18 +149,15 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({
                       scale: 0.95,
                       modifier: 1,
                       slideShadows: false,
-                    }
-                  }
+                    },
+                  },
                 }}
               >
                 {items.map((item, index) => {
                   const src = SLIDE_IMAGES[item.key];
 
                   return (
-                    <SwiperSlide
-                      key={item.key || index}
-                      className="home-page__what-we-learn-slide"
-                    >
+                    <SwiperSlide key={item.key || index} className="home-page__what-we-learn-slide">
                       <div className="home-page__what-we-learn-slide-frame">
                         {src ? (
                           <>

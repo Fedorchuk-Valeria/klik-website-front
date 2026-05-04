@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import '../src/assets/scss/index.scss';
+import "../src/assets/scss/index.scss";
 import Header from "@/src/components/ui/Header/Header";
 import Footer from "@/src/components/ui/Footer/Footer";
 
@@ -14,9 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="ru"
-    >
+    <html lang="ru">
       <body>
         <Header />
         {children}

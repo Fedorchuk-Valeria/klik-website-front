@@ -156,19 +156,17 @@
           "title": "Программирование",
           "key": "programming",
           "text": "Изучение основных понятий. Развитие алгоритмического и логического мышления.",
-          "items": [
-            "⚙️  Алгоритмы", "🧩  Логика", "💻  Знакомство с IT", "📘  Базовые понятия"
-          ]
+          "items": ["⚙️  Алгоритмы", "🧩  Логика", "💻  Знакомство с IT", "📘  Базовые понятия"]
         },
         {
           "title": "3D-моделирование",
           "key": "3d",
           "text": "Развитие пространственного мышления. Изучение самых популярных редакторов.",
           "items": [
-          "🧭  Пространственное мышление",
-          "🎨  Креативность",
-          "🧊  Изучение 3D",
-          "🖥️  Blender, Compas3D, After Affects и др."
+            "🧭  Пространственное мышление",
+            "🎨  Креативность",
+            "🧊  Изучение 3D",
+            "🖥️  Blender, Compas3D, After Affects и др."
           ]
         },
         {
@@ -279,9 +277,7 @@
           "position": "Game & Python developer\nнаставник по разработке",
           "text": "техник-программист, практик разработки на Python и Unity",
           "location": "Барановичи",
-          "tags": [
-            "Unity", "Python", "Unreal Engine"
-          ]
+          "tags": ["Unity", "Python", "Unreal Engine"]
         },
         {
           "id": "2",
@@ -289,9 +285,7 @@
           "position": "Fullstack / Software\ndevelopment mentor",
           "text": "разработчик цифровых проектов, практикующий Fullstack-наставник",
           "location": "Барановичи",
-          "tags": [
-            "C#", "C++", "Python"
-          ]
+          "tags": ["C#", "C++", "Python"]
         },
         {
           "id": "3",
@@ -299,9 +293,7 @@
           "position": "Mobile developer\n(Android / Kotlin)",
           "text": "разработчик Android-приложений, практик мехатронных систем",
           "location": "Борисов",
-          "tags": [
-            "Android", "Kotlin", "React Native"
-          ]
+          "tags": ["Android", "Kotlin", "React Native"]
         },
         {
           "id": "4",
@@ -310,7 +302,11 @@
           "text": "разработчик в области машинного обучения и анализа данных",
           "location": "Борисов",
           "tags": [
-            "Machine Learning", "Python", "C#", "C++", "Работа с базами данных (MS SQL, T-SQL)"
+            "Machine Learning",
+            "Python",
+            "C#",
+            "C++",
+            "Работа с базами данных (MS SQL, T-SQL)"
           ]
         },
         {
@@ -319,9 +315,7 @@
           "position": "Web & UI\ndeveloper",
           "text": "специалист по веб-разработке и UI-дизайну",
           "location": "Минск",
-          "tags": [
-            "HTML", "CSS", "JavaScript", "Python", "Java", "Illustrator"
-          ]
+          "tags": ["HTML", "CSS", "JavaScript", "Python", "Java", "Illustrator"]
         },
         {
           "id": "6",
@@ -329,9 +323,7 @@
           "position": "Game development mentor\n(Python / educational games)",
           "text": "разработчик игровых и образовательных приложений",
           "location": "Минск",
-          "tags": [
-            "Unity", "Python", "Unreal Engine"
-          ]
+          "tags": ["Unity", "Python", "Unreal Engine"]
         },
         {
           "id": "7",
@@ -339,9 +331,7 @@
           "position": "Programming mentor\n(Fundamentals & Creative projects)",
           "text": "наставник с опытом образовательных интенсивов и работы с детьми",
           "location": "Минск",
-          "tags": [
-            "Figma", "Blender", "Illustrator"
-          ]
+          "tags": ["Figma", "Blender", "Illustrator"]
         },
         {
           "id": "8",
@@ -349,9 +339,7 @@
           "position": "Fullstack developer\n(C++ / Web / Tools)",
           "text": "разработчик, выпускник RS School и программы Яндекс C++",
           "location": "Минск",
-          "tags": [
-            "C++", "Python", "JS", "Figma"
-          ]
+          "tags": ["C++", "Python", "JS", "Figma"]
         },
         {
           "id": "9",
@@ -359,9 +347,7 @@
           "position": "Data Analytics &\nProgramming mentor",
           "text": "специалист по анализу данных и программированию",
           "location": "Минск",
-          "tags": [
-            "C#", "Python", "JS", "TS"
-          ]
+          "tags": ["C#", "Python", "JS", "TS"]
         },
         {
           "id": "10",
@@ -370,7 +356,15 @@
           "text": "практикующий разработчик цифровых решений и UI/UX-проектов, специалист с опытом полного цикла создания IT-продуктов — от идеи до реализации",
           "location": "Минск",
           "tags": [
-            "Python", "Java", "C++", "HTML/CSS", "JS", "SQL", "Figma", "Blender", "After Effects"
+            "Python",
+            "Java",
+            "C++",
+            "HTML/CSS",
+            "JS",
+            "SQL",
+            "Figma",
+            "Blender",
+            "After Effects"
           ]
         },
         {
@@ -379,9 +373,7 @@
           "position": "Cybersecurity\nmentor",
           "text": "специалист по кибербезопасности, практикующий участник IT-хакатонов",
           "location": "Минск",
-          "tags": [
-            "Python", "Java", "C++", "HTML/CSS", "JS", "SQL"
-          ]
+          "tags": ["Python", "Java", "C++", "HTML/CSS", "JS", "SQL"]
         },
         {
           "id": "12",
@@ -389,9 +381,7 @@
           "position": "Algorithm & Competitive\nprogramming mentor",
           "text": "выпускник ПГУ, призёр международных олимпиад и участник IT-форумов\nмеждународного уровня",
           "location": "Новополоцк",
-          "tags": [
-            "Python", "Java", "C++", "HTML/CSS", "JS", "SQL"
-          ]
+          "tags": ["Python", "Java", "C++", "HTML/CSS", "JS", "SQL"]
         }
       ]
     },
@@ -420,12 +410,7 @@
           "isDropdown": true,
           "list": {
             "icon_variant": "pink",
-            "items": [
-              "Бесплатно",
-              "60 минут",
-              "Предварительная запись",
-              "Удобная локация"
-            ]
+            "items": ["Бесплатно", "60 минут", "Предварительная запись", "Удобная локация"]
           },
           "dropdown": [
             {
@@ -455,6 +440,32 @@
           }
         }
       ]
+    },
+    "sign_up_free_lesson": {
+      "tag": "",
+      "title": "Запишитесь\nна бесплатное занятие",
+      "text": "Ребёнок познакомится с форматом занятий, а мы определим уровень знаний и подберём группу обучения",
+      "items": [
+        {
+          "id": 1,
+          "title": "100%",
+          "text": "бесплатное первое занятие"
+        },
+        {
+          "id": 2,
+          "title": "60 минут",
+          "text": "занятие с наставником"
+        },
+        {
+          "id": 3,
+          "title": "0%",
+          "text": "обязательств"
+        }
+      ],
+      "form": {
+        "title": "Начните с пробного урока",
+        "text": "Заполните анкету, чтобы мы могли подобрать удобное для вас время пробного занятия"
+      }
     }
   }
 }

@@ -74,7 +74,7 @@
         border-color: transparent;
 
         &::before {
-          content: '';
+          content: "";
           position: absolute;
           inset: -2px;
           box-sizing: border-box;
@@ -176,7 +176,7 @@
           isolation: isolate;
 
           &::before {
-            content: '';
+            content: "";
             background: var(--main-green-neon);
             border-radius: 100px;
             width: 30px;
@@ -532,7 +532,6 @@
     border-radius: 50px;
 
     .how-sign-up__icon {
-
       &.how-sign-up__icon--top {
         height: 361px;
         width: 261px;
@@ -565,7 +564,7 @@
           border-color: transparent;
 
           &::before {
-            content: '';
+            content: "";
             position: absolute;
             inset: -2px;
             box-sizing: border-box;
@@ -666,7 +665,7 @@
             position: relative;
 
             &::after {
-              content: '';
+              content: "";
               position: absolute;
               background: var(--main-green-dark);
               width: 10px;

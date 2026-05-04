@@ -85,7 +85,7 @@ const TutorsSwiper: FC<TutorsSwiperProps> = ({
           </SwiperSlide>
         );
       }),
-    [isTabletLandscapeTutors, slidesForSwiper],
+    [isTabletLandscapeTutors, slidesForSwiper]
   );
 
   const onPaginationBeforeInit = useCallback(
@@ -96,7 +96,7 @@ const TutorsSwiper: FC<TutorsSwiperProps> = ({
         pagination.el = paginationElRef.current;
       }
     },
-    [paginationElRef, tutorsPaginationEnabled],
+    [paginationElRef, tutorsPaginationEnabled]
   );
 
   const swiperEl = (
@@ -124,11 +124,11 @@ const TutorsSwiper: FC<TutorsSwiperProps> = ({
       pagination={
         tutorsPaginationEnabled
           ? {
-            clickable: true,
-            hideOnClick: false,
-            bulletClass: "home-page__tutors-pagination-bullet",
-            bulletActiveClass: "home-page__tutors-pagination-bullet--active",
-          }
+              clickable: true,
+              hideOnClick: false,
+              bulletClass: "home-page__tutors-pagination-bullet",
+              bulletActiveClass: "home-page__tutors-pagination-bullet--active",
+            }
           : false
       }
       onBeforeInit={onPaginationBeforeInit}
