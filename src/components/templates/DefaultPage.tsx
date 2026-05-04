@@ -1,12 +1,12 @@
-import {Page} from "@/src/lib/content/types";
+import { Page } from "@/src/lib/content/types";
 
 type Props = {
-    page: Page;
+  page: Page;
 };
 export default function DefaultPage({ page }: Props) {
-    return (
-        <main>
-            <h1>{page.seo.h1}</h1>
-        </main>
-    );
+  return (
+    <main>
+      <h1>{page.seo.h1}</h1>
+    </main>
+  );
 }

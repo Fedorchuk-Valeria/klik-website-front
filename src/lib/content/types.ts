@@ -1,18 +1,18 @@
-export type PageType = 'home' | 'page';
+export type PageType = "home" | "page";
 
 export type Page = {
-    template: PageType;
-    seo: {
-        title: string;
-        description: string;
-        h1: string;
-    };
-    content: {
-        [key: string]: any;
-    }
+  template: PageType;
+  seo: {
+    title: string;
+    description: string;
+    h1: string;
+  };
+  content: {
+    [key: string]: unknown;
+  };
 };
 
 export type MenuItem = {
-    url: string;
-    title: string;
+  url: string;
+  title: string;
 };

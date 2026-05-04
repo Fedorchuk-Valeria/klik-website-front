@@ -1,5 +1,4 @@
 .footer {
-
   position: relative;
 
   &__sticker {
@@ -97,7 +96,7 @@
       font-size: 14px;
 
       &:before {
-        content: '';
+        content: "";
         width: 1.5px;
         height: 100%;
         position: absolute;
@@ -170,7 +169,6 @@
       }
     }
   }
-
 
   // TODO fix
   @media screen and (max-width: $desktop) {

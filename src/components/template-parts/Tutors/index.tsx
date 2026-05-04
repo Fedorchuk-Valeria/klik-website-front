@@ -1,14 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import {
-  FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
 
 import Button from "@/src/components/ui/Button/Button";
@@ -43,12 +36,7 @@ const AUTOPLAY_DELAY_MS = 4_000;
 const IDLE_RESUME_MS = 10_000;
 
 // TODO effects
-const Tutors: FC<PropTypes> = ({
-  tag,
-  title,
-  text,
-  items = [],
-}) => {
+const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const tutorCountRef = useRef(0);
   const autoplayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -63,39 +51,43 @@ const Tutors: FC<PropTypes> = ({
 
   const slidesWithImages = useMemo(
     () => items.filter((item) => TUTOR_IMAGES[item.id] != null),
-    [items],
+    [items]
   );
   const tutorCount = useMemo(() => slidesWithImages.length, [slidesWithImages]);
 
   const orderedIndices = useMemo(
     () => orderedTutorIndices(activeIndex, tutorCount),
-    [activeIndex, tutorCount],
+    [activeIndex, tutorCount]
   );
 
   const orderedSlides = useMemo(
-    () => orderedIndices.map((tutorIdx, slot) => ({
-      item: slidesWithImages[tutorIdx],
-      key: `${slidesWithImages[tutorIdx]?.id ?? slot}-${slot}`,
-      tutorIdx,
-    })),
-    [orderedIndices, slidesWithImages],
+    () =>
+      orderedIndices.map((tutorIdx, slot) => ({
+        item: slidesWithImages[tutorIdx],
+        key: `${slidesWithImages[tutorIdx]?.id ?? slot}-${slot}`,
+        tutorIdx,
+      })),
+    [orderedIndices, slidesWithImages]
   );
 
   const slidesForSwiper = useMemo(
     () =>
       isTabletLandscapeTutors
         ? slidesWithImages.map((item, tutorIdx) => ({
-          item,
-          key: `compact-${item.id}-${tutorIdx}`,
-          tutorIdx,
-        }))
+            item,
+            key: `compact-${item.id}-${tutorIdx}`,
+            tutorIdx,
+          }))
         : orderedSlides,
-    [isTabletLandscapeTutors, orderedSlides, slidesWithImages],
+    [isTabletLandscapeTutors, orderedSlides, slidesWithImages]
   );
 
-  const activeItem = useMemo(() => slidesWithImages[activeIndex] ?? slidesWithImages[0], [activeIndex, slidesWithImages]);
+  const activeItem = useMemo(
+    () => slidesWithImages[activeIndex] ?? slidesWithImages[0],
+    [activeIndex, slidesWithImages]
+  );
 
-  const initialSlideMid = useMemo(() => tutorCount >= 2 ? 1 : 0, [tutorCount]);
+  const initialSlideMid = useMemo(() => (tutorCount >= 2 ? 1 : 0), [tutorCount]);
 
   const clearAutoplayTimer = useCallback(() => {
     if (autoplayTimerRef.current) {
@@ -172,28 +164,31 @@ const Tutors: FC<PropTypes> = ({
         scheduleAutoplayStep();
       }
     },
-    [initialSlideMid, isTabletLandscapeTutors, scheduleAutoplayStep],
+    [initialSlideMid, isTabletLandscapeTutors, scheduleAutoplayStep]
   );
 
-  const onSlideChange = useCallback((swiper: SwiperType) => {
-    const slot = swiper.realIndex;
+  const onSlideChange = useCallback(
+    (swiper: SwiperType) => {
+      const slot = swiper.realIndex;
 
-    if (isTabletLandscapeTutors) {
-      setActiveIndex(slot);
-    } else {
-      setActiveIndex((prev) => {
-        const ring = orderedTutorIndices(prev, tutorCountRef.current);
-        const next = ring[slot];
-        return next !== undefined ? next : prev;
+      if (isTabletLandscapeTutors) {
+        setActiveIndex(slot);
+      } else {
+        setActiveIndex((prev) => {
+          const ring = orderedTutorIndices(prev, tutorCountRef.current);
+          const next = ring[slot];
+          return next !== undefined ? next : prev;
+        });
+      }
+
+      requestAnimationFrame(() => {
+        if (swiper.destroyed) return;
+        swiper.updateSlides();
+        swiper.updateSlidesClasses();
       });
-    }
-
-    requestAnimationFrame(() => {
-      if (swiper.destroyed) return;
-      swiper.updateSlides();
-      swiper.updateSlidesClasses();
-    });
-  }, [isTabletLandscapeTutors]);
+    },
+    [isTabletLandscapeTutors]
+  );
 
   const onSwiperClick = useCallback(
     (swiper: SwiperType) => {
@@ -216,7 +211,7 @@ const Tutors: FC<PropTypes> = ({
         });
       }
     },
-    [isTabletLandscapeTutors, onUserInteraction],
+    [isTabletLandscapeTutors, onUserInteraction]
   );
 
   const onSwiperSliderFirstMove = useCallback(() => {
@@ -230,11 +225,9 @@ const Tutors: FC<PropTypes> = ({
   useEffect(() => {
     const rootStyle = getComputedStyle(document.documentElement);
     const landscapeMaxPx = Number.parseFloat(
-      rootStyle.getPropertyValue("--layout-landscape-tablet-max").trim(),
+      rootStyle.getPropertyValue("--layout-landscape-tablet-max").trim()
     );
-    const tabletMaxPx = Number.parseFloat(
-      rootStyle.getPropertyValue("--layout-tablet-max").trim(),
-    );
+    const tabletMaxPx = Number.parseFloat(rootStyle.getPropertyValue("--layout-tablet-max").trim());
     if (!Number.isFinite(landscapeMaxPx) || !Number.isFinite(tabletMaxPx)) return;
 
     const mqLandscape = window.matchMedia(`(max-width: ${landscapeMaxPx}px)`);
@@ -269,7 +262,7 @@ const Tutors: FC<PropTypes> = ({
       clearAutoplayTimer();
       clearResumeTimer();
     },
-    [clearAutoplayTimer, clearResumeTimer],
+    [clearAutoplayTimer, clearResumeTimer]
   );
 
   useEffect(() => {
@@ -289,7 +282,7 @@ const Tutors: FC<PropTypes> = ({
       ([entry]) => {
         syncAutoplayVisibility(entry.isIntersecting);
       },
-      { threshold: 0.15 },
+      { threshold: 0.15 }
     );
 
     observer.observe(el);
@@ -312,40 +305,31 @@ const Tutors: FC<PropTypes> = ({
           {tag && <div className="home-page__tag">{tag}</div>}
 
           <div className={classNames("home-page__formats-top", "home-page__tutors-top")}>
-            {title && <h2 className={classNames("home-page__h2", "home-page__tutors-title")}>{title}</h2>}
-            {text && <div className={classNames("home-page__text", "home-page__tutors-text")}>{text}</div>}
+            {title && (
+              <h2 className={classNames("home-page__h2", "home-page__tutors-title")}>{title}</h2>
+            )}
+            {text && (
+              <div className={classNames("home-page__text", "home-page__tutors-text")}>{text}</div>
+            )}
           </div>
         </div>
 
         <div className="home-page__tutors-body">
           <div className="home-page__tutors-carousel">
             {isTabletLandscapeTutors ? (
-              <div
-                ref={tutorsPaginationElRef}
-                className="home-page__tutors-pagination-root"
-              />
+              <div ref={tutorsPaginationElRef} className="home-page__tutors-pagination-root" />
             ) : null}
             <div className="home-page__tutors-slider-viewport">
               {activeItem && (
-                <aside
-                  className="home-page__tutors-detail"
-                  aria-live="polite"
-                  aria-atomic="true"
-                >
+                <aside className="home-page__tutors-detail" aria-live="polite" aria-atomic="true">
                   <div className="home-page__tutors-detail__inner">
                     <div className="home-page__tutors-detail__text" key={activeItem.id}>
-                      <h3 className="home-page__tutors-detail__name">
-                        {activeItem.name}
-                      </h3>
+                      <h3 className="home-page__tutors-detail__name">{activeItem.name}</h3>
 
-                      <p className="home-page__tutors-detail__position">
-                        {activeItem.position}
-                      </p>
+                      <p className="home-page__tutors-detail__position">{activeItem.position}</p>
                     </div>
 
-                    <p className="home-page__tutors-detail__description">
-                      {activeItem.text}
-                    </p>
+                    <p className="home-page__tutors-detail__description">{activeItem.text}</p>
 
                     <div className="home-page__tutors-detail__location">
                       <Icon name="pin" />
@@ -357,7 +341,10 @@ const Tutors: FC<PropTypes> = ({
                       <Button
                         variant="orange"
                         type="button"
-                        className={classNames("home-page__tutors-nav", "home-page__tutors-nav--prev")}
+                        className={classNames(
+                          "home-page__tutors-nav",
+                          "home-page__tutors-nav--prev"
+                        )}
                         aria-label="Предыдущий наставник"
                         onClick={goPrev}
                       >
@@ -367,7 +354,10 @@ const Tutors: FC<PropTypes> = ({
                       <Button
                         variant="orange"
                         type="button"
-                        className={classNames("home-page__tutors-nav", "home-page__tutors-nav--next")}
+                        className={classNames(
+                          "home-page__tutors-nav",
+                          "home-page__tutors-nav--next"
+                        )}
                         aria-label="Следующий наставник"
                         onClick={goNext}
                       >

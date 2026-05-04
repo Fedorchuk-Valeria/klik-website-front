@@ -30,25 +30,16 @@ type PropTypes = {
     recommended: string;
     format: string;
   };
-}
+};
 
 const AUTOPLAY_DELAY_MS = 4000;
 
-const WhyWeAre: FC<PropTypes> = ({
-  tag,
-  title,
-  text,
-  items,
-  info,
-}) => {
+const WhyWeAre: FC<PropTypes> = ({ tag, title, text, items, info }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const swiperRef = useRef<SwiperType | null>(null);
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
 
-  const swiperSlides = useMemo(
-    () => items.map((item) => ({ item, key: item.id })),
-    [items],
-  );
+  const swiperSlides = useMemo(() => items.map((item) => ({ item, key: item.id })), [items]);
 
   const infoData = [
     {
@@ -95,7 +86,7 @@ const WhyWeAre: FC<PropTypes> = ({
       ([entry]) => {
         syncAutoplay(entry.isIntersecting);
       },
-      { threshold: 0.15 },
+      { threshold: 0.15 }
     );
 
     observer.observe(el);
@@ -115,13 +106,19 @@ const WhyWeAre: FC<PropTypes> = ({
 
           <div className="home-page__formats-top home-page__why-we-are-top">
             {title && (
-              <h2 className="home-page__h2 home-page__formats-title home-page__why-we-are-title">{title}</h2>
+              <h2 className="home-page__h2 home-page__formats-title home-page__why-we-are-title">
+                {title}
+              </h2>
             )}
 
-            {text && <div className="home-page__formats-text home-page__why-we-are-text">
-              {text}
-              <span className="home-page__why-we-are-top-icon"><WhyWeAreSVG /></span>
-            </div>}
+            {text && (
+              <div className="home-page__formats-text home-page__why-we-are-text">
+                {text}
+                <span className="home-page__why-we-are-top-icon">
+                  <WhyWeAreSVG />
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -171,14 +168,19 @@ const WhyWeAre: FC<PropTypes> = ({
             {swiperSlides.map(({ item, key }) => (
               <SwiperSlide key={key}>
                 <div className="home-page__why-we-are-item">
-                  <div className='home-page__why-we-are-item__headline'>
-                    <div className='home-page__why-we-are-item--avatar'>
-                      {item.fullName.split(" ").map(item => item.slice(0, 1)).join("")}
+                  <div className="home-page__why-we-are-item__headline">
+                    <div className="home-page__why-we-are-item--avatar">
+                      {item.fullName
+                        .split(" ")
+                        .map((item) => item.slice(0, 1))
+                        .join("")}
                     </div>
 
-                    <div className='home-page__why-we-are-item--info'>
+                    <div className="home-page__why-we-are-item--info">
                       <h3 className="home-page__why-we-are-item--info-title">“ {item.title} ”</h3>
-                      <p className="home-page__why-we-are-item--info-text">{item.fullName} | {item.position}</p>
+                      <p className="home-page__why-we-are-item--info-text">
+                        {item.fullName} | {item.position}
+                      </p>
                     </div>
 
                     <div className="home-page__why-we-are-item--star home-page__why-we-are-item--star-headline">
@@ -188,14 +190,10 @@ const WhyWeAre: FC<PropTypes> = ({
                     </div>
                   </div>
 
-                  <div className='home-page__why-we-are-item--text'>
-                    {item.text}
-                  </div>
+                  <div className="home-page__why-we-are-item--text">{item.text}</div>
 
                   <div className="home-page__why-we-are-item--meta">
-                    <div className='home-page__why-we-are-item--created-at'>
-                      {item.createdAt}
-                    </div>
+                    <div className="home-page__why-we-are-item--created-at">{item.createdAt}</div>
 
                     <div className="home-page__why-we-are-item--star home-page__why-we-are-item--star-meta">
                       {Array.from({ length: item.star }).map((_, index) => (
@@ -213,9 +211,7 @@ const WhyWeAre: FC<PropTypes> = ({
           <div className="home-page__why-we-are-info">
             {infoData.map((item) => (
               <div className="home-page__why-we-are-info-item" key={item.title}>
-                <p className="home-page__why-we-are-info-item-title">
-                  {item.title}
-                </p>
+                <p className="home-page__why-we-are-info-item-title">{item.title}</p>
 
                 <span className="home-page__why-we-are-info-item-subtitle">{item.subtitle}</span>
               </div>

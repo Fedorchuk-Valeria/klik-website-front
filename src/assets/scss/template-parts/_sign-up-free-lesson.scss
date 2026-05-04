@@ -1,0 +1,96 @@
+.sign-up-free-lesson {
+  width: calc(100% - 20px);
+  margin: 0 auto;
+
+  .sign-up-free-lesson__block {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    padding: 50px 50px 50px 90px;
+    border-radius: 50px;
+    background: var(--main-green-neon);
+  }
+
+  .sign-up-free-lesson__image {
+    width: 352px;
+    height: 385px;
+    position: relative;
+    margin-top: -11px;
+    margin-bottom: 21px;
+  }
+
+  .sign-up-free-lesson__title {
+    @include fonts(50px, 400, "Etude Noire");
+    margin-bottom: 10px;
+    color: var(--main-orange);
+    white-space: pre-wrap;
+    position: relative;
+
+    .sign-up-free-lesson__title-underline {
+      position: absolute;
+      bottom: -3px;
+      left: 85px;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      color: var(--main-pink);
+      height: 28px;
+      width: 381px;
+    }
+  }
+
+  .sign-up-free-lesson__text {
+    @include fonts(20px, 400, "Manrope");
+    max-width: 686px;
+    margin-bottom: 60px;
+  }
+
+  .sign-up-free-lesson__items {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+
+    .sign-up-free-lesson__item {
+      display: flex;
+      flex-direction: column;
+
+      .sign-up-free-lesson__item-title {
+        @include fonts(50px, 500);
+        color: var(--main-green-dark);
+      }
+
+      .sign-up-free-lesson__item-text {
+        @include fonts(18px, 400, "Manrope");
+        color: var(--main-burgundy);
+      }
+    }
+  }
+
+  .sign-up-free-lesson__form {
+    background: var(--main-blue);
+    border-radius: 50px;
+    padding: 100px;
+
+    .sign-up-free-lesson__form-title {
+      @include fonts(24px, 500, "Etude Noire");
+      color: var(--main-green-dark);
+      margin-bottom: 10px;
+    }
+
+    .sign-up-free-lesson__form-text {
+      @include fonts(16px, 400, "Manrope");
+      color: var(--main-black);
+      margin-bottom: 50px;
+    }
+
+    .sign-up-free-lesson__form-body {
+      @include flex-list(20px);
+
+      .sign-up-free-lesson__form-button {
+        @include center;
+        width: 100%;
+        margin-top: 10px;
+      }
+    }
+  }
+}

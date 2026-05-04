@@ -46,9 +46,7 @@ const WhatWeLearnAccordionItem: FC<WhatWeLearnAccordionItemProps> = ({
         aria-expanded={isOpen}
         onClick={() => onSelect(index)}
       >
-        <span className="home-page__what-we-learn-trigger-title">
-          {item.title}
-        </span>
+        <span className="home-page__what-we-learn-trigger-title">{item.title}</span>
 
         <span className="home-page__what-we-learn-trigger-icon">
           <Icon name="arrow" />
@@ -61,11 +59,7 @@ const WhatWeLearnAccordionItem: FC<WhatWeLearnAccordionItemProps> = ({
         aria-hidden={!isOpen}
       >
         <div ref={contentRef} className="home-page__what-we-learn-panel-inner">
-          {item?.text && (
-            <p className="home-page__what-we-learn-panel-text">
-              {item.text}
-            </p>
-          )}
+          {item?.text && <p className="home-page__what-we-learn-panel-text">{item.text}</p>}
 
           {!!item?.items?.length && (
             <ul className="home-page__what-we-learn-tags">
@@ -80,4 +74,4 @@ const WhatWeLearnAccordionItem: FC<WhatWeLearnAccordionItemProps> = ({
   );
 };
 
-export default WhatWeLearnAccordionItem
+export default WhatWeLearnAccordionItem;

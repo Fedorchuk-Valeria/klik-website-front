@@ -28,10 +28,7 @@
       width: 100%;
 
       .swiper-slide {
-        width: min(
-          770px,
-          calc((100% - 2 * 20px) * 3 / 7)
-        );
+        width: min(770px, calc((100% - 2 * 20px) * 3 / 7));
         min-width: 770px;
         height: auto;
         margin-top: auto;
