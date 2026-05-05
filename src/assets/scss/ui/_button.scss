@@ -74,4 +74,25 @@
       background-color: var(--main-orange);
     }
   }
+
+  &--outline-green-dark {
+    border: 2px solid var(--main-green-dark);
+    background: var(--main-bg);
+    color: var(--main-green-dark);
+    transition:
+      0.3s background-color,
+      0.3s color;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background: var(--main-green-dark);
+        color: var(--main-light);
+      }
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }
