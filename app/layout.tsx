@@ -7,7 +7,7 @@ import WidgetModal from "@/src/widgets/Modal";
 
 import { StoreProvider } from "@/src/store/StoreProvider";
 
-import "../src/assets/scss/index.scss";
+import "@/src/assets/scss/index.scss";
 
 export const metadata: Metadata = {
   title: "Онлайн школа",
