@@ -1,0 +1,28 @@
+.text-border--wrapper {
+  display: inline-block;
+
+  .card {
+    position: relative;
+    display: inline-block;
+    padding: 24px;
+  }
+
+  .card .text-border--svg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .card .card-content {
+    position: relative;
+    z-index: 1;
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--text-border-corner-radius, 12px);
+    }
+  }
+}

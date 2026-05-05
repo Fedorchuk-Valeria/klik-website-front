@@ -18,6 +18,7 @@ import WhatWeLearn from "@/src/components/template-parts/WhatWeLearn";
 import WhyWeAre from "@/src/components/template-parts/WhyWeAre";
 
 import { Page } from "@/src/lib/content/types";
+import AboutUs from "../template-parts/AboutUs";
 
 type Props = {
   page: Page;
@@ -43,6 +44,7 @@ export default function Home({ page }: Props) {
   const tutors = page.content.our_tutors;
   const howSignUp = page.content.how_sign_up;
   const signUpFreeLesson = page.content.sign_up_free_lesson;
+  const aboutUs = page.content.about_us;
 
   return (
     <main className="main home-page">
@@ -64,6 +66,8 @@ export default function Home({ page }: Props) {
           </div>
         </div>
       </section>
+
+      {aboutUs && <AboutUs {...aboutUs} />}
 
       <section className="home-page__block home-page__programs" id="programs">
         <div className="home-page__container">
@@ -133,9 +137,9 @@ export default function Home({ page }: Props) {
       </section>
 
       <WhatWeLearn {...whatWeLearn} />
-      {howSignUp ? <HowSignUp {...howSignUp} /> : null}
-      {whyWeAre ? <WhyWeAre {...whyWeAre} /> : null}
-      {signUpFreeLesson ? <SignUpFreeLesson {...signUpFreeLesson} /> : null}
+      {howSignUp && <HowSignUp {...howSignUp} />}
+      {whyWeAre && <WhyWeAre {...whyWeAre} />}
+      {signUpFreeLesson && <SignUpFreeLesson {...signUpFreeLesson} />}
       <Tutors {...tutors} />
 
       {faq ? (

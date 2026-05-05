@@ -92,6 +92,14 @@ type SignUpFreeLessonContentItem = {
 
 /** Поля `content` для главной (`home.json`). Секции опциональны — зависят от CMS. */
 export type HomePageContent = {
+  about_us?: {
+    tag?: string;
+    title?: string;
+    text?: string;
+    subtitle?: string;
+    items?: AboutUsContentItem[];
+    slides?: AboutUsSlideContentItem[];
+  };
   header?: {
     text?: string;
     button?: LinkButton;
@@ -159,6 +167,21 @@ export type HomePageContent = {
       text: string;
     };
   };
+};
+
+export type AboutUsContentItem = {
+  icon: string;
+  color: string;
+  title: string;
+  text: string;
+};
+
+export type AboutUsSlideContentItem = {
+  id: number;
+  title: string;
+  tag: string;
+  link: string;
+  type: string;
 };
 
 export type HomePage = {

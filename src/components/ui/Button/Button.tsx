@@ -1,9 +1,10 @@
 "use client";
 
-import Icon from "@/src/components/ui/Icon/Icon";
 import React from "react";
 
-export type ButtonVariant = "orange" | "main-light" | "main-green-dark";
+import Icon from "@/src/components/ui/Icon/Icon";
+
+export type ButtonVariant = "orange" | "main-light" | "main-green-dark" | "outline-green-dark";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant;

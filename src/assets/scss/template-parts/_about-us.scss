@@ -1,0 +1,113 @@
+.home-page__about-us {
+  margin-top: 150px;
+
+  .text-border--wrapper {
+    display: block;
+    width: 100%;
+    max-width: 833px;
+  }
+
+  .home-page__container {
+    display: flex;
+    gap: 80px;
+  }
+
+  .home-page__about-us--block {
+    width: 100%;
+
+    &:first-child {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+  }
+
+  .text-border--wrapper .card {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .home-page__about-us--tag {
+    @include fonts(20px, 500);
+    display: flex;
+    color: var(--main-orange);
+    margin-bottom: 38px;
+  }
+
+  .home-page__about-us--title {
+    margin-bottom: 20px;
+    white-space: pre-wrap;
+  }
+
+  .home-page__about-us--text {
+    @include fonts(24px, 400, "Manrope");
+    white-space: pre-wrap;
+    margin-bottom: 50px;
+  }
+
+  .home-page__about-us--list {
+    display: flex;
+    gap: 80px;
+    margin-bottom: 50px;
+
+    .home-page__about-us--list-item {
+      display: flex;
+      flex-direction: column;
+
+      .home-page__about-us--list-item-icon {
+        @include icon(80px);
+        @include center;
+        border-radius: 50%;
+        color: var(--main-burgundy);
+        margin-bottom: 25px;
+
+        svg {
+          @include icon(35px);
+        }
+      }
+
+      .home-page__about-us--list-item-title {
+        @include fonts(50px, 500, "Etude Noire");
+        color: var(--main-green-dark);
+        min-width: 211px;
+      }
+
+      .home-page__about-us--list-item-text {
+        @include fonts(18px, 400, "Manrope");
+      }
+    }
+  }
+
+  .home-page__about-us--actions {
+    display: flex;
+    width: 100%;
+    gap: 30px;
+    margin-top: auto;
+    margin-bottom: 43px;
+
+    .button {
+      @include center;
+      width: 100%;
+
+      &:last-child {
+        max-width: 336px;
+      }
+    }
+  }
+
+  .home-page__about-us--text-image {
+    width: 100%;
+    max-width: 785px;
+    margin: 0 auto;
+    border-radius: 60px;
+    overflow: hidden;
+    line-height: 0;
+  }
+
+  .home-page__about-us--text-image-photo {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
