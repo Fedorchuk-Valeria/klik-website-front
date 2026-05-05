@@ -1,6 +1,12 @@
 .modal {
   overscroll-behavior: contain;
 
+  &.modal--show-bg {
+    [open]::backdrop {
+      opacity: 0;
+    }
+  }
+
   dialog,
   ::backdrop {
     opacity: 0;
@@ -26,7 +32,7 @@
   }
 
   ::backdrop {
-    background: var(--neutral-primary);
+    background: var(--black);
     touch-action: none;
   }
 

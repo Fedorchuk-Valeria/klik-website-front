@@ -12,6 +12,7 @@ type PropTypes = DialogHTMLAttributes<HTMLDialogElement> & {
   isClose?: boolean;
   isCloseBg?: boolean;
   isVisible: boolean;
+  isHideBg?: boolean;
   onClose?: () => void;
 };
 
@@ -21,6 +22,7 @@ const Modal: FC<PropTypes> = ({
   children,
   isClose,
   isCloseBg,
+  isHideBg,
   onClose,
   ...props
 }) => {
@@ -58,7 +60,7 @@ const Modal: FC<PropTypes> = ({
   }, [isVisible]);
 
   return (
-    <div className={classNames("modal", className)}>
+    <div className={classNames("modal", className, { "modal--show-bg": !isHideBg })}>
       <dialog ref={ref} {...props} onCancel={handleCloseModal}>
         {children}
       </dialog>

@@ -22,6 +22,7 @@ import TextInput from "@/src/components/ui/TextInput";
 import { ModalType } from "@/src/entities/common";
 import { useAppDispatch } from "@/src/store/hooks";
 import { showModal } from "@/src/store/slices/modalSlice";
+import { API_URL } from "@/src/utils/constant";
 import { validationSchema } from "./validationSchema";
 
 function itemTitleWithThirdWordBold(title: string): ReactNode {
@@ -47,6 +48,11 @@ type PropTypes = {
 
 const MAX_TEXT_FIELD_LENGTH = 100;
 
+function normalizePhoneForApi(phone: string): string {
+  const digits = phone.replace(/\D/g, "");
+  return digits ? `+${digits}` : "";
+}
+
 const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
   const dispatch = useAppDispatch();
   const form = useFormik({
@@ -59,17 +65,49 @@ const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      fetch(`${API_URL}users/lead/`, {
+        method: "POST",
+        headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          legal_name: values.parent,
+          name: values.child,
+          phone: normalizePhoneForApi(values.phone),
+          dob: values.date,
+        }),
+      })
+        .then(() => {
+          form.resetForm();
 
-      dispatch(
-        showModal({
-          modalType: ModalType.NOTICE,
-          modalProps: {
-            title: "Заявка принята!",
-            description: "Менеджер свяжется с вами в ближайщее время",
-          },
+          dispatch(
+            showModal({
+              modalType: ModalType.NOTICE,
+              modalProps: {
+                isHideBg: true,
+                title: "Заявка принята!",
+                description: "Менеджер свяжется с вами в ближайщее время",
+                autoCloseDelayMs: 3000,
+              },
+            })
+          );
         })
-      );
+        .catch((error) => {
+          console.error(error);
+
+          dispatch(
+            showModal({
+              modalType: ModalType.NOTICE,
+              modalProps: {
+                isHideBg: true,
+                title: "Ошибка отправки ...",
+                description: "Попробуйте позже",
+                autoCloseDelayMs: 3000,
+              },
+            })
+          );
+        });
     },
     validateOnChange: false,
     validateOnBlur: false,
@@ -79,6 +117,10 @@ const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     form.handleChange(e);
     form.validateField(e.target.name);
+  };
+
+  const handleBlur = (name: keyof typeof form.values) => () => {
+    form.setFieldValue(name, String(form?.values?.[name])?.trim());
   };
 
   return (
@@ -140,6 +182,7 @@ const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
               value={form.values.parent}
               error={form.errors.parent}
               onChange={handleChange}
+              onBlur={handleBlur("parent")}
               placeholder="Иванов Иван Иванович"
               className="sign-up-free-lesson__form-input"
             />
@@ -153,6 +196,7 @@ const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
               value={form.values.child}
               error={form.errors.child}
               onChange={handleChange}
+              onBlur={handleBlur("child")}
               placeholder="Иванов Иван Иванович"
               className="sign-up-free-lesson__form-input"
             />

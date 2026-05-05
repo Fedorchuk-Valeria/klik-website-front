@@ -2,3 +2,20 @@ export enum ModalType {
   NOTICE = "notice",
   COOKIE_POLICY = "cookie_policy",
 }
+
+export enum HttpStatus {
+  OK = 200,
+  Created = 201,
+  NoContent = 204,
+  BadRequest = 400,
+  Unauthorized = 401,
+  ExpiredSubscribe = 402,
+  Forbidden = 403,
+  NotFound = 404,
+  Conflict = 409,
+  Gone = 410,
+  LargeRequest = 413,
+  UnprocessableEntity = 422,
+  ManyRequests = 429,
+  InternalServerError = 500,
+}
