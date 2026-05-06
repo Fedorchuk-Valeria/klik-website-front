@@ -182,6 +182,7 @@ export type AboutUsSlideContentItem = {
   tag: string;
   link: string;
   type: string;
+  image?: number;
 };
 
 export type HomePage = {
