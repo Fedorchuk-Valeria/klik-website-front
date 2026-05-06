@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { ROOT_DOMAIN, ROOT_CITY } from "@/src/lib/env";
+import { ROOT_CITY, ROOT_DOMAIN } from "@/src/lib/env";
 import { getCities } from "@/src/lib/getCities";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
   const host = req.headers.get("host") || "";
 
-  let subdomain = host.split(".")[0];
+  let subdomain = host;
 
   if (subdomain === ROOT_DOMAIN) {
     subdomain = ROOT_CITY;
