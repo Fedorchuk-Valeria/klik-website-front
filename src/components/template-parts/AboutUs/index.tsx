@@ -2,12 +2,13 @@ import classNames from "classnames";
 import Image, { type StaticImageData } from "next/image";
 import { FC } from "react";
 
+import image1 from "@/src/assets/images/templates/homepage/aboutUs/1.png";
+import girlImg from "@/src/assets/images/templates/homepage/aboutUs/girl.png";
+import HeartSVG from "@/src/assets/images/templates/homepage/aboutUs/heart.svg";
+
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import TextBorder from "@/src/components/ui/TextBorder";
-
-import image1 from "@/src/assets/images/templates/homepage/aboutUs/1.png";
-import girlImg from "@/src/assets/images/templates/homepage/aboutUs/girl.png";
 
 import { AboutUsContentItem, AboutUsSlideContentItem } from "@/src/lib/content/types";
 
@@ -26,7 +27,7 @@ type PropTypes = {
 
 // TODO slides on image
 // TODO responsive
-const AboutUs: FC<PropTypes> = ({ tag, title, text, subtitle, items, slides }) => {
+const AboutUs: FC<PropTypes> = ({ title, text, subtitle, items, slides }) => {
   return (
     <section className="home-page__about-us">
       <div className="home-page__block">
@@ -66,6 +67,10 @@ const AboutUs: FC<PropTypes> = ({ tag, title, text, subtitle, items, slides }) =
           </div>
 
           <div className="home-page__about-us--block">
+            <span className="home-page__about-us--heart">
+              <HeartSVG />
+            </span>
+
             <TextBorder text="Дополнительное IT-образование для детей" cornerRadius={60}>
               <div className="home-page__about-us--text-image">
                 <Image
