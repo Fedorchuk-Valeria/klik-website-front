@@ -4,13 +4,22 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
-  const host = req.headers.get("host") || "";
 
-  let subdomain = host;
+    const host = req.headers.get("host") || "";
 
-  if (subdomain === ROOT_DOMAIN) {
-    subdomain = ROOT_CITY;
-  }
+    const hostname = host.split(":")[0];
+
+    const rootDomain = ROOT_DOMAIN.split(":")[0];
+
+    let subdomain = ROOT_CITY;
+
+    if (hostname.endsWith(`.${rootDomain}`)) {
+        subdomain = hostname.replace(`.${rootDomain}`, "");
+    } else if (
+        hostname === rootDomain
+    ) {
+        subdomain = ROOT_CITY;
+    }
 
   const allowedCities = getCities();
 
@@ -29,5 +38,7 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+    matcher: [
+        "/((?!_next|favicon.ico|.*\\..*).*)",
+    ],
 };
