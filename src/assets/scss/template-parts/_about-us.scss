@@ -103,11 +103,105 @@
     border-radius: 60px;
     overflow: hidden;
     line-height: 0;
+
+    .home-page__about-us--text-image-photo {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
   }
 
-  .home-page__about-us--text-image-photo {
-    display: block;
-    width: 100%;
-    height: auto;
+  .home-page__about-us--slider {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    width: calc(100% - 40px);
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 19px;
+
+    .home-page__about-us--slider-item {
+      @include flex-list(10px);
+      border-radius: 40px;
+      padding: 20px;
+      width: 100%;
+    }
+
+    .home-page__about-us--slider-item__link {
+      cursor: pointer;
+      background: var(--main-bg);
+
+      .home-page__about-us--slider-item-title {
+        @include fonts(16px, 700);
+        color: var(--main-burgundy);
+      }
+    }
+
+    .home-page__about-us--slider-item__info-success {
+      background: rgba(251, 255, 220, 0.3);
+      backdrop-filter: blur(15px);
+
+      .home-page__about-us--slider-item-title {
+        @include fonts(20px, 500);
+        color: var(--main-light);
+        line-height: 120%;
+      }
+    }
+
+    .home-page__about-us--slider-item-success {
+      @include center;
+      @include icon(50px);
+      color: var(--main-green-neon);
+      border: 2px solid var(--main-green-neon);
+      border-radius: 50%;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .home-page__about-us--slider-item-image {
+      position: relative;
+      width: 323px;
+      height: 150px;
+
+      img {
+        border-radius: 20px;
+      }
+    }
+
+    .home-page__about-us--slider-item-title {
+      line-height: normal;
+    }
+
+    .home-page__about-us--slider-item-tag {
+      line-height: normal;
+      margin-bottom: 0;
+    }
+
+    .home-page__about-us--slider-item-footer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-top: 10px;
+
+      .home-page__about-us--slider-item-tag {
+        padding: 10px;
+        font-size: 14px;
+        gap: 20px;
+        align-items: center;
+        line-height: 0.6;
+      }
+
+      .home-page__about-us--slider-item-button {
+        @include center;
+        @include icon(45px);
+
+        svg {
+          @include icon(27px);
+          fill: var(--main-light);
+          transform: rotate(-30deg);
+        }
+      }
+    }
   }
 }
