@@ -1,10 +1,8 @@
 "use client";
 
 import classNames from "classnames";
-import { useFormik } from "formik";
 import Image from "next/image";
-import Link from "next/link";
-import { ChangeEvent, FC, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 
 import image from "@/src/assets/images/templates/homepage/signUpFreeLesson/sign-up-for-free-lesson.png";
 
@@ -12,18 +10,7 @@ import EyesSVG from "@/src/assets/images/templates/homepage/signUpFreeLesson/eye
 import FlowerSVG from "@/src/assets/images/templates/homepage/signUpFreeLesson/flower.svg";
 import SpiralSVG from "@/src/assets/images/templates/homepage/signUpFreeLesson/spiral.svg";
 import UnderlineSVG from "@/src/assets/images/templates/homepage/signUpFreeLesson/underline.svg";
-
-import Button from "@/src/components/ui/Button/Button";
-import Checkbox from "@/src/components/ui/Checkbox";
-import DateInput from "@/src/components/ui/DateInput";
-import PhoneInput from "@/src/components/ui/PhoneInput";
-import TextInput from "@/src/components/ui/TextInput";
-
-import { ModalType } from "@/src/entities/common";
-import { useAppDispatch } from "@/src/store/hooks";
-import { showModal } from "@/src/store/slices/modalSlice";
-import { API_URL } from "@/src/utils/constant";
-import { validationSchema } from "./validationSchema";
+import HomePageForm from "@/src/components/template-parts/Form";
 
 function itemTitleWithThirdWordBold(title: string): ReactNode {
   const words = title.split(" ");
@@ -46,83 +33,7 @@ type PropTypes = {
   }[];
 };
 
-const MAX_TEXT_FIELD_LENGTH = 100;
-
-function normalizePhoneForApi(phone: string): string {
-  const digits = phone.replace(/\D/g, "");
-  return digits ? `+${digits}` : "";
-}
-
 const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
-  const dispatch = useAppDispatch();
-  const form = useFormik({
-    initialValues: {
-      parent: "",
-      child: "",
-      phone: "",
-      date: "",
-      agreedment: false,
-    },
-    validationSchema,
-    onSubmit: (values) => {
-      fetch(`${API_URL}users/lead/`, {
-        method: "POST",
-        headers: {
-          Accept: "*/*",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          legal_name: values.parent,
-          name: values.child,
-          phone: normalizePhoneForApi(values.phone),
-          dob: values.date,
-        }),
-      })
-        .then(() => {
-          form.resetForm();
-
-          dispatch(
-            showModal({
-              modalType: ModalType.NOTICE,
-              modalProps: {
-                isHideBg: true,
-                title: "Заявка принята!",
-                description: "Менеджер свяжется с вами в ближайщее время",
-                autoCloseDelayMs: 3000,
-              },
-            })
-          );
-        })
-        .catch((error) => {
-          console.error(error);
-
-          dispatch(
-            showModal({
-              modalType: ModalType.NOTICE,
-              modalProps: {
-                isHideBg: true,
-                title: "Ошибка отправки ...",
-                description: "Попробуйте позже",
-                autoCloseDelayMs: 3000,
-              },
-            })
-          );
-        });
-    },
-    validateOnChange: false,
-    validateOnBlur: false,
-    validateOnMount: false,
-  });
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    form.handleChange(e);
-    form.validateField(e.target.name);
-  };
-
-  const handleBlur = (name: keyof typeof form.values) => () => {
-    form.setFieldValue(name, String(form?.values?.[name])?.trim());
-  };
-
   return (
     <section className={classNames("home-page__block", "sign-up-free-lesson")}>
       <div className="sign-up-free-lesson__block">
@@ -172,87 +83,7 @@ const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
             Заполните анкету, чтобы мы могли подобрать удобное для вас время пробного занятия
           </p>
 
-          <form className="sign-up-free-lesson__form-body" onSubmit={form.handleSubmit}>
-            <TextInput
-              required
-              max={MAX_TEXT_FIELD_LENGTH}
-              maxLength={MAX_TEXT_FIELD_LENGTH}
-              name="parent"
-              label="ФИО родителя"
-              value={form.values.parent}
-              error={form.errors.parent}
-              onChange={handleChange}
-              onBlur={handleBlur("parent")}
-              placeholder="Иванов Иван Иванович"
-              className="sign-up-free-lesson__form-input"
-            />
-
-            <TextInput
-              required
-              max={MAX_TEXT_FIELD_LENGTH}
-              maxLength={MAX_TEXT_FIELD_LENGTH}
-              name="child"
-              label="ФИО ребенка"
-              value={form.values.child}
-              error={form.errors.child}
-              onChange={handleChange}
-              onBlur={handleBlur("child")}
-              placeholder="Иванов Иван Иванович"
-              className="sign-up-free-lesson__form-input"
-            />
-
-            <PhoneInput
-              required
-              name="phone"
-              label="Телефон"
-              value={form.values.phone}
-              error={form.errors.phone}
-              onChange={handleChange}
-              placeholder="+375 (29) 123-45-67"
-              className="sign-up-free-lesson__form-input"
-            />
-
-            <DateInput
-              name="date"
-              label="Дата рождения ребёнка"
-              value={form.values.date}
-              error={form.errors.date}
-              onChange={handleChange}
-              className="sign-up-free-lesson__form-input"
-            />
-
-            <Button
-              type="submit"
-              variant="main-green-dark"
-              withArrow
-              className="sign-up-free-lesson__form-button"
-            >
-              Оставить заявку
-            </Button>
-
-            <div className="sign-up-free-lesson__form-checkbox-container">
-              <Checkbox
-                id="agreedment"
-                name="agreedment"
-                checked={form.values.agreedment}
-                error={form.errors.agreedment}
-                onChange={(checked) => form.setFieldValue("agreedment", checked)}
-                className="sign-up-free-lesson__form-checkbox"
-              />
-
-              <span className="sign-up-free-lesson__form-checkbox--text">
-                Я соглашаюсь с
-                <Link
-                  href="/privacy-policy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="sign-up-free-lesson__form-checkbox--link"
-                >
-                  политикой обработки конфиденциальных данных
-                </Link>
-              </span>
-            </div>
-          </form>
+          <HomePageForm />
         </div>
       </div>
     </section>

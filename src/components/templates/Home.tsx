@@ -10,15 +10,16 @@ import Button from "@/src/components/ui/Button/Button";
 import FAQ from "@/src/components/ui/Faq/Faq";
 import Icon from "@/src/components/ui/Icon/Icon";
 
+import AboutUs from "@/src/components/template-parts/AboutUs";
 import FormatsList from "@/src/components/template-parts/FormatsList/FormatsList";
 import HowSignUp from "@/src/components/template-parts/HowSignUp";
+import SelectTraining from "@/src/components/template-parts/SelectTraining";
 import SignUpFreeLesson from "@/src/components/template-parts/SignUpFreeLesson";
 import Tutors from "@/src/components/template-parts/Tutors";
 import WhatWeLearn from "@/src/components/template-parts/WhatWeLearn";
 import WhyWeAre from "@/src/components/template-parts/WhyWeAre";
 
 import { Page } from "@/src/lib/content/types";
-import AboutUs from "../template-parts/AboutUs";
 
 type Props = {
   page: Page;
@@ -45,6 +46,7 @@ export default function Home({ page }: Props) {
   const howSignUp = page.content.how_sign_up;
   const signUpFreeLesson = page.content.sign_up_free_lesson;
   const aboutUs = page.content.about_us;
+  const selectTraining = page.content.select_training;
 
   return (
     <main className="main home-page">
@@ -136,6 +138,7 @@ export default function Home({ page }: Props) {
         </div>
       </section>
 
+      {selectTraining && <SelectTraining {...selectTraining} />}
       <WhatWeLearn {...whatWeLearn} />
       {howSignUp && <HowSignUp {...howSignUp} />}
       {whyWeAre && <WhyWeAre {...whyWeAre} />}
