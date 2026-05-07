@@ -1,13 +1,17 @@
 "use client";
 
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
+import Icon from "@/src/components/ui/Icon/Icon";
+
 import { MAP_API_KEY } from "@/src/utils/constant";
+import { loadYandexMaps } from "@/src/utils/loadYandexMaps";
 
 import LocationCardContent, { LocationItemData } from "./Card";
+import { YANDEX_MAP_PIN_ICON } from "./yandexPinIcon";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -17,7 +21,14 @@ type Props = {
   title?: string;
 };
 
-const map = `${MAP_API_KEY}`;
+type YMapInstance = {
+  destroy: () => void;
+  setCenter: (center: number[], zoom?: number, options?: { duration?: number }) => void;
+  geoObjects: {
+    add: (object: unknown) => void;
+    getBounds: () => number[][] | null;
+  };
+};
 
 const LOCATION_BY_CITY = {
   minsk: [
@@ -26,30 +37,35 @@ const LOCATION_BY_CITY = {
       title: "Арэна",
       location: "Пр. Победителей 84, ТЦ Arena City, 2 этаж",
       metro: "Фрунзенская",
+      coords: [53.930781, 27.499905] as const,
     },
     {
       image: "https://placehold.co/600x400.png",
       title: "Мip",
       location: "ул. Аэродромная, 125, 4 этаж",
       metro: "",
+      coords: [53.8711, 27.6876] as const,
     },
     {
       image: "https://placehold.co/600x400.png",
       title: "Натхненне",
       location: "ул. Максима Богдановича, 132, 2 этаж",
       metro: "",
+      coords: [53.9191, 27.5685] as const,
     },
     {
       image: "https://placehold.co/600x400.png",
       title: "Камяніца",
       location: "ул. Неманская, 24, 2 этаж",
       metro: "",
+      coords: [53.9048, 27.5373] as const,
     },
     {
       image: "https://placehold.co/600x400.png",
       title: "Навуковая",
       location: "ул. Петра Мстиславца, д.1",
       metro: "",
+      coords: [53.9341, 27.6513] as const,
     },
   ],
   borisov: [
@@ -58,6 +74,7 @@ const LOCATION_BY_CITY = {
       title: "Спатканне",
       location: "ул. Строителей 26, ТЦ Клад Наполеона, 328 каб.",
       metro: "",
+      coords: [54.2239, 28.5118] as const,
     },
   ],
   baranovichi: [
@@ -66,12 +83,14 @@ const LOCATION_BY_CITY = {
       title: "Паветра",
       location: "ул. Марфицкого и Журавлевича, 1А, 3-й этаж",
       metro: "",
+      coords: [53.1322, 26.0175] as const,
     },
     {
       image: "https://placehold.co/600x400.png",
       title: "Усход",
       location: "ул. Тельмана, 64, ТЦ Радужный, 2-й этаж",
       metro: "",
+      coords: [53.1169, 26.043] as const,
     },
   ],
   novopolotsk: [
@@ -80,6 +99,7 @@ const LOCATION_BY_CITY = {
       title: "Iскра",
       location: 'ул. Нефтяников, 6, ТЦ "Зодиак"',
       metro: "",
+      coords: [55.531, 28.648] as const,
     },
   ],
 } as const satisfies Record<string, LocationItemData[]>;
@@ -87,6 +107,17 @@ const LOCATION_BY_CITY = {
 const Location: FC<Props> = ({ tag, title }) => {
   const [isLocationSlider, setIsLocationSlider] = useState(false);
   const locationPaginationElRef = useRef<HTMLDivElement>(null);
+
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  const mapInstanceRef = useRef<YMapInstance | null>(null);
+
+  const locations = LOCATION_BY_CITY.minsk;
+
+  const focusOnCoords = useCallback((coords: readonly [number, number]) => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+    map.setCenter([coords[0], coords[1]], 16, { duration: 300 });
+  }, []);
 
   const onLocationSwiperBeforeInit = (swiper: SwiperType) => {
     const el = locationPaginationElRef.current;
@@ -112,7 +143,73 @@ const Location: FC<Props> = ({ tag, title }) => {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  const handleShowOnMap = () => {};
+  useEffect(() => {
+    const apiKey = MAP_API_KEY;
+    if (!apiKey) return;
+
+    let cancelled = false;
+    const items = LOCATION_BY_CITY.minsk;
+
+    const run = async () => {
+      try {
+        await loadYandexMaps(apiKey);
+      } catch {
+        return;
+      }
+      if (cancelled || !mapContainerRef.current || !window.ymaps) return;
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- типы из JS API 2.1 не подключены
+      const ymaps = window.ymaps as any;
+
+      ymaps.ready(() => {
+        if (cancelled || !mapContainerRef.current) return;
+
+        const map: YMapInstance = new ymaps.Map(
+          mapContainerRef.current,
+          {
+            center: [items[0].coords[0], items[0].coords[1]],
+            zoom: 11,
+            controls: ["zoomControl"],
+          },
+          {
+            suppressMapOpenBlock: true,
+            suppressObsoleteBrowserNotifier: true,
+          }
+        );
+
+        mapInstanceRef.current = map;
+
+        items.forEach((item) => {
+          const placemark = new ymaps.Placemark(
+            [item.coords[0], item.coords[1]],
+            {
+              balloonContentHeader: item.title,
+              balloonContentBody: item.location,
+            },
+            { ...YANDEX_MAP_PIN_ICON }
+          );
+          placemark.events.add("click", () => {
+            map.setCenter([item.coords[0], item.coords[1]], 16, { duration: 300 });
+          });
+          map.geoObjects.add(placemark);
+        });
+
+        const bounds = map.geoObjects.getBounds();
+        if (bounds) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- setBounds в типах карты не объявлен
+          (map as any).setBounds(bounds, { checkZoomRange: true, zoomMargin: 48 });
+        }
+      });
+    };
+
+    void run();
+
+    return () => {
+      cancelled = true;
+      mapInstanceRef.current?.destroy();
+      mapInstanceRef.current = null;
+    };
+  }, []);
 
   return (
     <section className="home-page__block home-page__location">
@@ -150,10 +247,10 @@ const Location: FC<Props> = ({ tag, title }) => {
                       bulletActiveClass: "home-page__location-pagination-bullet--active",
                     }}
                   >
-                    {LOCATION_BY_CITY.minsk.map((item, index) => (
+                    {locations.map((item, index) => (
                       <SwiperSlide key={`${item.title}-${index}`}>
                         <div className="home-page__location-body-item">
-                          <LocationCardContent item={item} onShowOnMap={handleShowOnMap} />
+                          <LocationCardContent item={item} onShowOnMap={focusOnCoords} />
                         </div>
                       </SwiperSlide>
                     ))}
@@ -161,15 +258,33 @@ const Location: FC<Props> = ({ tag, title }) => {
                 </div>
               ) : (
                 <ul className="home-page__location-body-list">
-                  {LOCATION_BY_CITY.minsk.map((item, index) => (
+                  {locations.map((item, index) => (
                     <li key={`${item.title}-${index}`} className="home-page__location-body-item">
-                      <LocationCardContent item={item} onShowOnMap={handleShowOnMap} />
+                      <LocationCardContent item={item} onShowOnMap={focusOnCoords} />
                     </li>
                   ))}
                 </ul>
               )}
 
-              <div className="home-page__location-body-map"></div>
+              <div className="home-page__location-map-column">
+                <p className="home-page__location-map--hint">
+                  <span className="home-page__location-map--hint-icon">
+                    <Icon name="lamp" />
+                  </span>
+
+                  <span className="home-page__location-map--hint-text">
+                    <span>Интерактивная карта:</span>{" "}
+                    <span>Кликните на любую локацию, чтобы увидеть её на Яндекс.Картах</span>
+                  </span>
+                </p>
+                {!MAP_API_KEY ? (
+                  <div className="home-page__location-body-map home-page__location-body-map--placeholder">
+                    Укажите NEXT_PUBLIC_YANDEX_API_KEY для отображения карты
+                  </div>
+                ) : (
+                  <div ref={mapContainerRef} className="home-page__location-body-map" />
+                )}
+              </div>
             </div>
           </div>
         </div>

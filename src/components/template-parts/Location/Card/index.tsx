@@ -10,11 +10,12 @@ export type LocationItemData = {
   title: string;
   location: string;
   metro: string;
+  coords: readonly [number, number];
 };
 
 const LocationCardContent: FC<{
   item: LocationItemData;
-  onShowOnMap: () => void;
+  onShowOnMap: (coords: readonly [number, number]) => void;
 }> = ({ item, onShowOnMap }) => (
   <>
     <span className="home-page__location-body-item--image">
@@ -41,7 +42,7 @@ const LocationCardContent: FC<{
 
       <button
         type="button"
-        onClick={onShowOnMap}
+        onClick={() => onShowOnMap(item.coords)}
         className="home-page__location-body-item-info--button"
       >
         Показать на карте
