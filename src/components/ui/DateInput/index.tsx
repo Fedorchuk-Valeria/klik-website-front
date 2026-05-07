@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import type { ChangeEvent, ClipboardEvent, KeyboardEvent } from "react";
+import type { ChangeEvent, ClipboardEvent, CompositionEvent, KeyboardEvent } from "react";
 import { forwardRef, useMemo, useState } from "react";
 
 import TextInput from "../TextInput";
@@ -43,6 +43,7 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(function DateInpu
     onChange,
     onPaste,
     onKeyDown,
+    onCompositionEnd: onCompositionEndProp,
     onBeforeInput: onBeforeInputProp,
     inputMode,
     ...rest
@@ -72,29 +73,30 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(function DateInpu
   const digits = isControlled ? digitsFromControl : fallbackDigits;
   const masked = formatMasked(digits);
 
-  const emitMasked = (
-    nextDigits: string,
-    inp: HTMLInputElement,
-    base?: ChangeEvent<HTMLInputElement>
-  ) => {
+  const emitMasked = (nextDigits: string, inp: HTMLInputElement) => {
     const maskedVal = formatMasked(nextDigits);
     if (!isControlled) {
       setFallbackDigits(nextDigits);
     }
     const snap = inputSnapshot(inp, maskedVal);
-    if (base) {
-      onChange?.({ ...base, target: snap, currentTarget: snap } as ChangeEvent<HTMLInputElement>);
-    } else {
-      onChange?.({
-        target: snap,
-        currentTarget: snap,
-      } as ChangeEvent<HTMLInputElement>);
-    }
+    const syntheticChange = {
+      target: snap,
+      currentTarget: snap,
+      persist: () => {},
+    } as ChangeEvent<HTMLInputElement>;
+    onChange?.(syntheticChange);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const stripped = sanitizeDigits(e.target.value.replace(/\D/g, "").slice(0, 9), maxYear);
-    emitMasked(stripped, e.currentTarget, e);
+    emitMasked(stripped, e.currentTarget);
+  };
+
+  const handleCompositionEnd = (e: CompositionEvent<HTMLInputElement>) => {
+    onCompositionEndProp?.(e);
+    if (e.defaultPrevented) return;
+    const stripped = sanitizeDigits(e.currentTarget.value.replace(/\D/g, "").slice(0, 9), maxYear);
+    emitMasked(stripped, e.currentTarget);
   };
 
   const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
@@ -125,6 +127,8 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(function DateInpu
 
     const src = event as unknown as { inputType?: string; data?: string | null };
     const type = src.inputType ?? "";
+    /* Let paste/drop handlers normalize; `\D` in pasted text would wrongly cancel beforeinput */
+    if (type === "insertFromPaste" || type === "insertFromDrop") return;
     if (!type.startsWith("insert")) return;
 
     const data = typeof src.data === "string" ? src.data : "";
@@ -146,6 +150,7 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(function DateInpu
       placeholder={placeholder ?? "ДД.ММ.ГГГГ"}
       value={masked}
       onChange={handleChange}
+      onCompositionEnd={handleCompositionEnd}
       onPaste={handlePaste}
       onKeyDown={handleKeyDown}
       onBeforeInput={handleBeforeInput}
