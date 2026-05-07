@@ -104,6 +104,10 @@ const LOCATION_BY_CITY = {
   ],
 } as const satisfies Record<string, LocationItemData[]>;
 
+// TODO добавить автовыбор города из хоста
+// TODO зум 16 при клике
+// TODO автопереключение слайдов раз в 5 сек
+// TODO при тапе пауза 10 сек
 const Location: FC<Props> = ({ tag, title }) => {
   const [isLocationSlider, setIsLocationSlider] = useState(false);
   const locationPaginationElRef = useRef<HTMLDivElement>(null);
