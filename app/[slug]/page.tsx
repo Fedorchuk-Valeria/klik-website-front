@@ -5,9 +5,9 @@ import { getPage } from "@/src/lib/getPage";
 import { resolveTemplate } from "@/src/lib/resolveTemplate";
 
 type PageProps = {
-  params: {
+  params: Promise<{
     slug?: string;
-  };
+  }>;
 };
 
 export async function generateMetadata({ params }: PageProps) {
