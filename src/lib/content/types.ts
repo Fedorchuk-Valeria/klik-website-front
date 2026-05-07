@@ -92,6 +92,10 @@ type SignUpFreeLessonContentItem = {
 
 /** Поля `content` для главной (`home.json`). Секции опциональны — зависят от CMS. */
 export type HomePageContent = {
+  location?: {
+    tag?: string;
+    title?: string;
+  };
   select_training?: {
     tag?: string;
     title?: string;
