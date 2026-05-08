@@ -1,6 +1,6 @@
 .select-training {
   background: var(--main-blue);
-  padding: 146px 10px 153px;
+  padding: 146px 25px 153px;
   margin-bottom: 180px;
   position: relative;
   z-index: 1;
@@ -85,7 +85,7 @@
   }
 
   @media (max-width: $desktop) {
-    padding: 126px 10px 50px;
+    padding: 126px 25px 50px;
     margin-bottom: 120px;
 
     .select-training__block {
@@ -142,7 +142,7 @@
   }
 
   @media (max-width: $landscape-tablet-size) {
-    padding: 80px 10px;
+    padding: 80px 25px;
     margin-bottom: 100px;
 
     .select-training__block {

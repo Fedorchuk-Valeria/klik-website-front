@@ -2,7 +2,7 @@
 
 import { useFormik } from "formik";
 import Link from "next/link";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 
 import Button from "@/src/components/ui/Button/Button";
 import Checkbox from "@/src/components/ui/Checkbox";
@@ -26,6 +26,7 @@ function normalizePhoneForApi(phone: string): string {
 
 const HomePageForm = () => {
   const dispatch = useAppDispatch();
+  const [isLoading, setLoading] = useState(false);
   const form = useFormik({
     initialValues: {
       parent: "",
@@ -36,49 +37,61 @@ const HomePageForm = () => {
     },
     validationSchema,
     onSubmit: (values) => {
-      fetch(`${API_URL}users/lead/?branch=${getCurrentBranch()}`, {
-        method: "POST",
-        headers: {
-          Accept: "*/*",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          legal_name: values.parent,
-          name: values.child,
-          phone: normalizePhoneForApi(values.phone),
-          dob: values.date,
-        }),
-      })
-        .then(() => {
-          form.resetForm();
+      if (!values.agreedment) {
+        form.setFieldError(
+          "agreedment",
+          "Пожалуйста, согласитесь с политикой обработки конфиденциальных данных"
+        );
+      } else {
+        setLoading(true);
 
-          dispatch(
-            showModal({
-              modalType: ModalType.NOTICE,
-              modalProps: {
-                isHideBg: true,
-                title: "Заявка принята!",
-                description: "Менеджер свяжется с вами в ближайщее время",
-                autoCloseDelayMs: 3000,
-              },
-            })
-          );
+        fetch(`${API_URL}users/lead/?branch=${getCurrentBranch()}`, {
+          method: "POST",
+          headers: {
+            Accept: "*/*",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            legal_name: values.parent,
+            name: values.child,
+            phone: normalizePhoneForApi(values.phone),
+            dob: values.date,
+          }),
         })
-        .catch((error) => {
-          console.error(error);
+          .then(() => {
+            form.resetForm();
 
-          dispatch(
-            showModal({
-              modalType: ModalType.NOTICE,
-              modalProps: {
-                isHideBg: true,
-                title: "Ошибка отправки ...",
-                description: "Попробуйте позже",
-                autoCloseDelayMs: 3000,
-              },
-            })
-          );
-        });
+            dispatch(
+              showModal({
+                modalType: ModalType.NOTICE,
+                modalProps: {
+                  isHideBg: true,
+                  title: "Заявка принята!",
+                  description: "Менеджер свяжется с вами в ближайщее время",
+                  autoCloseDelayMs: 3000,
+                },
+              })
+            );
+          })
+          .catch((error) => {
+            console.error(error);
+
+            dispatch(
+              showModal({
+                modalType: ModalType.NOTICE,
+                modalProps: {
+                  isHideBg: true,
+                  title: "Ошибка отправки ...",
+                  description: "Попробуйте позже",
+                  autoCloseDelayMs: 3000,
+                },
+              })
+            );
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }
     },
     validateOnChange: false,
     validateOnBlur: false,
@@ -108,6 +121,7 @@ const HomePageForm = () => {
         onBlur={handleBlur("parent")}
         placeholder="Иванов Иван Иванович"
         className="home-page__form-input"
+        disabled={isLoading}
       />
 
       <TextInput
@@ -122,6 +136,7 @@ const HomePageForm = () => {
         onBlur={handleBlur("child")}
         placeholder="Иванов Иван Иванович"
         className="home-page__form-input"
+        disabled={isLoading}
       />
 
       <PhoneInput
@@ -133,6 +148,7 @@ const HomePageForm = () => {
         onChange={handleChange}
         placeholder="+375 (29) 123-45-67"
         className="home-page__form-input"
+        disabled={isLoading}
       />
 
       <DateInput
@@ -142,11 +158,22 @@ const HomePageForm = () => {
         error={form.errors.date}
         onChange={handleChange}
         className="home-page__form-input"
+        disabled={isLoading}
       />
 
-      <Button type="submit" variant="main-green-dark" withArrow className="home-page__form-button">
+      <Button
+        type="submit"
+        variant="main-green-dark"
+        withArrow
+        className="home-page__form-button"
+        disabled={isLoading}
+      >
         Оставить заявку
       </Button>
+
+      {form.errors.agreedment && (
+        <span className="home-page__form-error">{form.errors.agreedment}</span>
+      )}
 
       <div className="home-page__form-checkbox-container">
         <Checkbox
@@ -156,6 +183,7 @@ const HomePageForm = () => {
           error={form.errors.agreedment}
           onChange={(checked) => form.setFieldValue("agreedment", checked)}
           className="home-page__form-checkbox"
+          disabled={isLoading}
         />
 
         <span className="home-page__form-checkbox--text">
