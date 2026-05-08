@@ -182,9 +182,9 @@ function getCurrentBranch(): string {
       return "1";
     case "baranovichi":
       return "2";
-    case "novopolotsk":
-      return "3";
     case "borisov":
+      return "3";
+    case "novopolotsk":
       return "4";
   }
 
