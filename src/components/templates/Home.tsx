@@ -21,6 +21,7 @@ import WhatWeLearn from "@/src/components/template-parts/WhatWeLearn";
 import WhyWeAre from "@/src/components/template-parts/WhyWeAre";
 
 import { Page } from "@/src/lib/content/types";
+import CookiePolicyListener from "../template-parts/CookiePolicyListener";
 
 type Props = {
   page: Page;
@@ -185,6 +186,8 @@ export default function Home({ page }: Props) {
           </div>
         </section>
       ) : null}
+
+      <CookiePolicyListener />
     </main>
   );
 }
