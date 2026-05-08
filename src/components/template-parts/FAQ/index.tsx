@@ -1,3 +1,5 @@
+"use client";
+
 import { FC } from "react";
 
 import Button from "@/src/components/ui/Button/Button";
@@ -19,6 +21,18 @@ type PropTypes = {
 };
 
 const FAQPage: FC<PropTypes> = ({ footer, items, tag, text, title }) => {
+  const onClick = () => {
+    const el = document.getElementById(PAGE_ANCHORS.SIGN_UP_FREE_LESSON);
+
+    if (el) {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "start",
+      });
+    }
+  };
+
   return (
     <section className="home-page__block home-page__faq" id={PAGE_ANCHORS.FAQ}>
       <div className="home-page__container">
@@ -35,7 +49,7 @@ const FAQPage: FC<PropTypes> = ({ footer, items, tag, text, title }) => {
                 {footer?.title && <div className="home-page__faq-bottom_title">{footer.title}</div>}
                 {footer?.text && <div className="home-page__faq-bottom_text">{footer.text}</div>}
                 {footer?.button?.title && footer?.button?.url && (
-                  <Button className="home-page__faq-bottom_btn" withArrow={true}>
+                  <Button className="home-page__faq-bottom_btn" withArrow={true} onClick={onClick}>
                     {footer.button.title}
                   </Button>
                 )}

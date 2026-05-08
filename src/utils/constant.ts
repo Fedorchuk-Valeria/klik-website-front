@@ -9,6 +9,7 @@ export const PAGE_ANCHORS = {
   FAQ: "faq",
   LOCATION: "location",
   REVIEWS: "reviews",
+  SIGN_UP_FREE_LESSON: "sign-up-free-lesson",
 } as const;
 
 export const CITY_DISPLAY_NAME = {
