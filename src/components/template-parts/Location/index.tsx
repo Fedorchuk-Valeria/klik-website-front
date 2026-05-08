@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import Icon from "@/src/components/ui/Icon/Icon";
 
 import { getCitySlugFromHost, type ItKlikCitySlug } from "@/src/utils/cityFromHost";
-import { MAP_API_KEY } from "@/src/utils/constant";
+import { CITY_DISPLAY_NAME, MAP_API_KEY } from "@/src/utils/constant";
 import { loadYandexMaps } from "@/src/utils/loadYandexMaps";
 
 import LocationCardContent, { LocationItemData } from "./Card";
@@ -104,13 +104,6 @@ const LOCATION_BY_CITY = {
     },
   ],
 } as const satisfies Record<string, LocationItemData[]>;
-
-const CITY_DISPLAY_NAME = {
-  minsk: "Минск",
-  borisov: "Борисов",
-  baranovichi: "Барановичи",
-  novopolotsk: "Новополоцк",
-};
 
 // TODO картинки
 const LOCATION_AUTOPLAY_DELAY_MS = 5_000;

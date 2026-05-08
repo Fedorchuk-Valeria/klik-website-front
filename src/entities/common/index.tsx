@@ -1,6 +1,7 @@
 export enum ModalType {
   NOTICE = "notice",
   COOKIE_POLICY = "cookie_policy",
+  PLACE_SELECT = "place_select",
 }
 
 export enum HttpStatus {
