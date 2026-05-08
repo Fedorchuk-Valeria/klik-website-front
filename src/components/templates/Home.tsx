@@ -11,9 +11,11 @@ import FAQ from "@/src/components/ui/Faq/Faq";
 import Icon from "@/src/components/ui/Icon/Icon";
 
 import AboutUs from "@/src/components/template-parts/AboutUs";
+import CookiePolicyListener from "@/src/components/template-parts/CookiePolicyListener";
 import FormatsList from "@/src/components/template-parts/FormatsList/FormatsList";
 import HowSignUp from "@/src/components/template-parts/HowSignUp";
 import Location from "@/src/components/template-parts/Location";
+import PlaceListener from "@/src/components/template-parts/PlaceListener";
 import SelectTraining from "@/src/components/template-parts/SelectTraining";
 import SignUpFreeLesson from "@/src/components/template-parts/SignUpFreeLesson";
 import Tutors from "@/src/components/template-parts/Tutors";
@@ -21,9 +23,7 @@ import WhatWeLearn from "@/src/components/template-parts/WhatWeLearn";
 import WhyWeAre from "@/src/components/template-parts/WhyWeAre";
 
 import { Page } from "@/src/lib/content/types";
-import AboutUs from "../template-parts/AboutUs";
-import {PAGE_ANCHORS} from "@/src/utils/constant";
-import CookiePolicyListener from "../template-parts/CookiePolicyListener";
+import { PAGE_ANCHORS } from "@/src/utils/constant";
 
 type Props = {
   page: Page;
@@ -77,7 +77,7 @@ export default function Home({ page }: Props) {
       {aboutUs && <AboutUs {...aboutUs} />}
 
       <section className="home-page__block home-page__programs" id={PAGE_ANCHORS.PROGRAMS}>
-        <div className="home-page__container" >
+        <div className="home-page__container">
           <div className="home-page__programs-wrapper">
             {programs?.tag && <div className="home-page__tag">{programs.tag}</div>}
 
@@ -190,6 +190,7 @@ export default function Home({ page }: Props) {
       ) : null}
 
       <CookiePolicyListener />
+      <PlaceListener />
     </main>
   );
 }

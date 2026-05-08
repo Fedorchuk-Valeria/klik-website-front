@@ -1,0 +1,163 @@
+.place-select-modal {
+  dialog {
+    @include center;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 560px;
+    padding: 50px 30px 30px;
+    width: 100%;
+    min-height: 300px;
+    border-radius: 50px;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &:has(.place-select-modal__city-switcher.active) {
+      min-height: 504px;
+    }
+  }
+
+  .place-select-modal__title {
+    @include fonts(30px, 700);
+    color: var(--main-green-dark);
+    text-align: center;
+  }
+
+  .place-select-modal__city-switcher {
+    width: 100%;
+    border-radius: 100px;
+    border: 2px solid var(--main-orange);
+
+    &.active {
+      .city-switcher__current {
+        border: 2px solid var(--main-orange);
+        top: -2px;
+        left: -2px;
+        width: calc(100% + 4px);
+      }
+    }
+
+    .city-switcher__current {
+      @include fonts(18px, 400, "Manrope");
+      width: 100%;
+      color: var(--main-black);
+
+      .city-switcher__icon {
+        fill: var(--main-black);
+      }
+
+      .city-switcher__current-btn {
+        margin-left: auto;
+      }
+    }
+  }
+
+  .city-switcher__dropdown {
+    top: -2px;
+    left: -2px;
+    width: calc(100% + 4px);
+    background: var(--main-bg);
+    border: 2px solid var(--main-orange);
+
+    li a {
+      @include fonts(18px, 400, "Manrope");
+      color: var(--main-black);
+    }
+  }
+
+  .place-select-modal__button {
+    @include center;
+    width: 100%;
+    margin-top: auto;
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    dialog {
+      max-width: 534px;
+      padding: 30px;
+      min-height: 231px;
+      border-radius: 40px;
+
+      &:has(.place-select-modal__city-switcher.active) {
+        min-height: 430px;
+      }
+    }
+
+    .place-select-modal__city-switcher .city-switcher__current {
+      font-size: 14px;
+    }
+
+    .city-switcher__dropdown li a {
+      font-size: 14px;
+    }
+
+    .place-select-modal__title {
+      font-size: 26px;
+    }
+
+    .place-select-modal__button {
+      padding: 16px 30px;
+      font-size: 16px;
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    dialog {
+      max-width: 480px;
+      min-height: 281px;
+
+      &:has(.place-select-modal__city-switcher.active) {
+        min-height: 490px;
+      }
+    }
+
+    .place-select-modal__city-switcher .city-switcher__current {
+      font-size: 18px;
+    }
+
+    .city-switcher__dropdown li a {
+      font-size: 18px;
+    }
+
+    .place-select-modal__title {
+      font-size: 30px;
+    }
+
+    .place-select-modal__button {
+      padding: 20px;
+      font-size: 18px;
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    dialog {
+      max-width: 350px;
+      min-height: 244px;
+
+      &:has(.place-select-modal__city-switcher.active) {
+        min-height: 460px;
+      }
+    }
+
+    .place-select-modal__city-switcher .city-switcher__current {
+      font-size: 16px;
+    }
+
+    .city-switcher__dropdown li a {
+      font-size: 16px;
+    }
+
+    .place-select-modal__title {
+      font-size: 24px;
+    }
+
+    .place-select-modal__button {
+      padding: 16px 30px;
+      font-size: 16px;
+    }
+  }
+}
