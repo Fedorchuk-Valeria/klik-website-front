@@ -9,3 +9,6 @@ export const PAGE_ANCHORS = {
   LOCATION: "location",
   REVIEWS: "reviews",
 } as const;
+
+export const MAP_API_KEY = process.env.NEXT_PUBLIC_YANDEX_API_KEY;
+

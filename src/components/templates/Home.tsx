@@ -10,8 +10,11 @@ import Button from "@/src/components/ui/Button/Button";
 import FAQ from "@/src/components/ui/Faq/Faq";
 import Icon from "@/src/components/ui/Icon/Icon";
 
+import AboutUs from "@/src/components/template-parts/AboutUs";
 import FormatsList from "@/src/components/template-parts/FormatsList/FormatsList";
 import HowSignUp from "@/src/components/template-parts/HowSignUp";
+import Location from "@/src/components/template-parts/Location";
+import SelectTraining from "@/src/components/template-parts/SelectTraining";
 import SignUpFreeLesson from "@/src/components/template-parts/SignUpFreeLesson";
 import Tutors from "@/src/components/template-parts/Tutors";
 import WhatWeLearn from "@/src/components/template-parts/WhatWeLearn";
@@ -20,6 +23,7 @@ import WhyWeAre from "@/src/components/template-parts/WhyWeAre";
 import { Page } from "@/src/lib/content/types";
 import AboutUs from "../template-parts/AboutUs";
 import {PAGE_ANCHORS} from "@/src/utils/constant";
+import CookiePolicyListener from "../template-parts/CookiePolicyListener";
 
 type Props = {
   page: Page;
@@ -46,10 +50,12 @@ export default function Home({ page }: Props) {
   const howSignUp = page.content.how_sign_up;
   const signUpFreeLesson = page.content.sign_up_free_lesson;
   const aboutUs = page.content.about_us;
+  const selectTraining = page.content.select_training;
+  const location = page.content.location;
 
   return (
     <main className="main home-page">
-      <section className="home-page__header">
+      <section id="header" className="home-page__header">
         <div className="header__container">
           <div className="home-page__header-wrapper">
             <h1>{page.seo.h1}</h1>
@@ -137,8 +143,10 @@ export default function Home({ page }: Props) {
         </div>
       </section>
 
+      {selectTraining && <SelectTraining {...selectTraining} />}
       <WhatWeLearn {...whatWeLearn} />
       {howSignUp && <HowSignUp {...howSignUp} />}
+      {location && <Location {...location} />}
       {whyWeAre && <WhyWeAre {...whyWeAre} />}
       {signUpFreeLesson && <SignUpFreeLesson {...signUpFreeLesson} />}
       <Tutors {...tutors} />
@@ -180,6 +188,8 @@ export default function Home({ page }: Props) {
           </div>
         </section>
       ) : null}
+
+      <CookiePolicyListener />
     </main>
   );
 }
