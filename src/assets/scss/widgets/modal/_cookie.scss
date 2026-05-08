@@ -1,0 +1,103 @@
+.cookie-policy-modal {
+  dialog {
+    padding: 50px 30px 30px;
+    max-width: 564px;
+    width: 100%;
+    border-radius: 50px;
+  }
+
+  .cookie-policy-content__title {
+    @include fonts(30px, 700);
+    color: var(--main-green-dark);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .cookie-policy-content__description {
+    @include fonts(18px, 400, "Manrope");
+    margin-bottom: 20px;
+    color: var(--main-black);
+    text-align: center;
+
+    .cookie-policy-content__link {
+      color: var(--main-orange);
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+  }
+
+  .cookie-policy-content__button {
+    @include center;
+    @include fonts(18px, 600, "Manrope");
+    margin-top: 50px;
+    width: 100%;
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    dialog {
+      padding: 40px 30px 30px;
+      max-width: 534px;
+      border-radius: 40px;
+    }
+
+    .cookie-policy-content__title {
+      font-size: 26px;
+    }
+
+    .cookie-policy-content__description {
+      font-size: 16px;
+    }
+
+    .cookie-policy-content__button {
+      padding: 16px 30px;
+      font-size: 16px;
+      margin-top: 40px;
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    dialog {
+      padding: 30px;
+      max-width: 480px;
+    }
+
+    .cookie-policy-content__title {
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .cookie-policy-content__description {
+      font-size: 18px;
+    }
+
+    .cookie-policy-content__button {
+      font-size: 18px;
+      margin-top: 30px;
+      padding: 20px;
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    dialog {
+      padding: 20px;
+      max-width: 350px;
+      border-radius: 30px;
+    }
+
+    .cookie-policy-content__title {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .cookie-policy-content__description {
+      font-size: 14px;
+    }
+
+    .cookie-policy-content__button {
+      font-size: 16px;
+      margin-top: 20px;
+      padding: 16px 30px;
+    }
+  }
+}
