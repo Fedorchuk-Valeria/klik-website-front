@@ -109,7 +109,7 @@ const CITY_DISPLAY_NAME = {
   minsk: "Минск",
   borisov: "Борисов",
   baranovichi: "Барановичи",
-  novopolotsk: "Новополотск",
+  novopolotsk: "Новополоцк",
 };
 
 // TODO картинки
