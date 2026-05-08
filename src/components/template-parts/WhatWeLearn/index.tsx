@@ -22,6 +22,7 @@ import WhatWeLearnAccordionItem from "./WhatWeLearnAaccordionItem";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
+import {PAGE_ANCHORS} from "@/src/utils/constant";
 
 const SLIDE_IMAGES: Record<string, StaticImageData> = {
   programming: imgProgramming,
@@ -67,7 +68,7 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
   }
 
   return (
-    <section id="what-we-learn">
+    <section id={PAGE_ANCHORS.WHAT}>
       <div className="home-page__block home-page__what-we-learn">
         <span className="home-page__what-we-learn-line">
           <LineSvg />

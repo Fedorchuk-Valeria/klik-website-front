@@ -21,7 +21,6 @@ import WhatWeLearn from "@/src/components/template-parts/WhatWeLearn";
 import WhyWeAre from "@/src/components/template-parts/WhyWeAre";
 
 import { Page } from "@/src/lib/content/types";
-import AboutUs from "../template-parts/AboutUs";
 import {PAGE_ANCHORS} from "@/src/utils/constant";
 import CookiePolicyListener from "../template-parts/CookiePolicyListener";
 
@@ -96,9 +95,6 @@ export default function Home({ page }: Props) {
                     key={index}
                     href={"#"}
                   >
-                    <div className="home-page__programs-item_more">
-                      <Icon className="home-page__programs-item_icon" name="arrow-long" />
-                    </div>
                     <div className="home-page__programs-item_top">
                       {item?.tag && <div className="home-page__programs-item_tag">{item.tag}</div>}
                       {item?.class && (
@@ -114,10 +110,15 @@ export default function Home({ page }: Props) {
                         <div className="home-page__programs-item_quote">{item.quote}</div>
                       )}
                     </div>
-                    {item?.title && (
-                      <div className="home-page__programs-item_title">{item.title}</div>
-                    )}
-                    {item?.text && <div className="home-page__programs-item_text">{item.text}</div>}
+                    <div className="home-page__programs-item_body">
+                      {item?.title && (
+                        <div className="home-page__programs-item_title">{item.title}</div>
+                      )}
+                      {item?.text && <div className="home-page__programs-item_text">{item.text}</div>}
+                      <div className="home-page__programs-item_more">
+                        <Icon className="home-page__programs-item_icon" name="arrow-long" />
+                      </div>
+                    </div>
                   </Link>
                 );
               })}

@@ -8,6 +8,7 @@ import WidgetModal from "@/src/widgets/Modal";
 import { StoreProvider } from "@/src/store/StoreProvider";
 
 import "@/src/assets/scss/index.scss";
+import AnchorScroll from "@/src/components/AnchorScroll/AnchorScroll";
 
 export const metadata: Metadata = {
   title: "Онлайн школа",
@@ -23,6 +24,7 @@ export default function RootLayout({
     <html lang="ru">
       <body>
         <StoreProvider>
+          <AnchorScroll />
           <Header />
           {children}
           <WidgetModal />

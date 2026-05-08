@@ -8,6 +8,8 @@ export const PAGE_ANCHORS = {
   FAQ: "faq",
   LOCATION: "location",
   REVIEWS: "reviews",
+  WHAT: "what",
+  TUTORS: "tutors"
 } as const;
 
 export const MAP_API_KEY = process.env.NEXT_PUBLIC_YANDEX_API_KEY;

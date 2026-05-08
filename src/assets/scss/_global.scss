@@ -20,4 +20,8 @@ main {
   overflow-x: hidden;
   flex: 1 0 auto;
   padding-top: 232px;
+
+  @media screen and (max-width: $tablet-size) {
+    padding-top: 148px;
+  }
 }
