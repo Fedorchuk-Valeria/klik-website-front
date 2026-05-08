@@ -3,6 +3,7 @@ import { FC } from "react";
 
 import Button from "@/src/components/ui/Button/Button";
 
+import { setClientCookie } from "@/src/utils/clientCookies";
 import { COOKIE_CONSENT_STORAGE_KEY } from "@/src/utils/constant";
 import { applyGtagConsentWhenAccepted } from "@/src/utils/gaConsent";
 
@@ -13,7 +14,7 @@ type PropTypes = {
 const CookiePolicyContent: FC<PropTypes> = ({ onClose }) => {
   const handleAccept = () => {
     if (typeof window !== "undefined") {
-      localStorage.setItem(COOKIE_CONSENT_STORAGE_KEY, "true");
+      setClientCookie(COOKIE_CONSENT_STORAGE_KEY, "true");
 
       applyGtagConsentWhenAccepted();
       onClose?.();

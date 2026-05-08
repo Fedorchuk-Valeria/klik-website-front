@@ -9,6 +9,7 @@ import { useAppDispatch } from "@/src/store/hooks";
 import { showModal } from "@/src/store/slices/modalSlice";
 
 import { ModalType } from "@/src/entities/common";
+import { getClientCookie } from "@/src/utils/clientCookies";
 import { COOKIE_CONSENT_STORAGE_KEY, PLACE_STORAGE_KEY } from "@/src/utils/constant";
 
 const PlaceListener = () => {
@@ -17,8 +18,8 @@ const PlaceListener = () => {
   const { active } = useSelector((state: RootStore) => state.modal);
 
   useEffect(() => {
-    const cookiePolicy = localStorage.getItem(COOKIE_CONSENT_STORAGE_KEY);
-    const place = localStorage.getItem(PLACE_STORAGE_KEY);
+    const cookiePolicy = getClientCookie(COOKIE_CONSENT_STORAGE_KEY);
+    const place = getClientCookie(PLACE_STORAGE_KEY);
 
     if (cookiePolicy && !place && !active) {
       dispatch(showModal({ modalType: ModalType.PLACE_SELECT }));
@@ -27,7 +28,7 @@ const PlaceListener = () => {
     if (place) {
       router.push(place);
     }
-  }, [dispatch, active]);
+  }, [dispatch, active, router]);
 
   return null;
 };
