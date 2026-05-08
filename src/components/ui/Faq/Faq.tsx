@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
 import Icon from "@/src/components/ui/Icon/Icon";
+import { useEffect, useRef, useState } from "react";
 
 type FAQItemType = {
   question: string;
@@ -51,10 +51,10 @@ function Item({ item, isOpen, onToggle }: ItemProps) {
 }
 
 export default function FAQ({ items }: FAQProps) {
-  const [openItems, setOpenItems] = useState<boolean[]>(() => items.map((_, i) => i === 0));
+  const [openIndex, setOpenIndex] = useState<number | null>(() => (items.length > 0 ? 0 : null));
 
   const toggleItem = (index: number) => {
-    setOpenItems((prev) => prev.map((v, i) => (i === index ? !v : v)));
+    setOpenIndex((prev) => (prev === index ? null : index));
   };
 
   return (
@@ -63,7 +63,7 @@ export default function FAQ({ items }: FAQProps) {
         <Item
           key={index}
           item={item}
-          isOpen={openItems[index]}
+          isOpen={openIndex === index}
           onToggle={() => toggleItem(index)}
         />
       ))}
