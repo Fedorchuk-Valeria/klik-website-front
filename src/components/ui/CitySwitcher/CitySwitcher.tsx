@@ -1,15 +1,19 @@
 "use client";
 
+import classNames from "classnames";
 import { useEffect, useRef } from "react";
-import { City } from "@/src/lib/getCities";
+
 import Icon from "@/src/components/ui/Icon/Icon";
+import { City } from "@/src/lib/getCities";
 
 type CitySwitcherProps = {
   cities: City[];
   currentCity: City;
+  onClick?: (city: City) => void;
+  className?: string;
 };
 
-const CitySwitcher = ({ cities, currentCity }: CitySwitcherProps) => {
+const CitySwitcher = ({ cities, currentCity, onClick, className }: CitySwitcherProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -34,13 +38,18 @@ const CitySwitcher = ({ cities, currentCity }: CitySwitcherProps) => {
     ref.current.classList.toggle("active");
   };
 
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, city: City) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    onClick?.(city);
+
+    toggleDropdown();
+  };
+
   return (
-    <div className="city-switcher" ref={ref}>
-      <button
-        type="button"
-        className="city-switcher__current"
-        onClick={toggleDropdown}
-      >
+    <div className={classNames("city-switcher", className)} ref={ref}>
+      <button type="button" className="city-switcher__current" onClick={toggleDropdown}>
         <Icon className="city-switcher__icon" name="pin" />
 
         {currentCity.name}
@@ -57,11 +66,13 @@ const CitySwitcher = ({ cities, currentCity }: CitySwitcherProps) => {
           return (
             <li key={city.slug}>
               {isActive ? (
-                <span className="city-switcher__item active">
-                  {city.name}
-                </span>
+                <span className="city-switcher__item active">{city.name}</span>
               ) : (
-                <a href={city.url} className="city-switcher__item">
+                <a
+                  href={city.url}
+                  className="city-switcher__item"
+                  onClick={onClick ? (e) => handleClick(e, city) : undefined}
+                >
                   {city.name}
                 </a>
               )}

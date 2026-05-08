@@ -7,13 +7,15 @@ import imgGreen from "@/src/assets/images/templates/homepage/programs/green.jpg"
 import imgPink from "@/src/assets/images/templates/homepage/programs/pink.jpg";
 
 import Button from "@/src/components/ui/Button/Button";
-import FAQ from "@/src/components/ui/Faq/Faq";
 import Icon from "@/src/components/ui/Icon/Icon";
 
 import AboutUs from "@/src/components/template-parts/AboutUs";
+import CookiePolicyListener from "@/src/components/template-parts/CookiePolicyListener";
+import FAQPage from "@/src/components/template-parts/FAQ";
 import FormatsList from "@/src/components/template-parts/FormatsList/FormatsList";
 import HowSignUp from "@/src/components/template-parts/HowSignUp";
 import Location from "@/src/components/template-parts/Location";
+import PlaceListener from "@/src/components/template-parts/PlaceListener";
 import SelectTraining from "@/src/components/template-parts/SelectTraining";
 import SignUpFreeLesson from "@/src/components/template-parts/SignUpFreeLesson";
 import Tutors from "@/src/components/template-parts/Tutors";
@@ -76,7 +78,7 @@ export default function Home({ page }: Props) {
       {aboutUs && <AboutUs {...aboutUs} />}
 
       <section className="home-page__block home-page__programs" id={PAGE_ANCHORS.PROGRAMS}>
-        <div className="home-page__container" >
+        <div className="home-page__container">
           <div className="home-page__programs-wrapper">
             {programs?.tag && <div className="home-page__tag">{programs.tag}</div>}
 
@@ -151,46 +153,10 @@ export default function Home({ page }: Props) {
       {whyWeAre && <WhyWeAre {...whyWeAre} />}
       {signUpFreeLesson && <SignUpFreeLesson {...signUpFreeLesson} />}
       <Tutors {...tutors} />
-
-      {faq ? (
-        <section className="home-page__block home-page__faq" id={PAGE_ANCHORS.FAQ}>
-          <div className="home-page__container">
-            <div className="home-page__faq-wrapper">
-              <div className="home-page__faq-left">
-                <div className="home-page__faq-top">
-                  {faq?.tag && <div className="home-page__tag">{faq.tag}</div>}
-                  {faq?.title && (
-                    <h2 className="home-page__h2 home-page__faq-title">{faq.title}</h2>
-                  )}
-                  {faq?.text && <div className="home-page__faq-text">{faq.text}</div>}
-                </div>
-                <div className="home-page__faq-bottom">
-                  <div className="home-page__faq-bottom_body">
-                    {faq?.footer?.title && (
-                      <div className="home-page__faq-bottom_title">{faq.footer.title}</div>
-                    )}
-                    {faq?.footer?.text && (
-                      <div className="home-page__faq-bottom_text">{faq.footer.text}</div>
-                    )}
-                    {faq?.footer?.button?.title && faq?.footer?.button?.url && (
-                      <Button className="home-page__faq-bottom_btn" withArrow={true}>
-                        {faq.footer.button.title}
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </div>
-              {faq?.items && (
-                <div className="home-page__faq-right">
-                  <FAQ items={faq.items} />
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-      ) : null}
+      {faq && <FAQPage {...faq} />}
 
       <CookiePolicyListener />
+      <PlaceListener />
     </main>
   );
 }
