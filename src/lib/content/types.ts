@@ -6,12 +6,12 @@ export type PageSeo = {
   h1: string;
 };
 
-type LinkButton = {
+export type LinkButton = {
   title: string;
   url: string;
 };
 
-type FaqItem = {
+export type FaqItem = {
   question: string;
   answer: string;
 };
