@@ -99,8 +99,8 @@ const HomePageForm = () => {
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    form.handleChange(e);
-    form.validateField(e.target.name);
+    const { name, value } = e.target;
+    void form.setFieldValue(name, value, true);
   };
 
   const handleBlur = (name: keyof typeof form.values) => () => {

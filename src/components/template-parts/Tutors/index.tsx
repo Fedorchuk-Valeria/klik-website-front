@@ -299,7 +299,7 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
   }
 
   return (
-    <section ref={sectionRef}>
+    <section ref={sectionRef} id="tutors">
       <div className={classNames("home-page__block", "home-page__tutors")}>
         <div className="home-page__container">
           {tag && <div className="home-page__tag">{tag}</div>}

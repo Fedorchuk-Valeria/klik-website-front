@@ -52,7 +52,7 @@ export default function Home({ page }: Props) {
 
   return (
     <main className="main home-page">
-      <section className="home-page__header">
+      <section id="header" className="home-page__header">
         <div className="header__container">
           <div className="home-page__header-wrapper">
             <h1>{page.seo.h1}</h1>

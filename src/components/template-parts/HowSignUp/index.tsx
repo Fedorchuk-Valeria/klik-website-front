@@ -1,9 +1,10 @@
-import classNames from "classnames";
-import Image from "next/image";
-import { FC } from "react";
+"use client";
 
 import Button, { ButtonVariant } from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
+import classNames from "classnames";
+import Image from "next/image";
+import { FC, useCallback } from "react";
 
 import BottomSVG from "@/src/assets/images/templates/homepage/howSignUp/bottom.svg";
 import lastCardImage from "@/src/assets/images/templates/homepage/howSignUp/how_sign_up.jpg";
@@ -11,6 +12,8 @@ import LeafSVG from "@/src/assets/images/templates/homepage/howSignUp/leaf.svg";
 import TopSVG from "@/src/assets/images/templates/homepage/howSignUp/top.svg";
 
 import HowSignUpDropdownItem from "./HowSignUpDropdownItem";
+
+const HEADER_SCROLL_OFFSET_PX = 120;
 
 type HowSignUpItem = {
   id: number;
@@ -44,9 +47,10 @@ type CardProps = {
   item: HowSignUpItem;
   cardIndex: number;
   totalCards: number;
+  onClick?: () => void;
 };
 
-function HowSignUpCard({ item, cardIndex, totalCards }: CardProps) {
+function HowSignUpCard({ item, cardIndex, totalCards, onClick }: CardProps) {
   const list = item.list;
 
   return (
@@ -60,8 +64,7 @@ function HowSignUpCard({ item, cardIndex, totalCards }: CardProps) {
         className={classNames("how-sign-up__card-leaf", {
           "how-sign-up__card-leaf--placement-first": cardIndex === 0,
           "how-sign-up__card-leaf--placement-second": cardIndex === 1,
-          "how-sign-up__card-leaf--placement-last":
-            cardIndex === totalCards - 1 && totalCards >= 3,
+          "how-sign-up__card-leaf--placement-last": cardIndex === totalCards - 1 && totalCards >= 3,
         })}
       >
         <LeafSVG />
@@ -120,6 +123,7 @@ function HowSignUpCard({ item, cardIndex, totalCards }: CardProps) {
           withArrow
           variant={item.button.variant as ButtonVariant}
           className="how-sign-up__card-button"
+          onClick={onClick}
         >
           {item.button.title}
         </Button>
@@ -129,8 +133,22 @@ function HowSignUpCard({ item, cardIndex, totalCards }: CardProps) {
 }
 
 const HowSignUp: FC<PropTypes> = ({ tag, title, text, items }) => {
+  const handleScroll = useCallback(
+    (cardIndex: number) => () => {
+      const hash = cardIndex === 0 ? "#sign-up-free-lesson" : "#formats";
+      const id = hash.slice(1);
+      const el = document.getElementById(id);
+
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - HEADER_SCROLL_OFFSET_PX;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    },
+    []
+  );
+
   return (
-    <section className="home-page__block">
+    <section id="how-sign-up" className="home-page__block">
       <div className="how-sign-up">
         <div className="home-page__headline">
           {tag && <div className="home-page__tag">{tag}</div>}
@@ -152,6 +170,7 @@ const HowSignUp: FC<PropTypes> = ({ tag, title, text, items }) => {
               item={item}
               cardIndex={cardIndex}
               totalCards={array.length}
+              onClick={handleScroll(cardIndex)}
             />
           ))}
         </div>

@@ -16,7 +16,7 @@ type PropTypes = {
 
 const SelectTraining: FC<PropTypes> = ({ tag, title, text, items }) => {
   return (
-    <section className="select-training">
+    <section id="select-training" className="select-training">
       <span className="select-training__line">
         <Line />
       </span>

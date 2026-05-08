@@ -35,7 +35,10 @@ type PropTypes = {
 
 const SignUpFreeLesson: FC<PropTypes> = ({ title, text, items }) => {
   return (
-    <section className={classNames("home-page__block", "sign-up-free-lesson")}>
+    <section
+      id="sign-up-free-lesson"
+      className={classNames("home-page__block", "sign-up-free-lesson")}
+    >
       <div className="sign-up-free-lesson__block">
         <span className="sign-up-free-lesson__flower">
           <FlowerSVG />
