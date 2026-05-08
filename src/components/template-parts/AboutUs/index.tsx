@@ -11,6 +11,7 @@ import Icon from "@/src/components/ui/Icon/Icon";
 import TextBorder from "@/src/components/ui/TextBorder";
 
 import { AboutUsContentItem, AboutUsSlideContentItem } from "@/src/lib/content/types";
+import {PAGE_ANCHORS} from "@/src/utils/constant";
 
 const ABOUT_US_SLIDE_IMAGES: Record<number, StaticImageData> = {
   1: image1,
@@ -29,7 +30,7 @@ type PropTypes = {
 // TODO responsive
 const AboutUs: FC<PropTypes> = ({ title, text, subtitle, items, slides }) => {
   return (
-    <section className="home-page__about-us">
+    <section className="home-page__about-us" id={PAGE_ANCHORS.ABOUT}>
       <div className="home-page__block">
         <div className="home-page__container">
           <div className="home-page__about-us--block">

@@ -5,12 +5,26 @@ import Socials from "@/src/components/ui/Socials/Socials";
 import FooterBlock from "@/src/components/ui/Footer/FooterBlock";
 import { City, getCities } from "@/src/lib/getCities";
 import { MenuItem } from "@/src/lib/content/types";
+import {CitySettings, getCitySettings} from "@/src/lib/getCitySettings";
+import {headers} from "next/headers";
 
-type FooterInfo = {
+export type FooterInfo =
+  | {
   title: string;
   icon: string;
-  text?: string;
-  list?: City[];
+  text: string;
+  type: "text"
+}
+  | {
+  title: string;
+  icon: string;
+  type: "phone" | "email";
+  value: string;
+} | {
+  type: "cities"
+  title: string;
+  icon: string;
+  list: City[];
 };
 
 type FooterWidget = {
@@ -18,7 +32,13 @@ type FooterWidget = {
   links?: MenuItem[];
 };
 
-export default function Footer() {
+export default async function Footer() {
+
+  const headersList = await headers();
+  const slug = headersList.get("x-city") ?? "minsk";
+
+  const settings = getCitySettings(slug);
+
   const footerLinks: MenuItem[] = [
     {
       url: "#",
@@ -34,25 +54,31 @@ export default function Footer() {
     },
   ];
 
-  const footerInfo: FooterInfo[] = [
+  const footerInfo = (settings: CitySettings): FooterInfo[] => [
     {
       title: "Главный офис",
-      text: "г. Москва, ул. Тверская, д. 15",
       icon: "pin",
+      text: settings.address ?? '',
+      type: "text",
     },
     {
       title: "Телефон",
-      text: '<a href="tel:+375296332779">+375 (29) 633-27-79</a>',
       icon: "call",
+      type: "phone",
+      value: settings.phone ?? '',
     },
     {
       title: "Email",
-      text: '<a href="mailto:info@itschool.ru">info@itschool.ru</a>',
       icon: "mail",
+      type: "email",
+      value: settings.email ?? '',
     },
   ];
 
+  const items = footerInfo(settings);
+
   const footerCities: FooterInfo = {
+    type: "cities",
     title: "Наши города",
     icon: "world",
     list: getCities(),
@@ -139,7 +165,7 @@ export default function Footer() {
             </div>
             <div className="footer__info">
               <div className="footer__row">
-                {footerInfo.map((item, index) => (
+                {items.map((item, index) => (
                   <FooterBlock item={item} key={index} />
                 ))}
               </div>
@@ -147,9 +173,9 @@ export default function Footer() {
             </div>
           </div>
           <div className="footer__middle footer__body-row">
-            <div className="footer__socials">
-              <Socials />
-            </div>
+            {settings?.socials && <div className="footer__socials">
+              <Socials socials={settings.socials} />
+            </div>}
             {footerWidgets?.length > 0 && (
               <div className="footer__widgets">
                 {footerWidgets.map((widget, index) => (

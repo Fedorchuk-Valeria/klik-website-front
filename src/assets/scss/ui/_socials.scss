@@ -3,6 +3,10 @@
   align-items: center;
   gap: 20px;
 
+  @media screen and (max-width: $landscape-tablet-size) {
+    gap: 10px;
+  }
+
   &__item {
   }
 
@@ -18,13 +22,25 @@
     transition: 0.3s all;
     overflow: hidden;
 
+    @media screen and (max-width: $landscape-tablet-size) {
+      width: 40px;
+      height: 40px;
+    }
+
     svg {
       width: 24px;
       height: 24px;
       fill: var(--main-light);
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        width: 20px;
+        height: 20px;
+      }
     }
 
     &:hover {
+      background: transparent;
+
     }
   }
 }

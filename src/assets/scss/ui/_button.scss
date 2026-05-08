@@ -17,7 +17,8 @@
     justify-content: center;
     border-radius: 100%;
     top: 50%;
-    transform: translate(50%, -50%);
+    transform: translate(50%, -50%) scale(1);
+    transition: transform 0.3s ease;
 
     svg {
       width: 27px;
@@ -34,7 +35,21 @@
 
   &--orange {
     background-color: var(--main-orange);
+    border: 1.5px solid var(--main-orange);
     color: var(--main-light);
+
+    &:hover {
+      background-color: var(--main-orange-hover);
+
+      .button__arrow {
+        transform: translate(50%, -50%) scale(1.42);
+      }
+    }
+
+    &:active {
+      border-color: var(--main-orange-hover);
+      background-color: var(--main-orange-active);
+    }
 
     svg:not(.button__arrow) {
       fill: var(--main-light);
@@ -53,6 +68,16 @@
     background-color: var(--main-light);
     color: var(--main-green-dark);
 
+    &:hover {
+      background-color: var(--main-orange);
+      color: var(--main-light);
+    }
+
+    &:active {
+      background-color: var(--main-orange-hover);
+      color: var(--main-light);
+    }
+
     .button__arrow {
       svg {
         fill: var(--main-light);
@@ -65,6 +90,16 @@
   &--main-green-dark {
     background-color: var(--main-green-dark);
     color: var(--main-light);
+
+    &:hover {
+      .button__arrow {
+        transform: translate(50%, -50%) scale(1.42);
+      }
+    }
+
+    &:active {
+      background-color: var(--main-green-dark-active);
+    }
 
     .button__arrow {
       svg {
@@ -88,6 +123,10 @@
         background: var(--main-green-dark);
         color: var(--main-light);
       }
+    }
+
+    &:active {
+      background: var(--main-green-dark-active);
     }
   }
 

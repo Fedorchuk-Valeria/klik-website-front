@@ -1,12 +1,8 @@
 import Icon from "@/src/components/ui/Icon/Icon";
-import { City } from "@/src/lib/getCities";
+import {phoneToLink} from "@/src/lib/utils/phoneLink";
+import {FooterInfo} from "@/src/components/ui/Footer/Footer";
 type FooterBlockProps = {
-  item: {
-    title: string;
-    icon: string;
-    text?: string;
-    list?: City[];
-  };
+  item: FooterInfo
 };
 
 export default function FooterBlock({ item }: FooterBlockProps) {
@@ -20,15 +16,30 @@ export default function FooterBlock({ item }: FooterBlockProps) {
       </div>
 
       <div className="footer__block-body">
-        {item.text && <div dangerouslySetInnerHTML={{ __html: item.text }} />}
-        {item.list && (
+        {item.type === "text" && (
+          <div dangerouslySetInnerHTML={{ __html: item.text }} />
+        )}
+
+        {item.type === "cities" && (
           <ul className="footer__block-list">
-            {item.list.map((city, index) => (
-              <li key={index}>
+            {item?.list.map((city) => (
+              <li key={city.slug}>
                 <a href={city.url}>{city.name}</a>
               </li>
             ))}
           </ul>
+        )}
+
+        {item.type === "phone" && (
+          <a href={phoneToLink(item.value)}>
+            {item.value}
+          </a>
+        )}
+
+        {item.type === "email" && (
+          <a href={`mailto:${item.value}`}>
+            {item.value}
+          </a>
         )}
       </div>
     </div>

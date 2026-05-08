@@ -1,0 +1,9 @@
+{
+  "socials": [
+    { "icon": "inst", "url": "#" },
+    { "icon": "tiktok", "url": "#" },
+    { "icon": "telegram", "url": "#" }
+  ],
+  "address": "г. Борисов",
+  "email": "borisov@itschool.ru"
+}

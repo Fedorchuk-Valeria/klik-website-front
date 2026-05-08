@@ -1,35 +1,15 @@
 import Icon from "@/src/components/ui/Icon/Icon";
 
-type SocialItem = {
-  url: string;
-  name: string;
+export type SocialItem = {
   icon: string;
+  url: string;
 };
 
-export default function Socials() {
-  const socials: SocialItem[] = [
-    {
-      url: "#",
-      name: "instagram",
-      icon: "inst",
-    },
-    {
-      url: "#",
-      name: "tiktok",
-      icon: "tiktok",
-    },
-    {
-      url: "#",
-      name: "telegram",
-      icon: "telegram",
-    },
-    {
-      url: "#",
-      name: "vkontakte",
-      icon: "vk",
-    },
-  ];
+type SocialsProps = {
+  socials?: SocialItem[];
+};
 
+export default function Socials({ socials = [] }: SocialsProps) {
   if (socials.length == 0) {
     return;
   }
