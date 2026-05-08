@@ -41,7 +41,7 @@ const FormatsList = ({ items }: FormatsListProps) => {
   const hasActive = activeIndex !== null;
 
   return (
-    <div className="formats">
+    <div id="formats" className="formats">
       {items.map((item, index) => {
         const isActive = activeIndex === index;
         const isInactive = hasActive && !isActive;

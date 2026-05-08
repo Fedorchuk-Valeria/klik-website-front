@@ -22,7 +22,7 @@ type PropTypes = {
 
 const AboutUs: FC<PropTypes> = ({ title, text, subtitle, items, slides }) => {
   return (
-    <section className="home-page__about-us">
+    <section id="about-us" className="home-page__about-us">
       <div className="home-page__block">
         <div className="home-page__container">
           <div className="home-page__about-us--block">

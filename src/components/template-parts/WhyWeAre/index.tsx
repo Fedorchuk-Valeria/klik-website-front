@@ -99,7 +99,7 @@ const WhyWeAre: FC<PropTypes> = ({ tag, title, text, items, info }) => {
   }
 
   return (
-    <section ref={sectionRef}>
+    <section id="why-we-are" ref={sectionRef}>
       <div className="home-page__block home-page__why-we-are">
         <div className="home-page__container">
           {tag && <div className="home-page__tag">{tag}</div>}

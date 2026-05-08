@@ -376,7 +376,7 @@ const Location: FC<Props> = ({ tag, title }) => {
   }, [citySlug]);
 
   return (
-    <section className="home-page__block home-page__location">
+    <section id="location" className="home-page__block home-page__location">
       <div className="home-page__container">
         <div className="home-page__location-wrapper">
           <div className="home-page__location-top">

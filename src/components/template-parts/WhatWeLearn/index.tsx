@@ -67,7 +67,7 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
   }
 
   return (
-    <section>
+    <section id="what-we-learn">
       <div className="home-page__block home-page__what-we-learn">
         <span className="home-page__what-we-learn-line">
           <LineSvg />
