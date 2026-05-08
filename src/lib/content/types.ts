@@ -211,6 +211,7 @@ export type GenericPage = {
 export type Page = HomePage | GenericPage;
 
 export type MenuItem = {
-  url: string;
+  url?: string;
   title: string;
+  action?: string;
 };

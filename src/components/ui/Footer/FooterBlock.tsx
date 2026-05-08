@@ -20,16 +20,6 @@ export default function FooterBlock({ item }: FooterBlockProps) {
           <div dangerouslySetInnerHTML={{ __html: item.text }} />
         )}
 
-        {item.type === "cities" && (
-          <ul className="footer__block-list">
-            {item?.list.map((city) => (
-              <li key={city.slug}>
-                <a href={city.url}>{city.name}</a>
-              </li>
-            ))}
-          </ul>
-        )}
-
         {item.type === "phone" && (
           <a href={phoneToLink(item.value)}>
             {item.value}

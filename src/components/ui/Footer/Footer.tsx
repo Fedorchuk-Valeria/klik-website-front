@@ -3,10 +3,10 @@ import FooterSticker from "@/src/assets/images/footer_sticker.svg";
 
 import Socials from "@/src/components/ui/Socials/Socials";
 import FooterBlock from "@/src/components/ui/Footer/FooterBlock";
-import { City, getCities } from "@/src/lib/getCities";
 import { MenuItem } from "@/src/lib/content/types";
 import {CitySettings, getCitySettings} from "@/src/lib/getCitySettings";
 import {headers} from "next/headers";
+import {PAGE_ANCHORS} from "@/src/utils/constant";
 
 export type FooterInfo =
   | {
@@ -20,11 +20,6 @@ export type FooterInfo =
   icon: string;
   type: "phone" | "email";
   value: string;
-} | {
-  type: "cities"
-  title: string;
-  icon: string;
-  list: City[];
 };
 
 type FooterWidget = {
@@ -47,11 +42,7 @@ export default async function Footer() {
     {
       url: "#",
       title: "Политика конфиденциальности",
-    },
-    {
-      url: "#",
-      title: "Пользовательское соглашение",
-    },
+    }
   ];
 
   const footerInfo = (settings: CitySettings): FooterInfo[] => [
@@ -77,28 +68,25 @@ export default async function Footer() {
 
   const items = footerInfo(settings);
 
-  const footerCities: FooterInfo = {
-    type: "cities",
-    title: "Наши города",
-    icon: "world",
-    list: getCities(),
-  };
-
   const footerWidgets: FooterWidget[] = [
     {
       title: "О школе",
       links: [
         {
           title: "О нас",
-          url: "#",
+          url: `#${PAGE_ANCHORS.ABOUT}`,
         },
         {
-          title: "Наши тьюторы",
-          url: "#",
+          title: "Города",
+          action: "openCities", //TOdo добавить логику по модалке
+        },
+        {
+          title: "Наставники",
+          url: `#${PAGE_ANCHORS.TUTORS}`,
         },
         {
           title: "Отзывы",
-          url: "#",
+          url: `#${PAGE_ANCHORS.REVIEWS}`,
         },
       ],
     },
@@ -107,32 +95,15 @@ export default async function Footer() {
       links: [
         {
           title: "Форматы обучения",
-          url: "#",
+          url: `#${PAGE_ANCHORS.FORMATS}`,
         },
         {
           title: "Чему обучаем",
-          url: "#",
+          url: `#${PAGE_ANCHORS.WHAT}`,
         },
         {
           title: "Программы обучения",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Направления",
-      links: [
-        {
-          title: "Программирование",
-          url: "#",
-        },
-        {
-          title: "3D-моделирование",
-          url: "#",
-        },
-        {
-          title: "Дизайн",
-          url: "#",
+          url: `#${PAGE_ANCHORS.PROGRAMS}`,
         },
       ],
     },
@@ -141,7 +112,7 @@ export default async function Footer() {
       links: [
         {
           title: "FAQ",
-          url: "#",
+          url: `#${PAGE_ANCHORS.FAQ}`,
         },
       ],
     },
@@ -154,7 +125,7 @@ export default async function Footer() {
       </div>
       <div className="footer__container">
         <div className="footer__body">
-          <div className="footer__top footer__body-row">
+          <div className="footer__left">
             <div className="footer__brand">
               <div className="footer__logo">
                 <LogoSvg />
@@ -163,40 +134,39 @@ export default async function Footer() {
                 KLiK — дополнительное IT-образование детей 6–16 лет
               </div>
             </div>
+            {settings?.socials && <div className="footer__socials">
+              <Socials socials={settings.socials} />
+            </div>}
+          </div>
+          <div className="footer__right">
             <div className="footer__info">
               <div className="footer__row">
                 {items.map((item, index) => (
                   <FooterBlock item={item} key={index} />
                 ))}
               </div>
-              <FooterBlock item={footerCities} />
+              {footerWidgets?.length > 0 && (
+                <div className="footer__widgets">
+                  {footerWidgets.map((widget, index) => (
+                    <div key={index} className="footer__widget">
+                      <div className="footer__widget-title">{widget.title}</div>
+                      <ul className="footer__widget-list">
+                        {widget.links?.map((link, linkIndex) => (
+                          <li key={linkIndex}>
+                            <a href={link.url}>{link.title}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          </div>
-          <div className="footer__middle footer__body-row">
-            {settings?.socials && <div className="footer__socials">
-              <Socials socials={settings.socials} />
-            </div>}
-            {footerWidgets?.length > 0 && (
-              <div className="footer__widgets">
-                {footerWidgets.map((widget, index) => (
-                  <div key={index} className="footer__widget">
-                    <div className="footer__widget-title">{widget.title}</div>
-                    <ul className="footer__widget-list">
-                      {widget.links?.map((link, linkIndex) => (
-                        <li key={linkIndex}>
-                          <a href={link.url}>{link.title}</a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         </div>
         <div className="footer__bottom">
           <div className="footer__bottom-wrapper">
-            <div className="footer__bottom-copyright">© 2026 IT Школа. Все права защищены.</div>
+            <div className="footer__bottom-copyright">© 2026 Дополнительное IT-образование для детей. Все права защищены</div>
             <ul className="footer__links">
               {footerLinks.map((item, index) => (
                 <li className="footer__links-item" key={index}>

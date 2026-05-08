@@ -5,10 +5,13 @@ import CitySwitcher from "@/src/components/ui/CitySwitcher/CitySwitcher";
 import { getCities } from "@/src/lib/getCities";
 import { headers } from "next/headers";
 import Button from "@/src/components/ui/Button/Button";
-import Icon from "@/src/components/ui/Icon/Icon";
 import {getCitySettings} from "@/src/lib/getCitySettings";
 import {phoneToLink} from "@/src/lib/utils/phoneLink";
 import Link from "next/link";
+import HeaderMobileMenu from "@/src/components/HeaderMobileMenu/HeaderMobileMenu";
+import ButtonCabinet from "@/src/components/ui/ButtonCabinet/ButtonCabinet";
+import {PAGE_ANCHORS} from "@/src/utils/constant";
+import ButtonCall from "@/src/components/ui/ButtonCall/ButtonCall";
 
 export default async function Header() {
   const cities = await getCities();
@@ -18,6 +21,29 @@ export default async function Header() {
 
   const currentCity = cities.find((city) => city.slug === slug) || cities[0];
   const settings = getCitySettings(currentCity.slug);
+
+  const menuItems = [
+    {
+      url: `#${PAGE_ANCHORS.ABOUT}`,
+      title: "О Школе",
+    },
+    {
+      url: `#${PAGE_ANCHORS.PROGRAMS}`,
+      title: "Программы",
+    },
+    {
+      url: `#${PAGE_ANCHORS.LOCATION}`,
+      title: "Локации",
+    },
+    {
+      url: `#${PAGE_ANCHORS.REVIEWS}`,
+      title: "Отзывы",
+    },
+    {
+      url: `#${PAGE_ANCHORS.FAQ}`,
+      title: "FAQ",
+    },
+  ];
 
   return (
     <header className="header">
@@ -44,29 +70,22 @@ export default async function Header() {
                 <Socials socials={settings.socials} />
             </div>}
               <div className="header__cabinet">
-                <Button className="header__cabinet-button">
-                  <Icon className="header__cabinet-icon" name="user" />
-                  Личный кабинет
-                </Button>
+                <ButtonCabinet />
               </div>
             </div>
           </div>
           <div className="header__bottom header__row">
             <div className="header__left">
-              <HeaderMenu />
+              <HeaderMenu menuItems={menuItems} />
             </div>
             <div className="header__right last">
              {settings?.phone &&
               <a className="header__phone" href={phoneToLink(settings.phone)}>{settings.phone}</a>
              }
-              <Button className="header__call" variant="main-light">
-                Записаться
-              </Button>
-              <button>
-                121
-              </button>
+              <ButtonCall />
             </div>
           </div>
+          <HeaderMobileMenu phone={settings.phone} currentCity={currentCity} cities={cities} socials={settings.socials ?? []} menuItems={menuItems}  />
         </div>
       </div>
     </header>
