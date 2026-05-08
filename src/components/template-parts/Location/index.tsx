@@ -38,35 +38,35 @@ const LOCATION_BY_CITY = {
       title: "Арэна",
       location: "Пр. Победителей 84, ТЦ Arena City, 2 этаж",
       metro: "Фрунзенская",
-      coords: [53.930781, 27.499905] as const,
+      coords: [53.937997, 27.487524],
     },
     {
       image: "https://placehold.co/600x400.png",
       title: "Мip",
       location: "ул. Аэродромная, 125, 4 этаж",
-      metro: "",
-      coords: [53.8711, 27.6876] as const,
+      metro: "Аэродромная",
+      coords: [53.873341, 27.55857],
     },
     {
       image: "https://placehold.co/600x400.png",
       title: "Натхненне",
       location: "ул. Максима Богдановича, 132, 2 этаж",
-      metro: "",
-      coords: [53.9191, 27.5685] as const,
+      metro: "Академия наук",
+      coords: [53.937833, 27.584361],
     },
     {
       image: "https://placehold.co/600x400.png",
       title: "Камяніца",
       location: "ул. Неманская, 24, 2 этаж",
-      metro: "",
-      coords: [53.9048, 27.5373] as const,
+      metro: "Каменная горка",
+      coords: [53.911301, 27.431036],
     },
     {
       image: "https://placehold.co/600x400.png",
       title: "Навуковая",
       location: "ул. Петра Мстиславца, д.1",
-      metro: "",
-      coords: [53.9341, 27.6513] as const,
+      metro: "Восток",
+      coords: [53.928535, 27.654304],
     },
   ],
   borisov: [
@@ -75,7 +75,7 @@ const LOCATION_BY_CITY = {
       title: "Спатканне",
       location: "ул. Строителей 26, ТЦ Клад Наполеона, 328 каб.",
       metro: "",
-      coords: [54.2239, 28.5118] as const,
+      coords: [54.208212, 28.490276],
     },
   ],
   baranovichi: [
@@ -84,14 +84,14 @@ const LOCATION_BY_CITY = {
       title: "Паветра",
       location: "ул. Марфицкого и Журавлевича, 1А, 3-й этаж",
       metro: "",
-      coords: [53.1322, 26.0175] as const,
+      coords: [53.107054, 26.000308],
     },
     {
       image: "https://placehold.co/600x400.png",
       title: "Усход",
       location: "ул. Тельмана, 64, ТЦ Радужный, 2-й этаж",
       metro: "",
-      coords: [53.1169, 26.043] as const,
+      coords: [53.131866, 26.056075],
     },
   ],
   novopolotsk: [
@@ -100,15 +100,19 @@ const LOCATION_BY_CITY = {
       title: "Iскра",
       location: 'ул. Нефтяников, 6, ТЦ "Зодиак"',
       metro: "",
-      coords: [55.531, 28.648] as const,
+      coords: [55.513135, 28.682429],
     },
   ],
 } as const satisfies Record<string, LocationItemData[]>;
 
-// TODO координаты
+const CITY_DISPLAY_NAME = {
+  minsk: "Минск",
+  borisov: "Борисов",
+  baranovichi: "Барановичи",
+  novopolotsk: "Новополотск",
+};
+
 // TODO картинки
-// TODO зум 16 при клике
-// TODO настроить доступные адреса для карты (localhost, klik)
 const LOCATION_AUTOPLAY_DELAY_MS = 5_000;
 const LOCATION_IDLE_RESUME_MS = 10_000;
 
@@ -381,7 +385,7 @@ const Location: FC<Props> = ({ tag, title }) => {
           </div>
 
           <div className="home-page__location-body">
-            <p className="home-page__location-body--title">Минск</p>
+            <p className="home-page__location-body--title">{CITY_DISPLAY_NAME[citySlug]}</p>
 
             <div className="home-page__location-body-wrapper">
               {isLocationSlider ? (

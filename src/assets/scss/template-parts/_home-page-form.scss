@@ -25,6 +25,12 @@
     margin-top: 10px;
   }
 
+  .home-page__form-error {
+    @include fonts(14px, 500, "Manrope");
+    color: #e31b1b;
+    margin-left: 30px;
+  }
+
   .home-page__form-checkbox-container {
     display: flex;
     align-items: flex-start;
