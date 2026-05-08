@@ -11,6 +11,7 @@ import Modal from "@/src/components/ui/Modal";
 import { City, getCities } from "@/src/lib/getCities";
 import { useAppDispatch } from "@/src/store/hooks";
 import { hideModal } from "@/src/store/slices/modalSlice";
+import { setClientCookie } from "@/src/utils/clientCookies";
 import { PLACE_STORAGE_KEY } from "@/src/utils/constant";
 
 type PropTypes = {
@@ -25,7 +26,7 @@ const WidgetModalPlace: FC<PropTypes> = ({ className, isVisible }) => {
   const [city, setCity] = useState<City>(cities[0]);
 
   const handleAccept = useCallback(() => {
-    localStorage.setItem(PLACE_STORAGE_KEY, city.url);
+    setClientCookie(PLACE_STORAGE_KEY, city.url);
 
     router.push(city.url);
 
