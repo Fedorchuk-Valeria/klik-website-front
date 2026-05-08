@@ -17,6 +17,10 @@
     font-size: 22px;
     color: var(--main-light);
 
+    @media screen and (max-width: $landscape-tablet-size) {
+      font-size: 18px;
+    }
+
     &:after {
       content: "";
       position: absolute;
@@ -43,11 +47,33 @@
     display: flex;
     flex-direction: column;
     gap: 31px;
+
+    @media screen and (max-width: $desktop) {
+      padding: 40px 50px;
+    }
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      padding: 30px;
+      border-radius: 30px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      position: relative;
+    }
   }
 
   &__row {
     display: flex;
     align-items: center;
+  }
+
+  &__bottom {
+    @media screen and (max-width: $tablet-size) {
+      position: absolute;
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
   }
 
   &__left {
@@ -61,6 +87,12 @@
     display: flex;
     align-items: center;
     gap: 30px;
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      &:not(.last) {
+        gap: 50px;
+      }
+    }
   }
 
   &__brand {
@@ -80,6 +112,10 @@
       max-width: 174px;
       font-size: 14px;
       margin-top: -5px;
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        font-size: 12px;
+      }
     }
   }
 
@@ -90,6 +126,10 @@
     gap: 10px;
     border-radius: 100px;
 
+    @media screen and (max-width: $tablet-size) {
+      display: none
+    }
+
     li {
       a {
         padding: 15px 20px;
@@ -98,14 +138,30 @@
         color: var(--main-light);
         transition: 0.3s all;
         border-radius: 100px;
+
+        @media screen and (max-width: $landscape-tablet-size) {
+          padding: 12px 16px;
+          font-size: 14px;
+        }
       }
 
       &.active {
         a {
           background-color: var(--main-orange);
-          font-weight: 700;
         }
       }
+    }
+  }
+
+  &__socials {
+    @media screen and (max-width: $tablet-size) {
+      display: none;
+    }
+  }
+
+  &__city {
+    @media screen and (max-width: $tablet-size) {
+      display: none;
     }
   }
 
@@ -115,17 +171,42 @@
       height: 24px;
     }
 
+    @media screen and (max-width: $tablet-size) {
+      display: none;
+    }
+
     &-button {
       padding: 10px 30px;
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        font-size: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .button__text {
+        @media screen and (max-width: $landscape-tablet-size) {
+          gap: 0;
+        }
+      }
     }
   }
 
   &__call {
     padding: 20px 50px;
-  }
 
-  // TODO fix
-  @media screen and (max-width: $desktop) {
-    display: none;
+    @media screen and (max-width: $landscape-tablet-size) {
+      padding: 15px 50px;
+      font-size: 16px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      display: none;
+    }
   }
 }

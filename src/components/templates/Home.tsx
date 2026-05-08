@@ -21,6 +21,8 @@ import WhatWeLearn from "@/src/components/template-parts/WhatWeLearn";
 import WhyWeAre from "@/src/components/template-parts/WhyWeAre";
 
 import { Page } from "@/src/lib/content/types";
+import AboutUs from "../template-parts/AboutUs";
+import {PAGE_ANCHORS} from "@/src/utils/constant";
 import CookiePolicyListener from "../template-parts/CookiePolicyListener";
 
 type Props = {
@@ -74,8 +76,8 @@ export default function Home({ page }: Props) {
 
       {aboutUs && <AboutUs {...aboutUs} />}
 
-      <section className="home-page__block home-page__programs" id="programs">
-        <div className="home-page__container">
+      <section className="home-page__block home-page__programs" id={PAGE_ANCHORS.PROGRAMS}>
+        <div className="home-page__container" >
           <div className="home-page__programs-wrapper">
             {programs?.tag && <div className="home-page__tag">{programs.tag}</div>}
 
@@ -150,7 +152,7 @@ export default function Home({ page }: Props) {
       <Tutors {...tutors} />
 
       {faq ? (
-        <section className="home-page__block home-page__faq" id="faq">
+        <section className="home-page__block home-page__faq" id={PAGE_ANCHORS.FAQ}>
           <div className="home-page__container">
             <div className="home-page__faq-wrapper">
               <div className="home-page__faq-left">

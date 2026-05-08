@@ -74,6 +74,25 @@
       font-weight: 600;
       a {
         color: var(--main-light);
+        position: relative;
+
+        &:before {
+          content: "";
+          position: absolute;
+          bottom: -5px;
+          left: 0;
+          width: 100%;
+          height: 1.5px;
+          background-color: var(--main-orange);
+          transition: 0.3s all;
+          opacity: 0;
+        }
+
+        &:hover {
+          &:before {
+            opacity: 1;
+          }
+        }
       }
     }
 
@@ -129,6 +148,25 @@
         a {
           font-weight: 600;
           color: var(--main-light);
+          position: relative;
+
+          &:before {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: var(--main-orange);
+            transition: 0.3s all;
+            opacity: 0;
+          }
+
+          &:hover {
+            &:before {
+              opacity: 1;
+            }
+          }
         }
       }
     }

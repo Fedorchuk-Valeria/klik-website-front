@@ -10,6 +10,7 @@ import WhyWeAreSVG from "@/src/assets/images/templates/homepage/whyWeAre/why_we_
 import Icon from "@/src/components/ui/Icon/Icon";
 
 import "swiper/css";
+import {PAGE_ANCHORS} from "@/src/utils/constant";
 
 type PropTypes = {
   tag: string;
@@ -99,7 +100,7 @@ const WhyWeAre: FC<PropTypes> = ({ tag, title, text, items, info }) => {
   }
 
   return (
-    <section id="why-we-are" ref={sectionRef}>
+    <section ref={sectionRef} id={PAGE_ANCHORS.REVIEWS}>
       <div className="home-page__block home-page__why-we-are">
         <div className="home-page__container">
           {tag && <div className="home-page__tag">{tag}</div>}

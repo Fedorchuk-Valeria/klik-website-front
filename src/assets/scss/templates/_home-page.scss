@@ -38,22 +38,47 @@
     margin-top: -65px;
     color: var(--main-light);
 
+    @media screen and (max-width: $landscape-tablet-size) {
+      margin-top: -50px;
+    }
+
     &-wrapper {
       padding: 103px 90px 45px;
       background-color: var(--main-green-dark);
       border-radius: 0 0 70px 70px;
+
+      @media screen and (max-width: $desktop) {
+        padding-left: 50px;
+        padding-right: 50px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        padding: 30px;
+      }
+
+      img {
+        height: auto;
+      }
     }
 
     h1 {
-      @include fonts(100px, 500);
+      @include fonts(56px, 500);
       font-style: normal;
       line-height: normal;
       margin-bottom: 10px;
+
+      @media screen and (max-width: $desktop) {
+        @include fonts(48px, 500);
+      }
     }
 
     &-text {
       margin-bottom: 50px;
       font-size: 24px;
+
+      @media screen and (max-width: $desktop) {
+        font-size: 20px;
+      }
     }
 
     &-button {

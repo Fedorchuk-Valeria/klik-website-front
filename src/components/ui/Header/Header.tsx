@@ -1,43 +1,23 @@
 import LogoSvg from "@/src/assets/images/logo.svg";
 import Socials from "@/src/components/ui/Socials/Socials";
-import { MenuItem } from "@/src/lib/content/types";
 import HeaderMenu from "@/src/components/ui/HeaderMenu/HeaderMenu";
 import CitySwitcher from "@/src/components/ui/CitySwitcher/CitySwitcher";
 import { getCities } from "@/src/lib/getCities";
 import { headers } from "next/headers";
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
+import {getCitySettings} from "@/src/lib/getCitySettings";
+import {phoneToLink} from "@/src/lib/utils/phoneLink";
+import Link from "next/link";
 
 export default async function Header() {
   const cities = await getCities();
 
   const headersList = await headers();
-  const slug = headersList.get("x-city");
+  const slug = headersList.get("x-city") ?? "minsk";
 
   const currentCity = cities.find((city) => city.slug === slug) || cities[0];
-
-  const headerMenu: MenuItem[] = [
-    {
-      url: "",
-      title: "О Школе",
-    },
-    {
-      url: "#programms",
-      title: "Программы",
-    },
-    {
-      url: "#location",
-      title: "Локации",
-    },
-    {
-      url: "#reviews",
-      title: "Отзывы",
-    },
-    {
-      url: "#faq",
-      title: "FAQ",
-    },
-  ];
+  const settings = getCitySettings(currentCity.slug);
 
   return (
     <header className="header">
@@ -46,9 +26,9 @@ export default async function Header() {
           <div className="header__top header__row">
             <div className="header__left">
               <div className="header__brand">
-                <div className="header__logo">
+                <Link className="header__logo" href="/">
                   <LogoSvg />
-                </div>
+                </Link>
                 <div className="header__logo-text">
                   Дополнительное
                   <br />
@@ -60,9 +40,9 @@ export default async function Header() {
               </div>
             </div>
             <div className="header__right">
-              <div className="header__socials">
-                <Socials />
-              </div>
+            {settings?.socials && <div className="header__socials">
+                <Socials socials={settings.socials} />
+            </div>}
               <div className="header__cabinet">
                 <Button className="header__cabinet-button">
                   <Icon className="header__cabinet-icon" name="user" />
@@ -73,15 +53,18 @@ export default async function Header() {
           </div>
           <div className="header__bottom header__row">
             <div className="header__left">
-              <HeaderMenu items={headerMenu} />
+              <HeaderMenu />
             </div>
-            <div className="header__right">
-              <a className="header__phone" href="tel:+37529633279">
-                +375 (29) 633-27-79
-              </a>
+            <div className="header__right last">
+             {settings?.phone &&
+              <a className="header__phone" href={phoneToLink(settings.phone)}>{settings.phone}</a>
+             }
               <Button className="header__call" variant="main-light">
                 Записаться
               </Button>
+              <button>
+                121
+              </button>
             </div>
           </div>
         </div>

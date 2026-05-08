@@ -8,6 +8,12 @@
     border-radius: 100px;
     background-color: var(--secondary-light-10);
     color: var(--main-light);
+    position: relative;
+    z-index: 3;
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      font-size: 14px;
+    }
 
     &-btn {
       display: flex;
@@ -18,12 +24,18 @@
       background-color: var(--main-orange);
       margin-left: 20px;
       border-radius: 100%;
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        width: 30px;
+        height: 30px;
+      }
     }
 
     &-icon {
       width: 24px;
       height: 24px;
       fill: var(--main-light);
+      transition: transform 0.2s ease;
     }
   }
 
@@ -36,21 +48,66 @@
 
   &__dropdown {
     position: absolute;
+    top: 0;
+    left: -1px;
+    width: calc(100% + 2px);
+
     background-color: var(--main-green-dark);
-    top: calc(100% + 10px);
-    left: 0;
-    width: 100%;
+    border-radius: 25px;
+    border: 1px solid var(--secondary-light-30);
+    padding-top: 60px !important;
+    padding-bottom: 10px !important;
+
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transform: translateY(10px);
+    transition: 0.3s all;
+
+    z-index: 2;
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      padding-top: 50px !important;
+    }
 
     li {
-      padding: 10px;
-
       a {
         color: var(--main-light);
       }
 
       span {
-        color: var(--secondary-light-30);
+        color: var(--main-green-dark);
+        background-color: var(--main-green-neon);
       }
+
+      a, span {
+        padding: 10px 5px 10px 20px;
+        border-radius: 100px;
+        transition: 0.3s all;
+        display: inline-block;
+        width: 100%;
+
+        @media screen and (max-width: $landscape-tablet-size) {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  &.active {
+    border-color: var(--secondary-light-30);
+
+    .city-switcher__dropdown {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .city-switcher__current-icon {
+      transform: rotate(180deg);
     }
   }
 }

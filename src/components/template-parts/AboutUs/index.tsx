@@ -10,6 +10,7 @@ import Icon from "@/src/components/ui/Icon/Icon";
 import TextBorder from "@/src/components/ui/TextBorder";
 
 import { AboutUsContentItem, AboutUsSlideContentItem } from "@/src/lib/content/types";
+import {PAGE_ANCHORS} from "@/src/utils/constant";
 
 type PropTypes = {
   tag?: string;
@@ -22,7 +23,7 @@ type PropTypes = {
 
 const AboutUs: FC<PropTypes> = ({ title, text, subtitle, items, slides }) => {
   return (
-    <section id="about-us" className="home-page__about-us">
+    <section className="home-page__about-us" id={PAGE_ANCHORS.ABOUT}>
       <div className="home-page__block">
         <div className="home-page__container">
           <div className="home-page__about-us--block">
