@@ -1,12 +1,13 @@
 "use client";
 
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { FC, startTransition, useCallback, useEffect, useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import Icon from "@/src/components/ui/Icon/Icon";
 
+import { getCitySlugFromHost, type ItKlikCitySlug } from "@/src/utils/cityFromHost";
 import { MAP_API_KEY } from "@/src/utils/constant";
 import { loadYandexMaps } from "@/src/utils/loadYandexMaps";
 
@@ -104,18 +105,104 @@ const LOCATION_BY_CITY = {
   ],
 } as const satisfies Record<string, LocationItemData[]>;
 
-// TODO добавить автовыбор города из хоста
+// TODO координаты
+// TODO картинки
 // TODO зум 16 при клике
-// TODO автопереключение слайдов раз в 5 сек
-// TODO при тапе пауза 10 сек
+// TODO настроить доступные адреса для карты (localhost, klik)
+const LOCATION_AUTOPLAY_DELAY_MS = 5_000;
+const LOCATION_IDLE_RESUME_MS = 10_000;
+
 const Location: FC<Props> = ({ tag, title }) => {
   const [isLocationSlider, setIsLocationSlider] = useState(false);
+  const [citySlug, setCitySlug] = useState<ItKlikCitySlug>("minsk");
   const locationPaginationElRef = useRef<HTMLDivElement>(null);
+  const locationSliderViewportRef = useRef<HTMLDivElement>(null);
+
+  const swiperRef = useRef<SwiperType | null>(null);
+  const autoplayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pausedRef = useRef(false);
+  const inViewportRef = useRef(false);
+  const slideCountRef = useRef(0);
 
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<YMapInstance | null>(null);
 
-  const locations = LOCATION_BY_CITY.minsk;
+  useEffect(() => {
+    const slug = getCitySlugFromHost(window.location.hostname);
+    startTransition(() => {
+      setCitySlug(slug);
+    });
+  }, []);
+
+  const locations = LOCATION_BY_CITY[citySlug];
+  const locationSlideCount = locations.length;
+
+  const clearLocationAutoplayTimer = useCallback(() => {
+    if (autoplayTimerRef.current) {
+      clearTimeout(autoplayTimerRef.current);
+      autoplayTimerRef.current = null;
+    }
+  }, []);
+
+  const clearLocationResumeTimer = useCallback(() => {
+    if (resumeTimerRef.current) {
+      clearTimeout(resumeTimerRef.current);
+      resumeTimerRef.current = null;
+    }
+  }, []);
+
+  const scheduleLocationAutoplayStep = useCallback(() => {
+    clearLocationAutoplayTimer();
+
+    if (!inViewportRef.current || pausedRef.current) return;
+    if (slideCountRef.current <= 1) return;
+
+    const tick = () => {
+      autoplayTimerRef.current = null;
+      if (pausedRef.current) return;
+      if (!inViewportRef.current) return;
+      if (slideCountRef.current <= 1) return;
+
+      const sw = swiperRef.current;
+      if (!sw || sw.destroyed) return;
+
+      sw.slideNext();
+      autoplayTimerRef.current = setTimeout(tick, LOCATION_AUTOPLAY_DELAY_MS);
+    };
+
+    autoplayTimerRef.current = setTimeout(tick, LOCATION_AUTOPLAY_DELAY_MS);
+  }, [clearLocationAutoplayTimer]);
+
+  const onLocationSliderUserInteraction = useCallback(() => {
+    if (slideCountRef.current <= 1) return;
+
+    pausedRef.current = true;
+
+    clearLocationAutoplayTimer();
+    clearLocationResumeTimer();
+
+    resumeTimerRef.current = setTimeout(() => {
+      resumeTimerRef.current = null;
+      pausedRef.current = false;
+      scheduleLocationAutoplayStep();
+    }, LOCATION_IDLE_RESUME_MS);
+  }, [clearLocationAutoplayTimer, clearLocationResumeTimer, scheduleLocationAutoplayStep]);
+
+  const onLocationSwiperMount = useCallback(
+    (swiper: SwiperType) => {
+      swiperRef.current = swiper;
+      if (
+        isLocationSlider &&
+        inViewportRef.current &&
+        !pausedRef.current &&
+        slideCountRef.current > 1
+      ) {
+        scheduleLocationAutoplayStep();
+      }
+    },
+    [isLocationSlider, scheduleLocationAutoplayStep]
+  );
 
   const focusOnCoords = useCallback((coords: readonly [number, number]) => {
     const map = mapInstanceRef.current;
@@ -132,6 +219,75 @@ const Location: FC<Props> = ({ tag, title }) => {
     pg.el = el;
     origPg.el = el;
   };
+
+  useEffect(() => {
+    slideCountRef.current = locationSlideCount;
+  }, [locationSlideCount]);
+
+  useEffect(
+    () => () => {
+      clearLocationAutoplayTimer();
+      clearLocationResumeTimer();
+    },
+    [clearLocationAutoplayTimer, clearLocationResumeTimer]
+  );
+
+  useEffect(() => {
+    if (!isLocationSlider || locationSlideCount <= 1) {
+      clearLocationAutoplayTimer();
+      clearLocationResumeTimer();
+      swiperRef.current = null;
+    }
+  }, [isLocationSlider, locationSlideCount, clearLocationAutoplayTimer, clearLocationResumeTimer]);
+
+  useEffect(() => {
+    if (!isLocationSlider || locationSlideCount <= 1) {
+      inViewportRef.current = false;
+      clearLocationAutoplayTimer();
+      return;
+    }
+
+    const el = locationSliderViewportRef.current;
+    if (!el) {
+      inViewportRef.current = false;
+      clearLocationAutoplayTimer();
+      return;
+    }
+
+    const syncAutoplayVisibility = (visible: boolean) => {
+      inViewportRef.current = visible;
+
+      if (visible) {
+        if (!pausedRef.current) scheduleLocationAutoplayStep();
+      } else {
+        clearLocationAutoplayTimer();
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        syncAutoplayVisibility(entry.isIntersecting);
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(el);
+    const queued = observer.takeRecords();
+    if (queued.length) {
+      syncAutoplayVisibility(queued[queued.length - 1]?.isIntersecting ?? false);
+    }
+
+    return () => {
+      observer.disconnect();
+      inViewportRef.current = false;
+      clearLocationAutoplayTimer();
+    };
+  }, [
+    isLocationSlider,
+    locationSlideCount,
+    clearLocationAutoplayTimer,
+    scheduleLocationAutoplayStep,
+  ]);
 
   useEffect(() => {
     const rootStyle = getComputedStyle(document.documentElement);
@@ -152,7 +308,7 @@ const Location: FC<Props> = ({ tag, title }) => {
     if (!apiKey) return;
 
     let cancelled = false;
-    const items = LOCATION_BY_CITY.minsk;
+    const items = LOCATION_BY_CITY[citySlug];
 
     const run = async () => {
       try {
@@ -162,7 +318,7 @@ const Location: FC<Props> = ({ tag, title }) => {
       }
       if (cancelled || !mapContainerRef.current || !window.ymaps) return;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- типы из JS API 2.1 не подключены
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const ymaps = window.ymaps as any;
 
       ymaps.ready(() => {
@@ -200,7 +356,7 @@ const Location: FC<Props> = ({ tag, title }) => {
 
         const bounds = map.geoObjects.getBounds();
         if (bounds) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- setBounds в типах карты не объявлен
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (map as any).setBounds(bounds, { checkZoomRange: true, zoomMargin: 48 });
         }
       });
@@ -213,7 +369,7 @@ const Location: FC<Props> = ({ tag, title }) => {
       mapInstanceRef.current?.destroy();
       mapInstanceRef.current = null;
     };
-  }, []);
+  }, [citySlug]);
 
   return (
     <section className="home-page__block home-page__location">
@@ -229,13 +385,20 @@ const Location: FC<Props> = ({ tag, title }) => {
 
             <div className="home-page__location-body-wrapper">
               {isLocationSlider ? (
-                <div className="home-page__location-swiper-stack">
+                <div
+                  ref={locationSliderViewportRef}
+                  className="home-page__location-swiper-stack"
+                  onPointerDownCapture={
+                    locationSlideCount > 1 ? onLocationSliderUserInteraction : undefined
+                  }
+                >
                   <div
                     ref={locationPaginationElRef}
                     className="swiper-pagination home-page__location-swiper-pagination"
                   />
 
                   <Swiper
+                    key={citySlug}
                     modules={[Pagination]}
                     rewind
                     grabCursor
@@ -244,6 +407,7 @@ const Location: FC<Props> = ({ tag, title }) => {
                     spaceBetween={10}
                     className="home-page__location-swiper"
                     onBeforeInit={onLocationSwiperBeforeInit}
+                    onSwiper={onLocationSwiperMount}
                     pagination={{
                       el: null,
                       clickable: true,
@@ -281,11 +445,8 @@ const Location: FC<Props> = ({ tag, title }) => {
                     <span>Кликните на любую локацию, чтобы увидеть её на Яндекс.Картах</span>
                   </span>
                 </p>
-                {!MAP_API_KEY ? (
-                  <div className="home-page__location-body-map home-page__location-body-map--placeholder">
-                    Укажите NEXT_PUBLIC_YANDEX_API_KEY для отображения карты
-                  </div>
-                ) : (
+
+                {MAP_API_KEY && (
                   <div ref={mapContainerRef} className="home-page__location-body-map" />
                 )}
               </div>
