@@ -143,20 +143,6 @@
     }
   }
 
-  &__formats {
-    &-top {
-      @include center-between;
-      gap: 39px;
-      margin-bottom: 100px;
-    }
-
-    &-text {
-      max-width: 728px;
-      font-size: 24px;
-      color: var(--main-black);
-    }
-  }
-
   &__programs {
     &-top {
       display: flex;
@@ -300,12 +286,6 @@
     &__container {
       max-width: 1280px;
     }
-
-    &__formats {
-      &-top {
-        margin-bottom: 50px;
-      }
-    }
   }
 
   @media screen and (max-width: $landscape-tablet-size) {
@@ -323,12 +303,6 @@
 
     &__container {
       max-width: 944px;
-    }
-
-    &__formats {
-      &-top {
-        margin-bottom: 30px;
-      }
     }
   }
 

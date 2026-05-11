@@ -16,7 +16,7 @@ export type FaqItem = {
   answer: string;
 };
 
-type FormatContentItem = {
+export type FormatContentItem = {
   title: string;
   url: string;
   class: string;

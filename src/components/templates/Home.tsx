@@ -12,7 +12,7 @@ import Icon from "@/src/components/ui/Icon/Icon";
 import AboutUs from "@/src/components/template-parts/AboutUs";
 import CookiePolicyListener from "@/src/components/template-parts/CookiePolicyListener";
 import FAQPage from "@/src/components/template-parts/FAQ";
-import FormatsList from "@/src/components/template-parts/FormatsList/FormatsList";
+import Formats from "@/src/components/template-parts/Formats";
 import HowSignUp from "@/src/components/template-parts/HowSignUp";
 import Location from "@/src/components/template-parts/Location";
 import PlaceListener from "@/src/components/template-parts/PlaceListener";
@@ -23,8 +23,7 @@ import WhatWeLearn from "@/src/components/template-parts/WhatWeLearn";
 import WhyWeAre from "@/src/components/template-parts/WhyWeAre";
 
 import { Page } from "@/src/lib/content/types";
-import {PAGE_ANCHORS} from "@/src/utils/constant";
-import CookiePolicyListener from "../template-parts/CookiePolicyListener";
+import { PAGE_ANCHORS } from "@/src/utils/constant";
 
 type Props = {
   page: Page;
@@ -76,6 +75,7 @@ export default function Home({ page }: Props) {
       </section>
 
       {aboutUs && <AboutUs {...aboutUs} />}
+      {formats && <Formats {...formats} />}
 
       <section className="home-page__block home-page__programs" id={PAGE_ANCHORS.PROGRAMS}>
         <div className="home-page__container">
@@ -116,7 +116,9 @@ export default function Home({ page }: Props) {
                       {item?.title && (
                         <div className="home-page__programs-item_title">{item.title}</div>
                       )}
-                      {item?.text && <div className="home-page__programs-item_text">{item.text}</div>}
+                      {item?.text && (
+                        <div className="home-page__programs-item_text">{item.text}</div>
+                      )}
                       <div className="home-page__programs-item_more">
                         <Icon className="home-page__programs-item_icon" name="arrow-long" />
                       </div>
@@ -124,23 +126,6 @@ export default function Home({ page }: Props) {
                   </Link>
                 );
               })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="home-page__block home-page__formats" id="formats">
-        <div className="home-page__container">
-          <div className="home-page__formats-wrapper">
-            {formats?.tag && <div className="home-page__tag">{formats.tag}</div>}
-            <div className="home-page__formats-top">
-              {formats?.title && (
-                <h2 className="home-page__h2 home-page__formats-title">{formats.title}</h2>
-              )}
-              {formats?.text && <div className="home-page__formats-text">{formats.text}</div>}
-            </div>
-            <div className="home-page__formats-body">
-              <FormatsList items={formats?.items ?? []} />
             </div>
           </div>
         </div>

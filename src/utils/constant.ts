@@ -10,7 +10,7 @@ export const PAGE_ANCHORS = {
   LOCATION: "location",
   REVIEWS: "reviews",
   WHAT: "what",
-  TUTORS: "tutors"
+  TUTORS: "tutors",
   SIGN_UP_FREE_LESSON: "sign-up-free-lesson",
 } as const;
 
