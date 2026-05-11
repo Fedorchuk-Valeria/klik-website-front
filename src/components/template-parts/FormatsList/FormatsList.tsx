@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -43,6 +43,9 @@ export const formatImages: Record<string, string> = {
 
 const TABLET_MAX_CSS_VAR = "--layout-tablet-max";
 
+const FORMATS_AUTOPLAY_DELAY_MS = 5_000;
+const FORMATS_IDLE_RESUME_MS = 10_000;
+
 function useFormatsSliderMatch() {
   const [useSliderLayout, setUseSliderLayout] = useState(false);
 
@@ -67,11 +70,150 @@ const FormatsList = ({ items }: FormatsListProps) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [mobileSlideIndex, setMobileSlideIndex] = useState(0);
 
+  const formatsSliderViewportRef = useRef<HTMLDivElement>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
+  const autoplayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pausedRef = useRef(false);
+  const inViewportRef = useRef(false);
+  const slideCountRef = useRef(0);
+
   const hasActiveAccordion = activeIndex !== null && !useSliderLayout;
+
+  const clearFormatsAutoplayTimer = useCallback(() => {
+    if (autoplayTimerRef.current) {
+      clearTimeout(autoplayTimerRef.current);
+      autoplayTimerRef.current = null;
+    }
+  }, []);
+
+  const clearFormatsResumeTimer = useCallback(() => {
+    if (resumeTimerRef.current) {
+      clearTimeout(resumeTimerRef.current);
+      resumeTimerRef.current = null;
+    }
+  }, []);
+
+  const scheduleFormatsAutoplayStep = useCallback(() => {
+    clearFormatsAutoplayTimer();
+
+    if (!inViewportRef.current || pausedRef.current) return;
+    if (slideCountRef.current <= 1) return;
+
+    const tick = () => {
+      autoplayTimerRef.current = null;
+      if (pausedRef.current) return;
+      if (!inViewportRef.current) return;
+      if (slideCountRef.current <= 1) return;
+
+      const sw = swiperRef.current;
+      if (!sw || sw.destroyed) return;
+
+      sw.slideNext();
+      autoplayTimerRef.current = setTimeout(tick, FORMATS_AUTOPLAY_DELAY_MS);
+    };
+
+    autoplayTimerRef.current = setTimeout(tick, FORMATS_AUTOPLAY_DELAY_MS);
+  }, [clearFormatsAutoplayTimer]);
+
+  const onFormatsSliderUserInteraction = useCallback(() => {
+    if (slideCountRef.current <= 1) return;
+
+    pausedRef.current = true;
+
+    clearFormatsAutoplayTimer();
+    clearFormatsResumeTimer();
+
+    resumeTimerRef.current = setTimeout(() => {
+      resumeTimerRef.current = null;
+      pausedRef.current = false;
+      scheduleFormatsAutoplayStep();
+    }, FORMATS_IDLE_RESUME_MS);
+  }, [clearFormatsAutoplayTimer, clearFormatsResumeTimer, scheduleFormatsAutoplayStep]);
 
   const syncSlideFromSwiper = useCallback((swiper: SwiperType) => {
     setMobileSlideIndex(swiper.realIndex);
   }, []);
+
+  const onFormatsSwiperMount = useCallback(
+    (swiper: SwiperType) => {
+      swiperRef.current = swiper;
+      setMobileSlideIndex(swiper.realIndex);
+      if (
+        useSliderLayout &&
+        inViewportRef.current &&
+        !pausedRef.current &&
+        slideCountRef.current > 1
+      ) {
+        scheduleFormatsAutoplayStep();
+      }
+    },
+    [scheduleFormatsAutoplayStep, useSliderLayout]
+  );
+
+  useEffect(() => {
+    slideCountRef.current = items.length;
+  }, [items.length]);
+
+  useEffect(
+    () => () => {
+      clearFormatsAutoplayTimer();
+      clearFormatsResumeTimer();
+    },
+    [clearFormatsAutoplayTimer, clearFormatsResumeTimer]
+  );
+
+  useEffect(() => {
+    if (!useSliderLayout || items.length <= 1) {
+      clearFormatsAutoplayTimer();
+      clearFormatsResumeTimer();
+      swiperRef.current = null;
+    }
+  }, [useSliderLayout, items.length, clearFormatsAutoplayTimer, clearFormatsResumeTimer]);
+
+  useEffect(() => {
+    if (!useSliderLayout || items.length <= 1) {
+      inViewportRef.current = false;
+      clearFormatsAutoplayTimer();
+      return;
+    }
+
+    const el = formatsSliderViewportRef.current;
+    if (!el) {
+      inViewportRef.current = false;
+      clearFormatsAutoplayTimer();
+      return;
+    }
+
+    const syncAutoplayVisibility = (visible: boolean) => {
+      inViewportRef.current = visible;
+
+      if (visible) {
+        if (!pausedRef.current) scheduleFormatsAutoplayStep();
+      } else {
+        clearFormatsAutoplayTimer();
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        syncAutoplayVisibility(entry.isIntersecting);
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(el);
+    const queued = observer.takeRecords();
+    if (queued.length) {
+      syncAutoplayVisibility(queued[queued.length - 1]?.isIntersecting ?? false);
+    }
+
+    return () => {
+      observer.disconnect();
+      inViewportRef.current = false;
+      clearFormatsAutoplayTimer();
+    };
+  }, [useSliderLayout, items.length, clearFormatsAutoplayTimer, scheduleFormatsAutoplayStep]);
 
   if (!items.length) {
     return null;
@@ -141,27 +283,34 @@ const FormatsList = ({ items }: FormatsListProps) => {
 
   if (useSliderLayout) {
     return (
-      <Swiper
-        modules={[Pagination]}
-        className={classNames("formats", "formats--slider")}
-        slidesPerView={1}
-        watchOverflow
-        spaceBetween={16}
-        onSlideChange={syncSlideFromSwiper}
-        onSwiper={syncSlideFromSwiper}
-        pagination={{
-          clickable: true,
-          hideOnClick: false,
-          bulletClass: "formats__pagination-bullet",
-          bulletActiveClass: "formats__pagination-bullet--active",
-        }}
+      <div
+        ref={formatsSliderViewportRef}
+        className="formats__slider-viewport"
+        onPointerDownCapture={items.length > 1 ? onFormatsSliderUserInteraction : undefined}
       >
-        {items.map((item, index) => (
-          <SwiperSlide key={`${item.class}-${index}`}>
-            {renderItem(item, index, { type: "slider" })}
-          </SwiperSlide>
-        ))}
-      </Swiper>
+        <Swiper
+          modules={[Pagination]}
+          className={classNames("formats", "formats--slider")}
+          rewind
+          slidesPerView={1}
+          watchOverflow
+          spaceBetween={16}
+          onSlideChange={syncSlideFromSwiper}
+          onSwiper={onFormatsSwiperMount}
+          pagination={{
+            clickable: true,
+            hideOnClick: false,
+            bulletClass: "formats__pagination-bullet",
+            bulletActiveClass: "formats__pagination-bullet--active",
+          }}
+        >
+          {items.map((item, index) => (
+            <SwiperSlide key={`${item.class}-${index}`}>
+              {renderItem(item, index, { type: "slider" })}
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
     );
   }
 

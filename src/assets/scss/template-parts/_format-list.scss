@@ -460,6 +460,10 @@
 }
 
 @media screen and (max-width: $tablet-size) {
+  .formats__slider-viewport {
+    width: 100%;
+  }
+
   .formats.formats--slider {
     display: block;
 
