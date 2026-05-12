@@ -28,7 +28,7 @@ export type FormatContentItem = {
   }[];
 };
 
-type ProgramContentItem = {
+export type ProgramContentItem = {
   title: string;
   url: string;
   class: string;

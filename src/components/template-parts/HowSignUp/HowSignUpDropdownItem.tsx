@@ -4,6 +4,7 @@ import classNames from "classnames";
 import { FC, memo, useEffect, useRef, useState } from "react";
 
 import Icon from "@/src/components/ui/Icon/Icon";
+import useClickOutside from "@/src/hooks/useClickOutside";
 
 type HowSignUpDropdownItemProps = {
   title: string;
@@ -16,6 +17,7 @@ const HowSignUpDropdownItem: FC<HowSignUpDropdownItemProps> = ({
   text,
   defaultOpen = false,
 }) => {
+  const ref = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [height, setHeight] = useState("0px");
@@ -37,8 +39,11 @@ const HowSignUpDropdownItem: FC<HowSignUpDropdownItemProps> = ({
     }
   }, [isOpen, text]);
 
+  useClickOutside(ref, () => setIsOpen(false));
+
   return (
     <div
+      ref={ref}
       className={classNames("how-sign-up__dropdown-item", {
         "is-open": isOpen,
       })}
