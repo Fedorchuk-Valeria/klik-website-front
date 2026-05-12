@@ -41,14 +41,15 @@ const CitySwitcher = ({ cities, currentCity, onClick, className }: CitySwitcherP
     ref.current.classList.toggle("active");
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, city: City) => {
+  const handleCitySelect = (e: React.MouseEvent<HTMLAnchorElement>, city: City) => {
     e.preventDefault();
     e.stopPropagation();
 
-    onClick?.(city);
-
-    if (!onClick) {
+    if (onClick) {
+      onClick(city);
+    } else {
       setClientCookie(PLACE_STORAGE_KEY, city.url);
+      window.location.assign(city.url);
     }
 
     toggleDropdown();
@@ -78,7 +79,7 @@ const CitySwitcher = ({ cities, currentCity, onClick, className }: CitySwitcherP
                 <a
                   href={city.url}
                   className="city-switcher__item"
-                  onClick={onClick ? (e) => handleClick(e, city) : undefined}
+                  onClick={(e) => handleCitySelect(e, city)}
                 >
                   {city.name}
                 </a>
