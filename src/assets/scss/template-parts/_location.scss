@@ -54,6 +54,7 @@
 
         .swiper-slide {
           height: auto;
+          margin-bottom: 2px;
         }
       }
 
@@ -226,7 +227,7 @@
       flex: 1;
       width: 100%;
       height: 100%;
-      min-height: 400px;
+      min-height: 820px;
       border-radius: 20px;
       overflow: hidden;
       background: var(--main-bg);
@@ -274,6 +275,7 @@
       .home-page__location-body-map {
         border-radius: 30px;
         max-height: 650px;
+        min-height: 632px;
       }
     }
   }
@@ -291,7 +293,7 @@
     }
 
     .home-page__location-body-wrapper {
-      grid-template-columns: 351px 1fr;
+      grid-template-columns: minmax(0, 351px) minmax(0, 1fr);
       gap: 16px;
 
       .home-page__location-body-item {
@@ -351,6 +353,8 @@
     }
 
     .home-page__location-map-column {
+      min-width: 0;
+
       .home-page__location-map--hint {
         .home-page__location-map--hint-icon {
           @include icon(20px);

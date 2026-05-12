@@ -25,6 +25,9 @@ type Props = {
 type YMapInstance = {
   destroy: () => void;
   setCenter: (center: number[], zoom?: number, options?: { duration?: number }) => void;
+  container?: {
+    fitToViewport?: () => void;
+  };
   geoObjects: {
     add: (object: unknown) => void;
     getBounds: () => number[][] | null;
@@ -56,7 +59,7 @@ const LOCATION_BY_CITY = {
     },
     {
       image: "https://placehold.co/600x400.png",
-      title: "Камяніца",
+      title: "Камянiца",
       location: "ул. Неманская, 24, 2 этаж",
       metro: "Каменная горка",
       coords: [53.911301, 27.431036],
@@ -297,7 +300,48 @@ const Location: FC<Props> = ({ tag, title }) => {
     const sync = () => setIsLocationSlider(mq.matches);
     sync();
     mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
+    window.addEventListener("resize", sync);
+    window.visualViewport?.addEventListener("resize", sync);
+    return () => {
+      mq.removeEventListener("change", sync);
+      window.removeEventListener("resize", sync);
+      window.visualViewport?.removeEventListener("resize", sync);
+    };
+  }, []);
+
+  useEffect(() => {
+    const orientationTimeouts: number[] = [];
+
+    const refreshLayout = () => {
+      const sw = swiperRef.current;
+      if (sw && !sw.destroyed) {
+        sw.update();
+      }
+
+      const map = mapInstanceRef.current;
+      map?.container?.fitToViewport?.();
+    };
+
+    const onResize = () => {
+      refreshLayout();
+    };
+
+    const onOrientation = () => {
+      requestAnimationFrame(refreshLayout);
+      orientationTimeouts.push(window.setTimeout(refreshLayout, 100));
+      orientationTimeouts.push(window.setTimeout(refreshLayout, 350));
+    };
+
+    window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onOrientation);
+    window.visualViewport?.addEventListener("resize", onResize);
+
+    return () => {
+      orientationTimeouts.forEach((id) => window.clearTimeout(id));
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onOrientation);
+      window.visualViewport?.removeEventListener("resize", onResize);
+    };
   }, []);
 
   useEffect(() => {
@@ -397,6 +441,8 @@ const Location: FC<Props> = ({ tag, title }) => {
                   <Swiper
                     key={citySlug}
                     modules={[Pagination]}
+                    observer
+                    observeParents
                     rewind
                     grabCursor
                     watchOverflow={false}

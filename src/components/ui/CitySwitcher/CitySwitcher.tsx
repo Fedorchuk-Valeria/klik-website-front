@@ -6,6 +6,9 @@ import { useEffect, useRef } from "react";
 import Icon from "@/src/components/ui/Icon/Icon";
 import { City } from "@/src/lib/getCities";
 
+import { setClientCookie } from "@/src/utils/clientCookies";
+import { PLACE_STORAGE_KEY } from "@/src/utils/constant";
+
 type CitySwitcherProps = {
   cities: City[];
   currentCity: City;
@@ -43,6 +46,10 @@ const CitySwitcher = ({ cities, currentCity, onClick, className }: CitySwitcherP
     e.stopPropagation();
 
     onClick?.(city);
+
+    if (!onClick) {
+      setClientCookie(PLACE_STORAGE_KEY, city.url);
+    }
 
     toggleDropdown();
   };

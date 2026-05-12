@@ -11,6 +11,7 @@ import lastCardImage from "@/src/assets/images/templates/homepage/howSignUp/how_
 import LeafSVG from "@/src/assets/images/templates/homepage/howSignUp/leaf.svg";
 import TopSVG from "@/src/assets/images/templates/homepage/howSignUp/top.svg";
 
+import { PAGE_ANCHORS } from "@/src/utils/constant";
 import HowSignUpDropdownItem from "./HowSignUpDropdownItem";
 
 const HEADER_SCROLL_OFFSET_PX = 120;
@@ -112,7 +113,7 @@ function HowSignUpCard({ item, cardIndex, totalCards, onClick }: CardProps) {
               key={`${item.id}-${dropdown.title}-${dropdownIndex}`}
               title={dropdown.title}
               text={dropdown.text}
-              defaultOpen={dropdownIndex === 0}
+              defaultOpen={false}
             />
           ))}
         </div>
@@ -135,7 +136,8 @@ function HowSignUpCard({ item, cardIndex, totalCards, onClick }: CardProps) {
 const HowSignUp: FC<PropTypes> = ({ tag, title, text, items }) => {
   const handleScroll = useCallback(
     (cardIndex: number) => () => {
-      const hash = cardIndex === 0 ? "#sign-up-free-lesson" : "#formats";
+      const hash =
+        cardIndex === 0 ? `#${PAGE_ANCHORS.SIGN_UP_FREE_LESSON}` : `#${PAGE_ANCHORS.PROGRAMS}`;
       const id = hash.slice(1);
       const el = document.getElementById(id);
 

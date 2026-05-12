@@ -34,6 +34,11 @@
   }
 
   .how-sign-up-top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 100px;
+
     .how-sign-up__title {
       color: var(--main-light);
     }
@@ -317,6 +322,8 @@
     border-radius: 50px;
 
     .how-sign-up-top {
+      margin-bottom: 50px;
+
       .how-sign-up__text {
         font-size: 20px;
       }
@@ -545,6 +552,7 @@
 
     .how-sign-up-top {
       gap: 5px;
+      margin-bottom: 30px;
 
       .how-sign-up__text {
         font-size: 20px;
