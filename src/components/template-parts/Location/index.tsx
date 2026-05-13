@@ -422,10 +422,16 @@ const Location: FC<Props> = ({ tag, title }) => {
         const bounds = map.geoObjects.getBounds();
         if (bounds) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (map as any).setBounds(bounds, { checkZoomRange: true, zoomMargin: 48 });
-          if (map.getZoom() > LOCATION_MAP_MAX_ZOOM) {
-            map.setZoom(LOCATION_MAP_MAX_ZOOM, { duration: 0 });
-          }
+          const fit = (map as any).setBounds(bounds, {
+            checkZoomRange: true,
+            zoomMargin: 48,
+          }) as PromiseLike<unknown>;
+          void Promise.resolve(fit).then(() => {
+            if (cancelled) return;
+            if (map.getZoom() > LOCATION_MAP_MAX_ZOOM) {
+              map.setZoom(LOCATION_MAP_MAX_ZOOM, { duration: 0 });
+            }
+          });
         }
       });
     };
