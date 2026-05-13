@@ -35,6 +35,8 @@ type Props = {
 type YMapInstance = {
   destroy: () => void;
   setCenter: (center: number[], zoom?: number, options?: { duration?: number }) => void;
+  getZoom: () => number;
+  setZoom: (zoom: number, options?: { duration?: number }) => void;
   container?: {
     fitToViewport?: () => void;
   };
@@ -128,9 +130,9 @@ const LOCATION_BY_CITY = {
   ],
 } as const satisfies Record<string, LocationItemData[]>;
 
-// TODO картинки
 const LOCATION_AUTOPLAY_DELAY_MS = 5_000;
 const LOCATION_IDLE_RESUME_MS = 10_000;
+const LOCATION_MAP_MAX_ZOOM = 16;
 
 const Location: FC<Props> = ({ tag, title }) => {
   const [isLocationSlider, setIsLocationSlider] = useState(false);
@@ -220,7 +222,7 @@ const Location: FC<Props> = ({ tag, title }) => {
   const focusOnCoords = useCallback((coords: readonly [number, number]) => {
     const map = mapInstanceRef.current;
     if (!map) return;
-    map.setCenter([coords[0], coords[1]], 16, { duration: 300 });
+    map.setCenter([coords[0], coords[1]], LOCATION_MAP_MAX_ZOOM, { duration: 300 });
   }, []);
 
   const onLocationSwiperBeforeInit = (swiper: SwiperType) => {
@@ -410,7 +412,9 @@ const Location: FC<Props> = ({ tag, title }) => {
             { ...YANDEX_MAP_PIN_ICON }
           );
           placemark.events.add("click", () => {
-            map.setCenter([item.coords[0], item.coords[1]], 16, { duration: 300 });
+            map.setCenter([item.coords[0], item.coords[1]], LOCATION_MAP_MAX_ZOOM, {
+              duration: 300,
+            });
           });
           map.geoObjects.add(placemark);
         });
@@ -419,6 +423,9 @@ const Location: FC<Props> = ({ tag, title }) => {
         if (bounds) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (map as any).setBounds(bounds, { checkZoomRange: true, zoomMargin: 48 });
+          if (map.getZoom() > LOCATION_MAP_MAX_ZOOM) {
+            map.setZoom(LOCATION_MAP_MAX_ZOOM, { duration: 0 });
+          }
         }
       });
     };

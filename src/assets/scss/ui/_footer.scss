@@ -261,7 +261,7 @@
     }
 
     @media screen and (max-width: $tablet-size) {
-     gap: 100px;
+      gap: 100px;
     }
 
     @media screen and (max-width: $mobile-size) {
@@ -289,12 +289,14 @@
       }
     }
     &-list {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+      @include flex-list(20px);
+
+      li {
+        cursor: pointer;
+      }
 
       @media screen and (max-width: $mobile-size) {
-       flex-direction: row;
+        flex-direction: row;
         flex-wrap: wrap;
       }
 
