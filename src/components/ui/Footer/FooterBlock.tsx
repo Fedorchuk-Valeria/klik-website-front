@@ -1,8 +1,8 @@
+import { FooterInfo } from "@/src/components/ui/Footer/Footer";
 import Icon from "@/src/components/ui/Icon/Icon";
-import {phoneToLink} from "@/src/lib/utils/phoneLink";
-import {FooterInfo} from "@/src/components/ui/Footer/Footer";
+import { phoneToLink } from "@/src/lib/utils/phoneLink";
 type FooterBlockProps = {
-  item: FooterInfo
+  item: FooterInfo;
 };
 
 export default function FooterBlock({ item }: FooterBlockProps) {
@@ -16,21 +16,11 @@ export default function FooterBlock({ item }: FooterBlockProps) {
       </div>
 
       <div className="footer__block-body">
-        {item.type === "text" && (
-          <div dangerouslySetInnerHTML={{ __html: item.text }} />
-        )}
+        {item.type === "text" && <div dangerouslySetInnerHTML={{ __html: item.text }} />}
 
-        {item.type === "phone" && (
-          <a href={phoneToLink(item.value)}>
-            {item.value}
-          </a>
-        )}
+        {item.type === "phone" && <a href={phoneToLink(item.value)}>{item.value}</a>}
 
-        {item.type === "email" && (
-          <a href={`mailto:${item.value}`}>
-            {item.value}
-          </a>
-        )}
+        {item.type === "email" && <a href={`mailto:${item.value}`}>{item.value}</a>}
       </div>
     </div>
   );

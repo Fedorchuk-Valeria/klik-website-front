@@ -7,6 +7,16 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import Icon from "@/src/components/ui/Icon/Icon";
 
+import LocationEmotion from "@/src/assets/images/templates/homepage/locations/emotion.svg";
+import LocationFoot from "@/src/assets/images/templates/homepage/locations/foot.svg";
+import LocationHockey from "@/src/assets/images/templates/homepage/locations/hockey.svg";
+import LocationMir from "@/src/assets/images/templates/homepage/locations/mir.svg";
+import LocationScience from "@/src/assets/images/templates/homepage/locations/science.svg";
+import LocationStar from "@/src/assets/images/templates/homepage/locations/star.svg";
+import LocationStone from "@/src/assets/images/templates/homepage/locations/stone.svg";
+import LocationSunrise from "@/src/assets/images/templates/homepage/locations/sunrise.svg";
+import LocationWind from "@/src/assets/images/templates/homepage/locations/wind.svg";
+
 import { getCitySlugFromHost, type ItKlikCitySlug } from "@/src/utils/cityFromHost";
 import { CITY_DISPLAY_NAME, MAP_API_KEY } from "@/src/utils/constant";
 import { loadYandexMaps } from "@/src/utils/loadYandexMaps";
@@ -37,73 +47,83 @@ type YMapInstance = {
 const LOCATION_BY_CITY = {
   minsk: [
     {
-      image: "https://placehold.co/600x400.png",
+      image: "",
       title: "Арэна",
       location: "Пр. Победителей 84, ТЦ Arena City, 2 этаж",
       metro: "Фрунзенская",
       coords: [53.937997, 27.487524],
+      icon: <LocationHockey />,
+      iconPlacement: "top",
     },
     {
-      image: "https://placehold.co/600x400.png",
+      image: "",
       title: "Мip",
       location: "ул. Аэродромная, 125, 4 этаж",
       metro: "Аэродромная",
       coords: [53.873341, 27.55857],
+      icon: <LocationMir />,
     },
     {
-      image: "https://placehold.co/600x400.png",
+      image: "",
       title: "Натхненне",
       location: "ул. Максима Богдановича, 132, 2 этаж",
       metro: "Академия наук",
       coords: [53.937833, 27.584361],
+      icon: <LocationEmotion />,
     },
     {
-      image: "https://placehold.co/600x400.png",
+      image: "",
       title: "Камянiца",
       location: "ул. Неманская, 24, 2 этаж",
       metro: "Каменная горка",
       coords: [53.911301, 27.431036],
+      icon: <LocationStone />,
     },
     {
-      image: "https://placehold.co/600x400.png",
+      image: "",
       title: "Навуковая",
       location: "ул. Петра Мстиславца, д.1",
       metro: "Восток",
       coords: [53.928535, 27.654304],
+      icon: <LocationScience />,
     },
   ],
   borisov: [
     {
-      image: "https://placehold.co/600x400.png",
+      image: "",
       title: "Спатканне",
       location: "ул. Строителей 26, ТЦ Клад Наполеона, 328 каб.",
       metro: "",
       coords: [54.208212, 28.490276],
+      icon: <LocationFoot />,
     },
   ],
   baranovichi: [
     {
-      image: "https://placehold.co/600x400.png",
+      image: "",
       title: "Паветра",
       location: "ул. Марфицкого и Журавлевича, 1А, 3-й этаж",
       metro: "",
       coords: [53.107054, 26.000308],
+      icon: <LocationWind />,
     },
     {
-      image: "https://placehold.co/600x400.png",
+      image: "",
       title: "Усход",
       location: "ул. Тельмана, 64, ТЦ Радужный, 2-й этаж",
       metro: "",
       coords: [53.131866, 26.056075],
+      icon: <LocationSunrise />,
     },
   ],
   novopolotsk: [
     {
-      image: "https://placehold.co/600x400.png",
+      image: "",
       title: "Iскра",
       location: 'ул. Нефтяников, 6, ТЦ "Зодиак"',
       metro: "",
       coords: [55.513135, 28.682429],
+      icon: <LocationStar />,
     },
   ],
 } as const satisfies Record<string, LocationItemData[]>;
@@ -127,13 +147,6 @@ const Location: FC<Props> = ({ tag, title }) => {
 
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<YMapInstance | null>(null);
-
-  useEffect(() => {
-    const slug = getCitySlugFromHost(window.location.hostname);
-    startTransition(() => {
-      setCitySlug(slug);
-    });
-  }, []);
 
   const locations = LOCATION_BY_CITY[citySlug];
   const locationSlideCount = locations.length;
@@ -219,6 +232,13 @@ const Location: FC<Props> = ({ tag, title }) => {
     pg.el = el;
     origPg.el = el;
   };
+
+  useEffect(() => {
+    const slug = getCitySlugFromHost(window.location.hostname);
+    startTransition(() => {
+      setCitySlug(slug);
+    });
+  }, []);
 
   useEffect(() => {
     slideCountRef.current = locationSlideCount;
