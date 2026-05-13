@@ -4,6 +4,7 @@ import Image from "next/image";
 import { FC } from "react";
 
 import Icon from "@/src/components/ui/Icon/Icon";
+import classNames from "classnames";
 
 export type LocationItemData = {
   image: string;
@@ -11,6 +12,8 @@ export type LocationItemData = {
   location: string;
   metro: string;
   coords: readonly [number, number];
+  icon: React.ReactNode;
+  iconPlacement?: "top" | "bottom" | "middle";
 };
 
 const LocationCardContent: FC<{
@@ -18,14 +21,27 @@ const LocationCardContent: FC<{
   onShowOnMap: (coords: readonly [number, number]) => void;
 }> = ({ item, onShowOnMap }) => (
   <>
-    <span className="home-page__location-body-item--image">
-      <Image
-        src={item.image}
-        alt={item.title}
-        fill
-        className="home-page__location-body-item--image-img"
-      />
-    </span>
+    {item?.image && (
+      <span className="home-page__location-body-item--image">
+        <Image
+          src={item.image}
+          alt={item.title}
+          fill
+          className="home-page__location-body-item--image-img"
+        />
+      </span>
+    )}
+
+    {!item?.image && item?.icon && (
+      <span
+        className={classNames(
+          "home-page__location-body-item--icon",
+          `home-page__location-body-item--icon_${item?.iconPlacement || "middle"}`
+        )}
+      >
+        {item.icon}
+      </span>
+    )}
 
     <div className="home-page__location-body-item-info">
       <p className="home-page__location-body-item-info--title">{item.title}</p>

@@ -1,6 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+import { PENDING_HOME_ANCHOR_KEY } from "@/src/utils/constant";
 
 type MenuItem = {
   url: string;
@@ -17,6 +20,8 @@ const HeaderMobileList = ({ menuItems, onClose}: Props) => {
 
   const isHomePage = pathname === "/";
 
+  const getAnchorId = (url: string) => url.split("#")[1] ?? "";
+
   return (
     <ul className="header__mobile-menu">
       {menuItems.map((item) => {
@@ -27,9 +32,25 @@ const HeaderMobileList = ({ menuItems, onClose}: Props) => {
 
         return (
           <li key={item.url}>
-            <a href={href} onClick={onClose}>
-              {item.title}
-            </a>
+            {isHomePage ? (
+              <a href={href} onClick={onClose}>
+                {item.title}
+              </a>
+            ) : (
+              <Link
+                href="/"
+                scroll={false}
+                onClick={() => {
+                  const id = getAnchorId(item.url);
+                  if (id) {
+                    sessionStorage.setItem(PENDING_HOME_ANCHOR_KEY, id);
+                  }
+                  onClose?.();
+                }}
+              >
+                {item.title}
+              </Link>
+            )}
           </li>
         );
       })}

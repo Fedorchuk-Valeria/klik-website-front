@@ -28,11 +28,14 @@ export function middleware(req: NextRequest) {
   if (!isValidCity && subdomain !== ROOT_CITY) {
     const url = req.nextUrl.clone();
     url.pathname = "/404";
-    return NextResponse.rewrite(url);
+    const res = NextResponse.rewrite(url);
+    res.headers.set("x-pathname", req.nextUrl.pathname);
+    return res;
   }
 
   const res = NextResponse.next();
   res.headers.set("x-city", subdomain);
+  res.headers.set("x-pathname", req.nextUrl.pathname);
 
   return res;
 }

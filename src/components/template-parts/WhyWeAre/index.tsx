@@ -9,8 +9,8 @@ import WhyWeAreSVG from "@/src/assets/images/templates/homepage/whyWeAre/why_we_
 
 import Icon from "@/src/components/ui/Icon/Icon";
 
+import { PAGE_ANCHORS } from "@/src/utils/constant";
 import "swiper/css";
-import {PAGE_ANCHORS} from "@/src/utils/constant";
 
 type PropTypes = {
   tag: string;

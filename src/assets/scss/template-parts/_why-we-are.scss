@@ -1,9 +1,13 @@
 .home-page__why-we-are {
   .home-page__why-we-are-top {
+    display: flex;
     align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 100px;
     position: relative;
 
     .home-page__why-we-are-text {
+      @include fonts(24px, 400, "Manrope");
       margin-right: 45px;
     }
 
@@ -48,7 +52,7 @@
         min-height: 224px;
 
         .home-page__why-we-are-item__headline {
-          display: contents;
+          width: 100%;
 
           .home-page__why-we-are-item--avatar {
             display: none;
@@ -127,6 +131,7 @@
           display: flex;
           align-items: center;
           gap: 5px;
+          margin-left: auto;
 
           svg {
             @include icon(24px);

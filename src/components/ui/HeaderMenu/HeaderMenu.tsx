@@ -1,9 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
-const HEADER_OFFSET = 120;
+import {
+  HEADER_ANCHOR_OFFSET_PX,
+  PENDING_HOME_ANCHOR_KEY,
+  SET_ACTIVE_ANCHOR_EVENT,
+} from "@/src/utils/constant";
 
 type MenuItem = {
   url: string;
@@ -29,7 +34,13 @@ const HeaderMenu = ({ menuItems }: Props) => {
 
   useEffect(() => {
     const handleScroll = () => {
+      if (!isHomePage) {
+        setActive(menuItems[0]?.url ?? "");
+        return;
+      }
+
       let currentActive = menuItems[0]?.url ?? "";
+      const line = HEADER_ANCHOR_OFFSET_PX + 4;
 
       for (const item of menuItems) {
         if (!item.url.includes("#")) continue;
@@ -42,12 +53,8 @@ const HeaderMenu = ({ menuItems }: Props) => {
 
         const rect = el.getBoundingClientRect();
 
-        if (
-          rect.top <= HEADER_OFFSET &&
-          rect.bottom >= HEADER_OFFSET
-        ) {
+        if (rect.top <= line) {
           currentActive = item.url;
-          break;
         }
       }
 
@@ -60,6 +67,23 @@ const HeaderMenu = ({ menuItems }: Props) => {
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+    };
+  }, [menuItems, isHomePage]);
+
+  useEffect(() => {
+    const onAnchorNav = (e: Event) => {
+      const ce = e as CustomEvent<{ id?: string }>;
+      const id = ce.detail?.id;
+      if (!id) return;
+
+      const match = menuItems.find((item) => getAnchorId(item.url) === id);
+      if (match) setActive(match.url);
+    };
+
+    window.addEventListener(SET_ACTIVE_ANCHOR_EVENT, onAnchorNav as EventListener);
+
+    return () => {
+      window.removeEventListener(SET_ACTIVE_ANCHOR_EVENT, onAnchorNav as EventListener);
     };
   }, [menuItems]);
 
@@ -82,9 +106,22 @@ const HeaderMenu = ({ menuItems }: Props) => {
               isActive ? "active" : ""
             }`}
           >
-            <a href={href}>
-              {item.title}
-            </a>
+            {isHomePage ? (
+              <a href={href}>{item.title}</a>
+            ) : (
+              <Link
+                href="/"
+                scroll={false}
+                onClick={() => {
+                  const id = getAnchorId(item.url);
+                  if (id) {
+                    sessionStorage.setItem(PENDING_HOME_ANCHOR_KEY, id);
+                  }
+                }}
+              >
+                {item.title}
+              </Link>
+            )}
           </li>
         );
       })}

@@ -1,8 +1,15 @@
+export const HEADER_ANCHOR_OFFSET_PX = 120;
+/** Cross-page navigation to home + scroll target (avoids `/#` fighting the App Router). */
+export const PENDING_HOME_ANCHOR_KEY = "klick_pending_home_anchor";
+/** Fired after scrolling to a home section (+ detail: { id: string }). */
+export const SET_ACTIVE_ANCHOR_EVENT = "klick:set-active-anchor";
+
 export const PLACE_STORAGE_KEY = "place";
 export const COOKIE_CONSENT_STORAGE_KEY = "cookie_policy_accepted";
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const PAGE_ANCHORS = {
+  SELECT_TRAINING: "select-training",
   ABOUT: "about",
   PROGRAMS: "programs",
   FORMATS: "formats",

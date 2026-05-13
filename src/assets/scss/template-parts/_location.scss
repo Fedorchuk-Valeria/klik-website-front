@@ -124,6 +124,27 @@
         }
       }
 
+      .home-page__location-body-item--icon {
+        @include center;
+        width: 302px;
+        height: 240px;
+        border-radius: 20px;
+        background: var(--main-green-neon);
+
+        &.home-page__location-body-item--icon_top {
+          align-items: flex-start;
+
+          svg {
+            @include icon(240px);
+          }
+        }
+
+        svg {
+          @include icon(200px);
+          color: var(--main-green-dark);
+        }
+      }
+
       .home-page__location-body-item-info {
         @include flex-list(10px);
       }
@@ -310,6 +331,21 @@
           border-radius: 20px;
         }
 
+        .home-page__location-body-item--icon {
+          width: 100%;
+          height: 150px;
+
+          &.home-page__location-body-item--icon_top {
+            svg {
+              @include icon(150px);
+            }
+          }
+
+          svg {
+            @include icon(120px);
+          }
+        }
+
         .home-page__location-body-item-info {
           gap: 20px;
           height: calc(100% - 150px);
@@ -402,6 +438,21 @@
           border-radius: 20px;
         }
 
+        .home-page__location-body-item--icon {
+          width: 333px;
+          height: 100%;
+
+          &.home-page__location-body-item--icon_top {
+            svg {
+              @include icon(220px);
+            }
+          }
+
+          svg {
+            @include icon(180px);
+          }
+        }
+
         .home-page__location-body-item-info {
           gap: 20px;
           height: 100%;
@@ -490,6 +541,21 @@
           flex-shrink: 0;
           height: 189px;
           width: 100%;
+        }
+
+        .home-page__location-body-item--icon {
+          width: 100%;
+          height: 189px;
+
+          &.home-page__location-body-item--icon_top {
+            svg {
+              @include icon(189px);
+            }
+          }
+
+          svg {
+            @include icon(150px);
+          }
         }
 
         .home-page__location-body-item-info {

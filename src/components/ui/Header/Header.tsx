@@ -1,12 +1,11 @@
-import { headers } from "next/headers";
-import Link from "next/link";
-
 import LogoSvg from "@/src/assets/images/logo.svg";
+import { headers } from "next/headers";
 
 import HeaderMobileMenu from "@/src/components/HeaderMobileMenu/HeaderMobileMenu";
 import ButtonCabinet from "@/src/components/ui/ButtonCabinet/ButtonCabinet";
 import ButtonCall from "@/src/components/ui/ButtonCall/ButtonCall";
 import CitySwitcher from "@/src/components/ui/CitySwitcher/CitySwitcher";
+import HeaderLogoLink from "@/src/components/ui/Header/HeaderLogoLink";
 import HeaderMenu from "@/src/components/ui/HeaderMenu/HeaderMenu";
 import Socials from "@/src/components/ui/Socials/Socials";
 
@@ -54,9 +53,9 @@ export default async function Header() {
           <div className="header__top header__row">
             <div className="header__left">
               <div className="header__brand">
-                <Link className="header__logo" href="/">
+                <HeaderLogoLink className="header__logo">
                   <LogoSvg />
-                </Link>
+                </HeaderLogoLink>
 
                 <div className="header__logo-text">
                   Дополнительное
