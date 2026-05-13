@@ -3,7 +3,7 @@
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { FC, Fragment, MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,6 +17,7 @@ import Icon from "@/src/components/ui/Icon/Icon";
 import { ProgramContentItem } from "@/src/lib/content/types";
 import { PAGE_ANCHORS } from "@/src/utils/constant";
 
+import { useRouter } from "next/navigation";
 import "swiper/css";
 
 const programImages: Record<string, string> = {
@@ -58,8 +59,8 @@ function useProgramsSliderMatch() {
 }
 
 const Programs: FC<PropTypes> = ({ tag, title, text, items }) => {
+  const router = useRouter();
   const useSliderLayout = useProgramsSliderMatch();
-
   const programsSliderViewportRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwiperType | null>(null);
   const autoplayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -67,6 +68,18 @@ const Programs: FC<PropTypes> = ({ tag, title, text, items }) => {
   const pausedRef = useRef(false);
   const inViewportRef = useRef(false);
   const slideCountRef = useRef(0);
+
+  const handleMoreClick = useCallback(
+    (id?: string) => (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (id) {
+        router.push(`/program/${id}`);
+      }
+    },
+    [router]
+  );
 
   const clearProgramsAutoplayTimer = useCallback(() => {
     if (autoplayTimerRef.current) {
@@ -223,7 +236,7 @@ const Programs: FC<PropTypes> = ({ tag, title, text, items }) => {
         {item.text && <div className="home-page__programs-item_text">{item.text}</div>}
       </div>
 
-      <div className="home-page__programs-item_more">
+      <div className="home-page__programs-item_more" onClick={handleMoreClick(item.id)}>
         <Icon className="home-page__programs-item_icon" name="arrow-long" />
       </div>
     </Link>

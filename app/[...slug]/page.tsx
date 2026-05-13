@@ -4,9 +4,15 @@ import { notFound } from "next/navigation";
 import { getPage } from "@/src/lib/getPage";
 import { resolveTemplate } from "@/src/lib/resolveTemplate";
 
+function slugFromParams(segments: string[] | undefined) {
+  if (!segments?.length) return "home";
+
+  return segments.join("/");
+}
+
 type PageProps = {
   params: Promise<{
-    slug?: string;
+    slug?: string[];
   }>;
 };
 
@@ -16,7 +22,7 @@ export async function generateMetadata({ params }: PageProps) {
   const h = await headers();
 
   const city = h.get("x-city");
-  const slug = p.slug || "home";
+  const slug = slugFromParams(p.slug);
 
   if (!city) return {};
 
@@ -36,7 +42,7 @@ export default async function Page({ params }: PageProps) {
   const h = await headers();
 
   const city = h.get("x-city");
-  const slug = p.slug || "home";
+  const slug = slugFromParams(p.slug);
 
   if (!city) notFound();
 

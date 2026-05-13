@@ -8,16 +8,78 @@
     padding: 0 10px;
   }
 
-  .program-view__header {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
+  .program-view__title {
+    @include fonts(60px, 500);
+    color: var(--main-light);
+    margin-top: 50px;
+    max-width: 855px;
   }
 
-  .program-view__title {
-    color: var(--main-light);
-    font-family: Manrope, serif;
-    font-weight: 700;
+  .program-view__block {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 20px;
+    margin-top: 50px;
+    width: 100%;
+
+    .program-view__block-left,
+    .program-view__block-right {
+      min-width: 0;
+    }
+
+    .program-view__block-left {
+      @include flex-list(20px);
+      padding: 60px;
+      border-radius: 50px;
+
+      &.blue {
+        background-color: var(--main-blue);
+      }
+
+      &.pink {
+        background-color: var(--main-pink);
+      }
+
+      &.green {
+        background-color: var(--main-green-neon);
+      }
+
+      .program-view__block-left--tag {
+        @include center;
+        @include fonts(22px, 500, "Manrope");
+        padding: 10px 20px;
+        border-radius: 100px;
+        background-color: var(--main-orange);
+        color: var(--main-light);
+        width: fit-content;
+      }
+
+      .program-view__block-left--title {
+        @include fonts(50px, 500);
+        color: var(--main-orange);
+        margin-top: auto;
+      }
+
+      .program-view__block-left--text {
+        @include fonts(20px, 400, "Manrope");
+        color: var(--main-black);
+      }
+    }
+
+    .program-view__block-right {
+      position: relative;
+      height: 740px;
+      border-radius: 50px;
+      overflow: hidden;
+
+      img {
+        @include perfect-img;
+        border-radius: inherit;
+      }
+    }
+  }
+
+  .program-view__lessons {
   }
 }
