@@ -13,6 +13,9 @@ import AnchorScroll from "@/src/components/AnchorScroll/AnchorScroll";
 export const metadata: Metadata = {
   title: "Онлайн школа",
   description: "Онлайн школа",
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+  },
 };
 
 export default function RootLayout({
