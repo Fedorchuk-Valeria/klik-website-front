@@ -1,4 +1,4 @@
-export type PageType = "home" | "page";
+export type PageType = "home" | "page" | "program";
 
 export type PageSeo = {
   title: string;
@@ -35,6 +35,7 @@ export type ProgramContentItem = {
   quote?: string;
   text?: string;
   tag?: string;
+  id?: string;
 };
 
 type WhatWeLearnContentItem = {
@@ -195,20 +196,40 @@ export type AboutUsSlideContentItem = {
   image?: number;
 };
 
+export type ProgramPageContent = {
+  tag: string;
+  color: string;
+  title: string;
+  text: string;
+  items: ProgramPageBaseContentItem[];
+};
+
+type ProgramPageBaseContentItem = {
+  title: string;
+  text: string;
+  number: string;
+  image?: string;
+};
+
 export type HomePage = {
   template: "home";
   seo: PageSeo;
   content: HomePageContent;
 };
 
+export type ProgramPage = {
+  template: "program";
+  seo: PageSeo;
+  content: ProgramPageContent;
+};
+
 export type GenericPage = {
   template: "page";
   seo: PageSeo;
-  /** Произвольная полезная нагрузка простых страниц (например пустой массив в JSON). */
   content: unknown;
 };
 
-export type Page = HomePage | GenericPage;
+export type Page = HomePage | GenericPage | ProgramPage;
 
 export type MenuItem = {
   url?: string;

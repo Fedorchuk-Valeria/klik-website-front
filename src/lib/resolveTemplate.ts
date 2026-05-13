@@ -2,14 +2,19 @@ import { JSX } from "react";
 
 import DefaultPage from "@/src/components/templates/DefaultPage";
 import Home from "@/src/components/templates/Home";
+import ProgramView from "@/src/components/templates/Program";
 
 import { Page } from "./content/types";
 
 const map: Record<string, ({ page }: { page: Page }) => JSX.Element> = {
   page: DefaultPage,
   home: Home,
+  program: ProgramView,
 };
 
 export function resolveTemplate(template: string) {
+  console.log("template", template);
+  console.log("map", map);
+
   return map[template] || DefaultPage;
 }
