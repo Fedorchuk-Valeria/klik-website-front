@@ -1,13 +1,17 @@
+import { headers } from "next/headers";
+
 import FooterSticker from "@/src/assets/images/footer_sticker.svg";
+import LogoFillSvg from "@/src/assets/images/logo-fill.svg";
 import LogoSvg from "@/src/assets/images/logo.svg";
 
 import FooterBlock from "@/src/components/ui/Footer/FooterBlock";
+import FooterLinks from "@/src/components/ui/Footer/FooterLinks";
 import Socials from "@/src/components/ui/Socials/Socials";
+
 import { MenuItem } from "@/src/lib/content/types";
 import { CitySettings, getCitySettings } from "@/src/lib/getCitySettings";
 import { PAGE_ANCHORS } from "@/src/utils/constant";
-import { headers } from "next/headers";
-import FooterLinks from "./FooterLinks";
+import classNames from "classnames";
 
 export type FooterInfo =
   | {
@@ -31,6 +35,7 @@ type FooterWidget = {
 export default async function Footer() {
   const headersList = await headers();
   const slug = headersList.get("x-city") ?? "minsk";
+  const pathname = headersList.get("x-pathname") ?? "/";
 
   const settings = getCitySettings(slug);
 
@@ -118,8 +123,10 @@ export default async function Footer() {
     },
   ];
 
+  const isProgram = pathname.includes("/program");
+
   return (
-    <footer className="footer">
+    <footer className={classNames("footer", { "footer--secondary": isProgram })}>
       <div className="footer__sticker">
         <FooterSticker />
       </div>
@@ -129,7 +136,8 @@ export default async function Footer() {
           <div className="footer__left">
             <div className="footer__brand">
               <div className="footer__logo">
-                <LogoSvg />
+                {!isProgram && <LogoSvg />}
+                {isProgram && <LogoFillSvg />}
               </div>
 
               <div className="footer__logo-text">

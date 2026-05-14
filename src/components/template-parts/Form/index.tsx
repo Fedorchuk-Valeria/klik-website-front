@@ -1,5 +1,6 @@
 "use client";
 
+import classNames from "classnames";
 import { useFormik } from "formik";
 import Link from "next/link";
 import { ChangeEvent, useState } from "react";
@@ -24,7 +25,7 @@ function normalizePhoneForApi(phone: string): string {
   return digits ? `+${digits}` : "";
 }
 
-const HomePageForm = () => {
+const HomePageForm = ({ className }: { className?: string }) => {
   const dispatch = useAppDispatch();
   const [isLoading, setLoading] = useState(false);
   const form = useFormik({
@@ -108,7 +109,7 @@ const HomePageForm = () => {
   };
 
   return (
-    <form className="home-page__form-body" onSubmit={form.handleSubmit}>
+    <form className={classNames("home-page__form-body", className)} onSubmit={form.handleSubmit}>
       <TextInput
         required
         max={MAX_TEXT_FIELD_LENGTH}

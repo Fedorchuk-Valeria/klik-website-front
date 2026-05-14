@@ -13,8 +13,5 @@ const map: Record<string, ({ page }: { page: Page }) => JSX.Element> = {
 };
 
 export function resolveTemplate(template: string) {
-  console.log("template", template);
-  console.log("map", map);
-
   return map[template] || DefaultPage;
 }
