@@ -1,8 +1,9 @@
 {
   "socials": [
-    { "icon": "inst", "url": "#" },
-    { "icon": "tiktok", "url": "#" },
-    { "icon": "telegram", "url": "#" }
+    { "icon": "inst", "url": "https://www.instagram.com/klik.baranovichi/" },
+    { "icon": "tiktok", "url": "https://www.tiktok.com/@it.klik?_r=1&_t=ZS-96BWFEbMh7M" },
+    { "icon": "telegram", "url": "https://t.me/KLiK_bel" },
+    { "icon": "vk", "url": "https://vk.ru/it.klik" }
   ],
   "address": "г. Минск, ул. Аэродромная, 125, каб. 29",
   "email": "info@it-klik.by"

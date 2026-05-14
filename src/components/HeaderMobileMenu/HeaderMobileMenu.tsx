@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import MenuBg from "@/src/assets/images/mobile-menu-bg.svg";
 
@@ -36,6 +36,10 @@ export default function HeaderMobileMenu({
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
   return (
     <>
       {isOpen && (
@@ -60,7 +64,7 @@ export default function HeaderMobileMenu({
 
           <div className="header__mobile-center">
             {menuItems.length > 0 && (
-              <HeaderMobileList menuItems={menuItems} onClose={() => setIsOpen(false)} />
+              <HeaderMobileList menuItems={menuItems} onClose={handleClose} />
             )}
           </div>
 
@@ -77,7 +81,7 @@ export default function HeaderMobileMenu({
               </div>
             )}
 
-            <ButtonCall />
+            <ButtonCall onClose={handleClose} />
           </div>
         </div>
       )}
