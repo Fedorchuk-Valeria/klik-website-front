@@ -180,18 +180,22 @@ const AboutUsSlider: FC<PropTypes> = ({ slides }) => {
     };
   }, [mobileSliderMode, slides.length, clearAboutUsAutoplayTimer, scheduleAboutUsAutoplayStep]);
 
-  const handleSlideLinkClick = useCallback(() => {
-    const link = PAGE_ANCHORS.SELECT_TRAINING;
+  const handleSlideLinkClick = useCallback(
+    (isLink: boolean) => () => {
+      if (!isLink) return;
 
-    const element = document.getElementById(link);
+      const link = PAGE_ANCHORS.SELECT_TRAINING;
+      const element = document.getElementById(link);
 
-    if (element) {
-      window.scrollTo({
-        top: element.getBoundingClientRect().top + window.scrollY - HEADER_ANCHOR_OFFSET_PX,
-        behavior: "smooth",
-      });
-    }
-  }, []);
+      if (element) {
+        window.scrollTo({
+          top: element.getBoundingClientRect().top + window.scrollY - HEADER_ANCHOR_OFFSET_PX,
+          behavior: "smooth",
+        });
+      }
+    },
+    []
+  );
 
   return (
     <div
@@ -235,7 +239,7 @@ const AboutUsSlider: FC<PropTypes> = ({ slides }) => {
                   "home-page__about-us--slider-item",
                   `home-page__about-us--slider-item__${slide.type}`
                 )}
-                onClick={handleSlideLinkClick}
+                onClick={handleSlideLinkClick(!!slide.link)}
               >
                 {slide.type === "info-success" && (
                   <div className="home-page__about-us--slider-item-success">

@@ -49,4 +49,12 @@
   .breadcrumb__current {
     color: var(--secondary-light-30);
   }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    font-size: 12px;
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    font-size: 14px;
+  }
 }

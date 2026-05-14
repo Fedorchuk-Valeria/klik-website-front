@@ -1,6 +1,13 @@
 import classNames from "classnames";
 import Image from "next/image";
 
+import ClickersSvg from "@/src/assets/images/templates/programPage/clickers.svg";
+import CodersSvg from "@/src/assets/images/templates/programPage/coders.svg";
+import CreatorsSvg from "@/src/assets/images/templates/programPage/creators.svg";
+
+import imgClickers from "@/src/assets/images/templates/programPage/clickers.jpg";
+import imgCoders from "@/src/assets/images/templates/programPage/coders.jpg";
+import imgCreators from "@/src/assets/images/templates/programPage/creators.jpg";
 import lessonImage from "@/src/assets/images/templates/programPage/girl.jpg";
 
 import HomePageForm from "@/src/components/template-parts/Form";
@@ -12,6 +19,7 @@ type ProgramViewProps = {
   page: Page;
 };
 
+// TODO 800 & 375 slider
 export default function ProgramView({ page }: ProgramViewProps) {
   if (page.template !== "program") {
     throw new Error('Program: ожидался template "program"');
@@ -45,6 +53,12 @@ export default function ProgramView({ page }: ProgramViewProps) {
           <div className={classNames("program-view__block-left", page.content.color)}>
             <span className="program-view__block-left--tag">{page.content.tag}</span>
 
+            <span className={classNames("program-view__block-left--image", page.content.color)}>
+              {page.content.color === "green" && <CreatorsSvg />}
+              {page.content.color === "pink" && <CodersSvg />}
+              {page.content.color === "blue" && <ClickersSvg />}
+            </span>
+
             <h2 className="program-view__block-left--title">{page.content.title}</h2>
 
             <p className="program-view__block-left--text">{page.content.text}</p>
@@ -52,7 +66,13 @@ export default function ProgramView({ page }: ProgramViewProps) {
 
           <div className="program-view__block-right">
             <Image
-              src="https://placehold.co/600x400.png"
+              src={
+                page.content.color === "blue"
+                  ? imgClickers.src
+                  : page.content.color === "pink"
+                    ? imgCoders.src
+                    : imgCreators.src
+              }
               fill
               sizes="(max-width: 900px) 100vw, 50vw"
               alt={page.seo.h1}
@@ -84,6 +104,7 @@ export default function ProgramView({ page }: ProgramViewProps) {
                       <span>{lesson.number}</span>
                       <span>/{totalLessons < 10 ? `0${totalLessons}` : totalLessons}</span>
                     </span>
+
                     <p className="program-view__lessons-item_content-title">{lesson.title}</p>
                     <p className="program-view__lessons-item_content-text">{lesson.text}</p>
                   </div>
@@ -99,7 +120,7 @@ export default function ProgramView({ page }: ProgramViewProps) {
                 Заполните анкету, и мы подберём удобное для вас время
               </span>
 
-              <HomePageForm />
+              <HomePageForm className="program-view__lessons-form_form" />
 
               <ul className="program-view__lessons-form_items">
                 {formList.map((item, index) => (

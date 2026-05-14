@@ -1,6 +1,42 @@
 .footer {
   position: relative;
 
+  &.footer--secondary {
+    background: var(--main-green-dark);
+
+    .footer__body {
+      color: var(--main-burgundy);
+      background: var(--main-green-neon);
+
+      .socials__link svg {
+        fill: var(--main-green-dark);
+      }
+
+      .footer__block-title,
+      .footer__widget-title {
+        opacity: 0.4;
+      }
+
+      .footer__right {
+        .footer__block-title {
+          color: var(--main-burgundy);
+        }
+
+        .footer__block-body {
+          color: var(--main-green-dark);
+
+          a {
+            color: var(--main-green-dark);
+          }
+        }
+
+        .footer__widget-list li a {
+          color: var(--main-green-dark);
+        }
+      }
+    }
+  }
+
   &__sticker {
     position: absolute;
     top: -128px;
@@ -28,7 +64,7 @@
   }
 
   &__container {
-    max-width: 1900px;
+    max-width: 1920px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -39,7 +75,7 @@
   &__body {
     background-color: var(--main-green-dark);
     color: var(--main-light);
-    padding: 90px;
+    padding: 90px 100px;
     border-radius: 70px;
     display: flex;
     gap: 190px;
