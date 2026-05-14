@@ -48,6 +48,7 @@ export default function Home({ page }: Props) {
         <div className="header__container">
           <div className="home-page__header-wrapper">
             <h1>{page.seo.h1}</h1>
+
             {header ? (
               <div className="home-page__header-body">
                 {header?.text && <div className="home-page__header-text">{header?.text}</div>}
