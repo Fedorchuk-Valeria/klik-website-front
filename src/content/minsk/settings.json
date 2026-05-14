@@ -1,8 +1,8 @@
 {
   "socials": [
-    { "icon": "inst", "url": "#" },
-    { "icon": "tiktok", "url": "#" },
-    { "icon": "telegram", "url": "#" },
-    { "icon": "vk", "url": "#" }
+    { "icon": "inst", "url": "https://www.instagram.com/it.klik/" },
+    { "icon": "tiktok", "url": "https://www.tiktok.com/@it.klik?_r=1&_t=ZS-96BWFEbMh7M" },
+    { "icon": "telegram", "url": "https://t.me/KLiK_bel" },
+    { "icon": "vk", "url": "https://vk.ru/it.klik" }
   ]
 }

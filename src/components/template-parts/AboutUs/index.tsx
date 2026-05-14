@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { FC } from "react";
 
 import girlImg from "@/src/assets/images/templates/homepage/aboutUs/girl.png";
@@ -10,7 +11,7 @@ import Icon from "@/src/components/ui/Icon/Icon";
 import TextBorder from "@/src/components/ui/TextBorder";
 
 import { AboutUsContentItem, AboutUsSlideContentItem } from "@/src/lib/content/types";
-import {PAGE_ANCHORS} from "@/src/utils/constant";
+import { PAGE_ANCHORS } from "@/src/utils/constant";
 
 type PropTypes = {
   tag?: string;
@@ -52,11 +53,15 @@ const AboutUs: FC<PropTypes> = ({ title, text, subtitle, items, slides }) => {
             )}
 
             <div className="home-page__about-us--actions">
-              <Button variant="main-green-dark" withArrow={true}>
-                Записаться на курс
-              </Button>
+              <Link href={`#${PAGE_ANCHORS.SIGN_UP_FREE_LESSON}`}>
+                <Button variant="main-green-dark" withArrow={true}>
+                  Записаться на курс
+                </Button>
+              </Link>
 
-              <Button variant="outline-green-dark">Смотреть программы</Button>
+              <Link href={`#${PAGE_ANCHORS.PROGRAMS}`}>
+                <Button variant="outline-green-dark">Смотреть программы</Button>
+              </Link>
             </div>
           </div>
 

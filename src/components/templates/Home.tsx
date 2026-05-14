@@ -58,6 +58,7 @@ export default function Home({ page }: Props) {
                 )}
               </div>
             ) : null}
+
             <Image className="home-page__header-img" src={headerImg} alt={page.seo.h1} />
           </div>
         </div>
