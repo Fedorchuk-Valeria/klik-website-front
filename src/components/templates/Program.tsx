@@ -10,6 +10,7 @@ import imgCoders from "@/src/assets/images/templates/programPage/coders.jpg";
 import imgCreators from "@/src/assets/images/templates/programPage/creators.jpg";
 import lessonImage from "@/src/assets/images/templates/programPage/girl.jpg";
 
+import ProgramLessonsBlocks from "@/src/components/templates/ProgramLessonsBlocks";
 import HomePageForm from "@/src/components/template-parts/Form";
 import Breadcrumb from "@/src/components/ui/Breadcrumb/Breadcrumb";
 
@@ -19,7 +20,6 @@ type ProgramViewProps = {
   page: Page;
 };
 
-// TODO 800 & 375 slider
 export default function ProgramView({ page }: ProgramViewProps) {
   if (page.template !== "program") {
     throw new Error('Program: ожидался template "program"');
@@ -39,8 +39,6 @@ export default function ProgramView({ page }: ProgramViewProps) {
       text: "обязательств",
     },
   ];
-
-  const totalLessons = page.content.items.length;
 
   return (
     <section className="program-view">
@@ -84,33 +82,7 @@ export default function ProgramView({ page }: ProgramViewProps) {
           <p className="program-view__lessons-title">Основные блоки</p>
 
           <div className="program-view__lessons-items">
-            <ul className="program-view__lessons-list">
-              {page.content.items.map((lesson, index) => (
-                <li
-                  key={`${lesson.number}-${lesson.title}-${index}`}
-                  className="program-view__lessons-item"
-                >
-                  <div className="program-view__lessons-item_image">
-                    <Image
-                      src={lessonImage.src}
-                      alt={lesson.title}
-                      sizes="(max-width: 900px) 100vw, 50vw"
-                      fill
-                    />
-                  </div>
-
-                  <div className="program-view__lessons-item_content">
-                    <span className="program-view__lessons-item_content-number">
-                      <span>{lesson.number}</span>
-                      <span>/{totalLessons < 10 ? `0${totalLessons}` : totalLessons}</span>
-                    </span>
-
-                    <p className="program-view__lessons-item_content-title">{lesson.title}</p>
-                    <p className="program-view__lessons-item_content-text">{lesson.text}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            <ProgramLessonsBlocks items={page.content.items} lessonImageSrc={lessonImage.src} />
 
             <div className="program-view__lessons-form">
               <p className="program-view__lessons-form_title">
