@@ -1,4 +1,4 @@
-import { FooterInfo } from "@/src/components/ui/Footer/Footer";
+import type { FooterInfo } from "@/src/components/ui/Footer/Footer.types";
 import Icon from "@/src/components/ui/Icon/Icon";
 import { phoneToLink } from "@/src/lib/utils/phoneLink";
 type FooterBlockProps = {
