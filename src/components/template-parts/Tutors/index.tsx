@@ -196,7 +196,12 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
       if (!slide) return;
 
       const slot = swiper.slides.indexOf(slide);
-      if (slot < 0 || slot === swiper.activeIndex) return;
+      if (slot < 0) return;
+
+      if (slot === swiper.activeIndex) {
+        onUserInteraction();
+        return;
+      }
 
       const n = tutorCountRef.current;
 
