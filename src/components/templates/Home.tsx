@@ -1,6 +1,7 @@
 import Image from "next/image";
 
-import headerImg from "@/src/assets/images/templates/homepage/header.png";
+import bannerDesktopImg from "@/src/assets/images/templates/homepage/banner_desktop.png";
+import bannerTabletImg from "@/src/assets/images/templates/homepage/banner_tablet.png";
 
 import Button from "@/src/components/ui/Button/Button";
 
@@ -60,7 +61,14 @@ export default function Home({ page }: Props) {
               </div>
             ) : null}
 
-            <Image className="home-page__header-img" src={headerImg} alt={page.seo.h1} />
+            <div className="home-page__header-img">
+              <div className="home-page__header-img-layer home-page__header-img-layer--desktop">
+                <Image src={bannerDesktopImg} alt={page.seo.h1} fill />
+              </div>
+              <div className="home-page__header-img-layer home-page__header-img-layer--tablet">
+                <Image src={bannerTabletImg} alt={page.seo.h1} fill />
+              </div>
+            </div>
           </div>
         </div>
       </section>
