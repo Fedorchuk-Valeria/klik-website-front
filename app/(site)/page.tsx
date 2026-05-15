@@ -1,7 +1,8 @@
-import { getPage } from "@/src/lib/getPage";
-import { resolveTemplate } from "@/src/lib/resolveTemplate";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
+
+import { getPage } from "@/src/lib/getPage";
+import { resolveTemplate } from "@/src/lib/resolveTemplate";
 
 export async function generateMetadata() {
   const h = await headers();

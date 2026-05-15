@@ -8,6 +8,13 @@ export const PLACE_STORAGE_KEY = "place";
 export const COOKIE_CONSENT_STORAGE_KEY = "cookie_policy_accepted";
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+export const PAGES = {
+  HOME: "/",
+  LOGIN: "/login",
+  REGISTER: "/register",
+  FORGOT_PASSWORD: "/forgot-password",
+};
+
 export const PAGE_ANCHORS = {
   SELECT_TRAINING: "select-training",
   ABOUT: "about",

@@ -1,0 +1,28 @@
+.login-page {
+  padding: 50px 50px 50px 100px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  .login-page__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .login-page__logo {
+      display: flex;
+      width: 125px;
+      height: 52px;
+    }
+
+    .login-page__logo-text {
+      @include fonts(14px, 400, "Manrope");
+      line-height: 120%;
+      color: var(--main-black);
+    }
+  }
+
+  .login-page__main {
+    padding-top: 100px;
+  }
+}
