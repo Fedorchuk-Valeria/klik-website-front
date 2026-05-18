@@ -231,12 +231,6 @@
         @include center;
         margin-top: 40px;
         width: calc(100% - 23px);
-
-        @media (hover: hover) and (pointer: fine) {
-          &:hover {
-            color: var(--main-orange);
-          }
-        }
       }
 
       .how-sign-up__card-dropdown {
