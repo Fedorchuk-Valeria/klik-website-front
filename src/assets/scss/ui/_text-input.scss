@@ -4,13 +4,40 @@
   width: 100%;
 
   .text-input__label {
-    @include fonts(16px, 400, "Manrope");
+    @include fonts(16px, 500, "Manrope");
     color: var(--main-black);
     margin-left: 30px;
   }
 
   .text-input__required {
     color: var(--main-orange);
+  }
+
+  .text-input__control-wrapper {
+    position: relative;
+    padding: 0 2px;
+
+    .text-input__icon {
+      position: absolute;
+      top: 50%;
+      right: 30px;
+      transform: translateY(-50%);
+      width: fit-content;
+      height: fit-content;
+      min-width: 24px;
+      min-height: 24px;
+      z-index: 1;
+    }
+  }
+
+  &.text-input--outline .text-input__control {
+    background: var(--secondary-white-80);
+    outline: 1px solid #cbdccf;
+  }
+
+  &.text-input--filled .text-input__control {
+    background: #f7fdff;
+    outline: none;
   }
 
   .text-input__control {
@@ -23,7 +50,6 @@
     padding: 21px 30px 22px;
 
     color: var(--main-burgundy);
-    background: #f7fdff;
     border: none;
     border-radius: 100px;
 
@@ -39,10 +65,15 @@
       outline: 1px solid var(--main-orange);
       outline-offset: 1px;
     }
+
+    &.text-input__control--addon-after {
+      padding-right: 60px;
+    }
   }
 
   &.text-input--error .text-input__control {
     background: #f9d1d1;
+    outline: 1px solid #e31b1b;
   }
 
   &__error {
@@ -76,6 +107,7 @@
   @media (max-width: $mobile-size) {
     .text-input__label {
       font-size: 14px;
+      margin-left: 20px;
     }
 
     .text-input__control {

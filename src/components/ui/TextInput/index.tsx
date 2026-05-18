@@ -1,19 +1,23 @@
 import classNames from "classnames";
-import { ComponentPropsWithoutRef, forwardRef, useId } from "react";
+import { ComponentPropsWithoutRef, forwardRef, ReactNode, useId } from "react";
 
 export type TextInputProps = {
-  label: string;
+  label: ReactNode;
   error?: string | boolean;
+  addonAfter?: React.ReactNode;
+  variant?: "outline" | "filled";
 } & ComponentPropsWithoutRef<"input">;
 
 const TextInput = forwardRef<HTMLInputElement, TextInputProps>(function TextInput(
   {
     label,
     error,
+    addonAfter,
     className,
     id: idProp,
     required,
     type = "text",
+    variant = "filled",
     "aria-describedby": ariaDescribedByProp,
     "aria-invalid": ariaInvalidProp,
     ...inputProps
@@ -33,6 +37,8 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(function TextInpu
     <div
       className={classNames("text-input", className, {
         "text-input--error": !!error,
+        "text-input--outline": variant === "outline",
+        "text-input--filled": variant === "filled",
       })}
     >
       <label className="text-input__label" htmlFor={id}>
@@ -45,18 +51,22 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(function TextInpu
         ) : null}
       </label>
 
-      <input
-        ref={ref}
-        {...inputProps}
-        id={id}
-        type={type}
-        className={classNames(
-          "text-input__control",
-          isFilled && !error && "text-input__control--filled"
-        )}
-        aria-invalid={!!error ? true : ariaInvalidProp}
-        aria-describedby={ariaDescribedBy}
-      />
+      <div className="text-input__control-wrapper">
+        <input
+          ref={ref}
+          {...inputProps}
+          id={id}
+          type={type}
+          className={classNames("text-input__control", {
+            "text-input__control--filled": isFilled && !error,
+            "text-input__control--addon-after": !!addonAfter,
+          })}
+          aria-invalid={!!error ? true : ariaInvalidProp}
+          aria-describedby={ariaDescribedBy}
+        />
+
+        {!!addonAfter && <div className="text-input__icon">{addonAfter}</div>}
+      </div>
 
       {!!error && (
         <p className="text-input__error" id={errorId} role="alert">

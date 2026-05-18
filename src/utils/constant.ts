@@ -36,3 +36,7 @@ export const CITY_DISPLAY_NAME = {
 };
 
 export const MAP_API_KEY = process.env.NEXT_PUBLIC_YANDEX_API_KEY;
+export const PASSWORD_REGEX =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/;
+
+export const PASSWORD_INPUT_STRIP_REGEX = /[^a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/g;

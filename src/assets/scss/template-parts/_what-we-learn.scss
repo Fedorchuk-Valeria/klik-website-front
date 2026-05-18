@@ -8,6 +8,17 @@
     margin-top: 100px;
   }
 
+  .home-page__what-we-learn-top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    .home-page__what-we-learn-text {
+      @include fonts(24px, 400, "Manrope");
+      max-width: 647px;
+    }
+  }
+
   .home-page__what-we-learn-accordion {
     flex: 0 0 min(698px, 42%);
     min-width: 0;
