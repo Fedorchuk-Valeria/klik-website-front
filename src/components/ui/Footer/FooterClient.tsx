@@ -164,7 +164,7 @@ export default function FooterClient({ settings }: Props) {
         <div className="footer__bottom">
           <div className="footer__bottom-wrapper">
             <div className="footer__bottom-copyright">
-              © 2026 Дополнительное IT-образование для детей. Все права защищены
+              © 2026 KLiK – Дополнительное IT-образование для детей. Все права защищены
             </div>
 
             <ul className="footer__links">
