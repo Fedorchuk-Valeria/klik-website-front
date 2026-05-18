@@ -1,0 +1,28 @@
+.popover {
+  position: relative;
+  display: inline-block;
+  height: 100%;
+  width: fit-content;
+
+  .popover__trigger {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.popover__content {
+  @include fonts(12px, 400, "Manrope");
+  position: fixed;
+  box-sizing: border-box;
+  max-width: 296px;
+  padding: 10px;
+  background: var(--main-bg);
+  border: 1px solid rgba(238, 108, 77, 0.5);
+  box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  z-index: 11;
+}
