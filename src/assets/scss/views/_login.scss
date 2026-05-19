@@ -60,10 +60,18 @@
 
   .login-page__main {
     padding-top: 100px;
+    overflow-x: visible;
   }
 
   .login-page__form-content {
     padding-bottom: 5px;
+    overflow-x: visible;
+
+    .login-page__form-title--red {
+      @include fonts(20px, 400);
+      color: var(--main-orange);
+      margin-bottom: 50px;
+    }
 
     .login-page__text {
       @include fonts(16px, 400, "Manrope");
@@ -76,6 +84,7 @@
     .login-page__form {
       @include flex-list(20px);
       margin-top: 50px;
+      overflow-x: visible;
     }
 
     .login-page__form-label {
@@ -186,6 +195,11 @@
     .login-page__form-content {
       padding-bottom: 5px;
 
+      .login-page__form-title--red {
+        font-size: 16px;
+        margin-bottom: 30px;
+      }
+
       .login-page__text {
         font-size: 14px;
         margin-left: 10px;
@@ -247,6 +261,11 @@
     .login-page__form-content {
       padding-bottom: 5px;
 
+      .login-page__form-title--red {
+        font-size: 20px;
+        margin-bottom: 50px;
+      }
+
       .login-page__text {
         font-size: 16px;
         margin-left: 16px;
@@ -292,6 +311,11 @@
 
     .login-page__form-content {
       overflow-x: visible;
+
+      .login-page__form-title--red {
+        font-size: 14px;
+        margin-bottom: 30px;
+      }
 
       .login-page__text {
         font-size: 12px;
