@@ -447,7 +447,9 @@
 
   @media screen and (max-width: $mobile-size) {
     .home-page__programs-slider-viewport {
-      width: 100%;
+      margin-left: -10px;
+      margin-right: -10px;
+      width: calc(100% + 20px);
     }
 
     &.home-page__programs--slider .home-page__programs-top {

@@ -137,6 +137,10 @@
     .home-page__form-button {
       padding: 16px;
       margin-top: 8px;
+
+      .button__arrow {
+        right: 7px;
+      }
     }
 
     .home-page__form-checkbox-container {
