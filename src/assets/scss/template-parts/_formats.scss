@@ -56,5 +56,11 @@
       font-size: 16px;
       max-width: 100%;
     }
+
+    .home-page__formats-body {
+      margin-left: -10px;
+      margin-right: -10px;
+      width: calc(100% + 20px);
+    }
   }
 }

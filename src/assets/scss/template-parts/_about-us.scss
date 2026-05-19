@@ -735,11 +735,16 @@
         }
 
         .home-page__about-us--list-item-info {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
           min-width: 0;
+          gap: 0;
         }
 
         .home-page__about-us--list-item-title {
           font-size: 30px;
+          min-width: 0;
         }
 
         .home-page__about-us--list-item-text {
@@ -749,6 +754,8 @@
     }
 
     .home-page__about-us--actions {
+      gap: 10px;
+
       .button .button__arrow {
         @include icon(36px);
       }
