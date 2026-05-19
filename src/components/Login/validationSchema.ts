@@ -21,3 +21,10 @@ export const registerValidationSchema = Yup.object().shape({
     .required("Пожалуйста, заполните поле"),
   name: Yup.string().required("Пожалуйста, заполните поле"),
 });
+
+export const setNewPasswordValidationSchema = Yup.object().shape({
+  password: Yup.string().required("Пожалуйста, заполните поле"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password")], "Пароли не совпадают")
+    .required("Пожалуйста, заполните поле"),
+});
