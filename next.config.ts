@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
         as: "*.js",
       },
       "*.pdf": {
-        as: "*.url",
+        type: "asset",
       },
     },
   },
