@@ -6,6 +6,10 @@
     margin-bottom: 100px;
   }
 
+  .home-page__programs-title {
+    white-space: pre-wrap;
+  }
+
   .home-page__programs-text {
     @include fonts(24px, 400, "Manrope");
     max-width: 664px;

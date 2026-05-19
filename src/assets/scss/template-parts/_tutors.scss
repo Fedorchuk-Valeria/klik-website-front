@@ -132,7 +132,8 @@
       position: relative;
       z-index: 0;
       width: 100%;
-      overflow: visible;
+      overflow-x: clip;
+      overflow-y: visible;
     }
 
     .swiper-wrapper {

@@ -64,7 +64,7 @@ export default function FooterClient({ settings }: Props) {
       links: [
         {
           title: "О нас",
-          url: `#${PAGE_ANCHORS.ABOUT}`,
+          url: `/#${PAGE_ANCHORS.ABOUT}`,
         },
         {
           title: "Города",
@@ -72,11 +72,11 @@ export default function FooterClient({ settings }: Props) {
         },
         {
           title: "Наставники",
-          url: `#${PAGE_ANCHORS.TUTORS}`,
+          url: `/#${PAGE_ANCHORS.TUTORS}`,
         },
         {
           title: "Отзывы",
-          url: `#${PAGE_ANCHORS.REVIEWS}`,
+          url: `/#${PAGE_ANCHORS.REVIEWS}`,
         },
       ],
     },
@@ -85,15 +85,15 @@ export default function FooterClient({ settings }: Props) {
       links: [
         {
           title: "Форматы обучения",
-          url: `#${PAGE_ANCHORS.FORMATS}`,
+          url: `/#${PAGE_ANCHORS.FORMATS}`,
         },
         {
           title: "Чему обучаем",
-          url: `#${PAGE_ANCHORS.WHAT}`,
+          url: `/#${PAGE_ANCHORS.WHAT}`,
         },
         {
           title: "Программы обучения",
-          url: `#${PAGE_ANCHORS.PROGRAMS}`,
+          url: `/#${PAGE_ANCHORS.PROGRAMS}`,
         },
       ],
     },
@@ -102,7 +102,7 @@ export default function FooterClient({ settings }: Props) {
       links: [
         {
           title: "FAQ",
-          url: `#${PAGE_ANCHORS.FAQ}`,
+          url: `/#${PAGE_ANCHORS.FAQ}`,
         },
       ],
     },
