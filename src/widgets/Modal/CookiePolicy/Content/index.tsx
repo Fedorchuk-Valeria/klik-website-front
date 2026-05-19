@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FC } from "react";
 
+import cookiePolicyPdf from "@/src/assets/files/cookie-policy.pdf";
 import Button from "@/src/components/ui/Button/Button";
 
 import { setClientCookie } from "@/src/utils/clientCookies";
@@ -28,7 +29,12 @@ const CookiePolicyContent: FC<PropTypes> = ({ onClose }) => {
       <p className={"cookie-policy-content__description"}>
         Наш сайт использует только технические, необходимые для работы сайта cookie, которые не
         могут быть отключены. Более подробно вы можете ознакомиться о них на странице{" "}
-        <Link href={"#"} target="_blank" className={"cookie-policy-content__link"}>
+        <Link
+          href={cookiePolicyPdf}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={"cookie-policy-content__link"}
+        >
           Политика обработки cookie
         </Link>
         .

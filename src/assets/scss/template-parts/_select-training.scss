@@ -121,6 +121,14 @@
 
           .select-training__item-text {
             font-size: 16px;
+
+            &:first-child {
+              max-width: 173px;
+            }
+
+            &:last-child {
+              max-width: 233px;
+            }
           }
         }
       }
@@ -137,6 +145,7 @@
       .select-training__text {
         font-size: 18px;
         margin-bottom: 50px;
+        max-width: 500px;
       }
     }
   }
@@ -162,7 +171,7 @@
       position: absolute;
       width: 642px;
       height: 484px;
-      left: -30px;
+      left: -80px;
     }
 
     .select-training__container {

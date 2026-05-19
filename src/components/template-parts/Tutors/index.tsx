@@ -21,12 +21,14 @@ type PropTypes = {
   items?: TutorItem[];
 };
 
+const MAX_TUTORS_TAIL_IN_VIEW = 3;
 /** Чтобы активный всегда у левого края был один узкий превью-слайд. */
 function orderedTutorIndices(activeIndex: number, n: number): number[] {
   if (n <= 1) return [activeIndex];
   const prevIdx = (activeIndex - 1 + n) % n;
+  const tailCount = Math.min(n - 2, MAX_TUTORS_TAIL_IN_VIEW);
   const tail: number[] = [];
-  for (let step = 0; step < n - 2; step += 1) {
+  for (let step = 0; step < tailCount; step += 1) {
     tail.push((activeIndex + 1 + step) % n);
   }
   return [prevIdx, activeIndex, ...tail];

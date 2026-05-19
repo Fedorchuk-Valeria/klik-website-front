@@ -47,12 +47,9 @@
     }
 
     .home-page__faq-bottom_title {
-      font-family: "Etude Noire", serif;
-      font-size: 40px;
-      font-style: normal;
-      font-weight: 500;
-      line-height: normal;
+      @include fonts(40px, 500);
       margin-bottom: 20px;
+      max-width: 340px;
       color: var(--main-green-dark);
     }
 

@@ -17,13 +17,22 @@ const nextConfig: NextConfig = {
         loaders: ["@svgr/webpack"],
         as: "*.js",
       },
+      "*.pdf": {
+        as: "*.url",
+      },
     },
   },
   webpack(config) {
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: ["@svgr/webpack"],
-    });
+    config.module.rules.push(
+      {
+        test: /\.svg$/,
+        use: ["@svgr/webpack"],
+      },
+      {
+        test: /\.pdf$/i,
+        type: "asset/resource",
+      },
+    );
 
     return config;
   },

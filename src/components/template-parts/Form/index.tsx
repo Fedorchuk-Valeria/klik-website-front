@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import Link from "next/link";
 import { ChangeEvent, useState } from "react";
 
+import personalDataPdf from "@/src/assets/files/personal-data.pdf";
 import Button from "@/src/components/ui/Button/Button";
 import Checkbox from "@/src/components/ui/Checkbox";
 import DateInput from "@/src/components/ui/DateInput";
@@ -143,7 +144,7 @@ const HomePageForm = ({ className }: { className?: string }) => {
       <PhoneInput
         required
         name="phone"
-        label="Телефон"
+        label="Номер телефона"
         value={form.values.phone}
         error={form.errors.phone}
         onChange={handleChange}
@@ -190,7 +191,7 @@ const HomePageForm = ({ className }: { className?: string }) => {
         <span className="home-page__form-checkbox--text">
           Я соглашаюсь с
           <Link
-            href="/privacy-policy"
+            href={personalDataPdf}
             target="_blank"
             rel="noopener noreferrer"
             className="home-page__form-checkbox--link"

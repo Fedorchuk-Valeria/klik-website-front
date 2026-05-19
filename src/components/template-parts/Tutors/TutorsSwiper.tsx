@@ -105,7 +105,6 @@ const TutorsSwiper: FC<TutorsSwiperProps> = ({
       speed={0}
       grabCursor
       resizeObserver
-      watchSlidesProgress
       slidesPerView={isTabletLandscapeTutors ? 1 : "auto"}
       initialSlide={isTabletLandscapeTutors ? activeIndex : initialSlideMid}
       key={
