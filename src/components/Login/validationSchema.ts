@@ -28,3 +28,13 @@ export const setNewPasswordValidationSchema = Yup.object().shape({
     .oneOf([Yup.ref("password")], "Пароли не совпадают")
     .required("Пожалуйста, заполните поле"),
 });
+
+export const resetPasswordValidationSchema = Yup.object().shape({
+  phone: Yup.string().required("Пожалуйста, заполните поле"),
+});
+
+export const confirmCodeValidationSchema = Yup.object().shape({
+  code: Yup.string()
+    .required("Пожалуйста, заполните поле")
+    .matches(/^\d{4}$/, "Пожалуйста, заполните поле"),
+});

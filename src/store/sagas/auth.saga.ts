@@ -1,0 +1,193 @@
+import { call, fork, put, takeLatest } from "redux-saga/effects";
+
+import {
+  AuthForgotPasswordRequest,
+  AuthRegisterRequest,
+  AuthResetPasswordRequest,
+  AuthSignInRequest,
+  AuthVerifyCodeRequest,
+} from "@/src/entities/common/auth";
+import { UsersApi } from "@/src/services/http";
+import {
+  forgotPasswordRequest,
+  forgotPasswordSuccess,
+  loginRequest,
+  loginSuccess,
+  logoutRequest,
+  logoutSuccess,
+  registerRequest,
+  registerSuccess,
+  resendCodeRequest,
+  resetPasswordRequest,
+  resetPasswordSuccess,
+  setErrors,
+  verifyCodeRequest,
+  verifyCodeSuccess,
+} from "@/src/store/slices/auth";
+import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/src/utils/constant";
+import { CookieHelper } from "@/src/utils/helpers";
+
+const MAX_AGE = 7 * 24 * 60 * 60 * 1000;
+
+function* workerAuthLogin({ payload }: { payload: AuthSignInRequest }): unknown {
+  try {
+    const response = yield call(UsersApi.signIn, payload);
+
+    if (response?.data?.access) {
+      CookieHelper.setCookie(TOKEN_KEY, response.data.access, {
+        path: "/",
+        expires: new Date(Date.now() + MAX_AGE),
+      });
+    }
+
+    if (response?.data?.refresh) {
+      CookieHelper.setCookie(REFRESH_TOKEN_KEY, response.data.refresh, {
+        path: "/",
+        expires: new Date(Date.now() + MAX_AGE),
+      });
+    }
+
+    yield put(loginSuccess(response?.data?.user ?? null));
+  } catch (error) {
+    yield put(setErrors(error as Record<string, string[]> | null));
+  }
+}
+
+function* watchAuthLogin() {
+  yield takeLatest(
+    loginRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerAuthLogin
+  );
+}
+
+function* workerAuthRegister({ payload }: { payload: AuthRegisterRequest }) {
+  try {
+    yield call(UsersApi.register, payload);
+
+    yield put(registerSuccess());
+  } catch (error) {
+    yield put(setErrors(error as Record<string, string[]> | null));
+  }
+}
+
+function* watchAuthRegister() {
+  yield takeLatest(
+    registerRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerAuthRegister
+  );
+}
+
+function* workerAuthForgotPassword({ payload }: { payload: AuthForgotPasswordRequest }) {
+  try {
+    yield call(UsersApi.forgotPassword, payload);
+
+    yield put(forgotPasswordSuccess());
+  } catch (error) {
+    yield put(setErrors(error as Record<string, string[]> | null));
+  }
+}
+
+function* watchAuthForgotPassword() {
+  yield takeLatest(
+    forgotPasswordRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerAuthForgotPassword
+  );
+}
+
+function* workerAuthVerifyCode({ payload }: { payload: AuthVerifyCodeRequest }) {
+  try {
+    yield call(UsersApi.verifyCode, payload);
+
+    yield put(verifyCodeSuccess());
+  } catch (error) {
+    yield put(setErrors(error as Record<string, string[]> | null));
+  }
+}
+
+function* watchAuthVerifyCode() {
+  yield takeLatest(
+    verifyCodeRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerAuthVerifyCode
+  );
+}
+
+function* workerAuthResetPassword({ payload }: { payload: AuthResetPasswordRequest }) {
+  try {
+    const response: { data: { access: string; refresh: string; user: unknown } } = yield call(
+      UsersApi.resetPassword,
+      payload
+    );
+
+    if (response?.data?.access) {
+      CookieHelper.setCookie(TOKEN_KEY, response.data.access, {
+        path: "/",
+        expires: new Date(Date.now() + MAX_AGE),
+      });
+    }
+
+    if (response?.data?.refresh) {
+      CookieHelper.setCookie(REFRESH_TOKEN_KEY, response.data.refresh, {
+        path: "/",
+        expires: new Date(Date.now() + MAX_AGE),
+      });
+    }
+
+    yield put(resetPasswordSuccess());
+  } catch (error) {
+    yield put(setErrors(error as Record<string, string[]> | null));
+  }
+}
+
+function* watchAuthResetPassword() {
+  yield takeLatest(
+    resetPasswordRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerAuthResetPassword
+  );
+}
+
+function* workerAuthResendCode({ payload }: { payload: AuthVerifyCodeRequest }) {
+  try {
+    yield call(UsersApi.resendVerification, payload);
+
+    yield put(forgotPasswordSuccess());
+  } catch (error) {
+    yield put(setErrors(error as Record<string, string[]> | null));
+  }
+}
+
+function* watchAuthResendCode() {
+  yield takeLatest(
+    resendCodeRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerAuthResendCode
+  );
+}
+
+function* workerAuthLogout() {
+  try {
+    yield call(UsersApi.logout);
+
+    yield put(logoutSuccess());
+
+    CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
+    CookieHelper.deleteCookie(REFRESH_TOKEN_KEY, { path: "/" });
+  } catch (error) {
+    yield put(setErrors(error as Record<string, string[]> | null));
+  }
+}
+
+function* watchAuthLogout() {
+  yield takeLatest(
+    logoutRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerAuthLogout
+  );
+}
+
+export const authWatchers = [
+  fork(watchAuthLogin),
+  fork(watchAuthRegister),
+  fork(watchAuthForgotPassword),
+  fork(watchAuthVerifyCode),
+  fork(watchAuthResetPassword),
+  fork(watchAuthResendCode),
+  fork(watchAuthLogout),
+];

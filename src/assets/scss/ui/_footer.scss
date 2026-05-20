@@ -34,6 +34,32 @@
           color: var(--main-green-dark);
         }
       }
+
+      .footer__block-icon {
+        svg {
+          fill: var(--main-green-dark);
+        }
+      }
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      .footer__row {
+        margin-bottom: 50px;
+      }
+
+      .footer__bottom-wrapper {
+        font-size: 16px;
+      }
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      .footer__row {
+        margin-bottom: 30px;
+      }
+
+      .footer__bottom-wrapper {
+        font-size: 14px;
+      }
     }
   }
 
@@ -43,14 +69,21 @@
     right: 90px;
 
     @media screen and (max-width: $desktop) {
-      top: -80px;
+      top: -115px;
       right: 40px;
-      width: 150px;
+      width: 175px;
     }
 
     @media screen and (max-width: $landscape-tablet-size) {
-      width: 110px;
-      top: -73px;
+      width: 140px;
+      top: -95px;
+      right: 20px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      width: 150px;
+      top: -110px;
+      right: 10px;
     }
 
     @media screen and (max-width: $mobile-size) {
@@ -93,10 +126,12 @@
     }
 
     @media screen and (max-width: $tablet-size) {
+      border-radius: 50px;
       flex-direction: column;
     }
 
     @media screen and (max-width: $mobile-size) {
+      border-radius: 30px;
       gap: 30px;
       padding: 20px;
     }
@@ -137,11 +172,13 @@
 
     @media screen and (max-width: $landscape-tablet-size) {
       gap: 40px;
+      margin-bottom: 50px;
     }
 
     @media screen and (max-width: $mobile-size) {
       flex-direction: column;
       gap: 21px;
+      margin-bottom: 30px;
     }
   }
 
@@ -267,10 +304,6 @@
         font-size: 10px;
       }
 
-      @media screen and (max-width: $desktop) {
-        max-width: 140px;
-      }
-
       &:before {
         content: "";
         width: 1.5px;
@@ -324,11 +357,16 @@
         margin-bottom: 11px;
       }
     }
+
     &-list {
       @include flex-list(20px);
 
       li {
         cursor: pointer;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        gap: 10px;
       }
 
       @media screen and (max-width: $mobile-size) {
@@ -401,9 +439,12 @@
 
       @media screen and (max-width: $tablet-size) {
         margin-right: 0;
+        font-size: 16px;
       }
+
       @media screen and (max-width: $mobile-size) {
         text-align: center;
+        font-size: 14px;
       }
     }
   }
@@ -425,8 +466,13 @@
     align-items: center;
     gap: 30px;
 
+    @media screen and (max-width: $tablet-size) {
+      font-size: 16px;
+    }
+
     @media screen and (max-width: $mobile-size) {
       gap: 20px;
+      font-size: 14px;
       flex-direction: column;
     }
 

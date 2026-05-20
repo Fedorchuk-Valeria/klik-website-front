@@ -1,5 +1,8 @@
 "use client";
 
+import HomeAnchorLink, {
+  getAnchorIdFromHref,
+} from "@/src/components/ui/HomeAnchorLink/HomeAnchorLink";
 import { ModalType } from "@/src/entities/common";
 import { MenuItem } from "@/src/lib/content/types";
 import { useAppDispatch } from "@/src/store/hooks";
@@ -12,23 +15,38 @@ type PropTypes = {
 
 const FooterLinks: FC<PropTypes> = ({ link }) => {
   const dispatch = useAppDispatch();
+  const anchorId = link?.url ? getAnchorIdFromHref(link.url) : "";
 
-  const handleLinkClick = (action?: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
-    if (action) {
-      event.preventDefault();
-      event.stopPropagation();
+  const handleActionClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
 
-      if (action === "openCities") {
-        dispatch(showModal({ modalType: ModalType.PLACE_SELECT }));
-      }
+    if (link?.action === "openCities") {
+      dispatch(showModal({ modalType: ModalType.PLACE_SELECT }));
     }
   };
 
+  if (link?.action) {
+    return (
+      <li>
+        <a href={link.url ?? "#"} onClick={handleActionClick}>
+          {link.title}
+        </a>
+      </li>
+    );
+  }
+
+  if (anchorId) {
+    return (
+      <li>
+        <HomeAnchorLink anchor={anchorId}>{link?.title}</HomeAnchorLink>
+      </li>
+    );
+  }
+
   return (
     <li>
-      <a href={link?.url} onClick={handleLinkClick(link?.action)}>
-        {link?.title}
-      </a>
+      <a href={link?.url}>{link?.title}</a>
     </li>
   );
 };

@@ -19,10 +19,10 @@ import imgProgramming from "@/src/assets/images/templates/homepage/whatWeLearn/p
 
 import WhatWeLearnAccordionItem from "./WhatWeLearnAaccordionItem";
 
+import { PAGE_ANCHORS } from "@/src/utils/constant";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
-import {PAGE_ANCHORS} from "@/src/utils/constant";
 
 const SLIDE_IMAGES: Record<string, StaticImageData> = {
   programming: imgProgramming,
@@ -170,8 +170,11 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
                               className="home-page__what-we-learn-slide-img"
                               src={src}
                               alt={item.title}
-                              sizes="(max-width: 1200px) 90vw, 560px"
+                              width={src.width}
+                              height={src.height}
+                              unoptimized
                               priority={index === 0}
+                              loading={index === 0 ? undefined : "lazy"}
                             />
                           </>
                         ) : null}

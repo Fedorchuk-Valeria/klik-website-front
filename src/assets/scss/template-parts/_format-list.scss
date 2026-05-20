@@ -202,7 +202,7 @@
       @include icon(165px);
       @include flex-list(10px);
       border-radius: 100%;
-      border: 1px solid var(--secondary-light-30);
+      border: 1px solid var(--main-light);
       background-color: var(--secondary-light-10);
 
       .formats__content-item_icon {
