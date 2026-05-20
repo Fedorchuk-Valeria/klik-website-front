@@ -2,21 +2,39 @@
 
 import { useFormik } from "formik";
 import Link from "next/link";
-import { ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, useEffect } from "react";
 
 import { confirmCodeValidationSchema } from "@/src/components/Login/validationSchema";
-
 import Button from "@/src/components/ui/Button/Button";
 import CodeInput from "@/src/components/ui/CodeInput";
 
+import { RootStore } from "@/src/store";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { resendCodeRequest, verifyCodeRequest } from "@/src/store/slices/auth";
+import { PAGES, TOKEN_KEY } from "@/src/utils/constant";
+import { CookieHelper } from "@/src/utils/helpers";
+
 const ConfirmCode = () => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { isCodeCorrect, isLoading, errors } = useAppSelector((state: RootStore) => state.auth);
   const form = useFormik({
     initialValues: {
       code: "",
     },
     validationSchema: confirmCodeValidationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      const sessionToken = CookieHelper.getCookie(TOKEN_KEY);
+
+      if (sessionToken) {
+        dispatch(
+          verifyCodeRequest({
+            session_token: sessionToken,
+            code: values.code,
+          })
+        );
+      }
     },
     validateOnChange: false,
     validateOnBlur: false,
@@ -32,8 +50,28 @@ const ConfirmCode = () => {
     event.preventDefault();
     event.stopPropagation();
 
-    console.log("resend code");
+    const sessionToken = CookieHelper.getCookie(TOKEN_KEY);
+
+    if (sessionToken) {
+      dispatch(
+        resendCodeRequest({
+          session_token: sessionToken,
+        })
+      );
+    }
   };
+
+  useEffect(() => {
+    if (errors) {
+      form.setFieldError("code", errors.detail);
+    }
+  }, [errors]);
+
+  useEffect(() => {
+    if (isCodeCorrect) {
+      router.push(PAGES.HOME);
+    }
+  }, [isCodeCorrect]);
 
   return (
     <div className="login-page__form-content confirm-code-page">
@@ -48,6 +86,7 @@ const ConfirmCode = () => {
           error={form.errors.code}
           onChange={handleChange}
           className="confirm-code-page__code-input"
+          disabled={isLoading}
         />
 
         <Button
@@ -55,13 +94,14 @@ const ConfirmCode = () => {
           type="submit"
           variant="main-green-dark"
           className="login-page__form-button"
+          disabled={isLoading}
         >
           Отправить код
         </Button>
 
         <p className="login-page__after-text">
           Не пришел код?
-          <Link className="login-page__form-link" onClick={handleResendCode} href={"#"}>
+          <Link href={"#"} onClick={handleResendCode} className="login-page__form-link">
             Отправить код еще раз.
           </Link>
         </p>

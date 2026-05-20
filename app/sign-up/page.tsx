@@ -2,7 +2,7 @@
 
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect } from "react";
 
 import { registerValidationSchema } from "@/src/components/Login/validationSchema";
 import Button from "@/src/components/ui/Button/Button";
@@ -13,12 +13,14 @@ import Popover from "@/src/components/ui/Popover";
 import Tabs from "@/src/components/ui/Tabs";
 import TextInput from "@/src/components/ui/TextInput";
 
-import { useAppDispatch } from "@/src/store/hooks";
+import { RootStore } from "@/src/store";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { registerRequest } from "@/src/store/slices/auth";
 import { PAGES, PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
 
 const RegisterForm = () => {
   const dispatch = useAppDispatch();
+  const { isRegisterSuccess, isLoading, errors } = useAppSelector((state: RootStore) => state.auth);
   const router = useRouter();
   const form = useFormik({
     initialValues: {
@@ -61,6 +63,21 @@ const RegisterForm = () => {
     void form.setFieldValue(name, filtered, true);
   };
 
+  useEffect(() => {
+    if (isRegisterSuccess) {
+      router.push(PAGES.CONFIRM_CODE);
+    }
+  }, [isRegisterSuccess]);
+
+  useEffect(() => {
+    if (errors) {
+      form.setFieldError("phone", errors.phone);
+      form.setFieldError("name", errors.full_name);
+      form.setFieldError("password", errors.password);
+      form.setFieldError("confirmPassword", errors.confirm_password);
+    }
+  }, [errors, form]);
+
   return (
     <div className="login-page__form-content">
       <Tabs
@@ -84,6 +101,7 @@ const RegisterForm = () => {
           onChange={handleChange}
           placeholder="+375 (29) 123-45-67"
           className="login-page__form-input"
+          disabled={isLoading}
         />
 
         <TextInput
@@ -95,6 +113,7 @@ const RegisterForm = () => {
           error={form.errors.name}
           placeholder="Иванов Иван Иванович"
           className="login-page__form-input"
+          disabled={isLoading}
         />
 
         <PasswordInput
@@ -128,6 +147,7 @@ const RegisterForm = () => {
           value={form.values.password}
           error={form.errors.password}
           className="login-page__form-input"
+          disabled={isLoading}
         />
 
         <PasswordInput
@@ -139,6 +159,7 @@ const RegisterForm = () => {
           className="login-page__form-input"
           variant="outline"
           placeholder="********"
+          disabled={isLoading}
         />
 
         <Button
@@ -146,6 +167,7 @@ const RegisterForm = () => {
           type="submit"
           variant="main-green-dark"
           className="login-page__form-button"
+          disabled={isLoading}
         >
           Получить код подтверждения
         </Button>

@@ -62,7 +62,12 @@ function* watchAuthLogin() {
 
 function* workerAuthRegister({ payload }: { payload: AuthRegisterRequest }) {
   try {
-    yield call(UsersApi.register, payload);
+    const response: { data: { session_token: string } } = yield call(UsersApi.register, payload);
+
+    CookieHelper.setCookie(TOKEN_KEY, response.data.session_token, {
+      path: "/",
+      expires: new Date(Date.now() + MAX_AGE),
+    });
 
     yield put(registerSuccess());
   } catch (error) {
