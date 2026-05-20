@@ -1,5 +1,4 @@
 import {
-  AuthGetCodeRequest,
   AuthRegisterRequest,
   AuthResendCodeRequest,
   AuthResetPasswordRequest,
@@ -10,7 +9,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 type AuthState = {
   user: unknown | null;
-  errors: Record<string, string[]> | null;
+  errors: Record<string, string> | null;
   isRegisterSuccess: boolean;
   isCodeSent: boolean;
   isCodeCorrect: boolean;
@@ -55,7 +54,7 @@ const authSlice = createSlice({
       state.errors = null;
       state.isCodeSent = false;
     },
-    verifyCodeRequest(state, action: { payload: AuthGetCodeRequest }) {
+    verifyCodeRequest(state, action: { payload: AuthVerifyCodeRequest }) {
       void action.payload;
       state.isLoading = true;
       state.errors = null;
@@ -114,7 +113,7 @@ const authSlice = createSlice({
     setCodeCorrect(state, action: { payload: boolean }) {
       state.isCodeCorrect = action.payload;
     },
-    setErrors(state, action: { payload: Record<string, string[]> | null }) {
+    setErrors(state, action: { payload: Record<string, string> | null }) {
       state.errors = action.payload;
       state.isLoading = false;
     },
