@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-import { PENDING_HOME_ANCHOR_KEY } from "@/src/utils/constant";
+import HomeAnchorLink, {
+  getAnchorIdFromHref,
+} from "@/src/components/ui/HomeAnchorLink/HomeAnchorLink";
 
 type MenuItem = {
   url: string;
@@ -16,44 +15,17 @@ type Props = {
 };
 
 const HeaderMobileList = ({ menuItems, onClose}: Props) => {
-  const pathname = usePathname();
-
-  const isHomePage = pathname === "/";
-
-  const getAnchorId = (url: string) => url.split("#")[1] ?? "";
+  const getAnchorId = getAnchorIdFromHref;
 
   return (
     <ul className="header__mobile-menu">
-      {menuItems.map((item) => {
-        const href =
-          item.url.startsWith("#") && !isHomePage
-            ? `/${item.url}`
-            : item.url;
-
-        return (
-          <li key={item.url}>
-            {isHomePage ? (
-              <a href={href} onClick={onClose}>
-                {item.title}
-              </a>
-            ) : (
-              <Link
-                href="/"
-                scroll={false}
-                onClick={() => {
-                  const id = getAnchorId(item.url);
-                  if (id) {
-                    sessionStorage.setItem(PENDING_HOME_ANCHOR_KEY, id);
-                  }
-                  onClose?.();
-                }}
-              >
-                {item.title}
-              </Link>
-            )}
-          </li>
-        );
-      })}
+      {menuItems.map((item) => (
+        <li key={item.url}>
+          <HomeAnchorLink anchor={getAnchorId(item.url)} onClick={onClose}>
+            {item.title}
+          </HomeAnchorLink>
+        </li>
+      ))}
     </ul>
   );
 };
