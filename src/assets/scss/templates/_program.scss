@@ -1,5 +1,6 @@
 .program-view {
-  padding: 265px 0 179px;
+  padding: 265px 0 182px;
+  margin-bottom: -3px;
   background: var(--main-green-dark);
 
   .program-view__container {
@@ -597,6 +598,8 @@
         display: grid;
         grid-template-areas: "title title" "text text" "form list";
         column-gap: 96px;
+        margin-left: -10px;
+        margin-right: -10px;
 
         .program-view__lessons-form_title {
           font-size: 28px;
@@ -773,6 +776,9 @@
         border-radius: 50px;
         grid-template-areas: "title" "text" "form" "list";
         column-gap: 0;
+        margin-left: -20px;
+        margin-right: -20px;
+        width: calc(100% + 40px);
 
         .program-view__lessons-form_title {
           font-size: 30px;
@@ -787,7 +793,22 @@
           flex-direction: row;
           gap: 50px;
           margin-top: 50px;
+          margin-left: -21px;
+          margin-right: -22px;
         }
+      }
+    }
+  }
+
+  @media screen and (max-width: 770px) {
+    .program-view__lessons .program-view__lessons-form {
+      margin-left: 0;
+      margin-right: 0;
+      width: 100%;
+
+      .program-view__lessons-form_items {
+        margin-left: 0;
+        margin-right: 0;
       }
     }
   }
@@ -796,6 +817,7 @@
     padding: 105px 0 80px;
 
     .program-view__container {
+      padding: 20px 10px;
       max-width: 100%;
     }
 
@@ -941,6 +963,7 @@
         border-radius: 0px;
         margin-left: -10px;
         margin-right: -10px;
+        width: calc(100% + 20px);
 
         .program-view__lessons-form_title {
           font-size: 24px;
@@ -958,7 +981,6 @@
         }
 
         .program-view__lessons-form_items {
-          gap: 50px;
           margin-top: 50px;
           column-gap: 50px;
           row-gap: 20px;
@@ -984,7 +1006,7 @@
             }
 
             span {
-              font-size: 16px;
+              font-size: 14px;
             }
           }
         }

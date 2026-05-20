@@ -178,10 +178,10 @@
     }
 
     .home-page__what-we-learn-slide-img {
-      @include perfect-img;
       width: 100%;
       height: auto;
       display: block;
+      object-fit: contain;
     }
   }
 

@@ -45,8 +45,10 @@ const AboutUs: FC<PropTypes> = ({ title, text, subtitle, items, slides }) => {
                       <Icon name={item.icon} />
                     </span>
 
-                    <p className="home-page__about-us--list-item-title">{item.title}</p>
-                    <p className="home-page__about-us--list-item-text">{item.text}</p>
+                    <div className="home-page__about-us--list-item-info">
+                      <p className="home-page__about-us--list-item-title">{item.title}</p>
+                      <p className="home-page__about-us--list-item-text">{item.text}</p>
+                    </div>
                   </li>
                 ))}
               </ul>

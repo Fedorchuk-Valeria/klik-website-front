@@ -1,12 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
+import HomeAnchorLink, {
+  getAnchorIdFromHref,
+} from "@/src/components/ui/HomeAnchorLink/HomeAnchorLink";
 import {
   HEADER_ANCHOR_OFFSET_PX,
-  PENDING_HOME_ANCHOR_KEY,
   SET_ACTIVE_ANCHOR_EVENT,
 } from "@/src/utils/constant";
 
@@ -28,9 +29,7 @@ const HeaderMenu = ({ menuItems }: Props) => {
     menuItems[0]?.url ?? ""
   );
 
-  const getAnchorId = (url: string) => {
-    return url.split("#")[1] ?? "";
-  };
+  const getAnchorId = getAnchorIdFromHref;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -90,14 +89,9 @@ const HeaderMenu = ({ menuItems }: Props) => {
   return (
     <ul className="header__menu">
       {menuItems.map((item) => {
-        const href =
-          item.url.startsWith("#") && !isHomePage
-            ? `/${item.url}`
-            : item.url;
-
         const isActive =
           active === item.url ||
-          active === href;
+          active === `#${getAnchorId(item.url)}`;
 
         return (
           <li
@@ -106,22 +100,9 @@ const HeaderMenu = ({ menuItems }: Props) => {
               isActive ? "active" : ""
             }`}
           >
-            {isHomePage ? (
-              <a href={href}>{item.title}</a>
-            ) : (
-              <Link
-                href="/"
-                scroll={false}
-                onClick={() => {
-                  const id = getAnchorId(item.url);
-                  if (id) {
-                    sessionStorage.setItem(PENDING_HOME_ANCHOR_KEY, id);
-                  }
-                }}
-              >
-                {item.title}
-              </Link>
-            )}
+            <HomeAnchorLink anchor={getAnchorId(item.url)}>
+              {item.title}
+            </HomeAnchorLink>
           </li>
         );
       })}
