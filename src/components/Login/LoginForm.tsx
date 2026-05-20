@@ -43,7 +43,7 @@ const LoginForm = () => {
       <Tabs
         tabs={[
           { label: "Вход", value: PAGES.LOGIN },
-          { label: "Регистрация", value: PAGES.REGISTER },
+          { label: "Регистрация", value: PAGES.SIGN_UP },
         ]}
         activeTab={PAGES.LOGIN}
         onChange={handleChangeTab}

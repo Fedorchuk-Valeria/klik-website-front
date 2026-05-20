@@ -13,9 +13,12 @@ import Popover from "@/src/components/ui/Popover";
 import Tabs from "@/src/components/ui/Tabs";
 import TextInput from "@/src/components/ui/TextInput";
 
+import { useAppDispatch } from "@/src/store/hooks";
+import { registerRequest } from "@/src/store/slices/auth";
 import { PAGES, PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
 
 const RegisterForm = () => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const form = useFormik({
     initialValues: {
@@ -27,6 +30,15 @@ const RegisterForm = () => {
     validationSchema: registerValidationSchema,
     onSubmit: (values) => {
       console.log(values);
+
+      dispatch(
+        registerRequest({
+          phone: values.phone,
+          full_name: values.name,
+          password: values.password,
+          confirm_password: values.confirmPassword,
+        })
+      );
     },
     validateOnChange: false,
     validateOnBlur: false,
@@ -54,9 +66,9 @@ const RegisterForm = () => {
       <Tabs
         tabs={[
           { label: "Вход", value: PAGES.LOGIN },
-          { label: "Регистрация", value: PAGES.REGISTER },
+          { label: "Регистрация", value: PAGES.SIGN_UP },
         ]}
-        activeTab={PAGES.REGISTER}
+        activeTab={PAGES.SIGN_UP}
         onChange={handleChangeTab}
       />
 

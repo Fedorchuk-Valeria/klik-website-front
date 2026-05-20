@@ -8,11 +8,23 @@ export const PLACE_STORAGE_KEY = "place";
 export const COOKIE_CONSENT_STORAGE_KEY = "cookie_policy_accepted";
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+export const TOKEN_KEY = "token";
+export const REFRESH_TOKEN_KEY = "refresh_token";
+
+export const QUERY_PARAMS = {
+  PHONE: "phone",
+};
+
 export const PAGES = {
   HOME: "/",
+
+  NOT_FOUND: "/404",
+
   LOGIN: "/login",
-  REGISTER: "/register",
-  FORGOT_PASSWORD: "/forgot-password",
+  SIGN_UP: "/sign-up",
+  NEW_PASSWORD: "/new-password",
+  CONFIRM_CODE: "/confirm-code",
+  FORGOT_PASSWORD: "/reset-password",
 };
 
 export const PAGE_ANCHORS = {
