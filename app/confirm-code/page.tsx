@@ -3,7 +3,7 @@
 import { useFormik } from "formik";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent, Suspense, useEffect } from "react";
 
 import { confirmCodeValidationSchema } from "@/src/components/Login/validationSchema";
 import Button from "@/src/components/ui/Button/Button";
@@ -15,7 +15,7 @@ import { resendCodeRequest, verifyCodeRequest } from "@/src/store/slices/auth";
 import { PAGES, QUERY_PARAMS, TOKEN_KEY } from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
 
-const ConfirmCode = () => {
+const ConfirmCodeContent = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
@@ -115,4 +115,16 @@ const ConfirmCode = () => {
   );
 };
 
-export default ConfirmCode;
+const ConfirmCodePage = () => (
+  <Suspense
+    fallback={
+      <div className="login-page__form-content confirm-code-page">
+        <p className="login-page__form-title--red">Подтверждение номера</p>
+      </div>
+    }
+  >
+    <ConfirmCodeContent />
+  </Suspense>
+);
+
+export default ConfirmCodePage;
