@@ -76,9 +76,11 @@ export default async function Header() {
                 </div>
               )}
 
-              <div className="header__cabinet">
-                <ButtonCabinet />
-              </div>
+              {false && (
+                <div className="header__cabinet">
+                  <ButtonCabinet />
+                </div>
+              )}
             </div>
           </div>
 
