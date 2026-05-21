@@ -25,6 +25,7 @@ export const PAGES = {
   NEW_PASSWORD: "/new-password",
   CONFIRM_CODE: "/confirm-code",
   FORGOT_PASSWORD: "/reset-password",
+  COURSES: "/courses",
 };
 
 export const PAGE_ANCHORS = {

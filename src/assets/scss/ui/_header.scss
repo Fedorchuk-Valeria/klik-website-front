@@ -53,6 +53,14 @@
     gap: 31px;
     transition: 0.3s all;
 
+    &.light {
+      background-color: var(--main-bg);
+
+      .header__logo-text {
+        color: var(--main-black);
+      }
+    }
+
     @media screen and (max-width: $desktop) {
       padding: 40px 50px;
       gap: 25px;
@@ -187,6 +195,119 @@
   &__city {
     @media screen and (max-width: $tablet-size) {
       display: none;
+    }
+  }
+
+  &__auth {
+    display: flex;
+    gap: 30px;
+
+    @media screen and (max-width: $mobile-size) {
+      gap: 20px;
+    }
+  }
+
+  &__user {
+    &-icon {
+      width: 24px;
+      height: 24px;
+      display: none;
+
+      @media screen and (max-width: $mobile-size) {
+        display: block;
+        fill: var(--main-orange) !important;
+      }
+    }
+
+    &-button {
+      padding: 0;
+      background: transparent;
+      border-radius: 0;
+      border: 0;
+      position: relative;
+      font-size: 20px;
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        font-size: 16px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        font-size: 18px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        font-size: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--main-light);
+        border: 1.5px solid var(--main-orange);
+      }
+
+      &:active,
+      &:hover {
+        background: transparent;
+
+        @media screen and (max-width: $mobile-size) {
+          background-color: var(--main-light);
+        }
+
+        &:after {
+          opacity: 0;
+        }
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 5px;
+        left: 0;
+        width: 100%;
+        height: 1.5px;
+        background-color: var(--main-orange);
+        transition: 0.3s all;
+
+        @media screen and (max-width: $mobile-size) {
+          height: 0;
+        }
+      }
+
+      .button__text {
+        @media screen and (max-width: $mobile-size) {
+          gap: 0;
+        }
+      }
+    }
+  }
+
+  &__logout {
+    &-icon {
+      width: 24px;
+      height: 24px;
+    }
+    &-button {
+      padding: 10px 30px;
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        font-size: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .button__text {
+        @media screen and (max-width: $landscape-tablet-size) {
+          gap: 0;
+        }
+      }
     }
   }
 
