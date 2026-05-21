@@ -49,7 +49,7 @@ function* workerAuthLogin({ payload }: { payload: AuthSignInRequest }): unknown 
 
     yield put(loginSuccess(response?.data?.user ?? null));
   } catch (error) {
-    yield put(setErrors(error as Record<string, string[]> | null));
+    yield put(setErrors(error as Record<string, string> | null));
   }
 }
 
@@ -71,7 +71,7 @@ function* workerAuthRegister({ payload }: { payload: AuthRegisterRequest }) {
 
     yield put(registerSuccess());
   } catch (error) {
-    yield put(setErrors(error as Record<string, string[]> | null));
+    yield put(setErrors(error as Record<string, string> | null));
   }
 }
 
@@ -84,11 +84,19 @@ function* watchAuthRegister() {
 
 function* workerAuthForgotPassword({ payload }: { payload: AuthForgotPasswordRequest }) {
   try {
-    yield call(UsersApi.forgotPassword, payload);
+    const response: { data: { session_token: string } } = yield call(
+      UsersApi.forgotPassword,
+      payload
+    );
+
+    CookieHelper.setCookie(TOKEN_KEY, response.data.session_token, {
+      path: "/",
+      expires: new Date(Date.now() + MAX_AGE),
+    });
 
     yield put(forgotPasswordSuccess());
   } catch (error) {
-    yield put(setErrors(error as Record<string, string[]> | null));
+    yield put(setErrors(error as Record<string, string> | null));
   }
 }
 
@@ -105,7 +113,7 @@ function* workerAuthVerifyCode({ payload }: { payload: AuthVerifyCodeRequest }) 
 
     yield put(verifyCodeSuccess());
   } catch (error) {
-    yield put(setErrors(error as Record<string, string[]> | null));
+    yield put(setErrors(error as Record<string, string> | null));
   }
 }
 
@@ -139,7 +147,7 @@ function* workerAuthResetPassword({ payload }: { payload: AuthResetPasswordReque
 
     yield put(resetPasswordSuccess());
   } catch (error) {
-    yield put(setErrors(error as Record<string, string[]> | null));
+    yield put(setErrors(error as Record<string, string> | null));
   }
 }
 
@@ -156,7 +164,7 @@ function* workerAuthResendCode({ payload }: { payload: AuthVerifyCodeRequest }) 
 
     yield put(forgotPasswordSuccess());
   } catch (error) {
-    yield put(setErrors(error as Record<string, string[]> | null));
+    yield put(setErrors(error as Record<string, string> | null));
   }
 }
 
@@ -176,7 +184,7 @@ function* workerAuthLogout() {
     CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
     CookieHelper.deleteCookie(REFRESH_TOKEN_KEY, { path: "/" });
   } catch (error) {
-    yield put(setErrors(error as Record<string, string[]> | null));
+    yield put(setErrors(error as Record<string, string> | null));
   }
 }
 

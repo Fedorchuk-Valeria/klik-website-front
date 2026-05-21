@@ -1,15 +1,28 @@
 "use client";
 
 import { useFormik } from "formik";
-import { ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, useEffect } from "react";
 
 import { setNewPasswordValidationSchema } from "@/src/components/Login/validationSchema";
+import Button from "@/src/components/ui/Button/Button";
 import PasswordInput from "@/src/components/ui/PasswordInput";
 
-import Button from "@/src/components/ui/Button/Button";
-import { PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
+import { ModalType } from "@/src/entities/common";
+import { RootStore } from "@/src/store";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { resetPasswordRequest } from "@/src/store/slices/auth";
+import { showModal } from "@/src/store/slices/modalSlice";
+import { PAGES, PASSWORD_INPUT_STRIP_REGEX, TOKEN_KEY } from "@/src/utils/constant";
+import { CookieHelper } from "@/src/utils/helpers";
 
 const SetNewPasswordForm = () => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { isLoading, errors, isResetPasswordSuccess } = useAppSelector(
+    (state: RootStore) => state.auth
+  );
+
   const form = useFormik({
     initialValues: {
       password: "",
@@ -17,7 +30,17 @@ const SetNewPasswordForm = () => {
     },
     validationSchema: setNewPasswordValidationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      const sessionToken = CookieHelper.getCookie(TOKEN_KEY);
+
+      if (sessionToken) {
+        dispatch(
+          resetPasswordRequest({
+            password: values.password,
+            session_token: sessionToken,
+            confirm_password: values.confirmPassword,
+          })
+        );
+      }
     },
     validateOnChange: false,
     validateOnBlur: false,
@@ -30,6 +53,31 @@ const SetNewPasswordForm = () => {
 
     void form.setFieldValue(name, filtered, true);
   };
+
+  useEffect(() => {
+    if (errors) {
+      form.setFieldError("password", errors.password);
+      form.setFieldError("confirmPassword", errors.confirm_password);
+    }
+  }, [errors]);
+
+  useEffect(() => {
+    if (isResetPasswordSuccess) {
+      dispatch(
+        showModal({
+          modalType: ModalType.SUCCESSFULLY,
+          modalProps: {
+            autoCloseDelayMs: 5000,
+            type: "success",
+            icon: "success-circle",
+            text: "Пароль успешно изменен!",
+          },
+        })
+      );
+
+      router.push(PAGES.COURSES);
+    }
+  }, [isResetPasswordSuccess]);
 
   return (
     <div className="login-page__form-content">
@@ -45,6 +93,7 @@ const SetNewPasswordForm = () => {
           value={form.values.password}
           error={form.errors.password}
           className="login-page__form-input"
+          disabled={isLoading}
         />
 
         <PasswordInput
@@ -56,6 +105,7 @@ const SetNewPasswordForm = () => {
           value={form.values.confirmPassword}
           error={form.errors.confirmPassword}
           className="login-page__form-input"
+          disabled={isLoading}
         />
 
         <Button
@@ -63,6 +113,7 @@ const SetNewPasswordForm = () => {
           type="submit"
           variant="main-green-dark"
           className="login-page__form-button"
+          disabled={isLoading}
         >
           Сохранить пароль
         </Button>

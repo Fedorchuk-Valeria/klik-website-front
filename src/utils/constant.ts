@@ -13,19 +13,21 @@ export const REFRESH_TOKEN_KEY = "refresh_token";
 
 export const QUERY_PARAMS = {
   PHONE: "phone",
+  IS_RESET_PASSWORD: "is_reset_password",
 };
 
 export const PAGES = {
   HOME: "/",
-
   NOT_FOUND: "/404",
 
   LOGIN: "/login",
   SIGN_UP: "/sign-up",
-  NEW_PASSWORD: "/new-password",
   CONFIRM_CODE: "/confirm-code",
   FORGOT_PASSWORD: "/reset-password",
   COURSES: "/courses",
+  SET_NEW_PASSWORD: "/set-new-password",
+  PERSONAL_ACCOUNT: "/personal-account",
+  COURSE: "/course/:id",
 };
 
 export const PAGE_ANCHORS = {

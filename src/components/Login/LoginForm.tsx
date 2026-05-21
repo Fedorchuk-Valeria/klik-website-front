@@ -3,7 +3,7 @@
 import { useFormik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect } from "react";
 
 import { validationSchema } from "@/src/components/Login/validationSchema";
 import Button from "@/src/components/ui/Button/Button";
@@ -11,10 +11,15 @@ import PasswordInput from "@/src/components/ui/PasswordInput";
 import PhoneInput from "@/src/components/ui/PhoneInput";
 import Tabs from "@/src/components/ui/Tabs";
 
+import { RootStore } from "@/src/store";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { loginRequest } from "@/src/store/slices/auth";
 import { PAGES } from "@/src/utils/constant";
 
 const LoginForm = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { isLoading, errors, isLoggedIn } = useAppSelector((state: RootStore) => state.auth);
   const form = useFormik({
     initialValues: {
       phone: "",
@@ -22,7 +27,12 @@ const LoginForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      dispatch(
+        loginRequest({
+          phone: values.phone.replace(/[\s()]/g, ""),
+          password: values.password,
+        })
+      );
     },
     validateOnChange: false,
     validateOnBlur: false,
@@ -37,6 +47,19 @@ const LoginForm = () => {
     const { name, value } = e.target;
     void form.setFieldValue(name, value, true);
   };
+
+  useEffect(() => {
+    if (errors) {
+      form.setFieldError("phone", errors.phone || errors.non_field_errors);
+      form.setFieldError("password", errors.password || errors.non_field_errors);
+    }
+  }, [errors]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push(PAGES.COURSES);
+    }
+  }, [isLoggedIn]);
 
   return (
     <div className="login-page__form-content">
@@ -61,6 +84,7 @@ const LoginForm = () => {
           placeholder="+375 (29) 123-45-67"
           className="login-page__form-input"
           variant="outline"
+          disabled={isLoading}
         />
 
         <PasswordInput
@@ -72,6 +96,7 @@ const LoginForm = () => {
           className="login-page__form-input"
           variant="outline"
           placeholder="********"
+          disabled={isLoading}
         />
 
         <Button
@@ -79,6 +104,7 @@ const LoginForm = () => {
           type="submit"
           variant="main-green-dark"
           className="login-page__form-button"
+          disabled={isLoading}
         >
           Войти
         </Button>
