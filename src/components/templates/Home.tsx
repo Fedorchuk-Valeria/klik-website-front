@@ -54,7 +54,12 @@ export default function Home({ page }: Props) {
               <div className="home-page__header-body">
                 {header?.text && <div className="home-page__header-text">{header?.text}</div>}
                 {header.button?.title && header.button?.url && (
-                  <a href={"https://klik-holiday.by"} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={"https://klik-holiday.by"}
+                    className="home-page__header-button-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Button className="home-page__header-button" withArrow={true}>
                       {header.button?.title}
                     </Button>
