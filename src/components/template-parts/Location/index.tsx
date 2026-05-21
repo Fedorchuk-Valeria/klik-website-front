@@ -354,11 +354,25 @@ const Location: FC<Props> = ({ tag, title }) => {
       orientationTimeouts.push(window.setTimeout(refreshLayout, 350));
     };
 
+    let mapResizeRafId = 0;
+    const mapContainer = mapContainerRef.current;
+    let mapResizeObserver: ResizeObserver | undefined;
+
+    if (mapContainer) {
+      mapResizeObserver = new ResizeObserver(() => {
+        cancelAnimationFrame(mapResizeRafId);
+        mapResizeRafId = requestAnimationFrame(refreshLayout);
+      });
+      mapResizeObserver.observe(mapContainer);
+    }
+
     window.addEventListener("resize", onResize);
     window.addEventListener("orientationchange", onOrientation);
     window.visualViewport?.addEventListener("resize", onResize);
 
     return () => {
+      cancelAnimationFrame(mapResizeRafId);
+      mapResizeObserver?.disconnect();
       orientationTimeouts.forEach((id) => window.clearTimeout(id));
       window.removeEventListener("resize", onResize);
       window.removeEventListener("orientationchange", onOrientation);
