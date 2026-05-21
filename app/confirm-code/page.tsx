@@ -2,7 +2,7 @@
 
 import { useFormik } from "formik";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, useEffect } from "react";
 
 import { confirmCodeValidationSchema } from "@/src/components/Login/validationSchema";
@@ -12,12 +12,13 @@ import CodeInput from "@/src/components/ui/CodeInput";
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { resendCodeRequest, verifyCodeRequest } from "@/src/store/slices/auth";
-import { PAGES, TOKEN_KEY } from "@/src/utils/constant";
+import { PAGES, QUERY_PARAMS, TOKEN_KEY } from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
 
 const ConfirmCode = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
   const { isCodeCorrect, isLoading, errors } = useAppSelector((state: RootStore) => state.auth);
   const form = useFormik({
     initialValues: {
@@ -69,9 +70,13 @@ const ConfirmCode = () => {
 
   useEffect(() => {
     if (isCodeCorrect) {
-      router.push(PAGES.HOME);
+      if (searchParams.get(QUERY_PARAMS.IS_RESET_PASSWORD)) {
+        router.push(PAGES.SET_NEW_PASSWORD);
+      } else {
+        router.push(PAGES.HOME);
+      }
     }
-  }, [isCodeCorrect]);
+  }, [isCodeCorrect, searchParams]);
 
   return (
     <div className="login-page__form-content confirm-code-page">

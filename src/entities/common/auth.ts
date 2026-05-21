@@ -1,5 +1,5 @@
 export type AuthSignInRequest = {
-  username: string;
+  phone: string;
   password: string;
 };
 

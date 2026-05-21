@@ -1,4 +1,5 @@
 import {
+  AuthForgotPasswordRequest,
   AuthRegisterRequest,
   AuthResendCodeRequest,
   AuthResetPasswordRequest,
@@ -48,7 +49,7 @@ const authSlice = createSlice({
       state.isLoading = true;
       state.errors = null;
     },
-    forgotPasswordRequest(state, action: { payload: AuthVerifyCodeRequest }) {
+    forgotPasswordRequest(state, action: { payload: AuthForgotPasswordRequest }) {
       void action.payload;
       state.isLoading = true;
       state.errors = null;

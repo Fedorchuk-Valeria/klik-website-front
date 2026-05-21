@@ -10,7 +10,7 @@ import { POST } from "@/src/utils/http";
 
 const baseUrl = "/users";
 
-export const signIn = (data: AuthSignInRequest) => POST(`${baseUrl}/sign-in/`, data);
+export const signIn = (data: AuthSignInRequest) => POST(`${baseUrl}/login/`, data);
 
 export const register = (data: AuthRegisterRequest) => POST(`${baseUrl}/register/`, data);
 
