@@ -7,12 +7,15 @@ import Icon from "@/src/components/ui/Icon/Icon";
 
 import { PAGES, REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
+import {useAuth} from "@/src/utils/useAuth";
 
 export default function ButtonCabinet() {
   const router = useRouter();
 
+  const { isAuthenticated } = useAuth();
+
   const handleClick = () => {
-    if (CookieHelper.getCookie(TOKEN_KEY) && CookieHelper.getCookie(REFRESH_TOKEN_KEY)) {
+    if (isAuthenticated) {
       router.push(PAGES.PERSONAL_ACCOUNT);
     } else {
       router.push(PAGES.LOGIN);

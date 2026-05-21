@@ -10,6 +10,7 @@ export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const TOKEN_KEY = "token";
 export const REFRESH_TOKEN_KEY = "refresh_token";
+export const USER = "user_data";
 
 export const QUERY_PARAMS = {
   PHONE: "phone",

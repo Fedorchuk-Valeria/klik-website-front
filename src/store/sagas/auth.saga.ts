@@ -24,8 +24,9 @@ import {
   verifyCodeRequest,
   verifyCodeSuccess,
 } from "@/src/store/slices/auth";
-import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/src/utils/constant";
+import {PAGES, REFRESH_TOKEN_KEY, TOKEN_KEY, USER} from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
+import localStorage from "@/src/utils/helpers/localStorage";
 
 const MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 
@@ -46,6 +47,12 @@ function* workerAuthLogin({ payload }: { payload: AuthSignInRequest }): unknown 
         expires: new Date(Date.now() + MAX_AGE),
       });
     }
+
+    const profileResponse = yield call(UsersApi.me);
+
+    const user = profileResponse?.data;
+
+    localStorage.setStorageItem(USER, user);
 
     yield put(loginSuccess(response?.data?.user ?? null));
   } catch (error) {
@@ -177,12 +184,14 @@ function* watchAuthResendCode() {
 
 function* workerAuthLogout() {
   try {
-    yield call(UsersApi.logout);
-
+    //yield call(UsersApi.logout);
     yield put(logoutSuccess());
 
     CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
     CookieHelper.deleteCookie(REFRESH_TOKEN_KEY, { path: "/" });
+
+    localStorage.removeStorageItem(USER);
+    window.location.href = PAGES.COURSES;
   } catch (error) {
     yield put(setErrors(error as Record<string, string> | null));
   }
