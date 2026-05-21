@@ -91,6 +91,16 @@
         white-space: nowrap;
       }
     }
+
+    > .home-page__form-input:nth-child(1),
+    > .home-page__form-input:nth-child(2),
+    > .home-page__form-input:nth-child(3),
+    > .home-page__form-input:nth-child(4) {
+      .text-input__error {
+        white-space: nowrap;
+        margin-right: 0;
+      }
+    }
   }
 
   @media (max-width: $tablet-size) {
@@ -110,6 +120,16 @@
       .home-page__form-checkbox--text {
         white-space: wrap;
         font-size: 16px;
+      }
+    }
+
+    > .home-page__form-input:nth-child(1),
+    > .home-page__form-input:nth-child(2),
+    > .home-page__form-input:nth-child(3),
+    > .home-page__form-input:nth-child(4) {
+      .text-input__error {
+        white-space: wrap;
+        margin-right: 30px;
       }
     }
   }
