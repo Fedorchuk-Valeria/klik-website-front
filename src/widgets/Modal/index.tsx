@@ -12,6 +12,7 @@ import { hideModal } from "@/src/store/slices/modalSlice";
 import WidgetModalCookiePolicy from "./CookiePolicy";
 import WidgetModalNotice from "./Notice";
 import WidgetModalPlace from "./Place";
+import WidgetModalSuccessfully from "./Successfully";
 
 const WidgetModal = () => {
   const dispatch = useAppDispatch();
@@ -39,6 +40,8 @@ const WidgetModal = () => {
         return <WidgetModalCookiePolicy isVisible={active} {...modalProps} />;
       case ModalType.PLACE_SELECT:
         return <WidgetModalPlace isVisible={active} {...modalProps} />;
+      case ModalType.SUCCESSFULLY:
+        return <WidgetModalSuccessfully isVisible={active} {...modalProps} />;
 
       default:
         return null;

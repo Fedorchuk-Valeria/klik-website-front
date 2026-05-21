@@ -4,27 +4,32 @@ import classNames from "classnames";
 import { useFormik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect } from "react";
 
 import { resetPasswordValidationSchema } from "@/src/components/Login/validationSchema";
 import Button from "@/src/components/ui/Button/Button";
 import PhoneInput from "@/src/components/ui/PhoneInput";
 
+import { RootStore } from "@/src/store";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { forgotPasswordRequest } from "@/src/store/slices/auth";
 import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 
 const ResetNewPassword = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { isLoading, errors, isCodeSent } = useAppSelector((state: RootStore) => state.auth);
   const form = useFormik({
     initialValues: {
       phone: "",
     },
     validationSchema: resetPasswordValidationSchema,
     onSubmit: (values) => {
-      console.log(values);
-      router.push(
-        PAGES.CONFIRM_CODE +
-          QueryHelper.getQueryString({ [QUERY_PARAMS.PHONE]: values.phone.replace(/[\s()]/g, "") })
+      dispatch(
+        forgotPasswordRequest({
+          phone: values.phone.replace(/[\s()]/g, ""),
+        })
       );
     },
     validateOnChange: false,
@@ -36,6 +41,24 @@ const ResetNewPassword = () => {
     const { name, value } = e.target;
     void form.setFieldValue(name, value, true);
   };
+
+  useEffect(() => {
+    if (errors) {
+      form.setFieldError("phone", errors.phone);
+    }
+  }, [errors]);
+
+  useEffect(() => {
+    if (isCodeSent) {
+      router.push(
+        PAGES.CONFIRM_CODE +
+          QueryHelper.getQueryString({
+            [QUERY_PARAMS.PHONE]: form.values.phone.replace(/[\s()]/g, ""),
+            [QUERY_PARAMS.IS_RESET_PASSWORD]: "true",
+          })
+      );
+    }
+  }, [isCodeSent, form.values.phone]);
 
   return (
     <div className={classNames("login-page__form-content", "reset-password-page")}>
@@ -56,6 +79,7 @@ const ResetNewPassword = () => {
           onChange={handleChange}
           placeholder="+375 (29) 123-45-67"
           className="login-page__form-input"
+          disabled={isLoading}
         />
 
         <Button
@@ -63,6 +87,7 @@ const ResetNewPassword = () => {
           type="submit"
           variant="main-green-dark"
           className="login-page__form-button"
+          disabled={isLoading}
         >
           Отправить код
         </Button>
