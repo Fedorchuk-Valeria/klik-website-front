@@ -24,10 +24,9 @@ export const PAGES = {
   SIGN_UP: "/sign-up",
   CONFIRM_CODE: "/confirm-code",
   FORGOT_PASSWORD: "/reset-password",
-  SET_NEW_PASSWORD: "/set-new-password",
-
-  PERSONAL_ACCOUNT: "/personal-account",
   COURSES: "/courses",
+  SET_NEW_PASSWORD: "/set-new-password",
+  PERSONAL_ACCOUNT: "/personal-account",
   COURSE: "/course/:id",
 };
 
