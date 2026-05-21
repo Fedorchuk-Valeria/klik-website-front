@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import type { Swiper as SwiperType } from "swiper";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -15,6 +15,7 @@ import Icon from "@/src/components/ui/Icon/Icon";
 
 import { stripHtml } from "@/src/helper/stripHtml";
 
+import Link from "next/link";
 import "swiper/css";
 
 type ListItem = {
@@ -29,6 +30,7 @@ type FormatItem = {
   class: string;
   tag?: string;
   list?: ListItem[];
+  url?: string;
 };
 
 type FormatsListProps = {
@@ -69,8 +71,11 @@ const FormatsList = ({ items }: FormatsListProps) => {
   const useSliderLayout = useFormatsSliderMatch();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [mobileSlideIndex, setMobileSlideIndex] = useState(0);
+  const [layoutInstant, setLayoutInstant] = useState(false);
 
+  const formatsAccordionRef = useRef<HTMLDivElement>(null);
   const formatsSliderViewportRef = useRef<HTMLDivElement>(null);
+  const activeIndexRef = useRef<number | null>(null);
   const swiperRef = useRef<SwiperType | null>(null);
   const autoplayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -79,6 +84,29 @@ const FormatsList = ({ items }: FormatsListProps) => {
   const slideCountRef = useRef(0);
 
   const hasActiveAccordion = activeIndex !== null && !useSliderLayout;
+
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
+
+  const collapseFormatsInstantly = useCallback(() => {
+    if (activeIndexRef.current === null) return;
+
+    setLayoutInstant(true);
+    setActiveIndex(null);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setLayoutInstant(false));
+    });
+  }, []);
+
+  const handleDetailClick = useCallback(
+    (event: MouseEvent<HTMLAnchorElement>) => {
+      event.stopPropagation();
+      collapseFormatsInstantly();
+    },
+    [collapseFormatsInstantly]
+  );
 
   const clearFormatsAutoplayTimer = useCallback(() => {
     if (autoplayTimerRef.current) {
@@ -170,6 +198,26 @@ const FormatsList = ({ items }: FormatsListProps) => {
       swiperRef.current = null;
     }
   }, [useSliderLayout, items.length, clearFormatsAutoplayTimer, clearFormatsResumeTimer]);
+
+  useEffect(() => {
+    if (useSliderLayout) return;
+
+    const el = formatsAccordionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          collapseFormatsInstantly();
+        }
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, [useSliderLayout, collapseFormatsInstantly]);
 
   useEffect(() => {
     if (!useSliderLayout || items.length <= 1) {
@@ -272,9 +320,13 @@ const FormatsList = ({ items }: FormatsListProps) => {
               dangerouslySetInnerHTML={{ __html: item.text }}
             />
 
-            <Button className="formats__content-button" variant="main-light" withArrow={true}>
-              Подробнее
-            </Button>
+            {!!item.url && (
+            <Link href={item.url ?? ""} onClick={handleDetailClick}>
+              <Button className="formats__content-button" variant="main-light" withArrow={true}>
+                Подробнее
+              </Button>
+            </Link>
+            )}
           </div>
         </div>
       </div>
@@ -315,7 +367,10 @@ const FormatsList = ({ items }: FormatsListProps) => {
   }
 
   return (
-    <div className="formats">
+    <div
+      ref={formatsAccordionRef}
+      className={classNames("formats", { "formats--instant": layoutInstant })}
+    >
       {items.map((item, index) => (
         <Fragment key={`${item.class}-${index}`}>
           {renderItem(item, index, { type: "accordion" })}

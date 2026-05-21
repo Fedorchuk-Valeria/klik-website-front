@@ -5,6 +5,13 @@
   @media screen and (max-width: $desktop) {
     gap: 16px;
   }
+
+  &.formats--instant {
+    .formats__item,
+    .formats__item * {
+      transition: none !important;
+    }
+  }
 }
 
 .formats__item {
