@@ -119,16 +119,20 @@
             font-size: 40px;
           }
 
-          .select-training__item-text {
-            font-size: 16px;
-
-            &:first-child {
+          &:first-child {
+            .select-training__item-text {
               max-width: 173px;
             }
+          }
 
-            &:last-child {
+          &:last-child {
+            .select-training__item-text {
               max-width: 233px;
             }
+          }
+
+          .select-training__item-text {
+            font-size: 16px;
           }
         }
       }
