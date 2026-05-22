@@ -1,10 +1,8 @@
 import LogoSvg from "@/src/assets/images/logo-fill.svg";
 
-import ButtonCabinet from "@/src/components/ui/ButtonCabinet/ButtonCabinet";
 import Link from "next/link";
 import {PAGES} from "@/src/utils/constant";
-import Icon from "@/src/components/ui/Icon/Icon";
-import Button from "@/src/components/ui/Button/Button";
+import HeaderAuth from "@/src/components/ui/HeaderPlatformAuth/HeaderPlatformAuth";
 
 type HeaderPlatformProps = {
   variant?: "dark" | "light";
@@ -36,19 +34,7 @@ export default async function HeaderPlatform({
 
             {showAuthControls && (
             <div className="header__right">
-                <div className="header__auth">
-                  <Button className="header__user-button">
-                    <Icon className="header__user-icon" name="user" />
-                    Иванов Иван Иванович
-                  </Button>
-                  <Button className="header__logout-button">
-                    <Icon className="header__logout-icon" name="logout" />
-                    Выход
-                  </Button>
-                </div>
-                <div className="header__cabinet">
-                  <ButtonCabinet />
-                </div>
+              <HeaderAuth />
             </div>
             )}
           </div>

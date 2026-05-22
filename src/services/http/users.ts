@@ -6,7 +6,7 @@ import {
   AuthSignInRequest,
   AuthVerifyCodeRequest,
 } from "@/src/entities/common/auth";
-import { POST } from "@/src/utils/http";
+import {GET, POST} from "@/src/utils/http";
 
 const baseUrl = "/users";
 
@@ -26,3 +26,5 @@ export const resetPassword = (data: AuthResetPasswordRequest) =>
   POST(`${baseUrl}/reset-password/`, data);
 
 export const logout = () => POST(`${baseUrl}/logout/`);
+
+export const me = () => GET(`${baseUrl}/me/`);

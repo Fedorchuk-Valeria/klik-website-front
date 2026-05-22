@@ -21,3 +21,10 @@ export enum HttpStatus {
   ManyRequests = 429,
   InternalServerError = 500,
 }
+
+export type UserProfile = {
+  id: number;
+  role: string;
+  full_name: string;
+  phone: string;
+};

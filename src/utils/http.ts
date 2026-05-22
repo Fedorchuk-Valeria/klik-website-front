@@ -17,6 +17,15 @@ const defaultConfig = {
 
 const http = Axios.create(defaultConfig);
 const refreshTokenService = Axios.create(defaultConfig);
+http.interceptors.request.use((config) => {
+  const token = CookieHelper.getCookie(TOKEN_KEY);
+
+  if (token && config.headers) {
+    config.headers.set?.("Authorization", normalizeToken(token));
+  }
+
+  return config;
+});
 
 let refreshTokenPromise: Promise<unknown>;
 let isRefreshFinished = true;
