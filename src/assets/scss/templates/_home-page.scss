@@ -257,6 +257,12 @@
     &__container {
       max-width: 720px;
     }
+
+    &__header {
+      &-button-link {
+        min-width: 314px;
+      }
+    }
   }
 
   @media screen and (max-width: $mobile-size) {
@@ -270,6 +276,12 @@
 
     &__container {
       max-width: calc(100% - 20px);
+    }
+
+    &__header {
+      &-button-link {
+        min-width: 100%;
+      }
     }
   }
 }

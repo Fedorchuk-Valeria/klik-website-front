@@ -1,6 +1,11 @@
 "use client";
 
+import classNames from "classnames";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+import cookiePolicyPdf from "@/src/assets/files/cookie-policy.pdf";
+import privacyPolicyPdf from "@/src/assets/files/personal-data.pdf";
 
 import FooterSticker from "@/src/assets/images/footer_sticker.svg";
 import LogoFillSvg from "@/src/assets/images/logo-fill.svg";
@@ -14,7 +19,6 @@ import Socials from "@/src/components/ui/Socials/Socials";
 import { MenuItem } from "@/src/lib/content/types";
 import { CitySettings } from "@/src/lib/getCitySettings";
 import { PAGE_ANCHORS } from "@/src/utils/constant";
-import classNames from "classnames";
 
 type Props = {
   settings: CitySettings;
@@ -26,11 +30,11 @@ export default function FooterClient({ settings }: Props) {
 
   const footerLinks: MenuItem[] = [
     {
-      url: "#",
+      url: cookiePolicyPdf,
       title: "Политика обработки файлов cookies",
     },
     {
-      url: "#",
+      url: privacyPolicyPdf,
       title: "Политика конфиденциальности",
     },
   ];
@@ -169,9 +173,9 @@ export default function FooterClient({ settings }: Props) {
 
             <ul className="footer__links">
               {footerLinks.map((item, index) => (
-                <li className="footer__links-item" key={index}>
-                  {item.title}
-                </li>
+                <Link key={index} href={item.url ?? ""} target="_blank" rel="noopener noreferrer">
+                  <li className="footer__links-item">{item.title}</li>
+                </Link>
               ))}
             </ul>
           </div>
