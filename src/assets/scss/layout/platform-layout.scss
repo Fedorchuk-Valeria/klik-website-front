@@ -3,7 +3,21 @@
     padding-top: 150px;
   }
 
+  .header__wrapper {
+    padding: 41px 0;
+  }
+
+  .header__container {
+    max-width: 1740px;
+  }
+
   .header__cabinet {
     display: block;
+  }
+
+  &__container {
+    max-width: 1740px;
+    margin: 0 auto;
+    padding: 0 10px;
   }
 }

@@ -27,7 +27,7 @@ export const PAGES = {
   FORGOT_PASSWORD: "/reset-password",
   COURSES: "/courses",
   SET_NEW_PASSWORD: "/set-new-password",
-  PERSONAL_ACCOUNT: "/personal-account",
+  PROFILE: "/profile",
   COURSE: "/course/:id",
 };
 

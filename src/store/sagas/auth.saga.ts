@@ -14,7 +14,7 @@ import {
   loginRequest,
   loginSuccess,
   logoutRequest,
-  logoutSuccess,
+  logoutSuccess, profileRequest, profileSuccess,
   registerRequest,
   registerSuccess,
   resendCodeRequest,
@@ -27,6 +27,7 @@ import {
 import {PAGES, REFRESH_TOKEN_KEY, TOKEN_KEY, USER} from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
 import localStorage from "@/src/utils/helpers/localStorage";
+import {UserProfile} from "@/src/entities/common";
 
 const MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 
@@ -204,6 +205,26 @@ function* watchAuthLogout() {
   );
 }
 
+function* workerProfile() {
+  try {
+    const response: { data: UserProfile } = yield call(UsersApi.me);
+
+    localStorage.setStorageItem(USER, response.data);
+
+    yield put(profileSuccess(response.data));
+  } catch (error) {
+    yield put(setErrors(error as Record<string, string> | null));
+  }
+}
+
+function* watchProfile() {
+  yield takeLatest(
+    profileRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerProfile
+  );
+}
+
+
 export const authWatchers = [
   fork(watchAuthLogin),
   fork(watchAuthRegister),
@@ -212,4 +233,5 @@ export const authWatchers = [
   fork(watchAuthResetPassword),
   fork(watchAuthResendCode),
   fork(watchAuthLogout),
+  fork(watchProfile),
 ];
