@@ -21,6 +21,12 @@ export function middleware(req: NextRequest) {
         subdomain = ROOT_CITY;
     }
 
+  console.log("MIDDLEWARE", {
+    host,
+    pathname: req.nextUrl.pathname,
+    subdomain,
+  });
+
   const allowedCities = getCities();
 
   const isValidCity = allowedCities.some((city) => city.slug === subdomain);
