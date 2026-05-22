@@ -10,8 +10,8 @@ import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 
 import Button from "@/src/components/ui/Button/Button";
+import Icon from "@/src/components/ui/Icon/Icon";
 import Select from "@/src/components/ui/Select";
-import Icon from "../../ui/Icon/Icon";
 
 type Props = {
   initialCourses?: Course[];
@@ -104,7 +104,12 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
 
         <div className="courses-list">
           {courses.map((item) => (
-            <div key={item.id} className="courses-list__item">
+            <div
+              key={item.id}
+              className={classNames("courses-list__item", {
+                "courses-list__item--purchased": item.is_purchased,
+              })}
+            >
               <div className="courses-list__item-image">
                 <Image src={item.image} alt={item.title} fill />
 
