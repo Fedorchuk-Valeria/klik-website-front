@@ -18,7 +18,8 @@ const coursesSlice = createSlice({
   name: "courses",
   initialState,
   reducers: {
-    getCoursesRequest(state) {
+    getCoursesRequest(state, action: { payload: string }) {
+      void action.payload;
       state.isLoading = true;
       state.errors = null;
     },

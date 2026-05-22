@@ -70,6 +70,13 @@
       background-color: var(--main-bg);
       border: 1px solid #cbdccf;
       max-height: 780px;
+      transition: transform 0.3s ease;
+
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          transform: scale(1.03);
+        }
+      }
 
       &.courses-list__item--purchased {
         background: var(--main-green-neon);
@@ -119,6 +126,8 @@
           left: 10px;
           gap: 10px;
           z-index: 1;
+          max-height: 80px;
+          overflow-y: hidden;
 
           .courses-list__item-category {
             @include fonts(14px, 500, "Manrope");

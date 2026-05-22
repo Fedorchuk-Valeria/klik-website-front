@@ -2,12 +2,15 @@
 
 import classNames from "classnames";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Course } from "@/src/lib/getCourses";
+import { QUERY_PARAMS } from "@/src/utils/constant";
+import { QueryHelper } from "@/src/utils/helpers";
 
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { getCoursesRequest } from "@/src/store/slices/corses";
 
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
@@ -18,51 +21,75 @@ type Props = {
   initialErrors?: Record<string, string> | null;
 };
 
-const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
+const PagesCourses = ({ initialCourses = [] }: Props) => {
   const dispatch = useAppDispatch();
   const { data } = useAppSelector((state: RootStore) => state.courses);
+  const { isLoggedIn } = useAppSelector((state: RootStore) => state.auth);
   const [selectedFilter, setSelectedFilter] = useState<{ id: string; name: string }>({
     id: "all",
     name: "Все курсы",
   });
-  const [selectedCategory, setSelectedCategory] = useState<number[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
+  const [hasRequested, setHasRequested] = useState<boolean>(false);
 
   const allCategories = useMemo(() => {
     const seenCategoryIds = new Set<number>();
 
     return (
-      (data.length > 0 ? data : initialCourses)?.flatMap((item) => item.categories) ?? []
+      (data.length > 0 || hasRequested ? data : initialCourses)?.flatMap(
+        (item) => item.categories
+      ) ?? []
     ).filter((category) => {
       if (seenCategoryIds.has(category.id)) return false;
 
       seenCategoryIds.add(category.id);
       return true;
     });
-  }, [data, initialCourses]);
+  }, [data, hasRequested, initialCourses]);
 
   const courses = useMemo(() => {
-    return data.length > 0 ? data : initialCourses;
-  }, [data, initialCourses]);
+    return data.length > 0 || hasRequested ? data : initialCourses;
+  }, [data, hasRequested, initialCourses]);
 
   const options = useMemo(
     () => [
       { id: "all", name: "Все курсы" },
-      { id: "my", name: "Мои курсы" },
+      ...(isLoggedIn ? [{ id: "my", name: "Мои курсы" }] : []),
     ],
-    []
+    [isLoggedIn]
   );
 
-  const handleSelectCategory = (id: number) => () => {
+  const handleSelectCategory = (slug: string) => () => {
     setSelectedCategory((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((item) => item !== id);
+      if (prev.includes(slug)) {
+        return prev.filter((item) => item !== slug);
       }
 
-      return [...prev, id];
+      return [...prev, slug];
     });
   };
 
-  console.log(initialCourses, initialErrors, allCategories, courses, selectedFilter);
+  const handleSelectFilter = (option: { id: string; name: string }) => {
+    setSelectedFilter(option);
+    setSelectedCategory([]);
+  };
+
+  useEffect(() => {
+    if (selectedCategory.length > 0 || selectedFilter.id !== "all" || hasRequested) {
+      dispatch(
+        getCoursesRequest(
+          QueryHelper.getQueryString({
+            [QUERY_PARAMS.SCOPE]: selectedFilter.id,
+            [QUERY_PARAMS.CATEGORIES]: selectedCategory.join(","),
+          })
+        )
+      );
+
+      queueMicrotask(() => {
+        setHasRequested(true);
+      });
+    }
+  }, [selectedFilter, selectedCategory, dispatch]);
 
   return (
     <div className="page-courses">
@@ -81,7 +108,7 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
           <Select
             icon="document"
             options={options}
-            onChange={setSelectedFilter}
+            onChange={handleSelectFilter}
             selectedOption={selectedFilter}
             className="courses-headline__select"
           />
@@ -92,9 +119,9 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
                 key={item.id}
                 variant="outline-green-dark"
                 className={classNames("courses-headline__filter", {
-                  "courses-headline__filter--active": selectedCategory.includes(item.id),
+                  "courses-headline__filter--active": selectedCategory.includes(item.slug),
                 })}
-                onClick={handleSelectCategory(item.id)}
+                onClick={handleSelectCategory(item.slug)}
               >
                 {item.name}
               </Button>
