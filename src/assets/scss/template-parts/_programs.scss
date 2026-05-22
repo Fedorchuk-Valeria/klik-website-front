@@ -145,6 +145,19 @@
     }
   }
 
+  @media screen and (max-width: 1580px) {
+    .home-page__programs-item {
+      .home-page__programs-item_text {
+        max-width: 286px;
+      }
+
+      .home-page__programs-item_more {
+        bottom: 20px;
+        right: 20px;
+      }
+    }
+  }
+
   @media screen and (max-width: $desktop) {
     .home-page__programs-top {
       gap: 20px;
@@ -200,15 +213,6 @@
         grid-column: 1;
         grid-row: 3;
         margin-top: 0;
-      }
-
-      .home-page__programs-item_text {
-        max-width: 286px;
-      }
-
-      .home-page__programs-item_more {
-        bottom: 20px;
-        right: 20px;
       }
     }
   }

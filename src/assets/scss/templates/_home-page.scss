@@ -260,7 +260,7 @@
 
     &__header {
       &-button-link {
-        min-width: 314px;
+        min-width: calc(100% + 13px);
       }
     }
   }
