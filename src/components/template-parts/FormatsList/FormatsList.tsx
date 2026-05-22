@@ -334,7 +334,11 @@ const FormatsList = ({ items }: FormatsListProps) => {
             />
 
             {!!item.url && (
-              <Link href={item.url} onClick={handleDetailClick}>
+              <Link
+                href={item.url}
+                onClick={handleDetailClick}
+                className="formats__content-button-link"
+              >
                 <Button
                   className="formats__content-button"
                   variant="main-light"
