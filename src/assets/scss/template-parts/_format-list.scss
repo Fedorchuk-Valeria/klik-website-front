@@ -698,8 +698,12 @@
         }
       }
 
-      .formats__content-button {
+      .formats__content-button-link {
         grid-area: feat-cta;
+        width: 100%;
+      }
+
+      .formats__content-button {
         justify-content: center;
         width: calc(100% - 23px);
         margin-left: 0;
