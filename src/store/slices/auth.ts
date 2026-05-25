@@ -9,8 +9,10 @@ import {
 import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
 import { createSlice } from "@reduxjs/toolkit";
+import {UserProfile} from "@/src/entities/common";
 
 type AuthState = {
+  user_profile: UserProfile | null;
   user: unknown | null;
   errors: Record<string, string> | null;
   isRegisterSuccess: boolean;
@@ -24,6 +26,7 @@ type AuthState = {
 };
 
 const initialState: AuthState = {
+  user_profile: null,
   user: null,
   errors: null,
   isRegisterSuccess: false,
@@ -137,6 +140,14 @@ const authSlice = createSlice({
     clearPersonalAccountChanged(state) {
       state.isPersonalAccountChanged = false;
     },
+    profileRequest: (state) => {
+      state.isLoading = true;
+    },
+
+    profileSuccess: (state, action) => {
+      state.isLoading = false;
+      state.user_profile = action.payload;
+    },
   },
 });
 
@@ -165,5 +176,8 @@ export const {
 
   clearRegister,
   clearResetPassword,
+
+  profileRequest,
+  profileSuccess,
 } = authSlice.actions;
 export default authSlice.reducer;

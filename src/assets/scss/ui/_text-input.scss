@@ -69,6 +69,10 @@
     &.text-input__control--addon-after {
       padding-right: 60px;
     }
+
+    &:disabled {
+      opacity: 0.6;
+    }
   }
 
   &.text-input--error .text-input__control {

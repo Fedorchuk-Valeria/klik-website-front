@@ -16,7 +16,7 @@ export default function ButtonCabinet() {
 
   const handleClick = () => {
     if (isAuthenticated) {
-      router.push(PAGES.PERSONAL_ACCOUNT);
+      router.push(PAGES.PROFILE);
     } else {
       router.push(PAGES.LOGIN);
     }

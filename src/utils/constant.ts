@@ -30,7 +30,8 @@ export const PAGES = {
   FORGOT_PASSWORD: "/reset-password",
   COURSES: "/courses",
   SET_NEW_PASSWORD: "/set-new-password",
-  PERSONAL_ACCOUNT: "/personal-account",
+  PROFILE: "/profile",
+  PROFILE_PASSWORD: "/profile/password",
   COURSE: "/course/:id",
 };
 

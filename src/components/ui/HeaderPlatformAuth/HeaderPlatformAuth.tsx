@@ -9,11 +9,14 @@ import { useAppDispatch } from "@/src/store/hooks";
 import { logoutRequest } from "@/src/store/slices/auth";
 import {useAuth} from "@/src/utils/useAuth";
 import localStorage from "@/src/utils/helpers/localStorage";
-import {USER} from "@/src/utils/constant";
+import {PAGES, USER} from "@/src/utils/constant";
 import {UserProfile} from "@/src/entities/common";
+import {usePathname, useRouter} from "next/navigation";
 
 const HeaderAuth = () => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const { isAuthenticated, isMounted } = useAuth();
 
@@ -21,6 +24,10 @@ const HeaderAuth = () => {
 
   const handleLogout = () => {
     dispatch(logoutRequest());
+  };
+
+  const handleProfile = () => {
+    router.push(PAGES.PROFILE);
   };
 
   if (!isMounted) {
@@ -35,12 +42,16 @@ const HeaderAuth = () => {
     );
   }
 
+  const isProfilePage = pathname === PAGES.PROFILE || pathname === PAGES.PROFILE_PASSWORD;
+
   return (
     <div className="header__auth">
-      <Button className="header__user-button">
-        <Icon className="header__user-icon" name="user" />
-        {user?.full_name}
-      </Button>
+      {!isProfilePage && (
+        <Button className="header__user-button" onClick={handleProfile}>
+          <Icon className="header__user-icon" name="user" />
+          {user?.full_name}
+        </Button>
+      )}
 
       <Button
         className="header__logout-button"
