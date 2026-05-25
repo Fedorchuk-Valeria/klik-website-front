@@ -42,7 +42,7 @@ const HeaderAuth = () => {
     );
   }
 
-  const isProfilePage = pathname === PAGES.PROFILE;
+  const isProfilePage = pathname === PAGES.PROFILE || pathname === PAGES.PROFILE_PASSWORD;
 
   return (
     <div className="header__auth">

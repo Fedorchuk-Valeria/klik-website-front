@@ -1,0 +1,21 @@
+.button-back {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 0;
+  font-size: 14px;
+  color: var(--main-black);
+  transition: 0.3s all;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--main-orange);
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+    transform: rotate(90deg);
+    fill: var(--main-orange);
+  }
+}
