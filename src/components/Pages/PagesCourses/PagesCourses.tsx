@@ -4,6 +4,8 @@ import classNames from "classnames";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
+import image from "@/src/assets/images/view/courses/girl.png";
+
 import { Course } from "@/src/lib/getCourses";
 import { QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
@@ -23,7 +25,7 @@ type Props = {
   initialErrors?: Record<string, string> | null;
 };
 
-const PagesCourses = ({ initialCourses = [] }: Props) => {
+const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
   const dispatch = useAppDispatch();
   const { data } = useAppSelector((state: RootStore) => state.courses);
   const { isLoggedIn } = useAppSelector((state: RootStore) => state.auth);
@@ -37,17 +39,13 @@ const PagesCourses = ({ initialCourses = [] }: Props) => {
   const allCategories = useMemo(() => {
     const seenCategoryIds = new Set<number>();
 
-    return (
-      (data.length > 0 || hasRequested ? data : initialCourses)?.flatMap(
-        (item) => item.categories
-      ) ?? []
-    ).filter((category) => {
+    return (initialCourses?.flatMap((item) => item.categories) ?? []).filter((category) => {
       if (seenCategoryIds.has(category.id)) return false;
 
       seenCategoryIds.add(category.id);
       return true;
     });
-  }, [data, hasRequested, initialCourses]);
+  }, [initialCourses]);
 
   const courses = useMemo(() => {
     return data.length > 0 || hasRequested ? data : initialCourses;
@@ -59,6 +57,16 @@ const PagesCourses = ({ initialCourses = [] }: Props) => {
       ...(isLoggedIn ? [{ id: "my", name: "Мои курсы" }] : []),
     ],
     [isLoggedIn]
+  );
+
+  const categoryOptions = useMemo(
+    () => allCategories.map((item) => ({ id: item.slug, name: item.name })),
+    [allCategories]
+  );
+
+  const selectedCategoryOptions = useMemo(
+    () => categoryOptions.filter((item) => selectedCategory.includes(item.id)),
+    [categoryOptions, selectedCategory]
   );
 
   const handleSelectCategory = (slug: string) => () => {
@@ -87,6 +95,16 @@ const PagesCourses = ({ initialCourses = [] }: Props) => {
     );
   };
 
+  const handleSelectCategories = (options: { id: string; name: string }[]) => {
+    setSelectedCategory(options.map((item) => item.id));
+  };
+
+  useEffect(() => {
+    if (initialErrors) {
+      console.error(initialErrors);
+    }
+  }, [initialErrors]);
+
   useEffect(() => {
     if (selectedCategory.length > 0 || selectedFilter.id !== "all" || hasRequested) {
       dispatch(
@@ -108,7 +126,58 @@ const PagesCourses = ({ initialCourses = [] }: Props) => {
     <div className="page-courses">
       <div className="header__container">
         <div className="page-courses__header">
-          <h1>KLiK — дополнительное IT-образование для детей 6-16 лет</h1>
+          <div className="courses__container">
+            <div className="page-courses__header-content">
+              <div className="page-courses__header-content-left">
+                <h1 className="page-courses__header-title">
+                  KLiK — дополнительное IT-образование для детей 6-16 лет
+                </h1>
+
+                <p className="page-courses__header-text">
+                  {`Система, созданная белорусскими IT-специалистами,\nгде учат понимать, создавать и превращать идеи в проекты`}
+                </p>
+
+                <ul className="page-courses__header-content-list">
+                  {[
+                    {
+                      icon: "book",
+                      title: "62",
+                      text: "обучающих блока",
+                    },
+                    {
+                      icon: "people",
+                      title: "12",
+                      text: "человек в группе",
+                    },
+                    {
+                      icon: "code",
+                      title: "80%",
+                      text: "практики",
+                    },
+                  ].map((item) => (
+                    <li className="page-courses__header-content-item" key={item.icon}>
+                      <span className="page-courses__header-icon">
+                        <Icon name={item.icon} />
+                      </span>
+
+                      <div>
+                        <p className="page-courses__header-content-item-title">{item.title}</p>
+                        <span className="page-courses__header-content-item-text">{item.text}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+
+                <Button className="page-courses__header-button" variant="main-light" withArrow>
+                  Записаться на курс
+                </Button>
+              </div>
+
+              <div className="page-courses__header-image">
+                <Image src={image} alt="KLiK" fill />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -139,6 +208,17 @@ const PagesCourses = ({ initialCourses = [] }: Props) => {
                 {item.name}
               </Button>
             ))}
+
+            <Select
+              multiple
+              color="green"
+              icon="document"
+              options={categoryOptions}
+              allOptionName="Все направления"
+              onChange={handleSelectCategories}
+              selectedOptions={selectedCategoryOptions}
+              className="courses-headline__select-categories"
+            />
           </div>
         </div>
 
@@ -178,7 +258,9 @@ const PagesCourses = ({ initialCourses = [] }: Props) => {
                   <Icon name="clock" /> {item.duration_months} месяцев
                 </span>
 
-                <p className="courses-list__item-price">{item.price} P</p>
+                <p className="courses-list__item-price">
+                  {item.price} <Icon name="ruble" className="courses-list__item-price-icon" />
+                </p>
 
                 <Button
                   className="courses-list__item-button"

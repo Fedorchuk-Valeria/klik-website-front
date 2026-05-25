@@ -63,7 +63,7 @@ export async function getCourses(): Promise<CoursesFetchResult> {
     const payload: unknown = await response.json();
 
     return { data: normalizeCoursesPayload<Course>(payload), errors: null };
-  } catch {
-    return { data: [], errors: { detail: "Failed to fetch courses" } };
+  } catch (error) {
+    return { data: [], errors: { detail: `Failed to fetch courses: ${error}` } };
   }
 }

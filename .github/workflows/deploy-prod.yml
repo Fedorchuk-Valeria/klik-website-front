@@ -23,6 +23,6 @@ jobs:
             git fetch origin
             git checkout -B main origin/main
             git pull --ff-only
-            export $(cat .env.prod | xargs)
             docker compose -p klick-front-prod --env-file=.env.prod down --remove-orphans
-            docker compose -p klick-front-prod --env-file=.env.prod up -d --build
+            docker compose -p klick-front-prod --env-file=.env.prod build --no-cache
+            docker compose -p klick-front-prod --env-file=.env.prod up -d
