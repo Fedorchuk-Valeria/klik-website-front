@@ -15,6 +15,26 @@
     }
   }
 
+  &.select--green {
+    .select__current {
+      border-color: var(--main-green-dark);
+    }
+
+    &.select--open {
+      border-color: var(--main-green-dark);
+    }
+  }
+
+  &.select--orange {
+    .select__current {
+      border-color: var(--main-orange);
+    }
+
+    &.select--open {
+      border-color: var(--main-orange);
+    }
+  }
+
   .select__current {
     @include center-between;
     @include fonts(18px, 400, "Manrope");
@@ -57,6 +77,8 @@
     margin: 0;
     padding-bottom: 5px;
     list-style: none;
+    max-height: 70vh;
+    overflow-y: auto;
   }
 
   .select__item {
