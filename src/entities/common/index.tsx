@@ -3,6 +3,7 @@ export enum ModalType {
   COOKIE_POLICY = "cookie_policy",
   PLACE_SELECT = "place_select",
   SUCCESSFULLY = "successfully",
+  PAYMENT = "payment",
 }
 
 export enum HttpStatus {
