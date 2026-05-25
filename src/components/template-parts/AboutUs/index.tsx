@@ -55,7 +55,7 @@ const AboutUs: FC<PropTypes> = ({ title, text, subtitle, items, slides }) => {
             )}
 
             <div className="home-page__about-us--actions">
-              <Link href={`#${PAGE_ANCHORS.SIGN_UP_FREE_LESSON}`}>
+              <Link href={`#${PAGE_ANCHORS.SELECT_TRAINING}`}>
                 <Button variant="main-green-dark" withArrow={true}>
                   Записаться на курс
                 </Button>

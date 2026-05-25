@@ -85,6 +85,10 @@
       height: 51px;
     }
 
+    .home-page__form-button {
+      max-width: calc(100% - 23px);
+    }
+
     .home-page__form-checkbox-container {
       .home-page__form-checkbox--text {
         font-size: 14px;

@@ -26,7 +26,7 @@ export default async function Header() {
   const menuItems = [
     {
       url: `#${PAGE_ANCHORS.ABOUT}`,
-      title: "О Школе",
+      title: "О школе",
     },
     {
       url: `#${PAGE_ANCHORS.PROGRAMS}`,
