@@ -89,21 +89,34 @@ const FormatsList = ({ items }: FormatsListProps) => {
     activeIndexRef.current = activeIndex;
   }, [activeIndex]);
 
-  const collapseFormatsInstantly = useCallback(() => {
-    if (activeIndexRef.current === null) return;
+  const collapseFormatsInstantly = useCallback((holdUntilScrollEnd = false) => {
+    if (activeIndexRef.current === null && !holdUntilScrollEnd) return;
 
     setLayoutInstant(true);
     setActiveIndex(null);
 
+    let finished = false;
+    const finishInstant = () => {
+      if (finished) return;
+      finished = true;
+      setLayoutInstant(false);
+    };
+
+    if (holdUntilScrollEnd) {
+      window.addEventListener("scrollend", finishInstant, { once: true });
+      window.setTimeout(finishInstant, 1200);
+      return;
+    }
+
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => setLayoutInstant(false));
+      requestAnimationFrame(finishInstant);
     });
   }, []);
 
   const handleDetailClick = useCallback(
-    (event: MouseEvent<HTMLAnchorElement>) => {
+    (event: MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
       event.stopPropagation();
-      collapseFormatsInstantly();
+      collapseFormatsInstantly(true);
     },
     [collapseFormatsInstantly]
   );
@@ -321,11 +334,20 @@ const FormatsList = ({ items }: FormatsListProps) => {
             />
 
             {!!item.url && (
-            <Link href={item.url ?? ""} onClick={handleDetailClick}>
-              <Button className="formats__content-button" variant="main-light" withArrow={true}>
-                Подробнее
-              </Button>
-            </Link>
+              <Link
+                href={item.url}
+                onClick={handleDetailClick}
+                className="formats__content-button-link"
+              >
+                <Button
+                  className="formats__content-button"
+                  variant="main-light"
+                  withArrow={true}
+                  onClick={handleDetailClick}
+                >
+                  Подробнее
+                </Button>
+              </Link>
             )}
           </div>
         </div>

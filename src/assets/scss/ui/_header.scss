@@ -116,10 +116,32 @@
     }
   }
 
+  &:has(.burger.active) {
+    @media screen and (max-width: $mobile-size) {
+      .header__left {
+        .header__brand {
+          flex-direction: column;
+          max-width: 150px;
+        }
+
+        .header__logo-text {
+          display: flex;
+          margin-right: -40px;
+          margin-left: 10px;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
   &__brand {
     display: flex;
     gap: 10px;
     align-items: center;
+
+    @media screen and (max-width: $mobile-size) {
+      flex-direction: column;
+    }
   }
 
   &__logo {

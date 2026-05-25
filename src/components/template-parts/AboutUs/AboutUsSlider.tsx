@@ -184,7 +184,7 @@ const AboutUsSlider: FC<PropTypes> = ({ slides }) => {
     (isLink: boolean) => () => {
       if (!isLink) return;
 
-      const link = PAGE_ANCHORS.SELECT_TRAINING;
+      const link = PAGE_ANCHORS.SIGN_UP_FREE_LESSON;
       const element = document.getElementById(link);
 
       if (element) {
