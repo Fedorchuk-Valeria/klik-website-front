@@ -1,0 +1,69 @@
+import { cookies } from "next/headers";
+
+import { buildApiUrl } from "@/src/utils/buildApiUrl";
+import { TOKEN_KEY } from "@/src/utils/constant";
+import { normalizeToken } from "@/src/utils/http";
+import { normalizeCoursesPayload } from "@/src/utils/normalizeCoursesPayload";
+
+export type Course = {
+  categories: CourseCategory[];
+  created_at: string;
+  description: string;
+  duration_months: number;
+  id: number;
+  image: string;
+  is_purchased: boolean;
+  price: number;
+  title: string;
+  updated_at: string;
+};
+
+export type CourseCategory = {
+  id: number;
+  name: string;
+  slug: string;
+  sort_order: number;
+};
+
+export type CoursesFetchResult = {
+  data: Course[];
+  errors: Record<string, string> | null;
+};
+
+export async function getCourses(): Promise<CoursesFetchResult> {
+  const apiUrl = buildApiUrl("/courses/");
+
+  if (!apiUrl) {
+    return { data: [], errors: { detail: "API URL is not configured" } };
+  }
+
+  const cookieStore = await cookies();
+  const token = cookieStore.get(TOKEN_KEY)?.value;
+  const cookieHeader = cookieStore
+    .getAll()
+    .map(({ name, value }) => `${name}=${value}`)
+    .join("; ");
+
+  try {
+    const response = await fetch(apiUrl, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...(cookieHeader ? { Cookie: cookieHeader } : {}),
+        ...(token ? { Authorization: normalizeToken(token) } : {}),
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      const errorBody = (await response.json().catch(() => null)) as Record<string, string> | null;
+      return { data: [], errors: errorBody };
+    }
+
+    const payload: unknown = await response.json();
+
+    return { data: normalizeCoursesPayload<Course>(payload), errors: null };
+  } catch {
+    return { data: [], errors: { detail: "Failed to fetch courses" } };
+  }
+}

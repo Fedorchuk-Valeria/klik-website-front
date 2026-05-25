@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         hostname: "placehold.co",
         pathname: "/**",
       },
+      {
+        protocol: "http",
+        hostname: "173.249.41.92",
+        pathname: "/**",
+      },
     ],
   },
   turbopack: {
@@ -31,7 +36,7 @@ const nextConfig: NextConfig = {
       {
         test: /\.pdf$/i,
         type: "asset/resource",
-      },
+      }
     );
 
     return config;

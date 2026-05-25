@@ -1,72 +1,183 @@
 "use client";
 
-import { useState } from "react";
+import classNames from "classnames";
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
+
+import { Course } from "@/src/lib/getCourses";
+import { QUERY_PARAMS } from "@/src/utils/constant";
+import { QueryHelper } from "@/src/utils/helpers";
+
+import { RootStore } from "@/src/store";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { getCoursesRequest } from "@/src/store/slices/corses";
 
 import Button from "@/src/components/ui/Button/Button";
-import classNames from "classnames";
+import Icon from "@/src/components/ui/Icon/Icon";
+import Select from "@/src/components/ui/Select";
 
-const PagesCourses = () => {
+type Props = {
+  initialCourses?: Course[];
+  initialErrors?: Record<string, string> | null;
+};
 
-  const [selectedFilter, setSelectedFilter] = useState<string>("");
+const PagesCourses = ({ initialCourses = [] }: Props) => {
+  const dispatch = useAppDispatch();
+  const { data } = useAppSelector((state: RootStore) => state.courses);
+  const { isLoggedIn } = useAppSelector((state: RootStore) => state.auth);
+  const [selectedFilter, setSelectedFilter] = useState<{ id: string; name: string }>({
+    id: "all",
+    name: "Все курсы",
+  });
+  const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
+  const [hasRequested, setHasRequested] = useState<boolean>(false);
 
-  const filters = [
-    {
-      label: "Дизайн",
-      value: "design",
-    },
-    {
-      label: "Разработка игр",
-      value: "game-development",
-    },
-    {
-      label: "Python",
-      value: "python",
-    },
-    {
-      label: "Программирование",
-      value: "programming",
-    },
-    {
-      label: "Мобильные приложения",
-      value: "mobile-applications",
-    },
-    {
-      label: "Цифровой баланс",
-      value: "digital-balance",
-    },
-  ];
+  const allCategories = useMemo(() => {
+    const seenCategoryIds = new Set<number>();
+
+    return (
+      (data.length > 0 || hasRequested ? data : initialCourses)?.flatMap(
+        (item) => item.categories
+      ) ?? []
+    ).filter((category) => {
+      if (seenCategoryIds.has(category.id)) return false;
+
+      seenCategoryIds.add(category.id);
+      return true;
+    });
+  }, [data, hasRequested, initialCourses]);
+
+  const courses = useMemo(() => {
+    return data.length > 0 || hasRequested ? data : initialCourses;
+  }, [data, hasRequested, initialCourses]);
+
+  const options = useMemo(
+    () => [
+      { id: "all", name: "Все курсы" },
+      ...(isLoggedIn ? [{ id: "my", name: "Мои курсы" }] : []),
+    ],
+    [isLoggedIn]
+  );
+
+  const handleSelectCategory = (slug: string) => () => {
+    setSelectedCategory((prev) => {
+      if (prev.includes(slug)) {
+        return prev.filter((item) => item !== slug);
+      }
+
+      return [...prev, slug];
+    });
+  };
+
+  const handleSelectFilter = (option: { id: string; name: string }) => {
+    setSelectedFilter(option);
+    setSelectedCategory([]);
+  };
+
+  useEffect(() => {
+    if (selectedCategory.length > 0 || selectedFilter.id !== "all" || hasRequested) {
+      dispatch(
+        getCoursesRequest(
+          QueryHelper.getQueryString({
+            [QUERY_PARAMS.SCOPE]: selectedFilter.id,
+            [QUERY_PARAMS.CATEGORIES]: selectedCategory.join(","),
+          })
+        )
+      );
+
+      queueMicrotask(() => {
+        setHasRequested(true);
+      });
+    }
+  }, [selectedFilter, selectedCategory, dispatch]);
 
   return (
     <div className="page-courses">
-      <div className="header__container"><div className="page-courses__header"><h1>KLiK —
-        дополнительное
-        IT-образование
-        для детей 6-16 лет</h1></div>
-      </div>
-      <h1 className="courses__title">Мои курсы</h1>
-
-      <p className="courses__text">Выберите курс для начала обучения</p>
-
-      <div className="courses-headline">
-        <div className="courses-headline__select"></div>
-
-        <div className="courses-headline__filters">
-          {filters.map((filter) => (
-            <Button
-              key={filter.value}
-              variant="outline-green-dark"
-              className={classNames("courses-headline__filter", {
-                "courses-headline__filter--active": selectedFilter === filter.value,
-              })}
-              onClick={() => setSelectedFilter(filter.value)}
-            >
-              {filter.label}
-            </Button>
-          ))}
+      <div className="header__container">
+        <div className="page-courses__header">
+          <h1>KLiK — дополнительное IT-образование для детей 6-16 лет</h1>
         </div>
       </div>
 
-      <div className="courses-list"></div>
+      <div className="courses__container">
+        <p className="courses__title">Мои курсы</p>
+
+        <p className="courses__text">Выберите курс для начала обучения</p>
+
+        <div className="courses-headline">
+          <Select
+            icon="document"
+            options={options}
+            onChange={handleSelectFilter}
+            selectedOption={selectedFilter}
+            className="courses-headline__select"
+          />
+
+          <div className="courses-headline__filters">
+            {allCategories.map((item) => (
+              <Button
+                key={item.id}
+                variant="outline-green-dark"
+                className={classNames("courses-headline__filter", {
+                  "courses-headline__filter--active": selectedCategory.includes(item.slug),
+                })}
+                onClick={handleSelectCategory(item.slug)}
+              >
+                {item.name}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        <div className="courses-list">
+          {courses.map((item) => (
+            <div
+              key={item.id}
+              className={classNames("courses-list__item", {
+                "courses-list__item--purchased": item.is_purchased,
+              })}
+            >
+              <div className="courses-list__item-image">
+                <Image src={item.image} alt={item.title} fill />
+
+                {item.is_purchased && (
+                  <span className="courses-list__item-purchased">
+                    <Icon name="success-circle" /> Куплен
+                  </span>
+                )}
+
+                {item.categories && (
+                  <div className="courses-list__item-categories">
+                    {item.categories.map((category) => (
+                      <span key={category.id} className="courses-list__item-category">
+                        {category.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="courses-list__item-content">
+                <p className="courses-list__item-title">{item.title}</p>
+                <p className="courses-list__item-description">{item.description}</p>
+
+                <span className="courses-list__item-duration">
+                  <Icon name="clock" /> {item.duration_months} месяцев
+                </span>
+
+                <p className="courses-list__item-price">{item.price} P</p>
+
+                <Button
+                  className="courses-list__item-button"
+                  variant={item.is_purchased ? "main-green-dark" : "outline-green-dark"}
+                >
+                  {item.is_purchased ? "Открыть" : "Подробнее"}
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

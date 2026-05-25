@@ -6,6 +6,8 @@ import {
   AuthSignInRequest,
   AuthVerifyCodeRequest,
 } from "@/src/entities/common/auth";
+import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/src/utils/constant";
+import { CookieHelper } from "@/src/utils/helpers";
 import { createSlice } from "@reduxjs/toolkit";
 import {UserProfile} from "@/src/entities/common";
 
@@ -34,7 +36,7 @@ const initialState: AuthState = {
   isLogoutLoading: false,
   isResetPasswordSuccess: false,
   isPersonalAccountChanged: false,
-  isLoggedIn: false,
+  isLoggedIn: !!CookieHelper.getCookie(TOKEN_KEY) && !!CookieHelper.getCookie(REFRESH_TOKEN_KEY),
 };
 
 const authSlice = createSlice({

@@ -15,6 +15,9 @@ export const USER = "user_data";
 export const QUERY_PARAMS = {
   PHONE: "phone",
   IS_RESET_PASSWORD: "is_reset_password",
+
+  SCOPE: "scope",
+  CATEGORIES: "categories",
 };
 
 export const PAGES = {
