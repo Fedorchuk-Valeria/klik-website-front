@@ -13,6 +13,8 @@ import WidgetModalCookiePolicy from "./CookiePolicy";
 import WidgetModalNotice from "./Notice";
 import WidgetModalPlace from "./Place";
 import WidgetModalSuccessfully from "./Successfully";
+import WidgetModalPayment from "@/src/widgets/Modal/Payment";
+import {Course} from "@/src/lib/getCourses";
 
 const WidgetModal = () => {
   const dispatch = useAppDispatch();
@@ -42,7 +44,8 @@ const WidgetModal = () => {
         return <WidgetModalPlace isVisible={active} {...modalProps} />;
       case ModalType.SUCCESSFULLY:
         return <WidgetModalSuccessfully isVisible={active} {...modalProps} />;
-
+      case ModalType.PAYMENT:
+        return <WidgetModalPayment isVisible={active}  {...(modalProps as { course: Course })} />;
       default:
         return null;
     }

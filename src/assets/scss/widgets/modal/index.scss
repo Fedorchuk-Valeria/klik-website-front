@@ -1,4 +1,13 @@
+.modal {
+  &__title {
+    @include fonts(30px, 700, "Etude Noire");
+    color: var(--main-green-dark);
+    margin-bottom: 10px;
+  }
+}
+
 @import "./notice.scss";
 @import "./cookie.scss";
 @import "./place.scss";
 @import "./successfully.scss";
+@import "./payment.scss";
