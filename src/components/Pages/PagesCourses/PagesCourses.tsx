@@ -10,11 +10,13 @@ import { QueryHelper } from "@/src/utils/helpers";
 
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import {getCoursesRequest, purchaseRequest} from "@/src/store/slices/corses";
+import {getCoursesRequest} from "@/src/store/slices/corses";
 
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import Select from "@/src/components/ui/Select";
+import {showModal} from "@/src/store/slices/modalSlice";
+import {ModalType} from "@/src/entities/common";
 
 type Props = {
   initialCourses?: Course[];
@@ -74,8 +76,15 @@ const PagesCourses = ({ initialCourses = [] }: Props) => {
     setSelectedCategory([]);
   };
 
-  const handlePayment = (coursePk: number) => {
-    dispatch(purchaseRequest(coursePk));;
+  const handlePayment = (course: Course) => {
+    dispatch(
+      showModal({
+        modalType: ModalType.PAYMENT,
+        modalProps: {
+          course: course
+        },
+      })
+    );
   };
 
   useEffect(() => {
@@ -177,7 +186,7 @@ const PagesCourses = ({ initialCourses = [] }: Props) => {
                 >
                   {item.is_purchased ? "Открыть" : "Подробнее"}
                 </Button>
-                <Button onClick={() => handlePayment(item.id)}>
+                <Button onClick={() => handlePayment(item)}>
                   Оплата
                 </Button>
               </div>

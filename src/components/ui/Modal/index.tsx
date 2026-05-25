@@ -38,6 +38,18 @@ const Modal: FC<PropTypes> = ({
     if (onClose) onClose();
   }, [dispatch, onClose]);
 
+  const handleBackdropClick = useCallback(
+    (e: React.MouseEvent<HTMLDialogElement>) => {
+      if (!isCloseBg) return;
+
+      // клик именно по backdrop
+      if (e.target === e.currentTarget) {
+        handleClose();
+      }
+    },
+    [handleClose, isCloseBg]
+  );
+
   const handleCloseModal = useCallback(() => {
     if (!isCloseBg && !isClose) return;
 
@@ -61,7 +73,12 @@ const Modal: FC<PropTypes> = ({
 
   return (
     <div className={classNames("modal", className, { "modal--show-bg": !isHideBg })}>
-      <dialog ref={ref} {...props} onCancel={handleCloseModal}>
+      <dialog
+        ref={ref}
+        {...props}
+        onCancel={handleCloseModal}
+        onClick={handleBackdropClick}
+      >
         {children}
       </dialog>
     </div>
