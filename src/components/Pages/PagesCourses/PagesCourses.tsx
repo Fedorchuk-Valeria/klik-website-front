@@ -10,7 +10,7 @@ import { QueryHelper } from "@/src/utils/helpers";
 
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import { getCoursesRequest } from "@/src/store/slices/corses";
+import {getCoursesRequest, purchaseRequest} from "@/src/store/slices/corses";
 
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
@@ -72,6 +72,10 @@ const PagesCourses = ({ initialCourses = [] }: Props) => {
   const handleSelectFilter = (option: { id: string; name: string }) => {
     setSelectedFilter(option);
     setSelectedCategory([]);
+  };
+
+  const handlePayment = (coursePk: number) => {
+    dispatch(purchaseRequest(coursePk));;
   };
 
   useEffect(() => {
@@ -172,6 +176,9 @@ const PagesCourses = ({ initialCourses = [] }: Props) => {
                   variant={item.is_purchased ? "main-green-dark" : "outline-green-dark"}
                 >
                   {item.is_purchased ? "Открыть" : "Подробнее"}
+                </Button>
+                <Button onClick={() => handlePayment(item.id)}>
+                  Оплата
                 </Button>
               </div>
             </div>

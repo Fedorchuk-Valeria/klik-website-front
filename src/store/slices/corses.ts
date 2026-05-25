@@ -31,8 +31,22 @@ const coursesSlice = createSlice({
       state.errors = action.payload;
       state.isLoading = false;
     },
+    purchaseRequest(state, action: { payload: number }) {
+      void action.payload;
+      state.isLoading = true;
+      state.errors = null;
+    },
+
+    purchaseSuccess(state) {
+      state.isLoading = false;
+    },
+
+    purchaseFailure(state, action: { payload: Record<string, string> | null }) {
+      state.errors = action.payload;
+      state.isLoading = false;
+    },
   },
 });
 
-export const { getCoursesRequest, getCoursesSuccess, getCoursesFailure } = coursesSlice.actions;
+export const { getCoursesRequest, getCoursesSuccess, getCoursesFailure, purchaseRequest, purchaseSuccess, purchaseFailure } = coursesSlice.actions;
 export default coursesSlice.reducer;
