@@ -9,6 +9,7 @@ import Button from "@/src/components/ui/Button/Button";
 import { purchaseRequest } from "@/src/store/slices/corses";
 import Checkbox from "@/src/components/ui/Checkbox";
 import {PUBLIC_OFFER_URL} from "@/src/utils/constant";
+import Icon from "@/src/components/ui/Icon/Icon";
 
 type PropTypes = {
   course: Course;
@@ -51,7 +52,7 @@ const WidgetModalPayment: FC<PropTypes> = ({course, className, isVisible}) => {
         <div className="modal-payment__row">
           <div className="modal-payment__name">Стоимость</div>
           <div className="modal-payment__value">
-            {course.price} β
+            {course.price} <Icon className="modal-payment__currency" name="ruble" />
           </div>
         </div>
 

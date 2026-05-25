@@ -29,6 +29,16 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__currency {
+    width: 16px;
+    height: 15px;
+    color: var(--main-orange);
+    margin-top: 1px;
   }
 
   &__name {
