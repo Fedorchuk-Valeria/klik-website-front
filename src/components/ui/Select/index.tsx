@@ -1,33 +1,72 @@
 import classNames from "classnames";
-import { FC, useRef, useState } from "react";
+import { FC, useMemo, useRef, useState } from "react";
 
 import Icon from "@/src/components/ui/Icon/Icon";
 
 import useClickOutside from "@/src/hooks/useClickOutside";
 
-type PropTypes = {
+type Option = { id: string; name: string };
+
+type BasePropTypes = {
   icon?: string;
-  options: { id: string; name: string }[];
-  selectedOption: { id: string; name: string };
-  onChange: (option: { id: string; name: string }) => void;
   className?: string;
+  color?: "green" | "orange";
 };
 
-const Select: FC<PropTypes> = ({ options, selectedOption, icon, onChange, className }) => {
+type SingleSelectPropTypes = BasePropTypes & {
+  multiple?: false;
+  options: Option[];
+  selectedOption: Option;
+  onChange: (option: Option) => void;
+};
+
+type MultipleSelectPropTypes = BasePropTypes & {
+  multiple: true;
+  options: Option[];
+  selectedOptions: Option[];
+  onChange: (options: Option[]) => void;
+  allOption?: Option;
+  allOptionName?: string;
+};
+
+type PropTypes = SingleSelectPropTypes | MultipleSelectPropTypes;
+
+type SelectViewPropTypes = BasePropTypes & {
+  icon?: string;
+  displayText: string;
+  dropdownOptions: Option[];
+  isOptionActive: (option: Option, index: number) => boolean;
+  onOptionSelect: (option: Option, index: number) => void;
+  closeOnSelect?: boolean;
+};
+
+const SelectView: FC<SelectViewPropTypes> = ({
+  icon,
+  className,
+  color = "orange",
+  displayText,
+  dropdownOptions,
+  isOptionActive,
+  onOptionSelect,
+  closeOnSelect = false,
+}) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isOpen, setOpen] = useState(false);
+  const [openCount, setOpenCount] = useState(0);
+  const dropdownKey = dropdownOptions.map((item) => item.id).join("|");
 
   const handleClose = () => {
     setOpen(false);
   };
 
   const toggleDropdown = () => {
-    setOpen((prev) => !prev);
-  };
+    setOpen((prev) => {
+      if (!prev) {
+        setOpenCount((count) => count + 1);
+      }
 
-  const handleOptionSelect = (option: { id: string; name: string }) => () => {
-    onChange(option);
-    setOpen(false);
+      return !prev;
+    });
   };
 
   useClickOutside(ref, handleClose);
@@ -37,13 +76,15 @@ const Select: FC<PropTypes> = ({ options, selectedOption, icon, onChange, classN
       ref={ref}
       className={classNames("select", className, {
         "select--open": isOpen,
+        "select--green": color === "green",
+        "select--orange": color === "orange",
       })}
     >
       <button type="button" className="select__current" onClick={toggleDropdown}>
         <span className="select__current-text">
           {!!icon && <Icon className="select__icon" name={icon} />}
 
-          {selectedOption.name}
+          {displayText}
         </span>
 
         <span
@@ -56,13 +97,19 @@ const Select: FC<PropTypes> = ({ options, selectedOption, icon, onChange, classN
       </button>
 
       {isOpen && (
-        <ul className="select__dropdown">
-          {options.map((item) => {
+        <ul key={`${openCount}-${dropdownKey}`} className="select__dropdown">
+          {dropdownOptions.map((item, index) => {
             return (
               <li
-                onClick={handleOptionSelect(item)}
+                onClick={() => {
+                  onOptionSelect(item, index);
+
+                  if (closeOnSelect) {
+                    setOpen(false);
+                  }
+                }}
                 className={classNames("select__item", {
-                  "select__item--active": item.id === selectedOption.id,
+                  "select__item--active": isOptionActive(item, index),
                 })}
                 key={item.id}
               >
@@ -74,6 +121,76 @@ const Select: FC<PropTypes> = ({ options, selectedOption, icon, onChange, classN
       )}
     </div>
   );
+};
+
+const SingleSelect: FC<SingleSelectPropTypes> = (props) => {
+  const { options, selectedOption, onChange } = props;
+
+  return (
+    <SelectView
+      {...props}
+      closeOnSelect
+      displayText={selectedOption.name}
+      dropdownOptions={options}
+      isOptionActive={(option) => option.id === selectedOption.id}
+      onOptionSelect={(option) => onChange(option)}
+    />
+  );
+};
+
+const MultipleSelect: FC<MultipleSelectPropTypes> = (props) => {
+  const { options, selectedOptions, onChange, allOption, allOptionName = "Все" } = props;
+
+  const DEFAULT_ALL_OPTION = useMemo(() => ({ id: "all", name: allOptionName }), [allOptionName]);
+
+  const dropdownOptions = [allOption || DEFAULT_ALL_OPTION, ...options];
+
+  const displayText =
+    selectedOptions.length === 0
+      ? allOption?.name || DEFAULT_ALL_OPTION.name
+      : selectedOptions.map((item) => item.name).join(", ");
+
+  const isOptionActive = (option: Option, index: number) => {
+    if (index === 0) {
+      return selectedOptions.length === 0;
+    }
+
+    return selectedOptions.some((item) => item.id === option.id);
+  };
+
+  const handleOptionSelect = (option: Option, index: number) => {
+    if (index === 0) {
+      onChange([]);
+      return;
+    }
+
+    const isSelected = selectedOptions.some((item) => item.id === option.id);
+
+    if (isSelected) {
+      onChange(selectedOptions.filter((item) => item.id !== option.id));
+      return;
+    }
+
+    onChange([...selectedOptions, option]);
+  };
+
+  return (
+    <SelectView
+      {...props}
+      displayText={displayText}
+      dropdownOptions={dropdownOptions}
+      isOptionActive={isOptionActive}
+      onOptionSelect={handleOptionSelect}
+    />
+  );
+};
+
+const Select: FC<PropTypes> = (props) => {
+  if (props.multiple) {
+    return <MultipleSelect {...props} />;
+  }
+
+  return <SingleSelect {...props} />;
 };
 
 export default Select;
