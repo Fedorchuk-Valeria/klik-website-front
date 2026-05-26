@@ -1,3 +1,4 @@
+import { UserProfile } from "@/src/entities/common";
 import {
   AuthForgotPasswordRequest,
   AuthRegisterRequest,
@@ -9,7 +10,6 @@ import {
 import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
 import { createSlice } from "@reduxjs/toolkit";
-import {UserProfile} from "@/src/entities/common";
 
 type AuthState = {
   user_profile: UserProfile | null;
@@ -100,7 +100,6 @@ const authSlice = createSlice({
     },
     resetPasswordSuccess(state) {
       state.isLoading = false;
-      state.isLoggedIn = true;
       state.isResetPasswordSuccess = true;
     },
     logoutSuccess(state) {
