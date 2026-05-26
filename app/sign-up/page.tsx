@@ -15,7 +15,7 @@ import TextInput from "@/src/components/ui/TextInput";
 
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import { registerRequest } from "@/src/store/slices/auth";
+import { clearRegister, registerRequest } from "@/src/store/slices/auth";
 import { PAGES, PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
 
 const RegisterForm = () => {
@@ -56,6 +56,10 @@ const RegisterForm = () => {
     void form.setFieldValue(name, value, true);
   };
 
+  const handleBlur = (name: keyof typeof form.values) => {
+    void form.setFieldValue(name, String(form?.values?.[name])?.trim());
+  };
+
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const filtered = value.replace(PASSWORD_INPUT_STRIP_REGEX, "");
@@ -65,9 +69,11 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (isRegisterSuccess) {
+      dispatch(clearRegister());
+
       router.push(PAGES.CONFIRM_CODE);
     }
-  }, [isRegisterSuccess]);
+  }, [isRegisterSuccess, dispatch]);
 
   useEffect(() => {
     if (errors) {
@@ -113,6 +119,7 @@ const RegisterForm = () => {
           error={form.errors.name}
           placeholder="Иванов Иван Иванович"
           className="login-page__form-input"
+          onBlur={() => handleBlur("name")}
           disabled={isLoading}
         />
 

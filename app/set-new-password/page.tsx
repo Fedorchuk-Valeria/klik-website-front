@@ -11,7 +11,7 @@ import PasswordInput from "@/src/components/ui/PasswordInput";
 import { ModalType } from "@/src/entities/common";
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import { resetPasswordRequest } from "@/src/store/slices/auth";
+import { clearResetPassword, resetPasswordRequest } from "@/src/store/slices/auth";
 import { showModal } from "@/src/store/slices/modalSlice";
 import { PAGES, PASSWORD_INPUT_STRIP_REGEX, TOKEN_KEY } from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
@@ -75,9 +75,11 @@ const SetNewPasswordForm = () => {
         })
       );
 
-      router.push(PAGES.COURSES);
+      dispatch(clearResetPassword());
+
+      router.push(PAGES.LOGIN);
     }
-  }, [isResetPasswordSuccess]);
+  }, [isResetPasswordSuccess, dispatch]);
 
   return (
     <div className="login-page__form-content">

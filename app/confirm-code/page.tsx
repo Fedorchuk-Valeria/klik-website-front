@@ -3,7 +3,7 @@
 import { useFormik } from "formik";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ChangeEvent, Suspense, useEffect } from "react";
+import { ChangeEvent, Suspense, useEffect, useRef } from "react";
 
 import { confirmCodeValidationSchema } from "@/src/components/Login/validationSchema";
 import Button from "@/src/components/ui/Button/Button";
@@ -16,6 +16,7 @@ import { PAGES, QUERY_PARAMS, TOKEN_KEY } from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
 
 const ConfirmCodeContent = () => {
+  const codeInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
@@ -78,6 +79,12 @@ const ConfirmCodeContent = () => {
     }
   }, [isCodeCorrect, searchParams]);
 
+  useEffect(() => {
+    if (codeInputRef.current) {
+      codeInputRef.current.focus();
+    }
+  }, []);
+
   return (
     <div className="login-page__form-content confirm-code-page">
       <p className="login-page__form-title--red">Подтверждение номера</p>
@@ -92,6 +99,7 @@ const ConfirmCodeContent = () => {
           onChange={handleChange}
           className="confirm-code-page__code-input"
           disabled={isLoading}
+          ref={codeInputRef}
         />
 
         <Button

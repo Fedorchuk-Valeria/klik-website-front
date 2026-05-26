@@ -1,125 +1,8 @@
 .course-page {
-  .course-page__back {
-  }
-
   .course-page__content {
     max-width: 1740px;
     margin: 0 auto;
     padding: 0 10px;
-
-    .course-page__content-about {
-      display: flex;
-      align-items: stretch;
-      gap: 10px;
-
-      .course-page__content-about-image {
-        position: relative;
-        height: 673px;
-        max-width: 1062px;
-        width: 100%;
-
-        img {
-          @include perfect-img;
-          border-radius: 50px;
-        }
-
-        .course-page__content-about-purchased {
-          @include fonts(14px, 500, "Manrope");
-          position: absolute;
-          top: 30px;
-          left: 30px;
-          border-radius: 100px;
-          background: var(--main-green-neon);
-          color: var(--main-green-dark);
-          padding: 10px 20px;
-          z-index: 1;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-
-          svg {
-            @include icon(24px);
-          }
-        }
-
-        .course-page__content-about-categories {
-          position: absolute;
-          bottom: 30px;
-          left: 30px;
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
-          z-index: 1;
-          max-height: 100px;
-          overflow-y: hidden;
-
-          .course-page__content-about-category {
-            @include fonts(22px, 500, "Manrope");
-            padding: 8px 20px;
-            border-radius: 100px;
-            color: var(--main-light);
-            background: var(--secondary-light-30);
-            backdrop-filter: blur(8px);
-          }
-        }
-      }
-
-      .course-page__content-about-info {
-        @include flex-list(20px);
-        padding: 50px;
-        background: var(--main-green-neon);
-        border-radius: 50px;
-        width: 100%;
-        height: 100%;
-        max-width: 650px;
-
-        .course-page__content-about-info_title {
-          @include fonts(50px, 500, "Etude Noire");
-          color: var(--main-green-dark);
-        }
-
-        .course-page__content-about-info_description {
-          @include fonts(20px, 400, "Manrope");
-          color: var(--main-black);
-        }
-
-        .course-page__content-about-info_price {
-          @include fonts(50px, 500, "Etude Noire");
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          color: var(--main-orange);
-          margin-top: 10px;
-
-          svg {
-            @include icon(36px);
-            margin-bottom: 5px;
-          }
-        }
-
-        .course-page__content-about-info_button {
-          @include center;
-          margin-top: 10px;
-          width: 100%;
-        }
-
-        .course-page__content-about-info_list {
-          @include flex-list(12px);
-
-          li {
-            @include fonts(14px, 500, "Manrope");
-            display: flex;
-            align-items: center;
-            gap: 10px;
-
-            svg {
-              @include icon(24px);
-              color: var(--main-orange);
-            }
-          }
-        }
-      }
-    }
 
     .course-page__content-timing {
       margin-top: 50px;
@@ -158,51 +41,130 @@
         }
       }
     }
+  }
 
-    .course-page__content-tutorial {
-      margin-top: 100px;
+  @media screen and (max-width: $desktop) {
+    margin-top: 40px;
 
-      .course-page__content-tutorial_progress {
-        .course-page__content-tutorial_progress-title {
-          @include center-between;
+    .course-page__content {
+      max-width: 1320px;
 
-          .course-page__content-tutorial_progress-title-text {
-            @include fonts(22px, 400, "Manrope");
-            color: var(--main-black);
-          }
+      .course-page__content-timing {
+        margin-top: 40px;
+        gap: 80px;
 
-          .course-page__content-tutorial_progress-count {
-            @include fonts(16px, 500, "Etude Noire");
-            color: rgba(28, 26, 28, 0.3);
+        .course-page__content-timing_item {
+          .course-page__content-timing_item-content {
+            p {
+              font-size: 40px;
+            }
 
             span {
-              @include fonts(24px, 500, "Etude Noire");
-              color: var(--main-green-dark);
+              font-size: 16px;
             }
           }
         }
+      }
+    }
+  }
 
-        .course-page__content-tutorial_progress-bar {
-          margin-top: 10px;
-          display: flex;
-          align-items: center;
-          gap: 10px;
+  @media screen and (max-width: $landscape-tablet-size) {
+    .course-page__content {
+      max-width: 944px;
 
-          .course-page__content-tutorial_progress-bar-item {
-            height: 10px;
-            width: 100%;
-            border-radius: 100px;
-            background: #f0f6e8;
+      .course-page__content-timing {
+        margin-top: 30px;
+        gap: 60px;
+
+        .course-page__content-timing_item {
+          gap: 20px;
+
+          .course-page__content-timing_item-icon {
+            @include icon(50px);
+
+            svg {
+              @include icon(24px);
+            }
           }
 
-          .course-page__content-tutorial_progress-bar-item--active {
-            background: var(--main-green-dark);
+          .course-page__content-timing_item-content {
+            p {
+              font-size: 30px;
+            }
+
+            span {
+              font-size: 14px;
+            }
           }
         }
       }
+    }
+  }
 
-      .course-page__content-tutorial_content {
+  @media screen and (max-width: $tablet-size) {
+    .course-page__content {
+      max-width: 740px;
+
+      .course-page__content-timing {
         margin-top: 50px;
+        gap: 100px;
+
+        .course-page__content-timing_item {
+          gap: 20px;
+
+          .course-page__content-timing_item-icon {
+            @include icon(60px);
+
+            svg {
+              @include icon(29px);
+            }
+          }
+
+          .course-page__content-timing_item-content {
+            p {
+              font-size: 36px;
+            }
+
+            span {
+              font-size: 18px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    margin-top: 30px;
+
+    .course-page__content {
+      max-width: 100%;
+
+      .course-page__content-timing {
+        margin-top: 30px;
+        gap: 30px;
+
+        .course-page__content-timing_item {
+          gap: 12px;
+
+          .course-page__content-timing_item-icon {
+            @include icon(50px);
+
+            svg {
+              @include icon(24px);
+            }
+          }
+
+          .course-page__content-timing_item-content {
+            p {
+              font-size: 24px;
+            }
+
+            span {
+              font-size: 14px;
+            }
+          }
+        }
       }
     }
   }

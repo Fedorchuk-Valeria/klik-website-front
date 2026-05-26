@@ -5,9 +5,8 @@ import { useRouter } from "next/navigation";
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 
-import { PAGES, REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/src/utils/constant";
-import { CookieHelper } from "@/src/utils/helpers";
-import {useAuth} from "@/src/utils/useAuth";
+import { PAGES } from "@/src/utils/constant";
+import { useAuth } from "@/src/utils/useAuth";
 
 export default function ButtonCabinet() {
   const router = useRouter();
