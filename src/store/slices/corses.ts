@@ -5,6 +5,7 @@ import { Course } from "@/src/lib/getCourses";
 type CoursesState = {
   isLoading: boolean;
   data: Course[];
+  currentCourse: Course | null;
   errors: Record<string, string> | null;
 };
 
@@ -12,6 +13,7 @@ const initialState: CoursesState = {
   isLoading: false,
   data: [],
   errors: null,
+  currentCourse: null,
 };
 
 const coursesSlice = createSlice({
@@ -28,6 +30,19 @@ const coursesSlice = createSlice({
       state.isLoading = false;
     },
     getCoursesFailure(state, action: { payload: Record<string, string> | null }) {
+      state.errors = action.payload;
+      state.isLoading = false;
+    },
+    getCurrentCourseRequest(state, action: { payload: number }) {
+      void action.payload;
+      state.isLoading = true;
+      state.errors = null;
+    },
+    getCurrentCourseSuccess(state, action: { payload: Course }) {
+      state.currentCourse = action.payload;
+      state.isLoading = false;
+    },
+    getCurrentCourseFailure(state, action: { payload: Record<string, string> | null }) {
       state.errors = action.payload;
       state.isLoading = false;
     },
@@ -48,5 +63,15 @@ const coursesSlice = createSlice({
   },
 });
 
-export const { getCoursesRequest, getCoursesSuccess, getCoursesFailure, purchaseRequest, purchaseSuccess, purchaseFailure } = coursesSlice.actions;
+export const {
+  getCoursesRequest,
+  getCoursesSuccess,
+  getCoursesFailure,
+  getCurrentCourseRequest,
+  getCurrentCourseSuccess,
+  getCurrentCourseFailure,
+  purchaseRequest,
+  purchaseSuccess,
+  purchaseFailure,
+} = coursesSlice.actions;
 export default coursesSlice.reducer;

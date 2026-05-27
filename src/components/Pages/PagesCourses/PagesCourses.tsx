@@ -2,23 +2,22 @@
 
 import classNames from "classnames";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 import image from "@/src/assets/images/view/courses/girl.png";
 
 import { Course } from "@/src/lib/getCourses";
-import { QUERY_PARAMS } from "@/src/utils/constant";
+import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import {getCoursesRequest} from "@/src/store/slices/corses";
+import { getCoursesRequest } from "@/src/store/slices/corses";
 
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import Select from "@/src/components/ui/Select";
-import {showModal} from "@/src/store/slices/modalSlice";
-import {ModalType} from "@/src/entities/common";
 
 type Props = {
   initialCourses?: Course[];
@@ -82,17 +81,6 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
   const handleSelectFilter = (option: { id: string; name: string }) => {
     setSelectedFilter(option);
     setSelectedCategory([]);
-  };
-
-  const handlePayment = (course: Course) => {
-    dispatch(
-      showModal({
-        modalType: ModalType.PAYMENT,
-        modalProps: {
-          course: course
-        },
-      })
-    );
   };
 
   const handleSelectCategories = (options: { id: string; name: string }[]) => {
@@ -262,15 +250,14 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
                   {item.price} <Icon name="ruble" className="courses-list__item-price-icon" />
                 </p>
 
-                <Button
-                  className="courses-list__item-button"
-                  variant={item.is_purchased ? "main-green-dark" : "outline-green-dark"}
-                >
-                  {item.is_purchased ? "Открыть" : "Подробнее"}
-                </Button>
-                <Button onClick={() => handlePayment(item)}>
-                  Оплата
-                </Button>
+                <Link href={PAGES.COURSE.replace(":id", item.id.toString())}>
+                  <Button
+                    className="courses-list__item-button"
+                    variant={item.is_purchased ? "main-green-dark" : "outline-green-dark"}
+                  >
+                    {item.is_purchased ? "Открыть" : "Подробнее"}
+                  </Button>
+                </Link>
               </div>
             </div>
           ))}

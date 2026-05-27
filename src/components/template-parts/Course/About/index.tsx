@@ -3,6 +3,9 @@ import { FC, memo } from "react";
 
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
+import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
+import { QueryHelper } from "@/src/utils/helpers";
+import { useRouter } from "next/navigation";
 
 type PropTypes = {
   title: string;
@@ -12,6 +15,7 @@ type PropTypes = {
   infoList?: string[];
   description: string;
   categories: string[];
+  onPayment: () => void;
 };
 
 const CourseAbout: FC<PropTypes> = ({
@@ -22,7 +26,26 @@ const CourseAbout: FC<PropTypes> = ({
   description,
   isPayment = false,
   imageUrl = "https://placehold.net/default.png",
+  onPayment,
 }) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    if (isPayment) {
+      router.push(
+        PAGES.COURSES +
+          QueryHelper.getQueryString({
+            [QUERY_PARAMS.CATEGORIES]: categories.join(","),
+            [QUERY_PARAMS.FILTER]: "all",
+          })
+      );
+
+      return;
+    }
+
+    onPayment();
+  };
+
   return (
     <div className="course-about">
       <div className="course-about__image">
@@ -49,11 +72,16 @@ const CourseAbout: FC<PropTypes> = ({
         <p className="course-about__info-description">{description}</p>
 
         <p className="course-about__info-price">
-          <p>{price}</p>
+          <span>{price}</span>
           <Icon name="ruble" />
         </p>
 
-        <Button className="course-about__info-button" variant="main-green-dark" withArrow>
+        <Button
+          className="course-about__info-button"
+          variant="main-green-dark"
+          onClick={handleClick}
+          withArrow
+        >
           {isPayment ? "Продолжить обучение" : "Оплатить курс"}
         </Button>
 
