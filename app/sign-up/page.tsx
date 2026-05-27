@@ -31,8 +31,6 @@ const RegisterForm = () => {
     },
     validationSchema: registerValidationSchema,
     onSubmit: (values) => {
-      console.log(values);
-
       dispatch(
         registerRequest({
           phone: values.phone,

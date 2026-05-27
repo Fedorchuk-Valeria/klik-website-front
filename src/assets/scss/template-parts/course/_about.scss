@@ -9,6 +9,7 @@
     height: 673px;
     max-width: 1062px;
     width: 100%;
+    overflow: hidden;
 
     img {
       @include perfect-img;
@@ -42,7 +43,6 @@
       flex-wrap: wrap;
       gap: 10px;
       z-index: 1;
-      max-height: 100px;
       overflow-y: hidden;
 
       .course-about__category {
@@ -64,6 +64,7 @@
     width: 100%;
     height: 100%;
     max-width: 650px;
+    overflow: auto;
 
     .course-about__info-title {
       @include fonts(50px, 500, "Etude Noire");
@@ -207,7 +208,6 @@
       .course-about__categories {
         bottom: 20px;
         left: 20px;
-        max-height: 86px;
 
         .course-about__category {
           font-size: 16px;
@@ -292,7 +292,6 @@
       .course-about__categories {
         bottom: 20px;
         left: 20px;
-        max-height: 90px;
 
         .course-about__category {
           font-size: 18px;
@@ -394,7 +393,6 @@
       .course-about__categories {
         bottom: 10px;
         left: 10px;
-        max-height: 68px;
 
         .course-about__category {
           font-size: 12px;

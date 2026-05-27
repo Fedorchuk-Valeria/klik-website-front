@@ -150,12 +150,14 @@
 
         .course-tutorial__list-item_content-title {
           @include fonts(20px, 500, "Etude Noire");
+          @include text-line-clamp(1);
           color: var(--main-green-dark);
         }
 
         .course-tutorial__list-item_content-duration {
           @include fonts(18px, 400, "Manrope");
-          @include center;
+          display: flex;
+          align-items: center;
           color: var(--main-green-dark);
           margin-top: 10px;
           gap: 10px;

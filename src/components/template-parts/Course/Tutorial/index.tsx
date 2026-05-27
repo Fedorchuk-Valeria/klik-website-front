@@ -14,6 +14,7 @@ type PropTypes = {
     id: number;
     title: string;
     duration: string;
+    test_result: number | null;
     status: "done" | "active" | "disabled";
   }[];
   className?: string;
@@ -36,7 +37,7 @@ const CourseTutorial: FC<PropTypes> = ({ progress, total, list, className }) => 
             <div
               key={index}
               className={classNames("course-tutorial__progress-bar_item", {
-                "course-tutorial__progress-bar_item--active": index === 0,
+                "course-tutorial__progress-bar_item--active": index < progress,
               })}
             />
           ))}
@@ -90,7 +91,7 @@ const CourseTutorial: FC<PropTypes> = ({ progress, total, list, className }) => 
                         <span>
                           <span>Результат теста</span>
                           <span className="course-tutorial__list-item_button-result">
-                            : 67 из 100
+                            : {item?.test_result ?? 0} из 100
                           </span>
                         </span>
                       ) : isDisabled ? (

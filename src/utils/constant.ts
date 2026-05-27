@@ -16,6 +16,7 @@ export const QUERY_PARAMS = {
   PHONE: "phone",
   IS_RESET_PASSWORD: "is_reset_password",
 
+  FILTER: "filter",
   SCOPE: "scope",
   CATEGORIES: "categories",
 };
@@ -28,11 +29,13 @@ export const PAGES = {
   SIGN_UP: "/sign-up",
   CONFIRM_CODE: "/confirm-code",
   FORGOT_PASSWORD: "/reset-password",
-  COURSES: "/courses",
   SET_NEW_PASSWORD: "/set-new-password",
+
   PROFILE: "/profile",
   PROFILE_PASSWORD: "/profile/password",
-  COURSE: "/course/:id",
+
+  COURSES: "/courses",
+  COURSE: "/courses/:id",
 };
 
 export const PAGE_ANCHORS = {
@@ -61,4 +64,4 @@ export const PASSWORD_REGEX =
 
 export const PASSWORD_INPUT_STRIP_REGEX = /[^a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/g;
 
-export const PUBLIC_OFFER_URL = '#';
+export const PUBLIC_OFFER_URL = "#";
