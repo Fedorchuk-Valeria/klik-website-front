@@ -58,6 +58,25 @@ export type CourseFetchResult = {
   errors: Record<string, string> | null;
 };
 
+export type Lesson = {
+  course: Pick<Course, "id" | "title" | "progress_percent" | "lessons_count">;
+  description: string;
+  duration_minutes: number;
+  has_homework: boolean;
+  has_materials: boolean;
+  id: number;
+  lessons: CourseLesson[];
+  number: number;
+  title: string;
+  video_url: string;
+};
+
+export type LessonFetchResult = {
+  data: Lesson | null;
+  errors: Record<string, string> | null;
+  code?: number | null;
+};
+
 export async function getCourses(): Promise<CoursesFetchResult> {
   const apiUrl = buildApiUrl("/courses/");
 
@@ -131,5 +150,46 @@ export async function getCurrentCourse(courseId: number | string): Promise<Cours
     return { data: payload, errors: null };
   } catch (error) {
     return { data: null, errors: { detail: `Failed to fetch course: ${error}` } };
+  }
+}
+
+export async function getLesson(
+  courseId: number | string,
+  lessonId: number | string
+): Promise<LessonFetchResult> {
+  const apiUrl = buildApiUrl(`/courses/${courseId}/lessons/${lessonId}/`);
+
+  if (!apiUrl) {
+    return { data: null, errors: { detail: "API URL is not configured" } };
+  }
+
+  const cookieStore = await cookies();
+  const token = cookieStore.get(TOKEN_KEY)?.value;
+  const cookieHeader = cookieStore
+    .getAll()
+    .map(({ name, value }) => `${name}=${value}`)
+    .join("; ");
+
+  try {
+    const response = await fetch(apiUrl, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...(cookieHeader ? { Cookie: cookieHeader } : {}),
+        ...(token ? { Authorization: normalizeToken(token) } : {}),
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      const errorBody = (await response.json().catch(() => null)) as Record<string, string> | null;
+      return { data: null, errors: errorBody, code: response.status };
+    }
+
+    const payload = (await response.json()) as Lesson;
+
+    return { data: payload, errors: null };
+  } catch (error) {
+    return { data: null, errors: { detail: `Failed to fetch lesson: ${error}` } };
   }
 }

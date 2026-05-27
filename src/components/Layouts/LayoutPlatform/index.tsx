@@ -1,5 +1,3 @@
-import { headers } from "next/headers";
-
 import Footer from "@/src/components/ui/Footer/Footer";
 import HeaderPlatform from "@/src/components/ui/HeaderPlatform/HeaderPlatform";
 
@@ -14,13 +12,9 @@ export default async function LayoutPlatform({
   headerVariant = "dark",
   showAuthControls = true,
 }: LayoutPlatformProps) {
-  const headersList = await headers();
-  const pathname = headersList.get("x-pathname") ?? "";
-  const id = pathname.match(/^\/courses\/([^/]+)$/)?.[1];
-
   return (
     <div className="platform-layout">
-      <HeaderPlatform variant={id ? "light" : headerVariant} showAuthControls={showAuthControls} />
+      <HeaderPlatform variant={headerVariant} showAuthControls={showAuthControls} />
       <main className="platform-layout__content">{children}</main>
       <Footer />
     </div>

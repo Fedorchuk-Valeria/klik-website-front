@@ -95,6 +95,7 @@ const CoursePage: FC<PropTypes> = ({ data, errors }) => {
         <CourseTutorial
           progress={data?.progress_percent ?? 0}
           total={data?.lessons_count ?? 0}
+          isPurchased={data.is_purchased}
           list={
             (data?.lessons || [])?.map((lesson) => ({
               id: lesson.id,

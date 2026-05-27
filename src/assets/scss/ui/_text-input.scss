@@ -32,7 +32,7 @@
 
   &.text-input--outline .text-input__control {
     background: var(--secondary-white-80);
-    outline: 1px solid #cbdccf;
+    outline: 1px solid var(--border-color);
   }
 
   &.text-input--filled .text-input__control {
