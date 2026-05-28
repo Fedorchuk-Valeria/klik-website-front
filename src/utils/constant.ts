@@ -36,6 +36,7 @@ export const PAGES = {
 
   COURSES: "/courses",
   COURSE: "/courses/:id",
+  LESSON: "/courses/:id/lesson/:lessonId",
 };
 
 export const PAGE_ANCHORS = {
