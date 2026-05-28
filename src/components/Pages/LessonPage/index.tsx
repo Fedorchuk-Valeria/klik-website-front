@@ -4,6 +4,7 @@ import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FC, useCallback } from "react";
+import { useDispatch } from "react-redux";
 
 import { getTime } from "@/src/components/Pages/CoursePage";
 import TutorialList from "@/src/components/template-parts/Course/Tutorial/List";
@@ -11,13 +12,13 @@ import CourseProgress from "@/src/components/template-parts/Course/Tutorial/Prog
 import Test from "@/src/components/template-parts/Test";
 import BackButton from "@/src/components/ui/BackButton";
 import Badge from "@/src/components/ui/Badge";
+import Chat from "@/src/components/ui/Chat/Chat";
 import Icon from "@/src/components/ui/Icon/Icon";
 
 import { Lesson } from "@/src/lib/getCourses";
 import { useAppSelector } from "@/src/store/hooks";
 import { getLessonTestRequest } from "@/src/store/slices/lesson";
 import { PAGES } from "@/src/utils/constant";
-import { useDispatch } from "react-redux";
 
 type PropTypes = {
   id: string;
@@ -30,13 +31,7 @@ type PropTypes = {
 const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const {
-    data: lesson,
-    isLoading,
-    errors,
-    isTestLoading,
-    test,
-  } = useAppSelector((state) => state.lesson);
+  const { isTestLoading, test } = useAppSelector((state) => state.lesson);
 
   const handleStartTestClick = useCallback(() => {
     if (id && lessonId) {
@@ -173,6 +168,8 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
           description="Пройдите тест, чтобы открыть следующий урок"
         />
       </div>
+
+      <Chat />
     </div>
   );
 };

@@ -1,10 +1,6 @@
 .platform-layout {
   &__content {
     padding-top: 150px;
-
-    @media screen and (max-width: $landscape-tablet-size) {
-      padding-top: 90px;
-    }
   }
 
   .header__cabinet {
