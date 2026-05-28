@@ -66,3 +66,5 @@ export const PASSWORD_REGEX =
 export const PASSWORD_INPUT_STRIP_REGEX = /[^a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/g;
 
 export const PUBLIC_OFFER_URL = "#";
+
+export const VALIDATION_CLASS = "validatio-error";

@@ -19,6 +19,16 @@ const nextConfig: NextConfig = {
         hostname: "173.249.41.92",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "test.it-klik.by",
+        pathname: "/media/**",
+      },
+      {
+        protocol: "https",
+        hostname: "it-klik.by",
+        pathname: "/media/**",
+      },
     ],
   },
   turbopack: {

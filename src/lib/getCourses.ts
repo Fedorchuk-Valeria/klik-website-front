@@ -87,6 +87,26 @@ export type LessonFetchResult = {
   code?: number | null;
 };
 
+export type LessonTest = {
+  status: "not_passed" | "passed";
+  can_start: boolean;
+  can_submit: boolean;
+  submit_rule: string;
+  questions: LessonTestQuestion[];
+};
+
+export type LessonTestQuestion = {
+  id: number;
+  number: number;
+  total_questions: number;
+  text: string;
+  selection_type: "checkbox" | "radio";
+  answers: {
+    id: number;
+    text: string;
+  }[];
+};
+
 export async function getCourses(): Promise<CoursesFetchResult> {
   const apiUrl = buildApiUrl("/courses/");
 

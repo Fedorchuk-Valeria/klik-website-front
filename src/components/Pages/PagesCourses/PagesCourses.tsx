@@ -18,7 +18,6 @@ import { getCoursesRequest } from "@/src/store/slices/corses";
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import Select from "@/src/components/ui/Select";
-import Chat from "@/src/components/ui/Chat/Chat";
 
 type Props = {
   initialCourses?: Course[];
@@ -263,8 +262,6 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
             </div>
           ))}
         </div>
-
-        <Chat />
       </div>
     </div>
   );

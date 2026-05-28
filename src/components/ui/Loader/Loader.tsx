@@ -1,6 +1,13 @@
-const Loader = () => {
+import classNames from "classnames";
+import { FC, memo } from "react";
+
+type PropTypes = {
+  isLocal?: boolean;
+};
+
+const Loader: FC<PropTypes> = ({ isLocal = false }) => {
   return (
-    <div className="loader">
+    <div className={classNames("loader", { "loader--local": isLocal })}>
       <div className="loader__content">
         <div className="loader__spinner">
           <span />
@@ -14,4 +21,4 @@ const Loader = () => {
   );
 };
 
-export default Loader;
+export default memo(Loader);
