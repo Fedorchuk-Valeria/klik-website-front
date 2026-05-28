@@ -148,7 +148,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
 
     requestAnimationFrame(() => {
       const c = Math.min(Math.max(0, caret), newMasked.length);
-      el.setSelectionRange(c, c);
+      el?.setSelectionRange(c, c);
     });
   };
 
@@ -163,7 +163,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
         ev.preventDefault();
         requestAnimationFrame(() => {
           const caret = FOCUS_EMPTY_PREFIX.length;
-          el.setSelectionRange(caret, caret);
+          el?.setSelectionRange(caret, caret);
         });
         return;
       }
@@ -261,7 +261,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     if (digits.length === 0) {
       const caret = FOCUS_EMPTY_PREFIX.length;
       requestAnimationFrame(() => {
-        e.currentTarget.setSelectionRange(caret, caret);
+        e?.currentTarget?.setSelectionRange(caret, caret);
       });
     }
   };

@@ -3,6 +3,7 @@ import { FC, memo } from "react";
 
 import TutorialList from "@/src/components/template-parts/Course/Tutorial/List";
 import CourseProgress from "@/src/components/template-parts/Course/Tutorial/Progress";
+import { useParams } from "next/navigation";
 
 type PropTypes = {
   progress: number;
@@ -19,6 +20,8 @@ type PropTypes = {
 };
 
 const CourseTutorial: FC<PropTypes> = ({ progress, total, list, className, isPurchased }) => {
+  const courseId = useParams().id as string;
+
   return (
     <div className={classNames("course-tutorial", className)}>
       <CourseProgress progress={progress} total={total} />
@@ -31,7 +34,7 @@ const CourseTutorial: FC<PropTypes> = ({ progress, total, list, className, isPur
         )}
       </div>
 
-      <TutorialList list={list} />
+      <TutorialList list={list} courseId={courseId} />
     </div>
   );
 };

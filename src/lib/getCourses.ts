@@ -62,13 +62,23 @@ export type Lesson = {
   course: Pick<Course, "id" | "title" | "progress_percent" | "lessons_count">;
   description: string;
   duration_minutes: number;
-  has_homework: boolean;
-  has_materials: boolean;
+  has_homework?: boolean;
+  has_materials?: boolean;
+  materials?: LessonMaterial;
+  homework?: LessonMaterial;
   id: number;
   lessons: CourseLesson[];
   number: number;
   title: string;
-  video_url: string;
+  video_url?: string;
+  total_lessons?: number;
+  video?: { video_url: string; video_file: null };
+};
+
+export type LessonMaterial = {
+  has_file: boolean;
+  download_url: string | null;
+  empty_text: string;
 };
 
 export type LessonFetchResult = {

@@ -26,12 +26,8 @@
       width: 100%;
       height: 681px;
       border-radius: 50px;
-      object-fit: cover;
-
-      &:fullscreen,
-      &:-webkit-full-screen {
-        object-fit: contain;
-      }
+      object-fit: contain;
+      background: var(--black);
     }
 
     .lesson-page__lesson-content {
@@ -174,6 +170,33 @@
         width: 100%;
         margin-top: 50px;
 
+        .lesson-page__lesson-info_buttons-item--container {
+          @include flex-list(10px);
+          width: 100%;
+        }
+
+        .lesson-page__lesson-info_buttons-item--error {
+          @include fonts(18px, 400, "Manrope");
+          color: rgba(28, 26, 28, 0.4);
+          margin-left: 40px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          svg {
+            @include icon(24px);
+            color: var(--main-orange);
+          }
+        }
+
+        .lesson-page__lesson-info_buttons-item--button {
+          cursor: pointer;
+
+          &.lesson-page__lesson-info_buttons-item--button-disabled {
+            pointer-events: none;
+          }
+        }
+
         .lesson-page__lesson-info_buttons-item {
           @include center-between;
           @include fonts(24px, 500, "Manrope");
@@ -195,6 +218,11 @@
 
             svg {
               @include icon(24px);
+            }
+
+            &:disabled {
+              opacity: 0.5;
+              pointer-events: none;
             }
           }
         }
@@ -346,6 +374,11 @@
 
         .lesson-page__lesson-info_buttons {
           gap: 20px;
+
+          .lesson-page__lesson-info_buttons-item--error {
+            font-size: 16px;
+            margin-left: 20px;
+          }
 
           .lesson-page__lesson-info_buttons-item {
             font-size: 22px;
@@ -510,6 +543,14 @@
           gap: 12px;
           margin-top: 30px;
 
+          .lesson-page__lesson-info_buttons-item--error {
+            font-size: 12px;
+
+            svg {
+              @include icon(16px);
+            }
+          }
+
           .lesson-page__lesson-info_buttons-item {
             font-size: 16px;
             padding: 10px 10px 10px 24px;
@@ -667,6 +708,16 @@
         .lesson-page__lesson-info_buttons {
           margin-top: 30px;
 
+          .lesson-page__lesson-info_buttons-item--error {
+            font-size: 16px;
+            gap: 6px;
+            margin-left: 16px;
+
+            svg {
+              @include icon(24px);
+            }
+          }
+
           .lesson-page__lesson-info_buttons-item {
             font-size: 18px;
             padding: 10px 10px 10px 30px;
@@ -815,6 +866,15 @@
         .lesson-page__lesson-info_buttons {
           flex-direction: column;
           margin-top: 30px;
+
+          .lesson-page__lesson-info_buttons-item--error {
+            font-size: 12px;
+            margin-left: 20px;
+
+            svg {
+              @include icon(16px);
+            }
+          }
 
           .lesson-page__lesson-info_buttons-item {
             font-size: 14px;

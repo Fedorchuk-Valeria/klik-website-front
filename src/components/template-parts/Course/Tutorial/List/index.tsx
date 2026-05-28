@@ -9,10 +9,13 @@ import Icon from "@/src/components/ui/Icon/Icon";
 import CompleteLessonSVG from "@/src/assets/images/view/courses/complete-lesson.svg";
 import StepLineSVG from "@/src/assets/images/view/courses/step-line.svg";
 
+import { PAGES } from "@/src/utils/constant";
+
 type PropTypes = {
   className?: string;
-  onClick?: (id: number) => void;
+  onClick?: (id: number | null) => void;
   isHideButton?: boolean;
+  courseId?: string;
   list: {
     id: number;
     title: string;
@@ -22,7 +25,7 @@ type PropTypes = {
   }[];
 };
 
-const TutorialList: FC<PropTypes> = ({ list, className, onClick, isHideButton }) => {
+const TutorialList: FC<PropTypes> = ({ list, className, onClick, isHideButton, courseId }) => {
   return (
     <ul className={classNames("course-tutorial__list", className)}>
       {list.map((item, index) => {
@@ -33,9 +36,10 @@ const TutorialList: FC<PropTypes> = ({ list, className, onClick, isHideButton })
 
         return (
           <li
-            onClick={() => onClick?.(item.id)}
+            onClick={() => onClick?.(isDisabled ? null : item.id)}
             key={index}
             className={classNames("course-tutorial__list-item", {
+              "course-tutorial__list-item--clickable": !!onClick,
               "course-tutorial__list-item--done": isDone,
               "course-tutorial__list-item--disabled": isDisabled,
             })}
@@ -59,7 +63,19 @@ const TutorialList: FC<PropTypes> = ({ list, className, onClick, isHideButton })
               </div>
 
               {!isHideButton && (
-                <Link href={"#"} className={"course-tutorial__list-item_button"}>
+                <Link
+                  href={
+                    isDisabled
+                      ? "#"
+                      : isDone
+                        ? "#"
+                        : PAGES.LESSON.replace(":id", courseId ?? "").replace(
+                            ":lessonId",
+                            item.id.toString()
+                          )
+                  }
+                  className={"course-tutorial__list-item_button"}
+                >
                   <button>
                     <Icon name={isDone ? "test" : isDisabled ? "lock" : "play"} />
 

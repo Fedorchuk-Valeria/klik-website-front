@@ -1,10 +1,17 @@
 .course-tutorial__list {
   @include flex-list(30px);
 
+  .course-tutorial__list-item--clickable {
+    &:not(.course-tutorial__list-item--disabled) {
+      cursor: pointer;
+    }
+  }
+
   .course-tutorial__list-item {
     display: flex;
     align-items: center;
     gap: 20px;
+    min-width: 0;
 
     &:not(:last-child) {
       .course-tutorial__list-item--status {
@@ -89,10 +96,19 @@
       border-radius: 40px;
       padding: 22px 30px 22px 50px;
       width: 100%;
+      min-width: 0;
+      overflow: hidden;
+
+      & > div {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+      }
 
       .course-tutorial__list-item_content-title {
         @include fonts(20px, 500, "Etude Noire");
         @include text-line-clamp(1);
+        overflow-wrap: anywhere;
         color: var(--main-green-dark);
       }
 
@@ -111,6 +127,7 @@
       }
 
       .course-tutorial__list-item_button {
+        flex-shrink: 0;
         width: fit-content;
 
         button {

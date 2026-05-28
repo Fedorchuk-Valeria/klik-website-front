@@ -111,7 +111,7 @@ const CoursePage: FC<PropTypes> = ({ data, errors }) => {
   );
 };
 
-function getMonths(months: number) {
+export function getMonths(months: number) {
   switch (months) {
     case 1:
       return "месяц";
@@ -124,7 +124,7 @@ function getMonths(months: number) {
   }
 }
 
-function getTime(time: number) {
+export function getTime(time: number) {
   switch (time) {
     case 1:
       return "минута";

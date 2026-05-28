@@ -1,5 +1,9 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { FC } from "react";
 
+import { getTime } from "@/src/components/Pages/CoursePage";
 import TutorialList from "@/src/components/template-parts/Course/Tutorial/List";
 import CourseProgress from "@/src/components/template-parts/Course/Tutorial/Progress";
 import BackButton from "@/src/components/ui/BackButton";
@@ -7,6 +11,8 @@ import Icon from "@/src/components/ui/Icon/Icon";
 
 import { Lesson } from "@/src/lib/getCourses";
 import { PAGES } from "@/src/utils/constant";
+import classNames from "classnames";
+import Link from "next/link";
 
 type PropTypes = {
   id: string;
@@ -15,10 +21,16 @@ type PropTypes = {
 };
 
 // TODO tests
-// TODO homework
-// TODO materials
-// TODO logic
+// TODO download homework and materials
 const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
+  const router = useRouter();
+
+  const handleUrlClick = (itemId: number | null) => {
+    if (!itemId) return;
+
+    router.push(PAGES.LESSON.replace(":id", id).replace(":lessonId", itemId.toString()));
+  };
+
   return (
     <div className="lesson-page">
       <div className="lesson-page__container">
@@ -46,50 +58,24 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
 
               <CourseProgress
                 progress={0}
-                total={10}
+                total={data?.total_lessons ?? 0}
                 className="lesson-page__lesson-content_progress"
               />
 
               <TutorialList
                 className="lesson-page__lesson-content_list"
                 isHideButton={true}
-                list={[
-                  {
-                    id: 1,
-                    title: "Урок 1",
-                    duration: "10 минут",
-                    test_result: 67,
-                    status: "done",
-                  },
-                  {
-                    id: 2,
-                    title: "Урок 2",
-                    duration: "10 минут",
-                    test_result: null,
-                    status: "active",
-                  },
-                  {
-                    id: 3,
-                    title: "Урок 3",
-                    duration: "10 минут",
-                    test_result: null,
-                    status: "disabled",
-                  },
-                  {
-                    id: 4,
-                    title: "Урок 4",
-                    duration: "10 минут",
-                    test_result: null,
-                    status: "disabled",
-                  },
-                  {
-                    id: 5,
-                    title: "Урок 5",
-                    duration: "10 минут",
-                    test_result: null,
-                    status: "disabled",
-                  },
-                ]}
+                courseId={id}
+                onClick={handleUrlClick}
+                list={
+                  (data?.lessons || [])?.map((lesson) => ({
+                    id: lesson.id,
+                    title: lesson.title,
+                    duration: `${lesson.duration_minutes} ${getTime(lesson.duration_minutes)}`,
+                    test_result: lesson.test_result,
+                    status: lesson.is_completed ? "done" : lesson.is_locked ? "disabled" : "active",
+                  })) ?? []
+                }
               />
             </div>
           </div>
@@ -116,20 +102,43 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
                 {
                   text: "Материалы урока",
                   icon: "download",
-                  isDisabled: false,
+                  url: data?.materials?.download_url,
+                  isDisabled: !data?.materials?.has_file,
+                  error: data?.materials?.empty_text,
                 },
                 {
                   text: "Домашнее задание",
                   icon: "homework",
-                  isDisabled: true,
+                  url: data?.homework?.download_url,
+                  isDisabled: !data?.homework?.has_file,
+                  error: data?.homework?.empty_text,
                 },
               ].map((item) => (
-                <div key={item.text} className="lesson-page__lesson-info_buttons-item">
-                  <p>{item.text}</p>
+                <div key={item.text} className="lesson-page__lesson-info_buttons-item--container">
+                  <div className="lesson-page__lesson-info_buttons-item">
+                    <p>{item.text}</p>
 
-                  <button disabled={item.isDisabled}>
-                    <Icon name={item.icon} />
-                  </button>
+                    <Link
+                      href={item.url || ""}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download={item.icon === "download"}
+                      className={classNames("lesson-page__lesson-info_buttons-item--button", {
+                        "lesson-page__lesson-info_buttons-item--button-disabled": item.isDisabled,
+                      })}
+                    >
+                      <button disabled={item.isDisabled}>
+                        <Icon name={item.icon} />
+                      </button>
+                    </Link>
+                  </div>
+
+                  {!!item.error && (
+                    <p className="lesson-page__lesson-info_buttons-item--error">
+                      <Icon name="info-circle-outline" />
+                      <span>{item.error}</span>
+                    </p>
+                  )}
                 </div>
               ))}
             </div>

@@ -26,6 +26,10 @@ export default async function LessonDetailPage({ params }: PageProps) {
     return redirect(PAGES.LOGIN);
   }
 
+  if (code === HttpStatus.Forbidden) {
+    return redirect(PAGES.COURSE.replace(":id", id));
+  }
+
   if (code === HttpStatus.NotFound) {
     return notFound();
   }
