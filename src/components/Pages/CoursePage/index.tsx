@@ -95,6 +95,7 @@ const CoursePage: FC<PropTypes> = ({ data, errors }) => {
         <CourseTutorial
           progress={data?.progress_percent ?? 0}
           total={data?.lessons_count ?? 0}
+          isPurchased={data.is_purchased}
           list={
             (data?.lessons || [])?.map((lesson) => ({
               id: lesson.id,
@@ -110,7 +111,7 @@ const CoursePage: FC<PropTypes> = ({ data, errors }) => {
   );
 };
 
-function getMonths(months: number) {
+export function getMonths(months: number) {
   switch (months) {
     case 1:
       return "месяц";
@@ -123,7 +124,7 @@ function getMonths(months: number) {
   }
 }
 
-function getTime(time: number) {
+export function getTime(time: number) {
   switch (time) {
     case 1:
       return "минута";
