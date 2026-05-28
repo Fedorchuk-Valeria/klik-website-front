@@ -1,0 +1,146 @@
+.test-card {
+  padding: 30px;
+  border-radius: 40px;
+  background: var(--main-light);
+  width: 100%;
+
+  .test-card__badge {
+    width: fit-content;
+  }
+
+  .test-card__description {
+    @include fonts(18px, 400, "Manrope");
+    color: rgba(28, 26, 28, 0.4);
+    margin-top: 20px;
+  }
+
+  .test-card__title {
+    @include fonts(24px, 500, "Etude Noire");
+    color: var(--main-green-dark);
+    margin-top: 30px;
+  }
+
+  .test-card__answers {
+    @include flex-list(20px);
+    margin-top: 20px;
+
+    .test-card__answer {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      cursor: pointer;
+
+      span {
+        @include fonts(20px, 400, "Manrope");
+        color: var(--main-black);
+      }
+    }
+  }
+
+  @media screen and (max-width: $desktop) {
+    .test-card__description {
+      font-size: 16px;
+    }
+
+    .test-card__title {
+      font-size: 18px;
+    }
+
+    .test-card__answers {
+      margin-top: 20px;
+      gap: 16px;
+
+      .test-card__answer {
+        gap: 14px;
+
+        span {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    padding: 20px;
+    border-radius: 20px;
+
+    .test-card__description {
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    .test-card__title {
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    .test-card__answers {
+      gap: 12px;
+      margin-top: 16px;
+
+      .test-card__answer {
+        gap: 10px;
+
+        span {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    padding: 30px;
+    border-radius: 30px;
+
+    .test-card__description {
+      font-size: 14px;
+      margin-top: 16px;
+    }
+
+    .test-card__title {
+      font-size: 18px;
+      margin-top: 20px;
+    }
+
+    .test-card__answers {
+      gap: 12px;
+      margin-top: 16px;
+
+      .test-card__answer {
+        gap: 14px;
+
+        span {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    padding: 20px;
+    border-radius: 20px;
+
+    .test-card__description {
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    .test-card__title {
+      font-size: 16px;
+      margin-top: 16px;
+    }
+
+    .test-card__answers {
+      gap: 10px;
+      margin-top: 16px;
+
+      .test-card__answer {
+        gap: 10px;
+
+        span {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}

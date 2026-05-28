@@ -1,18 +1,23 @@
 "use client";
 
+import classNames from "classnames";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FC } from "react";
+import { FC, useCallback } from "react";
 
 import { getTime } from "@/src/components/Pages/CoursePage";
 import TutorialList from "@/src/components/template-parts/Course/Tutorial/List";
 import CourseProgress from "@/src/components/template-parts/Course/Tutorial/Progress";
+import Test from "@/src/components/template-parts/Test";
 import BackButton from "@/src/components/ui/BackButton";
+import Badge from "@/src/components/ui/Badge";
 import Icon from "@/src/components/ui/Icon/Icon";
 
 import { Lesson } from "@/src/lib/getCourses";
+import { useAppSelector } from "@/src/store/hooks";
+import { getLessonTestRequest } from "@/src/store/slices/lesson";
 import { PAGES } from "@/src/utils/constant";
-import classNames from "classnames";
-import Link from "next/link";
+import { useDispatch } from "react-redux";
 
 type PropTypes = {
   id: string;
@@ -24,6 +29,20 @@ type PropTypes = {
 // TODO download homework and materials
 const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const {
+    data: lesson,
+    isLoading,
+    errors,
+    isTestLoading,
+    test,
+  } = useAppSelector((state) => state.lesson);
+
+  const handleStartTestClick = useCallback(() => {
+    if (id && lessonId) {
+      dispatch(getLessonTestRequest({ coursePk: Number(id), lessonPk: Number(lessonId) }));
+    }
+  }, [id, lessonId, dispatch]);
 
   const handleUrlClick = (itemId: number | null) => {
     if (!itemId) return;
@@ -82,7 +101,7 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
 
           <div className="lesson-page__lesson-info">
             <div className="lesson-page__lesson-info_first">
-              <p className="lesson-page__lesson-info_first-label">Урок {data?.number}</p>
+              <Badge title={`Урок ${data?.number}`} />
               <p className="lesson-page__lesson-info_first-duration">
                 <Icon name="clock" />
 
@@ -144,6 +163,15 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
             </div>
           </div>
         </div>
+
+        <Test
+          data={test}
+          onStartTestClick={handleStartTestClick}
+          isTestLoading={isTestLoading}
+          className="lesson-page__test"
+          title="Тест для проверки знаний"
+          description="Пройдите тест, чтобы открыть следующий урок"
+        />
       </div>
     </div>
   );

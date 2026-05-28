@@ -127,16 +127,6 @@
         align-items: center;
         gap: 30px;
 
-        .lesson-page__lesson-info_first-label {
-          @include center;
-          @include fonts(18px, 500, "Manrope");
-          padding: 8px 20px;
-          border-radius: 100px;
-          background: var(--main-green-neon);
-          border: 1px solid var(--main-green-dark);
-          color: var(--main-green-dark);
-        }
-
         .lesson-page__lesson-info_first-duration {
           @include fonts(18px, 400, "Manrope");
           display: flex;
@@ -227,6 +217,15 @@
           }
         }
       }
+    }
+  }
+
+  .lesson-page__test {
+    margin-top: 50px;
+    max-width: 1063px;
+
+    .test__image {
+      max-width: 381px;
     }
   }
 
@@ -353,10 +352,6 @@
           align-items: center;
           gap: 30px;
 
-          .lesson-page__lesson-info_first-label {
-            font-size: 16px;
-          }
-
           .lesson-page__lesson-info_first-duration {
             font-size: 16px;
           }
@@ -386,6 +381,14 @@
             border-radius: 50px;
           }
         }
+      }
+    }
+
+    .lesson-page__test {
+      max-width: 815px;
+
+      .test__image {
+        max-width: 307px;
       }
     }
   }
@@ -512,11 +515,6 @@
         .lesson-page__lesson-info_first {
           gap: 20px;
 
-          .lesson-page__lesson-info_first-label {
-            font-size: 14px;
-            padding: 6px 16px;
-          }
-
           .lesson-page__lesson-info_first-duration {
             font-size: 14px;
             gap: 6px;
@@ -565,6 +563,15 @@
             }
           }
         }
+      }
+    }
+
+    .lesson-page__test {
+      margin-top: 30px;
+      max-width: 583px;
+
+      .test__image {
+        max-width: 180px;
       }
     }
   }
@@ -678,11 +685,6 @@
         .lesson-page__lesson-info_first {
           gap: 20px;
 
-          .lesson-page__lesson-info_first-label {
-            font-size: 16px;
-            padding: 6px 16px;
-          }
-
           .lesson-page__lesson-info_first-duration {
             font-size: 16px;
             gap: 6px;
@@ -732,6 +734,15 @@
             }
           }
         }
+      }
+    }
+
+    .lesson-page__test {
+      margin-top: 80px;
+      max-width: 100%;
+
+      .test__image {
+        max-width: 640px;
       }
     }
   }
@@ -836,11 +847,6 @@
         .lesson-page__lesson-info_first {
           gap: 16px;
 
-          .lesson-page__lesson-info_first-label {
-            font-size: 12px;
-            padding: 6px 14px;
-          }
-
           .lesson-page__lesson-info_first-duration {
             font-size: 14px;
             gap: 6px;
@@ -890,6 +896,14 @@
             }
           }
         }
+      }
+    }
+
+    .lesson-page__test {
+      margin-top: 50px;
+
+      .test__image {
+        max-width: 100%;
       }
     }
   }
