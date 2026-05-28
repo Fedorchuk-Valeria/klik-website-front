@@ -14,6 +14,7 @@ import {resetPasswordRequest} from "@/src/store/slices/auth";
 import {ChangeEvent, useEffect} from "react";
 import {showModal} from "@/src/store/slices/modalSlice";
 import {ModalType} from "@/src/entities/common";
+import PopoverPassword from "@/src/components/ui/Popovers/PopoverPassword";
 
 const PagesProfilePassword = () => {
 
@@ -94,7 +95,12 @@ const PagesProfilePassword = () => {
             <PasswordInput
               name="password"
               variant="outline"
-              label="Новый пароль"
+              label={
+                <span className="page-profile__form-label">
+                  <span>Пароль</span>
+                  <PopoverPassword />
+                </span>
+              }
               placeholder="********"
               onChange={handlePasswordChange}
               value={form.values.password}
