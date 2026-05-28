@@ -23,5 +23,9 @@
     @media screen and (max-width: $tablet-size) {
       max-width: 740px;
     }
+
+    @media screen and (max-width: $mobile-size) {
+      padding: 0 20px;
+    }
   }
 }

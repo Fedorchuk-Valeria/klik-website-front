@@ -1,5 +1,5 @@
 .page-profile {
-  margin: 60px 0 100px;
+  margin-bottom: 100px;
 
   h1 {
     @include fonts(24px, 500, "Etude Noire");
@@ -55,6 +55,17 @@
     flex-direction: column;
     gap: 20px;
     width: 100%;
+
+    &-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      svg {
+        @include icon(22px);
+        color: var(--main-orange);
+      }
+    }
 
     @media screen and (max-width: $desktop) {
       max-width: 600px;
@@ -209,14 +220,15 @@
       align-items: center;
       gap: 44px;
 
-      @media screen and (max-width: $tablet-size) {
-        gap: 16px;
+      @media screen and (max-width: $landscape-tablet-size) {
+        gap: 12px;
         flex-direction: column;
-        width: 100%;
+        align-items: baseline;
       }
 
-      @media screen and (max-width: $mobile-size) {
-        align-items: baseline;
+      @media screen and (max-width: $tablet-size) {
+        gap: 16px;
+        width: 100%;
       }
 
       .button {
@@ -224,16 +236,53 @@
         flex: 1;
         justify-content: center;
 
-        @media screen and (max-width: $tablet-size) {
+        @media screen and (max-width: $landscape-tablet-size) {
           width: 100%;
         }
       }
-    }
-  }
 
-  &__button {
-    @media screen and (max-width: $mobile-size) {
-      width: calc(100% - 20px) !important;
+      .button__arrow {
+
+        @media screen and (max-width: $desktop) {
+          width: 45px;
+          height: 45px;
+        }
+
+        @media screen and (max-width: $landscape-tablet-size) {
+          width: 36px;
+          height: 36px;
+          right: 5px;
+        }
+
+        @media screen and (max-width: $tablet-size) {
+          width: 45px;
+          height: 45px;
+        }
+
+        @media screen and (max-width: $mobile-size) {
+          width: 36px;
+          height: 36px;
+          right: 5px;
+        }
+
+        svg {
+          @media screen and (max-width: $desktop) {
+            @include icon(27px);
+          }
+
+          @media screen and (max-width: $landscape-tablet-size) {
+            @include icon(22px);
+          }
+
+          @media screen and (max-width: $tablet-size) {
+            @include icon(27px);
+          }
+
+          @media screen and (max-width: $mobile-size) {
+            @include icon(22px);
+          }
+        }
+      }
     }
   }
 }

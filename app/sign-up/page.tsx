@@ -6,10 +6,8 @@ import { ChangeEvent, useEffect } from "react";
 
 import { registerValidationSchema } from "@/src/components/Login/validationSchema";
 import Button from "@/src/components/ui/Button/Button";
-import Icon from "@/src/components/ui/Icon/Icon";
 import PasswordInput from "@/src/components/ui/PasswordInput";
 import PhoneInput from "@/src/components/ui/PhoneInput";
-import Popover from "@/src/components/ui/Popover";
 import Tabs from "@/src/components/ui/Tabs";
 import TextInput from "@/src/components/ui/TextInput";
 
@@ -17,6 +15,7 @@ import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { clearRegister, registerRequest } from "@/src/store/slices/auth";
 import { PAGES, PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
+import PopoverPassword from "@/src/components/ui/Popovers/PopoverPassword";
 
 const RegisterForm = () => {
   const dispatch = useAppDispatch();
@@ -126,24 +125,7 @@ const RegisterForm = () => {
           label={
             <span className="login-page__form-label">
               <span>Пароль</span>
-              <Popover
-                id="password-popover"
-                variant="click"
-                positionX="right"
-                positionY="bottom-end"
-                popoverClassName="password-popover-list"
-                content={
-                  <ul>
-                    <li>Минимальная длина - 8 символов.</li>
-                    <li>Должна быть минимум 1 заглавная буква.</li>
-                    <li>Должна быть минимум 1 строчная буква.</li>
-                    <li>Должен быть минимум 1 специальный символ.</li>
-                    <li>Должна быть минимум 1 цифра.</li>
-                  </ul>
-                }
-              >
-                <Icon name="info-circle-outline" />
-              </Popover>
+              <PopoverPassword />
             </span>
           }
           variant="outline"
