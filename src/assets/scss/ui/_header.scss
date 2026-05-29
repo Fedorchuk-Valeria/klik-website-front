@@ -59,6 +59,10 @@
       .header__logo-text {
         color: var(--main-black);
       }
+
+      .header__auth .header__user-button .button__text {
+        color: var(--main-green-dark);
+      }
     }
 
     @media screen and (max-width: $desktop) {

@@ -1,23 +1,24 @@
 "use client";
 
-import {useAppDispatch, useAppSelector} from "@/src/store/hooks";
-import {useEffect} from "react";
-import {profileRequest} from "@/src/store/slices/auth";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect } from "react";
+
+import avatar from "@/src/assets/images/view/profile/avatar.png";
+
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { profileRequest } from "@/src/store/slices/auth";
+import { PAGES } from "@/src/utils/constant";
+
+import Icon from "@/src/components/ui/Icon/Icon";
 import Loader from "@/src/components/ui/Loader/Loader";
 import PhoneInput from "@/src/components/ui/PhoneInput";
 import TextInput from "@/src/components/ui/TextInput";
-import Link from "next/link";
-import {PAGES} from "@/src/utils/constant";
-
-import avatar from "@/src/assets/images/view/profile/avatar.png";
-import Image from "next/image";
-import Icon from "@/src/components/ui/Icon/Icon";
 
 const PagesProfile = () => {
-
   const dispatch = useAppDispatch();
 
-  const {user_profile, isLoading} = useAppSelector((state) => state.auth);
+  const { user_profile, isLoading } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(profileRequest());
@@ -34,6 +35,7 @@ const PagesProfile = () => {
           <h1>Личный кабинет</h1>
           <div className="page-profile__wrapper">
             <Image src={avatar} alt="avatar" className="page-profile__avatar" />
+
             <div className="page-profile__form">
               <TextInput
                 variant="outline"

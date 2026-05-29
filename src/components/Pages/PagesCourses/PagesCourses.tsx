@@ -13,11 +13,10 @@ import { QueryHelper } from "@/src/utils/helpers";
 
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import { getCoursesRequest } from "@/src/store/slices/corses";
+import { clearCourses, getCoursesRequest } from "@/src/store/slices/corses";
 
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
-import MediaImage from "@/src/components/ui/MediaImage";
 import Select from "@/src/components/ui/Select";
 
 type Props = {
@@ -225,7 +224,7 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
               })}
             >
               <div className="courses-list__item-image">
-                <MediaImage src={item.image} alt={item.title} fill />
+                <Image src={item.image} alt={item.title} fill />
 
                 {item.is_purchased && (
                   <span className="courses-list__item-purchased">
@@ -256,7 +255,10 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
                   {item.price} <Icon name="ruble" className="courses-list__item-price-icon" />
                 </p>
 
-                <Link href={PAGES.COURSE.replace(":id", item.id.toString())}>
+                <Link
+                  href={PAGES.COURSE.replace(":id", item.id.toString())}
+                  onClick={() => dispatch(clearCourses())}
+                >
                   <Button
                     className="courses-list__item-button"
                     variant={item.is_purchased ? "main-green-dark" : "outline-green-dark"}

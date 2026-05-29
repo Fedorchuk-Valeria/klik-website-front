@@ -108,12 +108,20 @@
   }
 
   &__avatar {
-    max-width: 150px;
+    @include icon(150px);
+    aspect-ratio: 1/1;
     border-radius: 100%;
 
+    @media screen and (max-width: $landscape-tablet-size) {
+      @include icon(120px);
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      @include icon(150px);
+    }
+
     @media screen and (max-width: $mobile-size) {
-      max-width: 100px;
-      height: auto;
+      @include icon(100px);
     }
   }
 
@@ -242,7 +250,6 @@
       }
 
       .button__arrow {
-
         @media screen and (max-width: $desktop) {
           width: 45px;
           height: 45px;
