@@ -50,6 +50,8 @@ export const PAGE_ANCHORS = {
   WHAT: "what",
   TUTORS: "tutors",
   SIGN_UP_FREE_LESSON: "sign-up-free-lesson",
+
+  COURSES: "courses",
 } as const;
 
 export const CITY_DISPLAY_NAME = {

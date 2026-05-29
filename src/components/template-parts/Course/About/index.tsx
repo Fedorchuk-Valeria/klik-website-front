@@ -1,8 +1,8 @@
-import Image from "next/image";
 import { FC, memo } from "react";
 
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
+import MediaImage from "@/src/components/ui/MediaImage";
 import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 import { useRouter } from "next/navigation";
@@ -49,7 +49,7 @@ const CourseAbout: FC<PropTypes> = ({
   return (
     <div className="course-about">
       <div className="course-about__image">
-        <Image src={imageUrl} alt={title} fill />
+        <MediaImage src={imageUrl} alt={title} fill />
 
         {isPayment && (
           <div className="course-about__purchased">

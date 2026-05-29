@@ -62,9 +62,14 @@
           }
         }
 
+        .page-courses__header-button-link {
+          width: 100%;
+          margin-top: auto;
+        }
+
         .page-courses__header-button {
           @include center;
-          margin-top: auto;
+          width: 100%;
         }
       }
 
@@ -575,8 +580,9 @@
             }
           }
 
-          .page-courses__header-button {
+          .page-courses__header-button-link {
             margin-top: 30px;
+            max-width: calc(100% - 23px);
           }
         }
 
@@ -747,8 +753,12 @@
             }
           }
 
-          .page-courses__header-button {
+          .page-courses__header-button-link {
             margin-top: 18px;
+            max-width: 100%;
+          }
+
+          .page-courses__header-button {
             padding: 16px;
             width: calc(100% - 13px);
             font-size: 16px;

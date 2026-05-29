@@ -32,7 +32,7 @@ const CoursePage: FC<PropTypes> = ({ data, errors }) => {
         id: 1,
         title: data?.lessons_count,
         icon: "player",
-        description: "урока",
+        description: getLessons(data?.lessons_count ?? 0),
       },
       {
         id: 2,
@@ -110,6 +110,19 @@ const CoursePage: FC<PropTypes> = ({ data, errors }) => {
     </div>
   );
 };
+
+export function getLessons(count: number) {
+  switch (count) {
+    case 1:
+      return "урок";
+    case 2:
+    case 3:
+    case 4:
+      return "урока";
+    default:
+      return "уроков";
+  }
+}
 
 export function getMonths(months: number) {
   switch (months) {

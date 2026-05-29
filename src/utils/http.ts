@@ -58,7 +58,7 @@ http.interceptors.response.use(
 
           refreshTokenPromise = refreshTokenService({
             method: "POST",
-            url: "/auth/token/refresh/",
+            url: "/users/refresh/",
             headers: {
               ...defaultConfig.headers,
               "Content-Type": "application/json",

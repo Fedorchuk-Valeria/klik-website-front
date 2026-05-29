@@ -3,6 +3,7 @@ import { FC, memo } from "react";
 
 import TutorialList from "@/src/components/template-parts/Course/Tutorial/List";
 import CourseProgress from "@/src/components/template-parts/Course/Tutorial/Progress";
+import { LessonTestResult } from "@/src/lib/getCourses";
 import { useParams } from "next/navigation";
 
 type PropTypes = {
@@ -12,7 +13,7 @@ type PropTypes = {
     id: number;
     title: string;
     duration: string;
-    test_result: number | null;
+    test_result: LessonTestResult | null;
     status: "done" | "active" | "disabled";
   }[];
   className?: string;

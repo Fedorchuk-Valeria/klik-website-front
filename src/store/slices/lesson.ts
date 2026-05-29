@@ -1,12 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { Lesson, LessonTest } from "@/src/lib/getCourses";
+import {
+  Lesson,
+  LessonTest,
+  LessonTestBody,
+  LessonTestQuestion,
+  LessonTestResult,
+  PassedTest,
+} from "@/src/lib/getCourses";
 
 type LessonState = {
   isLoading: boolean;
   isTestLoading: boolean;
   data: Lesson | null;
   test: LessonTest | null;
+  result: LessonTestResult | null;
+  review: LessonTestQuestion[] | null;
   errors: Record<string, string> | null;
 };
 
@@ -16,6 +25,8 @@ const initialState: LessonState = {
   data: null,
   errors: null,
   test: null,
+  review: null,
+  result: null,
 };
 
 const lessonSlice = createSlice({
@@ -26,6 +37,9 @@ const lessonSlice = createSlice({
       void action.payload;
       state.isLoading = true;
       state.errors = null;
+      state.test = null;
+      state.review = null;
+      state.result = null;
     },
     getLessonSuccess(state, action: { payload: Lesson }) {
       state.data = action.payload;
@@ -41,11 +55,34 @@ const lessonSlice = createSlice({
       state.isTestLoading = true;
       state.errors = null;
     },
-    getLessonTestSuccess(state, action: { payload: LessonTest }) {
-      state.test = action.payload;
+    getLessonTestSuccess(state, action: { payload: LessonTest | PassedTest }) {
+      if (action.payload.status === "passed") {
+        state.review = (action.payload as PassedTest).review;
+        state.result = (action.payload as PassedTest).result;
+      } else {
+        state.test = action.payload as LessonTest;
+      }
       state.isTestLoading = false;
     },
     getLessonTestFailure(state, action: { payload: Record<string, string> | null }) {
+      state.errors = action.payload;
+      state.isTestLoading = false;
+    },
+
+    sendTestAnswersRequest(
+      state,
+      action: { payload: { coursePk: number; lessonPk: number; body: LessonTestBody } }
+    ) {
+      void action.payload;
+      state.isTestLoading = true;
+      state.errors = null;
+    },
+    sendTestAnswersSuccess(state, action: { payload: PassedTest }) {
+      state.review = action.payload.review;
+      state.result = action.payload.result;
+      state.isTestLoading = false;
+    },
+    sendTestAnswersFailure(state, action: { payload: Record<string, string> | null }) {
       state.errors = action.payload;
       state.isTestLoading = false;
     },
@@ -59,5 +96,8 @@ export const {
   getLessonTestRequest,
   getLessonTestSuccess,
   getLessonTestFailure,
+  sendTestAnswersRequest,
+  sendTestAnswersSuccess,
+  sendTestAnswersFailure,
 } = lessonSlice.actions;
 export default lessonSlice.reducer;

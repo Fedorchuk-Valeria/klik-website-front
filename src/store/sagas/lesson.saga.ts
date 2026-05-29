@@ -1,6 +1,6 @@
 import { call, fork, put, takeLatest } from "redux-saga/effects";
 
-import { Lesson, LessonTest } from "@/src/lib/getCourses";
+import { Lesson, LessonTest, LessonTestBody, PassedTest } from "@/src/lib/getCourses";
 import { CoursesApi } from "@/src/services/http";
 import {
   getLessonFailure,
@@ -9,6 +9,9 @@ import {
   getLessonTestFailure,
   getLessonTestRequest,
   getLessonTestSuccess,
+  sendTestAnswersFailure,
+  sendTestAnswersRequest,
+  sendTestAnswersSuccess,
 } from "@/src/store/slices/lesson";
 
 function* workerGetLesson({ payload }: { payload: { coursePk: number; lessonPk: number } }) {
@@ -53,4 +56,34 @@ function* watchGetLessonTest() {
   );
 }
 
-export const lessonWatchers = [fork(watchGetLesson), fork(watchGetLessonTest)];
+function* workerSendTestAnswers({
+  payload,
+}: {
+  payload: { coursePk: number; lessonPk: number; body: LessonTestBody };
+}) {
+  try {
+    const response: { data: PassedTest } = yield call(
+      CoursesApi.sendTestAnswers,
+      payload.coursePk,
+      payload.lessonPk,
+      payload.body
+    );
+
+    yield put(sendTestAnswersSuccess(response.data));
+  } catch (error) {
+    yield put(sendTestAnswersFailure(error as Record<string, string> | null));
+  }
+}
+
+function* watchSendTestAnswers() {
+  yield takeLatest(
+    sendTestAnswersRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerSendTestAnswers
+  );
+}
+
+export const lessonWatchers = [
+  fork(watchGetLesson),
+  fork(watchGetLessonTest),
+  fork(watchSendTestAnswers),
+];

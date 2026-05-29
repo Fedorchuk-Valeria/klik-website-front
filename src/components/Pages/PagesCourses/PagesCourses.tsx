@@ -8,7 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import image from "@/src/assets/images/view/courses/girl.png";
 
 import { Course } from "@/src/lib/getCourses";
-import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
+import { PAGE_ANCHORS, PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 
 import { RootStore } from "@/src/store";
@@ -17,6 +17,7 @@ import { getCoursesRequest } from "@/src/store/slices/corses";
 
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
+import MediaImage from "@/src/components/ui/MediaImage";
 import Select from "@/src/components/ui/Select";
 
 type Props = {
@@ -156,9 +157,14 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
                   ))}
                 </ul>
 
-                <Button className="page-courses__header-button" variant="main-light" withArrow>
-                  Записаться на курс
-                </Button>
+                <Link
+                  className="page-courses__header-button-link"
+                  href={`#${PAGE_ANCHORS.COURSES}`}
+                >
+                  <Button className="page-courses__header-button" variant="main-light" withArrow>
+                    Записаться на курс
+                  </Button>
+                </Link>
               </div>
 
               <div className="page-courses__header-image">
@@ -169,7 +175,7 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
         </div>
       </div>
 
-      <div className="courses__container">
+      <div className="courses__container" id={PAGE_ANCHORS.COURSES}>
         <p className="courses__title">Мои курсы</p>
 
         <p className="courses__text">Выберите курс для начала обучения</p>
@@ -219,7 +225,7 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
               })}
             >
               <div className="courses-list__item-image">
-                <Image src={item.image} alt={item.title} fill />
+                <MediaImage src={item.image} alt={item.title} fill />
 
                 {item.is_purchased && (
                   <span className="courses-list__item-purchased">

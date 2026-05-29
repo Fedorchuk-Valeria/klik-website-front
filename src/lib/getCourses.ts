@@ -22,6 +22,11 @@ export type Course = {
   updated_at: string;
 };
 
+export type LessonTestResult = {
+  correct_answers: number;
+  total_questions: number;
+};
+
 export type CourseLesson = {
   id: number;
   number: number;
@@ -29,7 +34,7 @@ export type CourseLesson = {
   duration_minutes: number;
   is_locked: boolean;
   is_completed: boolean;
-  test_result: number | null;
+  test_result: LessonTestResult | null;
 };
 
 export type CoursePrimaryAction = {
@@ -65,14 +70,14 @@ export type Lesson = {
   has_homework?: boolean;
   has_materials?: boolean;
   materials?: LessonMaterial;
-  homework?: LessonMaterial;
+  homework?: Omit<LessonMaterial, "download_url"> & { pdf_url: string | null };
   id: number;
   lessons: CourseLesson[];
   number: number;
   title: string;
   video_url?: string;
   total_lessons?: number;
-  video?: { video_url: string; video_file: null };
+  video?: { video_url: string; video_file: string | null };
 };
 
 export type LessonMaterial = {
@@ -101,10 +106,32 @@ export type LessonTestQuestion = {
   total_questions: number;
   text: string;
   selection_type: "checkbox" | "radio";
+  answers: LessonTestAnswer[];
+};
+
+export type LessonTestAnswer = {
+  id: number;
+  text: string;
+  is_selected?: boolean;
+  is_correct_answer?: boolean;
+};
+
+export type LessonTestBody = {
   answers: {
-    id: number;
-    text: string;
+    question_id: number;
+    answer_ids: number[];
   }[];
+};
+
+export type PassedTest = {
+  status: "passed" | "not_passed";
+  result: LessonTestResult;
+  review: LessonTestQuestion[];
+  next_action: {
+    type: "lesson";
+    course_id: number;
+    lesson_id: number;
+  };
 };
 
 export async function getCourses(): Promise<CoursesFetchResult> {
