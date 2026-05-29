@@ -60,6 +60,13 @@ const coursesSlice = createSlice({
       state.errors = action.payload;
       state.isLoading = false;
     },
+
+    clearCourses(state) {
+      state.data = [];
+      state.isLoading = false;
+      state.errors = null;
+      state.currentCourse = null;
+    },
   },
 });
 
@@ -73,5 +80,6 @@ export const {
   purchaseRequest,
   purchaseSuccess,
   purchaseFailure,
+  clearCourses,
 } = coursesSlice.actions;
 export default coursesSlice.reducer;

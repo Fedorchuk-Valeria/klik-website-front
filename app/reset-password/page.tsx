@@ -12,7 +12,7 @@ import PhoneInput from "@/src/components/ui/PhoneInput";
 
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import { forgotPasswordRequest } from "@/src/store/slices/auth";
+import { forgotPasswordRequest, setCodeSent } from "@/src/store/slices/auth";
 import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 
@@ -50,6 +50,8 @@ const ResetNewPassword = () => {
 
   useEffect(() => {
     if (isCodeSent) {
+      dispatch(setCodeSent(false));
+
       router.push(
         PAGES.CONFIRM_CODE +
           QueryHelper.getQueryString({
