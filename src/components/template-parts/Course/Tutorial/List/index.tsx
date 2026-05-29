@@ -9,6 +9,7 @@ import Icon from "@/src/components/ui/Icon/Icon";
 import CompleteLessonSVG from "@/src/assets/images/view/courses/complete-lesson.svg";
 import StepLineSVG from "@/src/assets/images/view/courses/step-line.svg";
 
+import { LessonTestResult } from "@/src/lib/getCourses";
 import { PAGES } from "@/src/utils/constant";
 
 type PropTypes = {
@@ -20,7 +21,7 @@ type PropTypes = {
     id: number;
     title: string;
     duration: string;
-    test_result: number | null;
+    test_result: LessonTestResult | null;
     status: "done" | "active" | "disabled";
   }[];
 };
@@ -67,12 +68,10 @@ const TutorialList: FC<PropTypes> = ({ list, className, onClick, isHideButton, c
                   href={
                     isDisabled
                       ? "#"
-                      : isDone
-                        ? "#"
-                        : PAGES.LESSON.replace(":id", courseId ?? "").replace(
-                            ":lessonId",
-                            item.id.toString()
-                          )
+                      : PAGES.LESSON.replace(":id", courseId ?? "").replace(
+                          ":lessonId",
+                          item.id.toString()
+                        )
                   }
                   className={"course-tutorial__list-item_button"}
                 >
@@ -84,7 +83,10 @@ const TutorialList: FC<PropTypes> = ({ list, className, onClick, isHideButton, c
                         <span>
                           <span>Результат теста</span>
                           <span className="course-tutorial__list-item_button-result">
-                            : {item?.test_result ?? 0} из 100
+                            :{" "}
+                            {item.test_result
+                              ? `${item.test_result.correct_answers}/${item.test_result.total_questions}`
+                              : "—"}
                           </span>
                         </span>
                       ) : isDisabled ? (

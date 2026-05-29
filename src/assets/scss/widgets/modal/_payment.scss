@@ -19,7 +19,6 @@
     justify-content: space-between;
     gap: 8px;
     margin-bottom: 12px;
-
   }
 
   &__value {
@@ -80,11 +79,12 @@
       }
     }
   }
+
   &__error {
     position: absolute;
     font-size: 14px;
     bottom: -25px;
-    color: #E31B1B;
+    color: var(--error-color);
   }
 
   &__btn {

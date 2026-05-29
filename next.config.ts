@@ -20,8 +20,18 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
       {
+        protocol: "http",
+        hostname: "test.it-klik.by",
+        pathname: "/media/**",
+      },
+      {
         protocol: "https",
         hostname: "test.it-klik.by",
+        pathname: "/media/**",
+      },
+      {
+        protocol: "http",
+        hostname: "it-klik.by",
         pathname: "/media/**",
       },
       {

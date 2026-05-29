@@ -9,15 +9,15 @@ import { useDispatch } from "react-redux";
 import { getTime } from "@/src/components/Pages/CoursePage";
 import TutorialList from "@/src/components/template-parts/Course/Tutorial/List";
 import CourseProgress from "@/src/components/template-parts/Course/Tutorial/Progress";
-import Test from "@/src/components/template-parts/Test";
+import Test, { TestAnswers } from "@/src/components/template-parts/Test";
 import BackButton from "@/src/components/ui/BackButton";
 import Badge from "@/src/components/ui/Badge";
 import Chat from "@/src/components/ui/Chat/Chat";
 import Icon from "@/src/components/ui/Icon/Icon";
 
-import { Lesson } from "@/src/lib/getCourses";
+import { Lesson, LessonTestBody } from "@/src/lib/getCourses";
 import { useAppSelector } from "@/src/store/hooks";
-import { getLessonTestRequest } from "@/src/store/slices/lesson";
+import { getLessonTestRequest, sendTestAnswersRequest } from "@/src/store/slices/lesson";
 import { PAGES } from "@/src/utils/constant";
 
 type PropTypes = {
@@ -31,7 +31,9 @@ type PropTypes = {
 const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { isTestLoading, test } = useAppSelector((state) => state.lesson);
+  const { isTestLoading, test, result, review } = useAppSelector((state) => state.lesson);
+
+  console.log(data, review, test, result);
 
   const handleStartTestClick = useCallback(() => {
     if (id && lessonId) {
@@ -39,11 +41,44 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
     }
   }, [id, lessonId, dispatch]);
 
-  const handleUrlClick = (itemId: number | null) => {
-    if (!itemId) return;
+  const handleUrlClick = useCallback(
+    (itemId: number | null) => {
+      if (!itemId) return;
 
-    router.push(PAGES.LESSON.replace(":id", id).replace(":lessonId", itemId.toString()));
-  };
+      router.push(PAGES.LESSON.replace(":id", id).replace(":lessonId", itemId.toString()));
+    },
+    [id]
+  );
+
+  const handleNextLessonClick = useCallback(() => {
+    if (id && lessonId) {
+      // router.push(PAGES.LESSON.replace(":id", id).replace(":lessonId", (Number(lessonId) + 1).toString()));
+    }
+  }, [id, lessonId]);
+
+  const handleSendAnswers = useCallback(
+    (answers: TestAnswers) => {
+      if (id && lessonId) {
+        console.log(answers);
+
+        const body: LessonTestBody = {
+          answers: Object.entries(answers).map(([questionId, answerIds]) => ({
+            question_id: Number(questionId),
+            answer_ids: answerIds,
+          })),
+        };
+
+        dispatch(
+          sendTestAnswersRequest({
+            coursePk: Number(id),
+            lessonPk: Number(lessonId),
+            body,
+          })
+        );
+      }
+    },
+    [id, lessonId, dispatch]
+  );
 
   return (
     <div className="lesson-page">
@@ -63,7 +98,10 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
               preload="metadata"
               className="lesson-page__video"
             >
-              <source src="https://placeholdervideo.dev/1920x1080" type="video/mp4" />
+              <source
+                src={data?.video?.video_url || data?.video?.video_file || ""}
+                type="video/mp4"
+              />
               Ваш браузер не поддерживает воспроизведение видео.
             </video>
 
@@ -123,7 +161,7 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
                 {
                   text: "Домашнее задание",
                   icon: "homework",
-                  url: data?.homework?.download_url,
+                  url: data?.homework?.pdf_url,
                   isDisabled: !data?.homework?.has_file,
                   error: data?.homework?.empty_text,
                 },
@@ -161,11 +199,21 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
 
         <Test
           data={test}
-          onStartTestClick={handleStartTestClick}
+          result={result}
+          review={review}
           isTestLoading={isTestLoading}
           className="lesson-page__test"
-          title="Тест для проверки знаний"
-          description="Пройдите тест, чтобы открыть следующий урок"
+          onSendAnswers={handleSendAnswers}
+          onStartTestClick={handleStartTestClick}
+          onNextLessonClick={handleNextLessonClick}
+          title={
+            result
+              ? `Тест пройден: ${result.correct_answers}/${result.total_questions}`
+              : "Тест для проверки знаний"
+          }
+          description={
+            result ? "Следующий урок открыт" : "Пройдите тест, чтобы открыть следующий урок"
+          }
         />
       </div>
 

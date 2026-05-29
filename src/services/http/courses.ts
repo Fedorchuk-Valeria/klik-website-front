@@ -1,3 +1,4 @@
+import { LessonTestBody } from "@/src/lib/getCourses";
 import { GET, POST } from "@/src/utils/http";
 
 const baseUrl = "/courses/";
@@ -13,3 +14,9 @@ export const getLesson = (coursePk: number | string, lessonPk: number | string) 
 
 export const getLessonTest = (coursePk: number | string, lessonPk: number | string) =>
   GET(`${baseUrl}${coursePk}/lessons/${lessonPk}/test/`);
+
+export const sendTestAnswers = (
+  coursePk: number | string,
+  lessonPk: number | string,
+  body: LessonTestBody
+) => POST(`${baseUrl}${coursePk}/lessons/${lessonPk}/test/`, body);
