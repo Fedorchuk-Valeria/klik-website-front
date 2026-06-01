@@ -29,6 +29,26 @@ const nextConfig: NextConfig = {
         hostname: "it-klik.by",
         pathname: "/media/**",
       },
+      {
+        protocol: "http",
+        hostname: "test.it-klik.by",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "test.it-klik.by",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "storage.yandexcloud.net",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "storage.yandexcloud.net",
+        pathname: "/**",
+      },
     ],
   },
   turbopack: {

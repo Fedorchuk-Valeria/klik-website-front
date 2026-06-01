@@ -7,6 +7,7 @@ import { normalizeCoursesPayload } from "@/src/utils/normalizeCoursesPayload";
 
 export type Course = {
   categories: CourseCategory[];
+  completed_lessons_count: number;
   created_at: string;
   description: string;
   duration_months: number;
@@ -64,17 +65,21 @@ export type CourseFetchResult = {
 };
 
 export type Lesson = {
-  course: Pick<Course, "id" | "title" | "progress_percent" | "lessons_count">;
-  description: string;
+  completed_lessons_count: number;
+  course: Pick<Course, "id" | "title" | "progress_percent" | "lessons_count" | "categories">;
+  description?: string;
   duration_minutes: number;
+  has_test?: boolean;
   has_homework?: boolean;
   has_materials?: boolean;
   materials?: LessonMaterial;
   homework?: Omit<LessonMaterial, "download_url"> & { pdf_url: string | null };
   id: number;
+  is_test_passed?: boolean;
   lessons: CourseLesson[];
   number: number;
   title: string;
+  test_result?: LessonTestResult;
   video_url?: string;
   total_lessons?: number;
   video?: { video_url: string; video_file: string | null };
@@ -103,6 +108,7 @@ export type LessonTest = {
 export type LessonTestQuestion = {
   id: number;
   number: number;
+  is_correct?: boolean;
   total_questions: number;
   text: string;
   selection_type: "checkbox" | "radio";

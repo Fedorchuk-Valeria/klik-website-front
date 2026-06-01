@@ -60,4 +60,24 @@
     opacity: 0.7;
     pointer-events: none;
   }
+
+  &.radio-color--red {
+    &:checked {
+      background-color: var(--error-color);
+
+      &::after {
+        background-color: var(--error-color);
+      }
+    }
+  }
+
+  &.radio-color--green {
+    &:checked {
+      background-color: var(--main-green-dark);
+
+      &::after {
+        background-color: var(--main-green-dark);
+      }
+    }
+  }
 }

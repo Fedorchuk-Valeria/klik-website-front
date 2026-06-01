@@ -19,10 +19,15 @@ type PropTypes = {
   onAnswerChange: (answerId: number, checked: boolean) => void;
   answers: LessonTestAnswer[];
   error: string | null;
+  disabled: boolean;
+  isTestPassed?: boolean;
+  isCorrect?: boolean;
 };
 
 const TestCard: FC<PropTypes> = ({
   id,
+  isTestPassed,
+  isCorrect,
   questionId,
   title,
   description,
@@ -32,22 +37,17 @@ const TestCard: FC<PropTypes> = ({
   selectedAnswerIds,
   onAnswerChange,
   error,
+  disabled,
 }) => {
-  const isCorrectAnswer = answers.some(
-    (answer) =>
-      typeof answer.is_correct_answer === "boolean" &&
-      answer.is_correct_answer === answer.is_selected
-  );
-  const isIncorrectAnswer = answers.some(
-    (answer) => !!answer.is_selected && answer.is_selected !== answer.is_correct_answer
-  );
+  const isCorrectAnswer = typeof isCorrect === "boolean" && isCorrect;
+  const isIncorrectAnswer = typeof isCorrectAnswer === "boolean" && !isCorrectAnswer;
 
   return (
     <div className={classNames("test-card", className)}>
       <div className="test-card__header">
         <Badge className="test-card__badge" title={`Вопрос ${id}`} />
 
-        {(isCorrectAnswer || isIncorrectAnswer) && (
+        {(isCorrectAnswer || isIncorrectAnswer) && isTestPassed && (
           <p
             className={classNames("test-card__result", {
               "test-card__result--correct": isCorrectAnswer,
@@ -67,20 +67,25 @@ const TestCard: FC<PropTypes> = ({
       <ul className="test-card__answers">
         {answers.map((answer) => {
           const isSelected = selectedAnswerIds.includes(answer.id);
+          const isAnswerCorrect =
+            answer?.is_selected && answer?.is_selected === answer?.is_correct_answer;
+          const isAnswerIncorrect =
+            answer?.is_selected && answer?.is_selected !== answer?.is_correct_answer;
 
           return (
             <li key={answer.id}>
               <label
                 className={classNames("test-card__answer", {
-                  "test-card__answer--correct": answer?.is_correct_answer,
-                  "test-card__answer--incorrect":
-                    answer?.is_selected && answer?.is_selected !== answer?.is_correct_answer,
+                  "test-card__answer--correct": isAnswerCorrect,
+                  "test-card__answer--incorrect": isAnswerIncorrect,
+                  "test-card__answer--disabled": disabled,
                 })}
               >
                 {selectionType === "checkbox" ? (
                   <Checkbox
                     value={answer.id}
                     variant="test"
+                    color={isTestPassed ? (isAnswerIncorrect ? "red" : "green") : "default"}
                     checked={isSelected}
                     onChange={(checked) => onAnswerChange(answer.id, checked)}
                   />
@@ -89,6 +94,7 @@ const TestCard: FC<PropTypes> = ({
                     name={`test-question-${questionId}`}
                     value={answer.id}
                     checked={isSelected}
+                    color={isTestPassed ? (isAnswerIncorrect ? "red" : "green") : "default"}
                     onChange={(checked) => onAnswerChange(answer.id, checked)}
                   />
                 )}

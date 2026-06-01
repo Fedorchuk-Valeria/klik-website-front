@@ -3,7 +3,7 @@
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FC, useCallback } from "react";
+import { FC, useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
 
 import { getTime } from "@/src/components/Pages/CoursePage";
@@ -18,7 +18,8 @@ import Icon from "@/src/components/ui/Icon/Icon";
 import { Lesson, LessonTestBody } from "@/src/lib/getCourses";
 import { useAppSelector } from "@/src/store/hooks";
 import { getLessonTestRequest, sendTestAnswersRequest } from "@/src/store/slices/lesson";
-import { PAGES } from "@/src/utils/constant";
+import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
+import { QueryHelper } from "@/src/utils/helpers";
 
 type PropTypes = {
   id: string;
@@ -33,7 +34,16 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
   const dispatch = useDispatch();
   const { isTestLoading, test, result, review } = useAppSelector((state) => state.lesson);
 
-  console.log(data, review, test, result);
+  const nextLesson = useMemo(() => {
+    if (!data?.lessons?.length) return null;
+
+    const sortedLessons = [...(data?.lessons || [])]?.sort((a, b) => a.number - b.number);
+    const currentIndex = sortedLessons?.findIndex((lesson) => lesson.id === Number(lessonId));
+
+    if (currentIndex === -1 || currentIndex === sortedLessons?.length - 1) return null;
+
+    return sortedLessons?.[currentIndex + 1];
+  }, [data?.lessons, lessonId]);
 
   const handleStartTestClick = useCallback(() => {
     if (id && lessonId) {
@@ -52,15 +62,33 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
 
   const handleNextLessonClick = useCallback(() => {
     if (id && lessonId) {
-      // router.push(PAGES.LESSON.replace(":id", id).replace(":lessonId", (Number(lessonId) + 1).toString()));
+      if (nextLesson) {
+        router.push(
+          PAGES.LESSON.replace(":id", id).replace(":lessonId", nextLesson?.id.toString() || "")
+        );
+      } else {
+        router.push(
+          PAGES.COURSES +
+            QueryHelper.getQueryString({
+              [QUERY_PARAMS.SCOPE]: "all",
+              [QUERY_PARAMS.CATEGORIES]: data?.course?.categories
+                ?.map((category) => category.slug)
+                ?.join(","),
+            })
+        );
+      }
     }
-  }, [id, lessonId]);
+  }, [id, lessonId, nextLesson]);
+
+  const handleReviewClick = useCallback(() => {
+    if (id && lessonId) {
+      dispatch(getLessonTestRequest({ coursePk: Number(id), lessonPk: Number(lessonId) }));
+    }
+  }, [id, lessonId, dispatch]);
 
   const handleSendAnswers = useCallback(
     (answers: TestAnswers) => {
       if (id && lessonId) {
-        console.log(answers);
-
         const body: LessonTestBody = {
           answers: Object.entries(answers).map(([questionId, answerIds]) => ({
             question_id: Number(questionId),
@@ -109,7 +137,7 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
               <p className="lesson-page__lesson-content_title">Содержание курса:</p>
 
               <CourseProgress
-                progress={0}
+                progress={data?.completed_lessons_count ?? 0}
                 total={data?.total_lessons ?? 0}
                 className="lesson-page__lesson-content_progress"
               />
@@ -199,20 +227,24 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
 
         <Test
           data={test}
-          result={result}
           review={review}
           isTestLoading={isTestLoading}
+          result={data?.test_result || result || null}
+          isTestPassed={data?.is_test_passed || !!result?.total_questions}
           className="lesson-page__test"
+          onReviewClick={handleReviewClick}
           onSendAnswers={handleSendAnswers}
           onStartTestClick={handleStartTestClick}
           onNextLessonClick={handleNextLessonClick}
           title={
-            result
-              ? `Тест пройден: ${result.correct_answers}/${result.total_questions}`
+            data?.is_test_passed || !!result?.total_questions
+              ? `Тест пройден: ${data?.test_result?.correct_answers || result?.correct_answers}/${data?.test_result?.total_questions || result?.total_questions}`
               : "Тест для проверки знаний"
           }
           description={
-            result ? "Следующий урок открыт" : "Пройдите тест, чтобы открыть следующий урок"
+            data?.is_test_passed || !!result?.total_questions
+              ? "Следующий урок открыт"
+              : "Пройдите тест, чтобы открыть следующий урок"
           }
         />
       </div>

@@ -7,7 +7,14 @@ import { VALIDATION_CLASS } from "@/src/utils/constant";
 
 type PropTypes = Omit<CheckboxPropTypes, "variant">;
 
-const Radio: FC<PropTypes> = ({ error, checked, onChange, className, ...props }) => {
+const Radio: FC<PropTypes> = ({
+  error,
+  checked,
+  onChange,
+  className,
+  color = "default",
+  ...props
+}) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange?.(event.target.checked);
   };
@@ -18,7 +25,7 @@ const Radio: FC<PropTypes> = ({ error, checked, onChange, className, ...props })
       type="radio"
       checked={!!checked}
       onChange={handleChange}
-      className={classNames("radio", className, {
+      className={classNames("radio", `radio-color--${color}`, className, {
         [VALIDATION_CLASS]: !!error,
       })}
     />

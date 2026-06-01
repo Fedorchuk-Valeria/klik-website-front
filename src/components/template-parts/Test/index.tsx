@@ -2,9 +2,10 @@
 
 import classNames from "classnames";
 import Image from "next/image";
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 
 import TestSVG from "@/src/assets/images/test.svg";
+import testImage from "@/src/assets/images/view/courses/test.png";
 
 import TestCard from "@/src/components/template-parts/Test/TestCard";
 import Button from "@/src/components/ui/Button/Button";
@@ -20,6 +21,8 @@ type PropTypes = {
   data: LessonTest | null;
   result: LessonTestResult | null;
   review: LessonTestQuestion[] | null;
+  isTestPassed?: boolean;
+  onReviewClick: () => void;
   onStartTestClick: () => void;
   onSendAnswers: (answers: TestAnswers) => void;
   onNextLessonClick: () => void;
@@ -34,6 +37,8 @@ const Test: FC<PropTypes> = ({
   review,
   className,
   description,
+  isTestPassed,
+  onReviewClick,
   onSendAnswers,
   isTestLoading,
   onStartTestClick,
@@ -103,7 +108,7 @@ const Test: FC<PropTypes> = ({
   };
 
   const handleClick = () => {
-    if (!!result) {
+    if (isTestPassed) {
       onNextLessonClick();
 
       return;
@@ -113,6 +118,8 @@ const Test: FC<PropTypes> = ({
       if (!validateAnswers()) return;
 
       onSendAnswers(answers);
+      setStarted(false);
+      setResultsVisible(false);
     } else {
       setAnswers({});
       setErrors(null);
@@ -123,26 +130,47 @@ const Test: FC<PropTypes> = ({
 
   const handleShowResultsClick = () => {
     setResultsVisible(true);
+    onReviewClick();
   };
 
   const questions = useMemo(() => {
     const result: LessonTestQuestion[] = [];
 
-    if (isStarted) {
+    if (!isTestPassed && isStarted) {
       result.push(...(data?.questions || []));
     } else {
       result.push(...(review || []));
     }
 
     return result;
-  }, [isStarted, data?.questions, review]);
+  }, [isStarted, isTestPassed, data?.questions, review]);
 
-  console.log(questions, review, data?.questions, isStarted);
+  useEffect(() => {
+    if (!!review) {
+      const nextAnswers: TestAnswers = {};
+
+      for (const question of review) {
+        nextAnswers[question.id] = question.answers
+          .map((answer) => {
+            if (answer.is_selected) {
+              return answer.id;
+            } else {
+              return null;
+            }
+          })
+          .filter((answer) => answer !== null);
+      }
+
+      queueMicrotask(() => {
+        setAnswers(nextAnswers);
+      });
+    }
+  }, [review]);
 
   return (
     <div
       className={classNames("test", className, {
-        "test--started": isStarted,
+        "test--started": isStarted || isResultsVisible,
       })}
     >
       <span className="test__icon">
@@ -159,6 +187,8 @@ const Test: FC<PropTypes> = ({
               {questions?.map((question) => (
                 <TestCard
                   key={question.id}
+                  isTestPassed={isTestPassed}
+                  isCorrect={question.is_correct}
                   id={question.number < 10 ? `0${question.number}` : question.number}
                   questionId={question.id}
                   title={question.text}
@@ -174,6 +204,7 @@ const Test: FC<PropTypes> = ({
                     handleAnswerChange(question.id, answerId, question.selection_type, checked)
                   }
                   error={errors?.[question.id] ?? null}
+                  disabled={isResultsVisible}
                 />
               ))}
             </div>
@@ -181,17 +212,19 @@ const Test: FC<PropTypes> = ({
 
           {isTestLoading && <Loader isLocal />}
 
-          <Button
-            className="test__button"
-            variant="main-green-dark"
-            onClick={handleClick}
-            disabled={isTestLoading}
-            withArrow
-          >
-            {result ? "Следующий урок" : isStarted ? "Завершить тест" : "Начать тест"}
-          </Button>
+          {!isResultsVisible && (
+            <Button
+              className="test__button"
+              variant="main-green-dark"
+              onClick={handleClick}
+              disabled={isTestLoading}
+              withArrow
+            >
+              {result ? "Следующий урок" : isStarted ? "Завершить тест" : "Начать тест"}
+            </Button>
+          )}
 
-          {!!result && (
+          {!!result && !isResultsVisible && (
             <Button
               disabled={isTestLoading}
               className="test__button"
@@ -204,12 +237,7 @@ const Test: FC<PropTypes> = ({
         </div>
 
         <div className="test__image">
-          <Image
-            fill
-            alt={title}
-            src="https://placehold.co/600x400.png"
-            sizes="(max-width: 768px) 100vw, 640px"
-          />
+          <Image fill alt={title} src={testImage} sizes="(max-width: 768px) 100vw, 640px" />
         </div>
       </div>
     </div>

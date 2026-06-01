@@ -65,10 +65,22 @@
 
     .test-card__answer--correct {
       color: var(--main-green-dark);
+
+      span {
+        color: var(--main-green-dark);
+      }
     }
 
     .test-card__answer--incorrect {
       color: var(--error-color);
+
+      span {
+        color: var(--error-color);
+      }
+    }
+
+    .test-card__answer--disabled {
+      pointer-events: none;
     }
   }
 
