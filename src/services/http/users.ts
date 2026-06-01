@@ -1,4 +1,5 @@
 import {
+  AuthChangePasswordRequest,
   AuthForgotPasswordRequest,
   AuthRegisterRequest,
   AuthResendCodeRequest,
@@ -24,6 +25,9 @@ export const resendVerification = (data: AuthResendCodeRequest) =>
 
 export const resetPassword = (data: AuthResetPasswordRequest) =>
   POST(`${baseUrl}/reset-password/`, data);
+
+export const changePassword = (data: AuthChangePasswordRequest) =>
+  POST(`${baseUrl}/change-password/`, data);
 
 export const logout = () => POST(`${baseUrl}/logout/`);
 

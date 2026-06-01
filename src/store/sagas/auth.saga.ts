@@ -1,6 +1,7 @@
 import { call, fork, put, takeLatest } from "redux-saga/effects";
 
 import {
+  AuthChangePasswordRequest,
   AuthForgotPasswordRequest,
   AuthRegisterRequest,
   AuthResetPasswordRequest,
@@ -9,6 +10,8 @@ import {
 } from "@/src/entities/common/auth";
 import { UsersApi } from "@/src/services/http";
 import {
+  changePasswordRequest,
+  changePasswordSuccess,
   forgotPasswordRequest,
   forgotPasswordSuccess,
   loginRequest,
@@ -224,6 +227,25 @@ function* watchProfile() {
   );
 }
 
+function* workerChangePassword({payload}: {
+  payload: AuthChangePasswordRequest;
+}) {
+  try {
+    yield call(UsersApi.changePassword, payload);
+
+    yield put(changePasswordSuccess());
+  } catch (error) {
+    yield put(setErrors(error as Record<string, string> | null));
+  }
+}
+
+function* watchChangePassword() {
+  yield takeLatest(
+    changePasswordRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerChangePassword
+  );
+}
+
 
 export const authWatchers = [
   fork(watchAuthLogin),
@@ -234,4 +256,5 @@ export const authWatchers = [
   fork(watchAuthResendCode),
   fork(watchAuthLogout),
   fork(watchProfile),
+  fork(watchChangePassword),
 ];
