@@ -1,5 +1,6 @@
 import { UserProfile } from "@/src/entities/common";
 import {
+  AuthChangePasswordRequest,
   AuthForgotPasswordRequest,
   AuthRegisterRequest,
   AuthResendCodeRequest,
@@ -23,6 +24,7 @@ type AuthState = {
   isResetPasswordSuccess: boolean;
   isPersonalAccountChanged: boolean;
   isLoggedIn: boolean;
+  isPasswordChanged: boolean;
 };
 
 const initialState: AuthState = {
@@ -37,6 +39,7 @@ const initialState: AuthState = {
   isResetPasswordSuccess: false,
   isPersonalAccountChanged: false,
   isLoggedIn: !!CookieHelper.getCookie(TOKEN_KEY) && !!CookieHelper.getCookie(REFRESH_TOKEN_KEY),
+  isPasswordChanged: false,
 };
 
 const authSlice = createSlice({
@@ -147,6 +150,24 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.user_profile = action.payload;
     },
+
+    changePasswordRequest(
+      state,
+      action: { payload: AuthChangePasswordRequest }
+    ) {
+      void action.payload;
+      state.isLoading = true;
+      state.errors = null;
+    },
+
+    changePasswordSuccess(state) {
+      state.isLoading = false;
+      state.isPasswordChanged = true;
+    },
+
+    clearPasswordChanged(state) {
+      state.isPasswordChanged = false;
+    }
   },
 });
 
@@ -178,5 +199,8 @@ export const {
 
   profileRequest,
   profileSuccess,
+
+  changePasswordRequest,
+  changePasswordSuccess,
 } = authSlice.actions;
 export default authSlice.reducer;

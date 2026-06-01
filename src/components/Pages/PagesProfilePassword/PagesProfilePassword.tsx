@@ -8,9 +8,8 @@ import {useAppDispatch, useAppSelector} from "@/src/store/hooks";
 import {RootStore} from "@/src/store";
 import {useFormik} from "formik";
 import {setNewPasswordValidationSchema} from "@/src/components/Login/validationSchema";
-import {CookieHelper} from "@/src/utils/helpers";
-import {PAGES, PASSWORD_INPUT_STRIP_REGEX, TOKEN_KEY} from "@/src/utils/constant";
-import {resetPasswordRequest} from "@/src/store/slices/auth";
+import {PAGES, PASSWORD_INPUT_STRIP_REGEX} from "@/src/utils/constant";
+import {changePasswordRequest} from "@/src/store/slices/auth";
 import {ChangeEvent, useEffect} from "react";
 import {showModal} from "@/src/store/slices/modalSlice";
 import {ModalType} from "@/src/entities/common";
@@ -20,7 +19,7 @@ const PagesProfilePassword = () => {
 
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isLoading, errors, isResetPasswordSuccess } = useAppSelector(
+  const { isLoading, errors, isPasswordChanged } = useAppSelector(
     (state: RootStore) => state.auth
   );
 
@@ -31,18 +30,12 @@ const PagesProfilePassword = () => {
     },
     validationSchema: setNewPasswordValidationSchema,
     onSubmit: (values) => {
-      const sessionToken = CookieHelper.getCookie(TOKEN_KEY);
-
-      if (sessionToken) {
-        /* Todo поменять логику после появление роута на смену пароля */
-        /*dispatch(
-          resetPasswordRequest({
-            password: values.password,
-            session_token: sessionToken,
-            confirm_password: values.confirmPassword,
-          })
-        );*/
-      }
+      dispatch(
+        changePasswordRequest({
+          password: values.password,
+          confirm_password: values.confirmPassword,
+        })
+      );
     },
     validateOnChange: false,
     validateOnBlur: false,
@@ -64,7 +57,7 @@ const PagesProfilePassword = () => {
   }, [errors]);
 
   useEffect(() => {
-    if (isResetPasswordSuccess) {
+    if (isPasswordChanged) {
       dispatch(
         showModal({
           modalType: ModalType.SUCCESSFULLY,
@@ -79,7 +72,7 @@ const PagesProfilePassword = () => {
 
       router.push(PAGES.PROFILE);
     }
-  }, [isResetPasswordSuccess]);
+  }, [isPasswordChanged]);
 
   const handleBack = () => {
     router.push(PAGES.PROFILE)
@@ -97,7 +90,7 @@ const PagesProfilePassword = () => {
               variant="outline"
               label={
                 <span className="page-profile__form-label">
-                  <span>Пароль</span>
+                  <span>Новый пароль</span>
                   <PopoverPassword />
                 </span>
               }
