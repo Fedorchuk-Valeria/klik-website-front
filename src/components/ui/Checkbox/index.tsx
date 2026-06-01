@@ -14,6 +14,7 @@ const Checkbox: FC<CheckboxPropTypes> = ({
   onChange,
   className,
   variant,
+  color = "default",
   ...props
 }) => {
   const isControlled = checked !== undefined;
@@ -38,9 +39,15 @@ const Checkbox: FC<CheckboxPropTypes> = ({
       type="checkbox"
       checked={isChecked}
       onChange={handleChange}
-      className={classNames("checkbox", className, `checkbox--${variant}`, {
-        [VALIDATION_CLASS]: !!error,
-      })}
+      className={classNames(
+        "checkbox",
+        className,
+        `checkbox--${variant}`,
+        `checkbox-color--${color}`,
+        {
+          [VALIDATION_CLASS]: !!error,
+        }
+      )}
     />
   );
 };

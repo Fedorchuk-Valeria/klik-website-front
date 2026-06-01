@@ -93,7 +93,7 @@ const CoursePage: FC<PropTypes> = ({ data, errors }) => {
         </div>
 
         <CourseTutorial
-          progress={data?.progress_percent ?? 0}
+          progress={data?.completed_lessons_count ?? 0}
           total={data?.lessons_count ?? 0}
           isPurchased={data.is_purchased}
           list={

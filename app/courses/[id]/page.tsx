@@ -16,7 +16,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
   const { id } = await params;
   const { data: course, errors } = await getCurrentCourse(id);
 
-  console.log(course, errors);
+  console.log("CourseDetailPage", course, errors);
 
   if (!course) {
     notFound();

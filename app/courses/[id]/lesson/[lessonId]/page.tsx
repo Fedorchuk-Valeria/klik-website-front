@@ -20,7 +20,7 @@ export default async function LessonDetailPage({ params }: PageProps) {
   const { id, lessonId } = await params;
   const { data: lesson, errors, code } = await getLesson(id, lessonId);
 
-  console.log(lesson, errors, code);
+  console.log("LessonDetailPage", lesson, errors, code);
 
   if (code === HttpStatus.Unauthorized) {
     return redirect(PAGES.LOGIN);

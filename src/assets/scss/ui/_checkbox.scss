@@ -59,6 +59,26 @@
     border-color: var(--main-black);
     background-color: var(--main-light);
 
+    &.checkbox-color--red {
+      &:checked {
+        border-color: var(--error-color);
+
+        &:before {
+          color: var(--error-color);
+        }
+      }
+    }
+
+    &.checkbox-color--green {
+      &:checked {
+        border-color: var(--main-green-dark);
+
+        &:before {
+          color: var(--main-green-dark);
+        }
+      }
+    }
+
     &:before {
       mask: none;
     }

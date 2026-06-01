@@ -110,6 +110,29 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
     }
   }, [selectedFilter, selectedCategory, dispatch]);
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.search) {
+      const query = QueryHelper.getFromQueryString(window.location.search);
+
+      if (query[QUERY_PARAMS.SCOPE]) {
+        queueMicrotask(() => {
+          setSelectedFilter(
+            options.find((item) => item.id === query[QUERY_PARAMS.SCOPE]) || {
+              id: "all",
+              name: "Все курсы",
+            }
+          );
+        });
+      }
+
+      if (query[QUERY_PARAMS.CATEGORIES]) {
+        queueMicrotask(() => {
+          setSelectedCategory(query[QUERY_PARAMS.CATEGORIES].split(","));
+        });
+      }
+    }
+  }, [options]);
+
   return (
     <div className="page-courses">
       <div className="header__container">
