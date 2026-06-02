@@ -3,30 +3,50 @@
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import image from "@/src/assets/images/view/courses/girl.png";
 
+import { Meta } from "@/src/entities/common";
 import { Course } from "@/src/lib/getCourses";
-import { PAGE_ANCHORS, PAGES, QUERY_PARAMS } from "@/src/utils/constant";
+import { COURSES_PAGE_SIZE, PAGE_ANCHORS, PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import { clearCourses, getCoursesRequest } from "@/src/store/slices/corses";
+import { clearCourses, getCoursesRequest, initCoursesFromSSR } from "@/src/store/slices/corses";
 
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
+import Loader from "@/src/components/ui/Loader/Loader";
 import Select from "@/src/components/ui/Select";
 
 type Props = {
   initialCourses?: Course[];
+  initialMeta?: Meta;
   initialErrors?: Record<string, string> | null;
 };
 
-const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
+const buildCoursesQuery = (page: number, scope: string, categories: string[]): string =>
+  QueryHelper.getQueryString({
+    [QUERY_PARAMS.PAGE]: page,
+    [QUERY_PARAMS.PAGE_SIZE]: COURSES_PAGE_SIZE,
+    [QUERY_PARAMS.SCOPE]: scope,
+    [QUERY_PARAMS.CATEGORIES]: categories.join(","),
+  });
+
+const PagesCourses = ({
+  initialCourses = [],
+  initialMeta = {
+    page: 1,
+    page_size: COURSES_PAGE_SIZE,
+    total_count: 0,
+    total_pages: 0,
+  },
+  initialErrors = null,
+}: Props) => {
   const dispatch = useAppDispatch();
-  const { data } = useAppSelector((state: RootStore) => state.courses);
+  const { data, meta, isLoading } = useAppSelector((state: RootStore) => state.courses);
   const { isLoggedIn } = useAppSelector((state: RootStore) => state.auth);
   const [selectedFilter, setSelectedFilter] = useState<{ id: string; name: string }>({
     id: "all",
@@ -34,6 +54,18 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
   });
   const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
   const [hasRequested, setHasRequested] = useState<boolean>(false);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+  const isLoadingRef = useRef(isLoading);
+  const prevFiltersKeyRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    isLoadingRef.current = isLoading;
+  }, [isLoading]);
+
+  const filtersKey = useMemo(
+    () => `${selectedFilter.id}:${selectedCategory.join(",")}`,
+    [selectedFilter.id, selectedCategory]
+  );
 
   const allCategories = useMemo(() => {
     const seenCategoryIds = new Set<number>();
@@ -46,9 +78,13 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
     });
   }, [initialCourses]);
 
+  const activeMeta = hasRequested ? meta : initialMeta;
+
   const courses = useMemo(() => {
-    return data.length > 0 || hasRequested ? data : initialCourses;
+    return hasRequested ? data : initialCourses;
   }, [data, hasRequested, initialCourses]);
+
+  const hasMore = activeMeta.page < activeMeta.total_pages;
 
   const options = useMemo(
     () => [
@@ -67,6 +103,40 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
     () => categoryOptions.filter((item) => selectedCategory.includes(item.id)),
     [categoryOptions, selectedCategory]
   );
+
+  const fetchCourses = useCallback(
+    (page: number, append = false) => {
+      dispatch(
+        getCoursesRequest({
+          query: buildCoursesQuery(page, selectedFilter.id, selectedCategory),
+          append,
+        })
+      );
+    },
+    [dispatch, selectedCategory, selectedFilter.id]
+  );
+
+  const loadMore = useCallback(() => {
+    if (isLoading || !hasMore) return;
+
+    const nextPage = activeMeta.page + 1;
+
+    if (!hasRequested) {
+      dispatch(initCoursesFromSSR({ data: initialCourses, meta: initialMeta }));
+      setHasRequested(true);
+    }
+
+    fetchCourses(nextPage, true);
+  }, [
+    activeMeta.page,
+    fetchCourses,
+    hasMore,
+    hasRequested,
+    initialCourses,
+    initialMeta,
+    isLoading,
+    dispatch,
+  ]);
 
   const handleSelectCategory = (slug: string) => () => {
     setSelectedCategory((prev) => {
@@ -94,21 +164,23 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
   }, [initialErrors]);
 
   useEffect(() => {
-    if (selectedCategory.length > 0 || selectedFilter.id !== "all" || hasRequested) {
-      dispatch(
-        getCoursesRequest(
-          QueryHelper.getQueryString({
-            [QUERY_PARAMS.SCOPE]: selectedFilter.id,
-            [QUERY_PARAMS.CATEGORIES]: selectedCategory.join(","),
-          })
-        )
-      );
-
-      queueMicrotask(() => {
-        setHasRequested(true);
-      });
+    if (prevFiltersKeyRef.current === filtersKey) {
+      return;
     }
-  }, [selectedFilter, selectedCategory, dispatch]);
+
+    const previousKey = prevFiltersKeyRef.current;
+    prevFiltersKeyRef.current = filtersKey;
+
+    if (previousKey === null && selectedCategory.length === 0 && selectedFilter.id === "all") {
+      return;
+    }
+
+    fetchCourses(1);
+
+    queueMicrotask(() => {
+      setHasRequested(true);
+    });
+  }, [filtersKey, fetchCourses, selectedCategory.length, selectedFilter.id]);
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.location.search) {
@@ -132,6 +204,32 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
       }
     }
   }, [options]);
+
+  useEffect(() => {
+    const sentinel = loadMoreRef.current;
+
+    if (!sentinel || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isLoadingRef.current) {
+          loadMore();
+        }
+      },
+      { rootMargin: "400px", threshold: 0 }
+    );
+
+    observer.observe(sentinel);
+
+    const queuedEntries = observer.takeRecords();
+    if (queuedEntries.some((entry) => entry.isIntersecting) && !isLoadingRef.current) {
+      loadMore();
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasMore, loadMore, courses.length]);
 
   return (
     <div className="page-courses">
@@ -293,6 +391,16 @@ const PagesCourses = ({ initialCourses = [], initialErrors = null }: Props) => {
             </div>
           ))}
         </div>
+
+        {hasMore && (
+          <div ref={loadMoreRef} className="courses-list__load-more" aria-hidden="true" />
+        )}
+
+        {isLoading && courses?.length > 0 && (
+          <div className="courses-list__load-more-loader">
+            <Loader isLocal />
+          </div>
+        )}
       </div>
     </div>
   );

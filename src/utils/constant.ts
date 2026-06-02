@@ -12,7 +12,12 @@ export const TOKEN_KEY = "token";
 export const REFRESH_TOKEN_KEY = "refresh_token";
 export const USER = "user_data";
 
+export const COURSES_PAGE_SIZE = 12;
+
 export const QUERY_PARAMS = {
+  PAGE: "page",
+  PAGE_SIZE: "page_size",
+
   PHONE: "phone",
   IS_RESET_PASSWORD: "is_reset_password",
 
