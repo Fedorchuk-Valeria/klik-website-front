@@ -281,6 +281,15 @@
     }
   }
 
+  .courses-list__load-more {
+    width: 100%;
+    height: 40px;
+  }
+
+  .courses-list__load-more-loader {
+    margin-bottom: 100px;
+  }
+
   @media screen and (max-width: $desktop) {
     .page-courses__header {
       padding-top: 150px;

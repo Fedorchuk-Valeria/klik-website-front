@@ -1,6 +1,9 @@
 import { call, fork, put, takeLatest } from "redux-saga/effects";
 
 import { CoursesApi } from "@/src/services/http";
+import { Course } from "@/src/lib/getCourses";
+import { COURSES_PAGE_SIZE, QUERY_PARAMS } from "@/src/utils/constant";
+import { QueryHelper } from "@/src/utils/helpers";
 import {
   getCoursesFailure,
   getCoursesRequest,
@@ -12,13 +15,24 @@ import {
   purchaseRequest,
   purchaseSuccess,
 } from "@/src/store/slices/corses";
-import { normalizeCoursesPayload } from "@/src/utils/normalizeCoursesPayload";
+import { normalizeCoursesResponse } from "@/src/utils/normalizeCoursesPayload";
 
-function* workerGetCourses(action: { payload: string }): unknown {
+function* workerGetCourses(action: { payload: { query: string; append?: boolean } }): unknown {
   try {
-    const response = yield call(CoursesApi.getCourses, action.payload);
+    const response = yield call(CoursesApi.getCourses, action.payload.query);
+    const queryParams = QueryHelper.getFromQueryString(action.payload.query);
+    const { data, meta } = normalizeCoursesResponse<Course>(response?.data, {
+      page: Number(queryParams[QUERY_PARAMS.PAGE]) || 1,
+      page_size: Number(queryParams[QUERY_PARAMS.PAGE_SIZE]) || COURSES_PAGE_SIZE,
+    });
 
-    yield put(getCoursesSuccess(normalizeCoursesPayload(response?.data)));
+    yield put(
+      getCoursesSuccess({
+        data,
+        meta,
+        append: action.payload.append,
+      })
+    );
   } catch (error) {
     yield put(getCoursesFailure(error as Record<string, string> | null));
   }
