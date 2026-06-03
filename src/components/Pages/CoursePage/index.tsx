@@ -82,7 +82,7 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
         <BackButton label="К списку курсов" url={PAGES.COURSES} />
 
         <CourseAbout
-          categories={data.categories.map((category) => category.name)}
+          categories={data.categories}
           infoList={[
             "Видео-уроки в HD качестве",
             "Материалы для скачивания",

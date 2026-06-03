@@ -2,7 +2,7 @@
 
 import classNames from "classnames";
 import Image from "next/image";
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import TestSVG from "@/src/assets/images/test.svg";
 import testImage from "@/src/assets/images/view/courses/test.png";
@@ -44,6 +44,8 @@ const Test: FC<PropTypes> = ({
   onStartTestClick,
   onNextLessonClick,
 }) => {
+  const contentListRef = useRef<HTMLDivElement>(null);
+  const shouldScrollToErrorRef = useRef(false);
   const [isStarted, setStarted] = useState(false);
   const [isResultsVisible, setResultsVisible] = useState(false);
   const [answers, setAnswers] = useState<TestAnswers>({});
@@ -115,7 +117,11 @@ const Test: FC<PropTypes> = ({
     }
 
     if (isStarted) {
-      if (!validateAnswers()) return;
+      if (!validateAnswers()) {
+        shouldScrollToErrorRef.current = true;
+
+        return;
+      }
 
       onSendAnswers(answers);
       setStarted(false);
@@ -167,6 +173,16 @@ const Test: FC<PropTypes> = ({
     }
   }, [review]);
 
+  useEffect(() => {
+    if (!shouldScrollToErrorRef.current || !errors || !contentListRef.current) return;
+
+    shouldScrollToErrorRef.current = false;
+
+    const firstErrorCard = contentListRef.current.querySelector(".test-card--error");
+
+    firstErrorCard?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [errors]);
+
   return (
     <div
       className={classNames("test", className, {
@@ -183,7 +199,7 @@ const Test: FC<PropTypes> = ({
           <p className="test__content-description">{description}</p>
 
           {(isStarted || isResultsVisible) && !isTestLoading && (
-            <div className="test__content-list">
+            <div className="test__content-list" ref={contentListRef}>
               {questions?.map((question) => (
                 <TestCard
                   key={question.id}
@@ -214,7 +230,7 @@ const Test: FC<PropTypes> = ({
 
           {!isResultsVisible && (
             <Button
-              className="test__button"
+              className="test__button test__button--next"
               variant="main-green-dark"
               onClick={handleClick}
               disabled={isTestLoading}
@@ -227,7 +243,7 @@ const Test: FC<PropTypes> = ({
           {!!result && !isResultsVisible && (
             <Button
               disabled={isTestLoading}
-              className="test__button"
+              className="test__button test__button--results"
               variant="outline-green-dark"
               onClick={handleShowResultsClick}
             >

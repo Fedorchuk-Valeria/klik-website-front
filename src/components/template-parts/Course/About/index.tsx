@@ -1,11 +1,14 @@
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FC, memo } from "react";
 
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
+
 import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
-import { useRouter } from "next/navigation";
+
+import { CourseCategory } from "@/src/lib/getCourses";
 
 type PropTypes = {
   title: string;
@@ -14,7 +17,7 @@ type PropTypes = {
   isPayment?: boolean;
   infoList?: string[];
   description: string;
-  categories: string[];
+  categories: CourseCategory[];
   onPayment: () => void;
 };
 
@@ -35,7 +38,7 @@ const CourseAbout: FC<PropTypes> = ({
       router.push(
         PAGES.COURSES +
           QueryHelper.getQueryString({
-            [QUERY_PARAMS.CATEGORIES]: categories.join(","),
+            [QUERY_PARAMS.CATEGORIES]: categories.map((category) => category.slug).join(","),
             [QUERY_PARAMS.FILTER]: "all",
           })
       );
@@ -60,8 +63,8 @@ const CourseAbout: FC<PropTypes> = ({
 
         <div className="course-about__categories">
           {categories.map((category) => (
-            <span key={category} className="course-about__category">
-              {category}
+            <span key={category.id} className="course-about__category">
+              {category.name}
             </span>
           ))}
         </div>

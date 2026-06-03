@@ -43,7 +43,11 @@ const TestCard: FC<PropTypes> = ({
   const isIncorrectAnswer = typeof isCorrectAnswer === "boolean" && !isCorrectAnswer;
 
   return (
-    <div className={classNames("test-card", className)}>
+    <div
+      className={classNames("test-card", className, {
+        "test-card--error": !!error,
+      })}
+    >
       <div className="test-card__header">
         <Badge className="test-card__badge" title={`Вопрос ${id}`} />
 
