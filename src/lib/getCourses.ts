@@ -1,9 +1,12 @@
 import { cookies } from "next/headers";
 
+import { Meta } from "@/src/entities/common";
+
 import { buildApiUrl } from "@/src/utils/buildApiUrl";
-import { TOKEN_KEY } from "@/src/utils/constant";
+import { COURSES_PAGE_SIZE, QUERY_PARAMS, TOKEN_KEY } from "@/src/utils/constant";
+import { QueryHelper } from "@/src/utils/helpers";
 import { normalizeToken } from "@/src/utils/http";
-import { normalizeCoursesPayload } from "@/src/utils/normalizeCoursesPayload";
+import { normalizeCoursesResponse } from "@/src/utils/normalizeCoursesPayload";
 
 export type Course = {
   categories: CourseCategory[];
@@ -56,6 +59,7 @@ export type CourseCategory = {
 
 export type CoursesFetchResult = {
   data: Course[];
+  meta: Meta;
   errors: Record<string, string> | null;
 };
 
@@ -140,11 +144,15 @@ export type PassedTest = {
   };
 };
 
-export async function getCourses(): Promise<CoursesFetchResult> {
-  const apiUrl = buildApiUrl("/courses/");
+export async function getCourses(query = ""): Promise<CoursesFetchResult> {
+  const apiUrl = buildApiUrl(`/courses/${query}`);
 
   if (!apiUrl) {
-    return { data: [], errors: { detail: "API URL is not configured" } };
+    return {
+      data: [],
+      meta: { page: 1, page_size: COURSES_PAGE_SIZE, total_count: 0, total_pages: 0 },
+      errors: { detail: "API URL is not configured" },
+    };
   }
 
   const cookieStore = await cookies();
@@ -167,14 +175,27 @@ export async function getCourses(): Promise<CoursesFetchResult> {
 
     if (!response.ok) {
       const errorBody = (await response.json().catch(() => null)) as Record<string, string> | null;
-      return { data: [], errors: errorBody };
+      return {
+        data: [],
+        meta: { page: 1, page_size: COURSES_PAGE_SIZE, total_count: 0, total_pages: 0 },
+        errors: errorBody,
+      };
     }
 
     const payload: unknown = await response.json();
+    const queryParams = QueryHelper.getFromQueryString(query.startsWith("?") ? query : `?${query}`);
+    const { data, meta } = normalizeCoursesResponse<Course>(payload, {
+      page: Number(queryParams[QUERY_PARAMS.PAGE]) || 1,
+      page_size: Number(queryParams[QUERY_PARAMS.PAGE_SIZE]) || COURSES_PAGE_SIZE,
+    });
 
-    return { data: normalizeCoursesPayload<Course>(payload), errors: null };
+    return { data, meta, errors: null };
   } catch (error) {
-    return { data: [], errors: { detail: `Failed to fetch courses: ${error}` } };
+    return {
+      data: [],
+      meta: { page: 1, page_size: COURSES_PAGE_SIZE, total_count: 0, total_pages: 0 },
+      errors: { detail: `Failed to fetch courses: ${error}` },
+    };
   }
 }
 

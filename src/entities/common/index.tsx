@@ -30,3 +30,10 @@ export type UserProfile = {
   full_name: string;
   phone: string;
 };
+
+export type Meta = {
+  page: number;
+  page_size: number;
+  total_count: number;
+  total_pages: number;
+};
