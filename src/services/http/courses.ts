@@ -3,12 +3,18 @@ import { GET, POST } from "@/src/utils/http";
 
 const baseUrl = "/courses/";
 
+export interface PurchasePayload {
+  course_id: number;
+  success_url: string;
+  fail_url: string;
+}
+
 export const getCourses = (query = "") => GET(baseUrl + query);
 
 export const getCurrentCourse = (coursePk: number | string) => GET(`${baseUrl}${coursePk}/`);
 
-export const purchase = (coursePk: number) => POST(`${baseUrl}${coursePk}/mock-purchase/`);
-
+export const purchase = (data: PurchasePayload) =>
+  POST(`${baseUrl}payments/express-pay/`, data);
 export const getLesson = (coursePk: number | string, lessonPk: number | string) =>
   GET(`${baseUrl}${coursePk}/lessons/${lessonPk}/`);
 

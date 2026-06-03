@@ -4,6 +4,7 @@ export enum ModalType {
   PLACE_SELECT = "place_select",
   SUCCESSFULLY = "successfully",
   PAYMENT = "payment",
+  PAYMENT_STATUS = "payment_status",
 }
 
 export enum HttpStatus {

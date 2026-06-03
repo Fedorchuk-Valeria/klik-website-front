@@ -13,6 +13,7 @@ import {
   purchaseSuccess,
 } from "@/src/store/slices/corses";
 import { normalizeCoursesPayload } from "@/src/utils/normalizeCoursesPayload";
+import {PurchasePayload} from "@/src/services/http/courses";
 
 function* workerGetCourses(action: { payload: string }): unknown {
   try {
@@ -47,16 +48,15 @@ function* watchGetCurrentCourse() {
   );
 }
 
-function* workerPurchase(action: { payload: number }): unknown {
+function* workerPurchase(action: { payload: PurchasePayload }): unknown {
   try {
     const response = yield call(CoursesApi.purchase, action.payload);
 
     yield put(purchaseSuccess());
 
-    /*if (response?.data?.payment_url) {
-      console.log('repsonse=', response);
-      window.location.href = response.data.payment_url;
-    }*/
+    if (response?.data?.form_url) {
+      window.location.href = response.data.form_url;
+    }
   } catch (error) {
     yield put(purchaseFailure(error as Record<string, string> | null));
   }
