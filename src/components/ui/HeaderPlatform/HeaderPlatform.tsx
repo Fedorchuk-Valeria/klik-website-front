@@ -1,9 +1,5 @@
-import LogoFillSvg from "@/src/assets/images/logo-fill.svg";
-import LogoSvg from "@/src/assets/images/logo.svg";
-
-import Link from "next/link";
-import {PAGES} from "@/src/utils/constant";
-import HeaderAuth from "@/src/components/ui/HeaderPlatformAuth/HeaderPlatformAuth";
+import HeaderAuth from "@/src/components/ui/HeaderPlatformAuth/HeaderPlatformAuth";;
+import HeaderPlatformLogo from "@/src/components/ui/HeaderPlatform/HeaderPlatformLogo";
 
 type HeaderPlatformProps = {
   variant?: "dark" | "light";
@@ -14,7 +10,8 @@ export default async function HeaderPlatform({
    variant = "dark",
    showAuthControls = true,
    }: HeaderPlatformProps) {
-  const LogoComponent = variant === "light" ? LogoFillSvg : LogoSvg;
+  const logo = variant === "light" ? "light" : "dark";
+
   return (
     <header className="header">
       <div className="header__container">
@@ -22,9 +19,7 @@ export default async function HeaderPlatform({
           <div className="header__top header__row">
             <div className="header__left">
               <div className="header__brand">
-                <Link className="header__logo" href={PAGES.COURSES}>
-                  <LogoComponent />
-                </Link>
+                <HeaderPlatformLogo variant={variant} />
 
                 <div className="header__logo-text">
                   Дополнительное
