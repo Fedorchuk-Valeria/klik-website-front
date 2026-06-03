@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useMemo } from "react";
+import {FC, useEffect, useMemo} from "react";
 
 import CourseAbout from "@/src/components/template-parts/Course/About";
 import CourseTutorial from "@/src/components/template-parts/Course/Tutorial";
@@ -13,14 +13,19 @@ import { PAGES } from "@/src/utils/constant";
 
 import { useAppDispatch } from "@/src/store/hooks";
 import { showModal } from "@/src/store/slices/modalSlice";
+import {useSearchParams} from "next/navigation";
+import {CitySettings, getCitySettings} from "@/src/lib/getCitySettings";
+import {getPlural} from "@/src/helper/getPlural";
 
 type PropTypes = {
   data: Course;
   errors: Record<string, string> | null;
+  settings: CitySettings;
 };
 
-const CoursePage: FC<PropTypes> = ({ data, errors }) => {
+const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
   const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
 
   if (errors) {
     console.error(errors);
@@ -54,6 +59,22 @@ const CoursePage: FC<PropTypes> = ({ data, errors }) => {
       })
     );
   };
+
+  useEffect(() => {
+    const payment = searchParams.get("payment");
+
+    if (payment === "success" || payment === "fail") {
+      dispatch(
+        showModal({
+          modalType: ModalType.PAYMENT_STATUS,
+          modalProps: {
+            status: payment,
+            settings: settings,
+          },
+        })
+      );
+    }
+  }, [dispatch, searchParams]);
 
   return (
     <div className="course-page">
@@ -112,42 +133,15 @@ const CoursePage: FC<PropTypes> = ({ data, errors }) => {
 };
 
 export function getLessons(count: number) {
-  switch (count) {
-    case 1:
-      return "урок";
-    case 2:
-    case 3:
-    case 4:
-      return "урока";
-    default:
-      return "уроков";
-  }
+  return getPlural(count, ["%d урок", "%d урока", "%d уроков"]);
 }
 
 export function getMonths(months: number) {
-  switch (months) {
-    case 1:
-      return "месяц";
-    case 2:
-    case 3:
-    case 4:
-      return "месяца";
-    default:
-      return "месяцев";
-  }
+  return getPlural(months, ["%d месяц", "%d месяца", "%d месяцев"]);
 }
 
 export function getTime(time: number) {
-  switch (time) {
-    case 1:
-      return "минута";
-    case 2:
-    case 3:
-    case 4:
-      return "минуты";
-    default:
-      return "минут";
-  }
+  return getPlural(time, ["%d минута", "%d минуты", "%d минут"]);
 }
 
 export default CoursePage;

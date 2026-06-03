@@ -4,13 +4,33 @@
     align-items: center;
     flex-direction: column;
     gap: 10px;
-    padding: 30px 50px;
+    padding: 50px 30px;
     width: 560px;
     overflow-x: hidden;
+
+    @media screen and (max-width: $mobile-size) {
+      padding: 40px 20px;
+    }
+
+    .modal__close {
+      @media screen and (max-width: $mobile-size) {
+        top: 20px;
+        height: 20px;
+      }
+    }
   }
 
   &__body {
     width: 100%;
+    font-size: 18px;
+
+    a {
+      color: var(--main-orange);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
   &__row {
@@ -24,13 +44,15 @@
   &__value {
     @include fonts(18px, 500, "Etude Noire");
     color: var(--main-orange);
-    max-width: 300px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     display: flex;
     align-items: center;
     gap: 5px;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px;
   }
 
   &__currency {
@@ -49,6 +71,10 @@
     padding-left: 34px;
     position: relative;
     margin-top: 20px;
+
+    @media screen and (max-width: $mobile-size) {
+      font-size: 16px;
+    }
 
     .checkbox {
       position: absolute;
@@ -85,6 +111,11 @@
     font-size: 14px;
     bottom: -25px;
     color: var(--error-color);
+
+    @media screen and (max-width: $mobile-size) {
+      font-size: 12px;
+      left: 5px;
+    }
   }
 
   &__btn {

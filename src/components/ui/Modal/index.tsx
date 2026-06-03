@@ -7,6 +7,7 @@ import useHideBodyScroll from "@/src/hooks/useHideBodyScroll";
 
 import { useAppDispatch } from "@/src/store/hooks";
 import { hideModal } from "@/src/store/slices/modalSlice";
+import Icon from "@/src/components/ui/Icon/Icon";
 
 type PropTypes = DialogHTMLAttributes<HTMLDialogElement> & {
   isClose?: boolean;
@@ -14,6 +15,7 @@ type PropTypes = DialogHTMLAttributes<HTMLDialogElement> & {
   isVisible: boolean;
   isHideBg?: boolean;
   onClose?: () => void;
+  showCloseButton?: boolean;
 };
 
 const Modal: FC<PropTypes> = ({
@@ -24,6 +26,7 @@ const Modal: FC<PropTypes> = ({
   isCloseBg,
   isHideBg,
   onClose,
+  showCloseButton = false,
   ...props
 }) => {
   const ref = useRef<HTMLDialogElement>(null);
@@ -79,6 +82,16 @@ const Modal: FC<PropTypes> = ({
         onCancel={handleCloseModal}
         onClick={handleBackdropClick}
       >
+        {showCloseButton && (
+          <button
+            type="button"
+            className="modal__close"
+            onClick={handleClose}
+            aria-label="Close modal"
+          >
+            <Icon name="close" />
+          </button>
+        )}
         {children}
       </dialog>
     </div>

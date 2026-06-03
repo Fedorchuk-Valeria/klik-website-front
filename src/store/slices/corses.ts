@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { Meta } from "@/src/entities/common";
 import { Course } from "@/src/lib/getCourses";
+import {PurchasePayload} from "@/src/services/http/courses";
 import { COURSES_PAGE_SIZE } from "@/src/utils/constant";
 
 type GetCoursesRequestPayload = {
@@ -87,7 +88,7 @@ const coursesSlice = createSlice({
       state.errors = action.payload;
       state.isLoading = false;
     },
-    purchaseRequest(state, action: { payload: number }) {
+    purchaseRequest(state, action: { payload: PurchasePayload }) {
       void action.payload;
       state.isLoading = true;
       state.errors = null;

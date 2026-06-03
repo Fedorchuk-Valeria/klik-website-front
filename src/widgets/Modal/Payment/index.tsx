@@ -8,7 +8,7 @@ import { Course } from "@/src/lib/getCourses";
 import Button from "@/src/components/ui/Button/Button";
 import { purchaseRequest } from "@/src/store/slices/corses";
 import Checkbox from "@/src/components/ui/Checkbox";
-import {PUBLIC_OFFER_URL} from "@/src/utils/constant";
+import {PAGES, PUBLIC_OFFER_URL} from "@/src/utils/constant";
 import Icon from "@/src/components/ui/Icon/Icon";
 
 type PropTypes = {
@@ -19,9 +19,18 @@ type PropTypes = {
 
 const WidgetModalPayment: FC<PropTypes> = ({course, className, isVisible}) => {
   const dispatch = useAppDispatch();
+  const origin = window.location.origin;
+
+  const coursePath = PAGES.COURSE.replace(":id", String(course.id));
+
+  const successUrl = `${origin}${coursePath}?payment=success`;
+  const failUrl = `${origin}${coursePath}?payment=fail`;
 
   const [agree, setAgree] = useState(false);
   const [error, setError] = useState("");
+
+  console.log('successUrl=', successUrl);
+  console.log('failUrl=', failUrl);
 
   const handlePayment = (id: number) => {
     if (!agree) {
@@ -30,16 +39,22 @@ const WidgetModalPayment: FC<PropTypes> = ({course, className, isVisible}) => {
     }
 
     setError("");
-    dispatch(purchaseRequest(id));
+    dispatch(
+      purchaseRequest({
+        course_id: id,
+        success_url: successUrl,
+        fail_url: failUrl,
+      })
+    );
   };
 
   return (
     <Modal
       isClose
-      isCloseBg
       isVisible={isVisible}
       isHideBg={true}
       className={classNames("modal-payment", className)}
+      showCloseButton={true}
     >
       <div className="modal__title">Оплата курса</div>
 

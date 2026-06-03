@@ -4,6 +4,27 @@
     color: var(--main-green-dark);
     margin-bottom: 10px;
   }
+  dialog {
+    position: relative;
+  }
+
+  &__close {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    cursor: pointer;
+
+    svg {
+      color: var(--main-green-dark);
+      width: 24px;
+      height: 24px;
+    }
+  }
 }
 
 @import "./notice.scss";
@@ -11,3 +32,4 @@
 @import "./place.scss";
 @import "./successfully.scss";
 @import "./payment.scss";
+@import "./payment-status.scss";

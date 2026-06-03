@@ -1,0 +1,19 @@
+.modal-payment-status {
+  dialog {
+    align-items: center;
+  }
+
+  .modal__title {
+    text-align: center;
+  }
+
+  .modal-payment__body {
+    text-align: center;
+  }
+
+  &.success {
+    .modal-payment__btn {
+      margin-top: 0;
+    }
+  }
+}
