@@ -190,7 +190,7 @@
 
         .lesson-page__lesson-info_buttons-item {
           @include center-between;
-          @include fonts(24px, 500, "Manrope");
+          @include fonts(24px, 500);
           line-height: 120%;
           padding: 20px 20px 20px 40px;
           background: var(--main-blue);
@@ -659,8 +659,8 @@
               min-width: 60px;
 
               .course-tutorial__list-item--status-line {
-                bottom: -113%;
-                @include icon(56px);
+                bottom: -65%;
+                @include icon(32px);
               }
 
               .course-tutorial__list-item--status-icon {
