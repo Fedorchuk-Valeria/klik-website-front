@@ -18,7 +18,7 @@ export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Привет!<br/><br/>Я твой AI помощник.<br/><br/>Ответь на несколько вопросов, и я подберу для тебя оптимальное решение.<br/><br/>😄 Готовы?",
+      text: "Привет!<br/>Я твой AI помощник.<br/>Ответь на несколько вопросов, и я подберу для тебя оптимальное решение.<br/>😄 Готовы?",
       sender: "bot",
     },
   ]);
@@ -41,7 +41,7 @@ export default function Chat() {
   const fakeRequest = async (text: string) => {
     return new Promise<string>((resolve) => {
       setTimeout(() => {
-        resolve(`<strong>Спасибо за ваш вопрос 👋</strong><br /><br />Сейчас это тестовый ответ AI-помощника.`);
+        resolve(`<strong>Спасибо за ваш вопрос 👋</strong><br />Сейчас это тестовый ответ AI-помощника.`);
       }, 2000);
     });
   };
