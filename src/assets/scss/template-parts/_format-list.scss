@@ -16,6 +16,7 @@
 
 .formats__item {
   position: relative;
+  flex-shrink: 0;
   width: 560px;
   height: 714px;
   border-radius: 70px;
@@ -150,7 +151,7 @@
     transition: all 0.5s ease;
 
     width: 100%;
-    max-width: 524px;
+    max-width: calc(100% - 425px);
 
     .formats__content-list {
       display: flex;
@@ -162,6 +163,7 @@
     .formats__content-title {
       @include fonts(46px, 500, "Etude Noire");
       margin-bottom: 20px;
+      word-break: break-all;
     }
 
     .formats__content-text {
@@ -194,7 +196,7 @@
     }
 
     .formats__content-button {
-      width: 100%;
+      width: calc(100% - 63px);
       display: flex;
       justify-content: center;
       margin-top: 37px;
@@ -220,6 +222,8 @@
         max-width: 90px;
         text-align: center;
         font-size: 14px;
+        white-space: pre-line;
+        flex-shrink: 0;
       }
     }
   }
@@ -280,7 +284,7 @@
     }
 
     .formats__content {
-      left: 515px;
+      left: 380px;
       max-width: 314px;
       height: calc(100% - 40px);
 
@@ -320,13 +324,14 @@
 
     &.formats__item--active {
       width: 900px;
-      min-width: 900px;
 
       .formats__image {
-        width: 475px;
-        height: 553px;
-        border-radius: 30px;
-        left: 20px;
+        width: 311px;
+        height: 510px;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 45px;
+        border-radius: 33px;
       }
     }
 
@@ -362,7 +367,7 @@
     }
 
     .formats__content {
-      left: 315px;
+      left: 284px;
       max-width: 314px;
       height: calc(100% - 40px);
 
@@ -402,13 +407,14 @@
 
     &.formats__item--active {
       width: 655px;
-      min-width: 655px;
 
       .formats__image {
-        width: 275px;
-        height: 553px;
+        width: 227px;
+        height: 510px;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 33px;
         border-radius: 30px;
-        left: 20px;
       }
     }
 
@@ -499,7 +505,6 @@
 
     &.formats__item--active {
       width: 510px;
-      min-width: 510px;
 
       .formats__image {
         width: 194px;

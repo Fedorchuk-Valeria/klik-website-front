@@ -1,5 +1,6 @@
 "use client";
 
+import classNames from "classnames";
 import Image from "next/image";
 import { FC, RefObject, useCallback, useMemo } from "react";
 import type { Swiper as SwiperType } from "swiper";
@@ -8,6 +9,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import { TUTOR_IMAGES } from "./tutorImages";
 import type { TutorItem } from "./types";
+
+export const TUTORS_SWIPER_SPEED_MS = 300;
 
 const SLIDE_GAP = 20;
 const SLIDE_INACTIVE_W = 270;
@@ -28,11 +31,13 @@ export type TutorsSwiperProps = {
   activeIndex: number;
   initialSlideMid: number;
   tutorCount: number;
+  isMovePhase: boolean;
   tutorsPaginationEnabled: boolean;
   paginationElRef: RefObject<HTMLDivElement | null>;
   onSwiper: (swiper: SwiperType) => void;
   onSwiperClick: (swiper: SwiperType) => void;
   onSlideChange: (swiper: SwiperType) => void;
+  onSlideChangeTransitionEnd: (swiper: SwiperType) => void;
   onSwiperSliderFirstMove: () => void;
 };
 
@@ -42,11 +47,13 @@ const TutorsSwiper: FC<TutorsSwiperProps> = ({
   activeIndex,
   initialSlideMid,
   tutorCount,
+  isMovePhase,
   tutorsPaginationEnabled,
   paginationElRef,
   onSwiper,
   onSwiperClick,
   onSlideChange,
+  onSlideChangeTransitionEnd,
   onSwiperSliderFirstMove,
 }) => {
   const swiperSlides = useMemo(
@@ -102,7 +109,7 @@ const TutorsSwiper: FC<TutorsSwiperProps> = ({
   const swiperEl = (
     <Swiper
       modules={[Pagination]}
-      speed={0}
+      speed={isTabletLandscapeTutors ? 0 : TUTORS_SWIPER_SPEED_MS}
       grabCursor
       resizeObserver
       slidesPerView={isTabletLandscapeTutors ? 1 : "auto"}
@@ -110,9 +117,11 @@ const TutorsSwiper: FC<TutorsSwiperProps> = ({
       key={
         isTabletLandscapeTutors
           ? `tutor-compact-${tutorCount}-pg-${tutorsPaginationEnabled ? 1 : 0}`
-          : `tutor-order-${activeIndex}`
+          : `tutor-order-${tutorCount}`
       }
-      className="home-page__tutors-swiper"
+      className={classNames("home-page__tutors-swiper", {
+        "home-page__tutors-swiper--phase-move": !isTabletLandscapeTutors && isMovePhase,
+      })}
       spaceBetween={isTabletLandscapeTutors ? 0 : SLIDE_GAP}
       slidesOffsetAfter={isTabletLandscapeTutors ? 0 : SLIDES_OFFSET_AFTER}
       slidesOffsetBefore={isTabletLandscapeTutors ? 0 : SLIDES_OFFSET_BEFORE}
@@ -134,6 +143,7 @@ const TutorsSwiper: FC<TutorsSwiperProps> = ({
       onSwiper={onSwiper}
       onClick={onSwiperClick}
       onSlideChange={onSlideChange}
+      onSlideChangeTransitionEnd={onSlideChangeTransitionEnd}
       onSliderFirstMove={onSwiperSliderFirstMove}
     >
       {swiperSlides}

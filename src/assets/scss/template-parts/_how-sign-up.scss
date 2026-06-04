@@ -211,6 +211,7 @@
 
           .how-sign-up__card-list--item-icon {
             @include icon(25px);
+            min-width: 25px;
 
             &--pink {
               color: var(--main-pink);
@@ -242,9 +243,11 @@
           border: 2px solid var(--main-orange);
           border-radius: 100px;
           overflow: hidden;
+          transition: border-radius 0.3s ease 0.3s;
 
-          &.is-open {
+          &:has(.is-open) {
             border-radius: 38px;
+            transition: none;
           }
         }
 
@@ -382,9 +385,11 @@
             border: 2px solid var(--main-orange);
             border-radius: 100px;
             overflow: hidden;
+            transition: border-radius 0.3s ease 0.3s;
 
-            &.is-open {
+            &:has(.is-open) {
               border-radius: 38px;
+              transition: none;
             }
           }
         }
@@ -481,6 +486,7 @@
           .how-sign-up__card-list--item {
             .how-sign-up__card-list--item-icon {
               @include icon(21px);
+              min-width: 21px;
             }
 
             .how-sign-up__card-list--item-text {
@@ -502,9 +508,11 @@
             border: 2px solid var(--main-orange);
             border-radius: 100px;
             overflow: hidden;
+            transition: border-radius 0.3s ease 0.3s;
 
-            &.is-open {
+            &:has(.is-open) {
               border-radius: 30px;
+              transition: none;
             }
           }
 
@@ -706,6 +714,7 @@
           .how-sign-up__card-list--item {
             .how-sign-up__card-list--item-icon {
               @include icon(25px);
+              min-width: 25px;
             }
 
             .how-sign-up__card-list--item-text {
@@ -869,6 +878,7 @@
           .how-sign-up__card-list--item {
             .how-sign-up__card-list--item-icon {
               @include icon(19px);
+              min-width: 19px;
             }
 
             .how-sign-up__card-list--item-text {

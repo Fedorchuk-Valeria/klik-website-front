@@ -67,15 +67,15 @@
           "list": [
             {
               "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewBox=\"0 0 66 66\" fill=\"none\">\n  <path d=\"M49.5002 19.69C49.3352 19.6625 49.1427 19.6625 48.9777 19.69C45.1827 19.5525 42.1577 16.445 42.1577 12.595C42.1577 8.66251 45.3202 5.5 49.2527 5.5C53.1852 5.5 56.3477 8.69001 56.3477 12.595C56.3202 16.445 53.2952 19.5525 49.5002 19.69Z\" stroke=\"#FBFFDC\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M46.668 39.71C50.4355 40.3425 54.588 39.6825 57.503 37.73C61.3805 35.145 61.3805 30.91 57.503 28.325C54.5605 26.3725 50.3529 25.7124 46.5854 26.3724\" stroke=\"#FBFFDC\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M16.4173 19.69C16.5823 19.6625 16.7748 19.6625 16.9398 19.69C20.7348 19.5525 23.7598 16.445 23.7598 12.595C23.7598 8.66251 20.5973 5.5 16.6648 5.5C12.7323 5.5 9.56982 8.69001 9.56982 12.595C9.59732 16.445 12.6223 19.5525 16.4173 19.69Z\" stroke=\"#FBFFDC\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M19.25 39.71C15.4825 40.3425 11.33 39.6825 8.41496 37.73C4.53746 35.145 4.53746 30.91 8.41496 28.325C11.3575 26.3725 15.565 25.7124 19.3325 26.3724\" stroke=\"#FBFFDC\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M33.0002 40.2325C32.8352 40.205 32.6427 40.205 32.4777 40.2325C28.6827 40.095 25.6577 36.9875 25.6577 33.1375C25.6577 29.205 28.8202 26.0425 32.7527 26.0425C36.6852 26.0425 39.8477 29.2325 39.8477 33.1375C39.8202 36.9875 36.7952 40.1225 33.0002 40.2325Z\" stroke=\"#FBFFDC\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M24.9975 48.895C21.12 51.48 21.12 55.715 24.9975 58.3C29.3975 61.2425 36.6025 61.2425 41.0025 58.3C44.88 55.715 44.88 51.48 41.0025 48.895C36.63 45.98 29.3975 45.98 24.9975 48.895Z\" stroke=\"#FBFFDC\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>",
-              "title": "Группы\u2028до 12 человек"
+              "title": "Группы\nдо 12 человек"
             },
             {
               "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewBox=\"0 0 66 66\" fill=\"none\">\n  <path d=\"M60.5 33C60.5 48.18 48.18 60.5 33 60.5C17.82 60.5 5.5 48.18 5.5 33C5.5 17.82 17.82 5.5 33 5.5C48.18 5.5 60.5 17.82 60.5 33Z\" stroke=\"#FBFFDC\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M43.2024 41.7451L34.6774 36.6576C33.1924 35.7776 31.9824 33.6601 31.9824 31.9276V20.6526\" stroke=\"#FBFFDC\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>",
-              "title": "Занятие\u2028100 минут"
+              "title": "Занятие\n100 минут"
             },
             {
               "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewBox=\"0 0 66 66\" fill=\"none\">\n  <path d=\"M22 5.5V13.75\" stroke=\"#FBFFDC\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M44 5.5V13.75\" stroke=\"#FBFFDC\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M9.625 24.9976H56.375\" stroke=\"#FBFFDC\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M57.75 23.375V46.75C57.75 55 53.625 60.5 44 60.5H22C12.375 60.5 8.25 55 8.25 46.75V23.375C8.25 15.125 12.375 9.625 22 9.625H44C53.625 9.625 57.75 15.125 57.75 23.375Z\" stroke=\"#FBFFDC\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M43.1607 37.675H43.1854\" stroke=\"#FBFFDC\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M43.1607 45.925H43.1854\" stroke=\"#FBFFDC\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M32.9878 37.675H33.0125\" stroke=\"#FBFFDC\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M32.9878 45.925H33.0125\" stroke=\"#FBFFDC\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M22.8091 37.675H22.8338\" stroke=\"#FBFFDC\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M22.8091 45.925H22.8338\" stroke=\"#FBFFDC\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>",
-              "title": "1 раз\u2028в неделю"
+              "title": "1 раз\nв неделю"
             }
           ]
         },
@@ -95,7 +95,7 @@
             },
             {
               "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewBox=\"0 0 66 66\" fill=\"none\">\n  <path d=\"M33 60.5V55\" stroke=\"#01524C\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M33 49.5V44\" stroke=\"#01524C\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M33 38.5V30.25C33 19.6075 41.6075 11 52.25 11H60.5\" stroke=\"#01524C\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M5.5 11H13.75C24.3925 11 33 19.6075 33 30.25V33V38.5\" stroke=\"#01524C\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M11 5.5L5.5 11L11 16.5\" stroke=\"#01524C\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <path d=\"M55 5.5L60.5 11L55 16.5\" stroke=\"#01524C\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>",
-              "title": "20+\u2028направлений"
+              "title": "20+\nнаправлений"
             }
           ]
         },
@@ -184,7 +184,7 @@
       ],
       "footer": {
         "title": "Не нашли ответ на свой вопрос?",
-        "text": "Свяжитесь с нами, и мы с радостью ответим\u2028на все ваши вопросы!",
+        "text": "Свяжитесь с нами, и мы с радостью ответим\nна все ваши вопросы!",
         "button": {
           "title": "Оставить заявку",
           "url": "#"
@@ -193,7 +193,7 @@
     },
     "what_we_learn": {
       "tag": "Направления",
-      "title": "Чему мы обучаем в Klik?",
+      "title": "Чему мы обучаем в KliK?",
       "text": "Ребёнок пробует себя в разных направлениях и создаёт реальные цифровые проекты, от идеи до результата",
       "items": [
         {

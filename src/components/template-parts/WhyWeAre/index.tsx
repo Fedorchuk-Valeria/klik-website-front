@@ -1,8 +1,8 @@
 "use client";
 
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef } from "react";
 import type { Swiper as SwiperType } from "swiper";
-import { Autoplay, Pagination } from "swiper/modules";
+import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import WhyWeAreSVG from "@/src/assets/images/templates/homepage/whyWeAre/why_we_are.svg";
@@ -33,12 +33,17 @@ type PropTypes = {
   };
 };
 
-const AUTOPLAY_DELAY_MS = 4000;
+const AUTOPLAY_DELAY_MS = 4_000;
+const IDLE_RESUME_MS = 10_000;
 
 const WhyWeAre: FC<PropTypes> = ({ tag, title, text, items, info }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const swiperRef = useRef<SwiperType | null>(null);
-  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
+  const autoplayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pausedRef = useRef(false);
+  const inViewportRef = useRef(false);
+  const slideCountRef = useRef(0);
 
   const swiperSlides = useMemo(() => items.map((item) => ({ item, key: item.id })), [items]);
 
@@ -61,39 +66,127 @@ const WhyWeAre: FC<PropTypes> = ({ tag, title, text, items, info }) => {
     },
   ];
 
-  const onSwiper = useCallback((swiper: SwiperType) => {
-    swiperRef.current = swiper;
-    swiper.autoplay.stop();
-    setSwiperInstance(swiper);
+  const clearAutoplayTimer = useCallback(() => {
+    if (autoplayTimerRef.current) {
+      clearTimeout(autoplayTimerRef.current);
+      autoplayTimerRef.current = null;
+    }
   }, []);
 
-  useEffect(() => {
-    if (!swiperInstance) return;
+  const clearResumeTimer = useCallback(() => {
+    if (resumeTimerRef.current) {
+      clearTimeout(resumeTimerRef.current);
+      resumeTimerRef.current = null;
+    }
+  }, []);
 
+  const scheduleAutoplayStep = useCallback(() => {
+    clearAutoplayTimer();
+
+    if (!inViewportRef.current || pausedRef.current) return;
+    if (slideCountRef.current <= 1) return;
+
+    const sw = swiperRef.current;
+    if (sw && !sw.destroyed && sw.isEnd) return;
+
+    const tick = () => {
+      autoplayTimerRef.current = null;
+      if (pausedRef.current) return;
+      if (!inViewportRef.current) return;
+      if (slideCountRef.current <= 1) return;
+
+      const sw = swiperRef.current;
+      if (!sw || sw.destroyed || sw.isEnd) return;
+
+      sw.slideNext();
+      autoplayTimerRef.current = setTimeout(tick, AUTOPLAY_DELAY_MS);
+    };
+
+    autoplayTimerRef.current = setTimeout(tick, AUTOPLAY_DELAY_MS);
+  }, [clearAutoplayTimer]);
+
+  const onUserInteraction = useCallback(() => {
+    if (slideCountRef.current <= 1) return;
+
+    pausedRef.current = true;
+
+    clearAutoplayTimer();
+    clearResumeTimer();
+
+    resumeTimerRef.current = setTimeout(() => {
+      resumeTimerRef.current = null;
+      pausedRef.current = false;
+      scheduleAutoplayStep();
+    }, IDLE_RESUME_MS);
+  }, [clearAutoplayTimer, clearResumeTimer, scheduleAutoplayStep]);
+
+  const onSwiper = useCallback(
+    (swiper: SwiperType) => {
+      swiperRef.current = swiper;
+      if (inViewportRef.current && !pausedRef.current && slideCountRef.current > 1) {
+        scheduleAutoplayStep();
+      }
+    },
+    [scheduleAutoplayStep]
+  );
+
+  const onSwiperClick = useCallback(
+    (swiper: SwiperType) => {
+      const slide = swiper.clickedSlide;
+      if (!slide) return;
+
+      const slot = swiper.slides.indexOf(slide);
+      if (slot < 0) return;
+
+      onUserInteraction();
+
+      if (slot !== swiper.activeIndex) {
+        swiper.slideTo(slot);
+      }
+    },
+    [onUserInteraction]
+  );
+
+  useEffect(() => {
+    slideCountRef.current = items.length;
+  }, [items.length]);
+
+  useEffect(
+    () => () => {
+      clearAutoplayTimer();
+      clearResumeTimer();
+    },
+    [clearAutoplayTimer, clearResumeTimer]
+  );
+
+  useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
 
-    const syncAutoplay = (visible: boolean) => {
-      const swiper = swiperRef.current;
-      if (!swiper) return;
+    const syncAutoplayVisibility = (visible: boolean) => {
+      inViewportRef.current = visible;
       if (visible) {
-        swiper.autoplay.start();
+        if (!pausedRef.current) scheduleAutoplayStep();
       } else {
-        swiper.autoplay.stop();
+        clearAutoplayTimer();
       }
     };
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        syncAutoplay(entry.isIntersecting);
+        syncAutoplayVisibility(entry.isIntersecting);
       },
       { threshold: 0.15 }
     );
 
     observer.observe(el);
+    const queued = observer.takeRecords();
+    if (queued.length) {
+      syncAutoplayVisibility(queued[queued.length - 1]?.isIntersecting ?? false);
+    }
 
     return () => observer.disconnect();
-  }, [swiperInstance]);
+  }, [clearAutoplayTimer, items.length, scheduleAutoplayStep]);
 
   if (!items.length || !swiperSlides.length) {
     return null;
@@ -123,10 +216,12 @@ const WhyWeAre: FC<PropTypes> = ({ tag, title, text, items, info }) => {
           </div>
         </div>
 
-        <div className="home-page__why-we-are-body">
+        <div
+          className="home-page__why-we-are-body"
+          onPointerDownCapture={items.length > 1 ? onUserInteraction : undefined}
+        >
           <Swiper
-            modules={[Autoplay, Pagination]}
-            rewind
+            modules={[Pagination]}
             grabCursor
             centeredSlides
             initialSlide={1}
@@ -136,11 +231,9 @@ const WhyWeAre: FC<PropTypes> = ({ tag, title, text, items, info }) => {
             observer
             observeSlideChildren
             resizeObserver
-            autoplay={{
-              delay: AUTOPLAY_DELAY_MS,
-              disableOnInteraction: false,
-            }}
             onSwiper={onSwiper}
+            onClick={onSwiperClick}
+            onSliderFirstMove={onUserInteraction}
             className="home-page__why-we-are-swiper"
             spaceBetween={10}
             pagination={{
