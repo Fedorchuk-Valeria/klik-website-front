@@ -65,7 +65,7 @@ const WidgetModalPayment: FC<PropTypes> = ({course, className, isVisible}) => {
         </div>
 
         <div className="modal-payment__row">
-          <div className="modal-payment__name">Стоимость</div>
+          <div className="modal-payment__name dotted">Стоимость</div>
           <div className="modal-payment__value">
             {course.price} <Icon className="modal-payment__currency" name="ruble" />
           </div>

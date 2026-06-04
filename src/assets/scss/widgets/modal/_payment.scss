@@ -53,6 +53,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 250px;
+    flex-shrink: 0;
   }
 
   &__currency {
@@ -65,6 +66,23 @@
   &__name {
     white-space: nowrap;
     flex-shrink: 0;
+
+    &.dotted {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      min-width: 0; /* важно */
+
+      &::after {
+        content: "..................................................................................";
+        flex: 1;
+        min-width: 0; /* важно */
+        overflow: hidden;
+        white-space: nowrap;
+        margin: 0 20px;
+        color: var(--secondary-burgundy-40);
+      }
+    }
   }
 
   &__agreement {
