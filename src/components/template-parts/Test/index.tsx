@@ -195,8 +195,8 @@ const Test: FC<PropTypes> = ({
 
       <div className="test__content">
         <div className="test__content-info">
-          <p className="test__content-title">{title}</p>
-          <p className="test__content-description">{description}</p>
+          <p className="test__content-title">{!isResultsVisible ? title : "Результаты теста"}</p>
+          {!isResultsVisible && <p className="test__content-description">{description}</p>}
 
           {(isStarted || isResultsVisible) && !isTestLoading && (
             <div className="test__content-list" ref={contentListRef}>

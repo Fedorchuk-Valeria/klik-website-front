@@ -3,6 +3,11 @@
   border-radius: 40px;
   background: var(--main-light);
   width: 100%;
+  border: 1px solid transparent;
+
+  &:has(.test-card__result--incorrect) {
+    border: 1px solid var(--error-color);
+  }
 
   .test-card__header {
     @include center-between;

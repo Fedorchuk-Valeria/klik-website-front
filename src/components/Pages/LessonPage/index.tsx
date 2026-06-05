@@ -17,7 +17,11 @@ import Icon from "@/src/components/ui/Icon/Icon";
 
 import { Lesson, LessonTestBody } from "@/src/lib/getCourses";
 import { useAppSelector } from "@/src/store/hooks";
-import { getLessonTestRequest, sendTestAnswersRequest } from "@/src/store/slices/lesson";
+import {
+  clearTestResult,
+  getLessonTestRequest,
+  sendTestAnswersRequest,
+} from "@/src/store/slices/lesson";
 import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 
@@ -62,6 +66,8 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
 
   const handleNextLessonClick = useCallback(() => {
     if (id && lessonId) {
+      dispatch(clearTestResult());
+
       if (nextLesson) {
         router.push(
           PAGES.LESSON.replace(":id", id).replace(":lessonId", nextLesson?.id.toString() || "")
@@ -78,7 +84,7 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
         );
       }
     }
-  }, [id, lessonId, nextLesson]);
+  }, [id, lessonId, dispatch, nextLesson, data?.course?.categories]);
 
   const handleReviewClick = useCallback(() => {
     if (id && lessonId) {
@@ -107,6 +113,8 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
     },
     [id, lessonId, dispatch]
   );
+
+  console.log("data", data, id, lessonId, result, review);
 
   return (
     <div className="lesson-page">

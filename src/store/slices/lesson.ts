@@ -86,6 +86,12 @@ const lessonSlice = createSlice({
       state.errors = action.payload;
       state.isTestLoading = false;
     },
+
+    clearTestResult(state) {
+      state.test = null;
+      state.result = null;
+      state.review = null;
+    },
   },
 });
 
@@ -99,5 +105,6 @@ export const {
   sendTestAnswersRequest,
   sendTestAnswersSuccess,
   sendTestAnswersFailure,
+  clearTestResult,
 } = lessonSlice.actions;
 export default lessonSlice.reducer;
