@@ -230,8 +230,16 @@
 
       &--animating {
         max-width: none;
+        overflow: hidden;
         cursor: default;
         pointer-events: none;
+
+        &.home-page__tutors-slide--active,
+        &.home-page__tutors-slide--incoming-active {
+          width: unset;
+          max-width: none;
+          height: unset;
+        }
 
         &:not(.home-page__tutors-slide--active):not(.home-page__tutors-slide--incoming-active) {
           width: auto;

@@ -34,6 +34,7 @@ export type TutorsSliderProps = {
   slides: TutorsSliderSlide[];
   transition: TutorsSliderTransition | null;
   transitionId: number;
+  withEnterSlide?: boolean;
   onSlideClick: (slot: number) => void;
   onSwipeNext: () => void;
   onSwipePrev: () => void;
@@ -46,6 +47,7 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
   slides,
   transition,
   transitionId,
+  withEnterSlide = false,
   onSlideClick,
   onSwipeNext,
   onSwipePrev,
@@ -85,7 +87,9 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
     });
 
     const timerId = window.setTimeout(() => {
-      onTransitionEnd();
+      requestAnimationFrame(() => {
+        onTransitionEnd();
+      });
     }, TUTORS_SLIDE_TRANSITION_MS);
 
     return () => {
@@ -95,20 +99,39 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
     };
   }, [transition, transitionId, onTransitionEnd]);
 
-  const incomingActiveSlot =
-    slides.length === 2 ? 0 : transition === "next" ? 2 : 0;
+  const incomingActiveSlot = useMemo(() => {
+    if (slides.length === 2) return 0;
+    if (transition === "next") return 2;
+    if (transition === "prev" && withEnterSlide) return 1;
+    return 0;
+  }, [slides.length, transition, withEnterSlide]);
 
   const getSlideStyle = useCallback(
-    (slot: number): CSSProperties | undefined => {
-      if (!transition) return undefined;
+    (slot: number): CSSProperties => {
+      if (transition) {
+        const layouts =
+          transition === "next"
+            ? getNextTransitionLayouts(slot, slides.length, metrics)
+            : getPrevTransitionLayouts(slot, slides.length, metrics, withEnterSlide);
 
-      const layouts =
-        transition === "next"
-          ? getNextTransitionLayouts(slot, slides.length, metrics)
-          : getPrevTransitionLayouts(slot, slides.length, metrics);
+        const layout = animPhase === "run" ? layouts.to : layouts.from;
+        const isRunning = animPhase === "run";
 
-      const layout = animPhase === "run" ? layouts.to : layouts.from;
-      const isAnimating = animPhase === "run";
+        return {
+          position: "absolute",
+          left: layout.left,
+          width: layout.width,
+          height: layout.height,
+          opacity: layout.opacity,
+          bottom: 0,
+          zIndex: slot === incomingActiveSlot ? 2 : 1,
+          transition: isRunning
+            ? `left ${TUTORS_SLIDE_TRANSITION_MS}ms cubic-bezier(0.4, 0, 0.2, 1), width ${TUTORS_SLIDE_TRANSITION_MS}ms cubic-bezier(0.4, 0, 0.2, 1), height ${TUTORS_SLIDE_TRANSITION_MS}ms cubic-bezier(0.4, 0, 0.2, 1), opacity ${TUTORS_SLIDE_TRANSITION_MS}ms ease-in-out`
+            : "none",
+        };
+      }
+
+      const layout = getSlotLayout(slot, metrics);
 
       return {
         position: "absolute",
@@ -117,13 +140,9 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
         height: layout.height,
         opacity: layout.opacity,
         bottom: 0,
-        zIndex: slot === incomingActiveSlot ? 2 : 1,
-        transition: isAnimating
-          ? `left ${TUTORS_SLIDE_TRANSITION_MS}ms cubic-bezier(0.4, 0, 0.2, 1), width ${TUTORS_SLIDE_TRANSITION_MS}ms cubic-bezier(0.4, 0, 0.2, 1), height ${TUTORS_SLIDE_TRANSITION_MS}ms cubic-bezier(0.4, 0, 0.2, 1), opacity ${TUTORS_SLIDE_TRANSITION_MS}ms ease-in-out`
-          : "none",
       };
     },
-    [animPhase, incomingActiveSlot, metrics, slides.length, transition]
+    [animPhase, incomingActiveSlot, metrics, slides.length, transition, withEnterSlide]
   );
 
   const isOutgoingActive = useCallback(
@@ -132,9 +151,13 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
         return slot === DESKTOP_ACTIVE_SLOT;
       }
 
+      if (transition === "prev" && withEnterSlide) {
+        return slot === 2;
+      }
+
       return slot === DESKTOP_ACTIVE_SLOT;
     },
-    [transition]
+    [transition, withEnterSlide]
   );
 
   const isIncomingActive = useCallback(
@@ -149,8 +172,12 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
   );
 
   const showTags = useCallback(
-    (slot: number) => isIncomingActive(slot),
-    [isIncomingActive]
+    (slot: number) => {
+      if (!isIncomingActive(slot)) return false;
+      if (transition) return animPhase === "run";
+      return true;
+    },
+    [animPhase, isIncomingActive, transition]
   );
 
   const onPointerDown = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
@@ -192,21 +219,46 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
     }
   }, []);
 
-  const trackMinHeight = metrics.activeH;
   const isAnimating = transition != null;
 
-  const animatingTrackWidth = useMemo(() => {
-    if (!isAnimating || slides.length === 0) return undefined;
-    const lastSlot = slides.length - 1;
-    const lastLayout = getSlotLayout(lastSlot, metrics);
+  const trackMinHeight = useMemo(() => {
+    let maxH = metrics.activeH;
+
+    if (transition) {
+      for (let slot = 0; slot < slides.length; slot += 1) {
+        const layouts =
+          transition === "next"
+            ? getNextTransitionLayouts(slot, slides.length, metrics)
+            : getPrevTransitionLayouts(slot, slides.length, metrics, withEnterSlide);
+
+        maxH = Math.max(maxH, layouts.from.height, layouts.to.height);
+      }
+    }
+
+    return maxH;
+  }, [metrics, slides.length, transition, withEnterSlide]);
+
+  const stableSlotCount = useMemo(() => {
+    if (transition === "prev" && withEnterSlide && slides.length > 2) {
+      return slides.length - 1;
+    }
+
+    return slides.length;
+  }, [slides.length, transition, withEnterSlide]);
+
+  const trackWidth = useMemo(() => {
+    if (stableSlotCount <= 0) return 0;
+
+    const lastLayout = getSlotLayout(stableSlotCount - 1, metrics);
     return lastLayout.left + lastLayout.width;
-  }, [isAnimating, metrics, slides.length]);
+  }, [metrics, stableSlotCount]);
 
   return (
     <div
       className={classNames("home-page__tutors-slider", {
         "home-page__tutors-slider--animating": isAnimating,
       })}
+      style={{ minHeight: trackMinHeight }}
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerCancel}
@@ -214,15 +266,11 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
       <div
         ref={trackRef}
         className="home-page__tutors-slider__track"
-        style={
-          isAnimating
-            ? {
-                position: "relative",
-                minHeight: trackMinHeight,
-                width: animatingTrackWidth,
-              }
-            : undefined
-        }
+        style={{
+          position: "relative",
+          minHeight: trackMinHeight,
+          width: trackWidth,
+        }}
       >
         {slides.map(({ item, key }, slot) => {
           const img = item ? TUTOR_IMAGES[item.id] : undefined;
@@ -237,7 +285,8 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
               key={key}
               className={classNames("home-page__tutors-slide", {
                 "home-page__tutors-slide--active": isOutgoing,
-                "home-page__tutors-slide--incoming-active": isIncoming && isAnimating,
+                "home-page__tutors-slide--incoming-active":
+                  isIncoming && isAnimating && animPhase === "run",
                 "home-page__tutors-slide--animating": isAnimating,
               })}
               style={slideStyle}

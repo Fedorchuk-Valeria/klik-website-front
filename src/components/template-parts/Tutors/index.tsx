@@ -54,6 +54,7 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
     direction: TutorsSliderTransition;
     slides: TutorsSliderSlide[];
     id: number;
+    withEnterSlide: boolean;
   } | null>(null);
   const tutorsPaginationElRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -61,6 +62,7 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
     direction: TutorsSliderTransition;
     slides: TutorsSliderSlide[];
     id: number;
+    withEnterSlide: boolean;
   } | null>(null);
   const [isTabletLandscapeTutors, setIsTabletLandscapeTutors] = useState(false);
   const [isTutorsPagination, setIsTutorsPagination] = useState(false);
@@ -91,14 +93,40 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
     [orderedSlides]
   );
 
-  const buildDesktopSlideSnapshot = useCallback((fromIndex: number) => {
-    const n = tutorCountRef.current;
-    const items = slidesWithImagesRef.current;
-    return orderedTutorIndices(fromIndex, n).map((tutorIdx, slot) => ({
-      item: items[tutorIdx],
-      key: `tutor-${items[tutorIdx]?.id ?? slot}`,
-    }));
-  }, []);
+  const buildDesktopSlideSnapshot = useCallback(
+    (fromIndex: number, direction: TutorsSliderTransition) => {
+      const n = tutorCountRef.current;
+      const items = slidesWithImagesRef.current;
+      const base = orderedTutorIndices(fromIndex, n).map((tutorIdx, slot) => ({
+        item: items[tutorIdx],
+        key: `tutor-${items[tutorIdx]?.id ?? slot}`,
+      }));
+
+      if (direction !== "prev" || n < 3) {
+        return { slides: base, withEnterSlide: false };
+      }
+
+      const baseIndices = orderedTutorIndices(fromIndex, n);
+      const newActive = (fromIndex - 1 + n) % n;
+      const enterIdx = (newActive - 1 + n) % n;
+
+      if (!baseIndices.includes(enterIdx)) {
+        return {
+          slides: [
+            {
+              item: items[enterIdx],
+              key: `tutor-${items[enterIdx]?.id ?? enterIdx}`,
+            },
+            ...base,
+          ],
+          withEnterSlide: true,
+        };
+      }
+
+      return { slides: base, withEnterSlide: false };
+    },
+    []
+  );
 
   const startDesktopTransition = useCallback((direction: TutorsSliderTransition) => {
     if (slideTransitionRef.current) return false;
@@ -106,11 +134,12 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
     const n = tutorCountRef.current;
     if (n < 2) return false;
 
-    const snapshot = buildDesktopSlideSnapshot(activeIndexRef.current);
+    const snapshot = buildDesktopSlideSnapshot(activeIndexRef.current, direction);
     desktopTransitionIdRef.current += 1;
     const nextTransition = {
       direction,
-      slides: snapshot,
+      slides: snapshot.slides,
+      withEnterSlide: snapshot.withEnterSlide,
       id: desktopTransitionIdRef.current,
     };
 
@@ -437,6 +466,7 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
                   slides={slideTransition?.slides ?? desktopSlides}
                   transition={slideTransition?.direction ?? null}
                   transitionId={slideTransition?.id ?? 0}
+                  withEnterSlide={slideTransition?.withEnterSlide ?? false}
                   onSlideClick={onDesktopSlideClick}
                   onSwipeNext={goNext}
                   onSwipePrev={goPrev}

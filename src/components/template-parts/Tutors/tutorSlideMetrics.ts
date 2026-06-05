@@ -104,7 +104,7 @@ export function getNextTransitionLayouts(
     return {
       from,
       to: {
-        left: -(inactiveW + gap),
+        left: from.left,
         width: inactiveW,
         height: inactiveH,
         opacity: 0,
@@ -157,10 +157,83 @@ export function getNextTransitionLayouts(
 export function getPrevTransitionLayouts(
   slot: number,
   slideCount: number,
-  metrics: TutorSlideMetrics
+  metrics: TutorSlideMetrics,
+  withEnterSlide = false
 ): { from: SlideLayout; to: SlideLayout } {
-  const from = getSlotLayout(slot, metrics);
   const { inactiveW, inactiveH, activeW, activeH, gap } = metrics;
+
+  if (withEnterSlide && slideCount > 2) {
+    if (slot === 0) {
+      const toSlot = getSlotLayout(0, metrics);
+      return {
+        from: {
+          left: -(inactiveW + gap),
+          width: inactiveW,
+          height: inactiveH,
+          opacity: 0,
+        },
+        to: {
+          ...toSlot,
+          opacity: 0.5,
+        },
+      };
+    }
+
+    if (slot === 1) {
+      const fromSlot = getSlotLayout(0, metrics);
+      const toSlot = getSlotLayout(DESKTOP_ACTIVE_SLOT, metrics);
+      return {
+        from: fromSlot,
+        to: {
+          ...toSlot,
+          width: activeW,
+          height: activeH,
+          opacity: 1,
+        },
+      };
+    }
+
+    const visualFromSlot = slot - 1;
+    const from = getSlotLayout(visualFromSlot, metrics);
+
+    if (slot === 2) {
+      const toSlot = getSlotLayout(2, metrics);
+      return {
+        from,
+        to: {
+          ...toSlot,
+          width: inactiveW,
+          height: inactiveH,
+          opacity: 0.5,
+        },
+      };
+    }
+
+    if (slot + 1 >= slideCount) {
+      return {
+        from,
+        to: {
+          left: from.left + inactiveW + gap,
+          width: inactiveW,
+          height: inactiveH,
+          opacity: 0,
+        },
+      };
+    }
+
+    const toSlot = getSlotLayout(slot, metrics);
+    return {
+      from,
+      to: {
+        ...toSlot,
+        width: inactiveW,
+        height: inactiveH,
+        opacity: 0.5,
+      },
+    };
+  }
+
+  const from = getSlotLayout(slot, metrics);
 
   if (slideCount === 2) {
     if (slot === 0) {
