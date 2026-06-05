@@ -42,12 +42,7 @@ const HowSignUpDropdownItem: FC<HowSignUpDropdownItemProps> = ({
   useClickOutside(ref, () => setIsOpen(false));
 
   return (
-    <div
-      ref={ref}
-      className={classNames("how-sign-up__dropdown-item", {
-        "is-open": isOpen,
-      })}
-    >
+    <div ref={ref} className="how-sign-up__dropdown-item">
       <button
         type="button"
         className={classNames("how-sign-up__dropdown-trigger", {

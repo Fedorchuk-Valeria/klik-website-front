@@ -2,7 +2,7 @@
 
 import classNames from "classnames";
 import Image, { type StaticImageData } from "next/image";
-import { FC, useCallback, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
 import { EffectCoverflow } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -20,6 +20,7 @@ import imgProgramming from "@/src/assets/images/templates/homepage/whatWeLearn/p
 import WhatWeLearnAccordionItem from "./WhatWeLearnAaccordionItem";
 
 import { PAGE_ANCHORS } from "@/src/utils/constant";
+
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
@@ -46,21 +47,79 @@ export type WhatWeLearnProps = {
   }[];
 };
 
+const TABLET_MAX_CSS_VAR = "--layout-tablet-max";
+
 const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => {
   const swiperRef = useRef<SwiperType | null>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const galleryRef = useRef<HTMLDivElement | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  const goToSlide = useCallback((index: number) => {
-    setActiveIndex(index);
-    swiperRef.current?.slideToLoop(index, 400);
-  }, []);
+  const handleAccordionSelect = useCallback(
+    (index: number) => {
+      if (openIndex === index) {
+        setOpenIndex(null);
+        return;
+      }
+
+      setOpenIndex(index);
+      swiperRef.current?.slideToLoop(index, 400);
+    },
+    [openIndex]
+  );
 
   const onSwiper = useCallback((swiper: SwiperType) => {
     swiperRef.current = swiper;
   }, []);
 
-  const onRealIndexChange = useCallback((swiper: SwiperType) => {
-    setActiveIndex(swiper.realIndex);
+  useEffect(() => {
+    const refreshSwiper = () => {
+      requestAnimationFrame(() => {
+        const sw = swiperRef.current;
+        if (!sw || sw.destroyed) {
+          return;
+        }
+
+        sw.update();
+      });
+    };
+
+    const rootStyle = getComputedStyle(document.documentElement);
+    const tabletMaxPx = Number.parseFloat(rootStyle.getPropertyValue(TABLET_MAX_CSS_VAR).trim());
+
+    let mq: MediaQueryList | undefined;
+
+    const onGalleryVisible = () => {
+      refreshSwiper();
+      window.setTimeout(refreshSwiper, 100);
+    };
+
+    if (Number.isFinite(tabletMaxPx)) {
+      mq = window.matchMedia(`(min-width: ${tabletMaxPx + 1}px)`);
+      mq.addEventListener("change", onGalleryVisible);
+    }
+
+    let galleryResizeRafId = 0;
+    let galleryResizeObserver: ResizeObserver | undefined;
+    const galleryEl = galleryRef.current;
+
+    if (galleryEl) {
+      galleryResizeObserver = new ResizeObserver(() => {
+        cancelAnimationFrame(galleryResizeRafId);
+        galleryResizeRafId = requestAnimationFrame(refreshSwiper);
+      });
+      galleryResizeObserver.observe(galleryEl);
+    }
+
+    window.addEventListener("resize", refreshSwiper);
+    window.visualViewport?.addEventListener("resize", refreshSwiper);
+
+    return () => {
+      cancelAnimationFrame(galleryResizeRafId);
+      mq?.removeEventListener("change", onGalleryVisible);
+      galleryResizeObserver?.disconnect();
+      window.removeEventListener("resize", refreshSwiper);
+      window.visualViewport?.removeEventListener("resize", refreshSwiper);
+    };
   }, []);
 
   if (!items.length) {
@@ -111,14 +170,14 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
                     key={item.key || index}
                     item={item}
                     index={index}
-                    isOpen={index === activeIndex}
-                    onSelect={goToSlide}
+                    isOpen={openIndex === index}
+                    onSelect={handleAccordionSelect}
                   />
                 ))}
               </ul>
             </div>
 
-            <div className="home-page__what-we-learn-gallery">
+            <div ref={galleryRef} className="home-page__what-we-learn-gallery">
               <Swiper
                 className="home-page__what-we-learn-swiper"
                 effect="coverflow"
@@ -128,8 +187,10 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
                 slidesPerView="auto"
                 initialSlide={0}
                 loop={true}
+                observer
+                observeSlideChildren
+                resizeObserver
                 onSwiper={onSwiper}
-                onRealIndexChange={onRealIndexChange}
                 modules={[EffectCoverflow]}
                 breakpoints={{
                   1920: {
