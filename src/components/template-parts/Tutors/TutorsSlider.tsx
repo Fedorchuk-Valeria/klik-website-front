@@ -14,6 +14,7 @@ import {
 } from "react";
 
 import { TUTOR_IMAGES } from "./tutorImages";
+import type { TutorsSliderSlide } from "./tutorSlideMetrics";
 import {
   DESKTOP_ACTIVE_SLOT,
   getNextTransitionLayouts,
@@ -24,7 +25,6 @@ import {
   TUTORS_SLIDE_TRANSITION_MS,
   type TutorSlideMetrics,
 } from "./tutorSlideMetrics";
-import type { TutorsSliderSlide } from "./tutorSlideMetrics";
 
 export type { TutorsSliderSlide };
 
@@ -180,14 +180,17 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
     [animPhase, isIncomingActive, transition]
   );
 
-  const onPointerDown = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
-    if (transition) return;
-    if (event.button !== 0) return;
+  const onPointerDown = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (transition) return;
+      if (event.button !== 0) return;
 
-    pointerStartXRef.current = event.clientX;
-    pointerIdRef.current = event.pointerId;
-    event.currentTarget.setPointerCapture(event.pointerId);
-  }, [transition]);
+      pointerStartXRef.current = event.clientX;
+      pointerIdRef.current = event.pointerId;
+      event.currentTarget.setPointerCapture(event.pointerId);
+    },
+    [transition]
+  );
 
   const onPointerUp = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {

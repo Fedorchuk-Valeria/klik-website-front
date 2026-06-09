@@ -1,15 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import HomeAnchorLink, {
   getAnchorIdFromHref,
 } from "@/src/components/ui/HomeAnchorLink/HomeAnchorLink";
-import {
-  HEADER_ANCHOR_OFFSET_PX,
-  SET_ACTIVE_ANCHOR_EVENT,
-} from "@/src/utils/constant";
+import { HEADER_ANCHOR_OFFSET_PX, SET_ACTIVE_ANCHOR_EVENT } from "@/src/utils/constant";
 
 type MenuItem = {
   url: string;
@@ -25,9 +22,7 @@ const HeaderMenu = ({ menuItems }: Props) => {
 
   const isHomePage = pathname === "/";
 
-  const [active, setActive] = useState<string>(
-    menuItems[0]?.url ?? ""
-  );
+  const [active, setActive] = useState<string>(menuItems[0]?.url ?? "");
 
   const getAnchorId = getAnchorIdFromHref;
 
@@ -89,20 +84,11 @@ const HeaderMenu = ({ menuItems }: Props) => {
   return (
     <ul className="header__menu">
       {menuItems.map((item) => {
-        const isActive =
-          active === item.url ||
-          active === `#${getAnchorId(item.url)}`;
+        const isActive = active === item.url || active === `#${getAnchorId(item.url)}`;
 
         return (
-          <li
-            key={item.url}
-            className={`header__menu-item ${
-              isActive ? "active" : ""
-            }`}
-          >
-            <HomeAnchorLink anchor={getAnchorId(item.url)}>
-              {item.title}
-            </HomeAnchorLink>
+          <li key={item.url} className={`header__menu-item ${isActive ? "active" : ""}`}>
+            <HomeAnchorLink anchor={getAnchorId(item.url)}>{item.title}</HomeAnchorLink>
           </li>
         );
       })}

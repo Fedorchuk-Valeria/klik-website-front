@@ -49,9 +49,12 @@ export type WhatWeLearnProps = {
 
 const TABLET_MAX_CSS_VAR = "--layout-tablet-max";
 
+const SLIDE_TRANSITION_MS = 400;
+
 const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => {
   const swiperRef = useRef<SwiperType | null>(null);
   const galleryRef = useRef<HTMLDivElement | null>(null);
+  const pendingRefreshRef = useRef(false);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const handleAccordionSelect = useCallback(
@@ -62,7 +65,7 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
       }
 
       setOpenIndex(index);
-      swiperRef.current?.slideToLoop(index, 400);
+      swiperRef.current?.slideToLoop(index, SLIDE_TRANSITION_MS);
     },
     [openIndex]
   );
@@ -71,18 +74,38 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
     swiperRef.current = swiper;
   }, []);
 
+  const refreshSwiper = useCallback(() => {
+    requestAnimationFrame(() => {
+      const sw = swiperRef.current;
+      if (!sw || sw.destroyed) {
+        return;
+      }
+
+      if (sw.animating) {
+        pendingRefreshRef.current = true;
+        return;
+      }
+
+      sw.update();
+    });
+  }, []);
+
+  const onSlideChangeTransitionEnd = useCallback((swiper: SwiperType) => {
+    if (!pendingRefreshRef.current) {
+      return;
+    }
+
+    pendingRefreshRef.current = false;
+    requestAnimationFrame(() => {
+      if (swiper.destroyed || swiper.animating) {
+        return;
+      }
+
+      swiper.update();
+    });
+  }, []);
+
   useEffect(() => {
-    const refreshSwiper = () => {
-      requestAnimationFrame(() => {
-        const sw = swiperRef.current;
-        if (!sw || sw.destroyed) {
-          return;
-        }
-
-        sw.update();
-      });
-    };
-
     const rootStyle = getComputedStyle(document.documentElement);
     const tabletMaxPx = Number.parseFloat(rootStyle.getPropertyValue(TABLET_MAX_CSS_VAR).trim());
 
@@ -120,7 +143,7 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
       window.removeEventListener("resize", refreshSwiper);
       window.visualViewport?.removeEventListener("resize", refreshSwiper);
     };
-  }, []);
+  }, [refreshSwiper]);
 
   if (!items.length) {
     return null;
@@ -181,6 +204,7 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
               <Swiper
                 className="home-page__what-we-learn-swiper"
                 effect="coverflow"
+                speed={SLIDE_TRANSITION_MS}
                 allowTouchMove={false}
                 simulateTouch={false}
                 centeredSlides
@@ -191,6 +215,7 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
                 observeSlideChildren
                 resizeObserver
                 onSwiper={onSwiper}
+                onSlideChangeTransitionEnd={onSlideChangeTransitionEnd}
                 modules={[EffectCoverflow]}
                 breakpoints={{
                   1920: {

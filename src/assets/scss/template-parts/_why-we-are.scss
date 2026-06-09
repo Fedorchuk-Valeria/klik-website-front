@@ -71,7 +71,9 @@
         overflow: hidden;
         cursor: pointer;
 
-        &:not(.home-page__why-we-are-slide--active):not(.home-page__why-we-are-slide--incoming-active) {
+        &:not(.home-page__why-we-are-slide--active):not(
+            .home-page__why-we-are-slide--incoming-active
+          ) {
           overflow: visible;
         }
 
@@ -99,13 +101,17 @@
             height: unset;
           }
 
-          &:not(.home-page__why-we-are-slide--active):not(.home-page__why-we-are-slide--incoming-active) {
+          &:not(.home-page__why-we-are-slide--active):not(
+              .home-page__why-we-are-slide--incoming-active
+            ) {
             width: auto;
             height: auto;
           }
         }
 
-        &:not(.home-page__why-we-are-slide--active):not(.home-page__why-we-are-slide--incoming-active) {
+        &:not(.home-page__why-we-are-slide--active):not(
+            .home-page__why-we-are-slide--incoming-active
+          ) {
           .home-page__why-we-are-item {
             background: transparent;
             border: 2px solid var(--main-green-dark);
@@ -362,7 +368,9 @@
     .home-page__why-we-are-body {
       .home-page__why-we-are-slider {
         .home-page__why-we-are-slide {
-          &:not(.home-page__why-we-are-slide--active):not(.home-page__why-we-are-slide--incoming-active) {
+          &:not(.home-page__why-we-are-slide--active):not(
+              .home-page__why-we-are-slide--incoming-active
+            ) {
             .home-page__why-we-are-item {
               .home-page__why-we-are-item__headline {
                 .home-page__why-we-are-item--info {

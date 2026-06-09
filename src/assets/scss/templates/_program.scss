@@ -1,5 +1,5 @@
 .program-view {
-  padding: 265px 0 182px;
+  padding: 205px 0 182px;
   margin-bottom: -3px;
   background: var(--main-green-dark);
 
@@ -382,7 +382,7 @@
   }
 
   @media screen and (max-width: $desktop) {
-    padding: 265px 0 120px;
+    padding: 205px 0 120px;
 
     .program-view__container {
       max-width: 1340px;
@@ -485,7 +485,7 @@
   }
 
   @media screen and (max-width: $landscape-tablet-size) {
-    padding: 210px 0 100px;
+    padding: 150px 0 100px;
 
     .program-view__container {
       max-width: 944px;
@@ -562,6 +562,36 @@
 
       .program-view__lessons-slider {
         display: block;
+
+        .program-view__lessons-slide_inner {
+          flex-direction: row;
+          align-items: stretch;
+          gap: 20px;
+          padding: 20px;
+        }
+
+        .program-view__lessons-slide_image {
+          width: 320px;
+          height: 244px;
+          min-width: 320px;
+        }
+
+        .program-view__lessons-slide_count--corner {
+          display: flex;
+        }
+
+        .program-view__lessons-slide_count--hero {
+          display: none;
+        }
+
+        .program-view__lessons-slide_title {
+          font-size: 22px;
+          margin-top: auto;
+        }
+
+        .program-view__lessons-slide_text {
+          font-size: 16px;
+        }
       }
 
       .program-view__lessons-list {
@@ -638,44 +668,8 @@
     }
   }
 
-  @media screen and (max-width: $landscape-tablet-size) {
-    .program-view__lessons {
-      .program-view__lessons-slider {
-        .program-view__lessons-slide_inner {
-          flex-direction: row;
-          align-items: stretch;
-          gap: 20px;
-          padding: 20px;
-        }
-
-        .program-view__lessons-slide_image {
-          width: 320px;
-          height: 244px;
-          min-width: 320px;
-        }
-
-        .program-view__lessons-slide_count--corner {
-          display: flex;
-        }
-
-        .program-view__lessons-slide_count--hero {
-          display: none;
-        }
-
-        .program-view__lessons-slide_title {
-          font-size: 22px;
-          margin-top: auto;
-        }
-
-        .program-view__lessons-slide_text {
-          font-size: 16px;
-        }
-      }
-    }
-  }
-
   @media screen and (max-width: $tablet-size) {
-    padding: 125px 0 100px;
+    padding: 100px 0 100px;
 
     .program-view__container {
       max-width: 740px;
@@ -815,7 +809,7 @@
   }
 
   @media screen and (max-width: 680px) {
-    padding: 105px 0 80px;
+    padding: 60px 0 80px;
 
     .program-view__container {
       padding: 20px 10px;

@@ -5,9 +5,9 @@ import { DialogHTMLAttributes, FC, useCallback, useEffect, useRef } from "react"
 
 import useHideBodyScroll from "@/src/hooks/useHideBodyScroll";
 
+import Icon from "@/src/components/ui/Icon/Icon";
 import { useAppDispatch } from "@/src/store/hooks";
 import { hideModal } from "@/src/store/slices/modalSlice";
-import Icon from "@/src/components/ui/Icon/Icon";
 
 type PropTypes = DialogHTMLAttributes<HTMLDialogElement> & {
   isClose?: boolean;
@@ -76,12 +76,7 @@ const Modal: FC<PropTypes> = ({
 
   return (
     <div className={classNames("modal", className, { "modal--show-bg": !isHideBg })}>
-      <dialog
-        ref={ref}
-        {...props}
-        onCancel={handleCloseModal}
-        onClick={handleBackdropClick}
-      >
+      <dialog ref={ref} {...props} onCancel={handleCloseModal} onClick={handleBackdropClick}>
         {showCloseButton && (
           <button
             type="button"

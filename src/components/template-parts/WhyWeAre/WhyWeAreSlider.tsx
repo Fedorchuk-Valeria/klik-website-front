@@ -1,15 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import {
-  CSSProperties,
-  FC,
-  useCallback,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { CSSProperties, FC, useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import WhyWeAreReviewCard from "./WhyWeAreReviewCard";
 import {
@@ -106,11 +98,11 @@ const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
 
   useLayoutEffect(() => {
     if (!transition || transitionId === 0) {
-      setAnimPhase("idle");
+      queueMicrotask(() => setAnimPhase("idle"));
       return;
     }
 
-    setAnimPhase("start");
+    queueMicrotask(() => setAnimPhase("start"));
 
     let raf2 = 0;
     const raf1 = requestAnimationFrame(() => {
@@ -161,13 +153,7 @@ const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
       if (transition) {
         const layouts =
           transition === "next"
-            ? getNextReviewTransitionLayouts(
-                slot,
-                slides.length,
-                metrics,
-                activeHeights,
-                slides
-              )
+            ? getNextReviewTransitionLayouts(slot, slides.length, metrics, activeHeights, slides)
             : getPrevReviewTransitionLayouts(
                 slot,
                 slides.length,
@@ -269,12 +255,7 @@ const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
 
     for (let slot = 0; slot < stableSlotCount; slot += 1) {
       const isActive = slot === REVIEW_ACTIVE_SLOT;
-      const layout = getReviewSlotLayout(
-        slot,
-        metrics,
-        getSlideHeight(slot, isActive),
-        isActive
-      );
+      const layout = getReviewSlotLayout(slot, metrics, getSlideHeight(slot, isActive), isActive);
 
       minLeft = Math.min(minLeft, layout.left);
       maxRight = Math.max(maxRight, layout.left + layout.width);
@@ -357,8 +338,7 @@ const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
               key={key}
               className={classNames("home-page__why-we-are-slide", {
                 "home-page__why-we-are-slide--active": isOutgoing,
-                "home-page__why-we-are-slide--incoming-active":
-                  isIncoming && isAnimating,
+                "home-page__why-we-are-slide--incoming-active": isIncoming && isAnimating,
                 "home-page__why-we-are-slide--animating": isAnimating,
               })}
               style={slideStyle}

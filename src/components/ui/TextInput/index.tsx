@@ -41,15 +41,17 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(function TextInpu
         "text-input--filled": variant === "filled",
       })}
     >
-      {label ? <label className="text-input__label" htmlFor={id}>
-        {label}
-        {required ? (
-          <span className="text-input__required" aria-hidden>
+      {label ? (
+        <label className="text-input__label" htmlFor={id}>
+          {label}
+          {required ? (
+            <span className="text-input__required" aria-hidden>
               {" "}
-            *
+              *
             </span>
-        ) : null}
-      </label> : null}
+          ) : null}
+        </label>
+      ) : null}
       <div className="text-input__control-wrapper">
         <input
           ref={ref}

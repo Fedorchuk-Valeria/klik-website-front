@@ -72,6 +72,7 @@ export const PASSWORD_REGEX =
 
 export const PASSWORD_INPUT_STRIP_REGEX = /[^a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/g;
 
-export const PUBLIC_OFFER_URL = "https://drive.google.com/file/d/1SsbIcZF38PtcCaR4w9p6w8jxR1F8P5Ey/view";
+export const PUBLIC_OFFER_URL =
+  "https://drive.google.com/file/d/1SsbIcZF38PtcCaR4w9p6w8jxR1F8P5Ey/view";
 
 export const VALIDATION_CLASS = "validatio-error";

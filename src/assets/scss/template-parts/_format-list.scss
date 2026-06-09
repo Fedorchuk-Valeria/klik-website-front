@@ -17,7 +17,7 @@
 .formats__item {
   position: relative;
   flex-shrink: 0;
-  width: 560px;
+  width: calc(calc(100% - 40px) / 3);
   height: 714px;
   border-radius: 70px;
 
@@ -229,7 +229,7 @@
   }
 
   &.formats__item--active {
-    width: 1000px;
+    width: calc(100% - 712px);
 
     .formats__item-more {
       opacity: 0;
@@ -323,7 +323,7 @@
     }
 
     &.formats__item--active {
-      width: 900px;
+      width: calc(100% - 632px);
 
       .formats__image {
         width: 311px;
@@ -458,7 +458,7 @@
     }
 
     .formats__content {
-      left: 230px;
+      left: 240px;
       max-width: 260px;
 
       .formats__content-title {

@@ -7,8 +7,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import WhyWeAreSVG from "@/src/assets/images/templates/homepage/whyWeAre/why_we_are.svg";
 
-import Icon from "@/src/components/ui/Icon/Icon";
-
 import WhyWeAreReviewCard from "./WhyWeAreReviewCard";
 import WhyWeAreSlider, { type WhyWeAreSliderTransition } from "./WhyWeAreSlider";
 import type { ReviewItem, WhyWeAreSliderSlide } from "./whyWeAreSlideMetrics";
@@ -131,30 +129,31 @@ const WhyWeAre: FC<PropTypes> = ({ tag, title, text, items, info }) => {
     []
   );
 
-  const startDesktopTransition = useCallback((direction: WhyWeAreSliderTransition) => {
-    if (slideTransitionRef.current) return false;
+  const startDesktopTransition = useCallback(
+    (direction: WhyWeAreSliderTransition) => {
+      if (slideTransitionRef.current) return false;
 
-    const n = slideCountRef.current;
-    if (n < 2) return false;
+      const n = slideCountRef.current;
+      if (n < 2) return false;
 
-    const snapshot = buildDesktopSlideSnapshot(activeIndexRef.current, direction);
-    desktopTransitionIdRef.current += 1;
-    const nextTransition = {
-      direction,
-      slides: snapshot.slides,
-      withEnterSlide: snapshot.withEnterSlide,
-      id: desktopTransitionIdRef.current,
-    };
+      const snapshot = buildDesktopSlideSnapshot(activeIndexRef.current, direction);
+      desktopTransitionIdRef.current += 1;
+      const nextTransition = {
+        direction,
+        slides: snapshot.slides,
+        withEnterSlide: snapshot.withEnterSlide,
+        id: desktopTransitionIdRef.current,
+      };
 
-    slideTransitionRef.current = nextTransition;
-    setSlideTransition(nextTransition);
+      slideTransitionRef.current = nextTransition;
+      setSlideTransition(nextTransition);
 
-    setActiveIndex((i) =>
-      direction === "next" ? (i + 1) % n : (i - 1 + n) % n
-    );
+      setActiveIndex((i) => (direction === "next" ? (i + 1) % n : (i - 1 + n) % n));
 
-    return true;
-  }, [buildDesktopSlideSnapshot]);
+      return true;
+    },
+    [buildDesktopSlideSnapshot]
+  );
 
   const onDesktopTransitionEnd = useCallback(() => {
     slideTransitionRef.current = null;
