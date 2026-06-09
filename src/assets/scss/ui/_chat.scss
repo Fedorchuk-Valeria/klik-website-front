@@ -29,7 +29,7 @@
 
     background: var(--white);
     border-radius: 30px;
-    border: 1.5px solid rgba(238, 108, 77, 0.50);
+    border: 1.5px solid rgba(238, 108, 77, 0.5);
 
     display: flex;
     flex-direction: column;
@@ -60,7 +60,6 @@
       height: 477px;
       border-radius: 20px;
     }
-
   }
 
   &__header {
@@ -215,7 +214,6 @@
   }
 
   &__message {
-
     padding: 30px;
     border-radius: 20px;
 
@@ -238,7 +236,7 @@
     &-name {
       font-size: 14px;
       margin-bottom: 10px;
-      color: rgba(28, 26, 28, 0.50);
+      color: rgba(28, 26, 28, 0.5);
 
       @media screen and (max-width: $desktop) {
         font-size: 12px;
@@ -265,7 +263,7 @@
       }
     }
 
-    &--bot {
+    &--assistant {
       background: rgba(28, 26, 28, 0.04);
 
       .text {
@@ -330,7 +328,7 @@
     font-size: 14px;
 
     span {
-      color: rgba(28, 26, 28, 0.50);
+      color: rgba(28, 26, 28, 0.5);
     }
 
     @media screen and (max-width: $desktop) {
@@ -409,7 +407,6 @@
         width: 24px;
         height: 24px;
       }
-
     }
 
     &:hover:not(:disabled) {
@@ -516,7 +513,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(28, 26, 28, 0.50);
+    color: rgba(28, 26, 28, 0.5);
     font-size: 14px;
   }
 

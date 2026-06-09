@@ -4,6 +4,7 @@ import createSagaMiddleware from "redux-saga";
 import { rootSaga } from "./sagas";
 
 import authReducer from "./slices/auth";
+import chatReducer from "./slices/chat";
 import coursesReducer from "./slices/corses";
 import lessonReducer from "./slices/lesson";
 import modalReducer from "./slices/modalSlice";
@@ -16,6 +17,7 @@ export const store = configureStore({
     auth: authReducer,
     courses: coursesReducer,
     lesson: lessonReducer,
+    chat: chatReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware),
 });
