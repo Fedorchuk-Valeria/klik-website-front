@@ -59,9 +59,11 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
     (itemId: number | null) => {
       if (!itemId) return;
 
+      dispatch(clearTestResult());
+
       router.push(PAGES.LESSON.replace(":id", id).replace(":lessonId", itemId.toString()));
     },
-    [id]
+    [id, dispatch]
   );
 
   const handleNextLessonClick = useCallback(() => {
@@ -113,8 +115,6 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
     },
     [id, lessonId, dispatch]
   );
-
-  console.log("data", data, id, lessonId, result, review);
 
   return (
     <div className="lesson-page">

@@ -1,6 +1,6 @@
 "use client";
 
-import {FC, useEffect, useMemo} from "react";
+import { FC, useEffect, useMemo } from "react";
 
 import CourseAbout from "@/src/components/template-parts/Course/About";
 import CourseTutorial from "@/src/components/template-parts/Course/Tutorial";
@@ -11,11 +11,11 @@ import { ModalType } from "@/src/entities/common";
 import { Course } from "@/src/lib/getCourses";
 import { PAGES } from "@/src/utils/constant";
 
+import { getPlural } from "@/src/helper/getPlural";
+import { CitySettings } from "@/src/lib/getCitySettings";
 import { useAppDispatch } from "@/src/store/hooks";
 import { showModal } from "@/src/store/slices/modalSlice";
-import {useSearchParams} from "next/navigation";
-import {CitySettings, getCitySettings} from "@/src/lib/getCitySettings";
-import {getPlural} from "@/src/helper/getPlural";
+import { useSearchParams } from "next/navigation";
 
 type PropTypes = {
   data: Course;
@@ -42,7 +42,7 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
       {
         id: 2,
         icon: "clock",
-        title: `${data.duration_months} ${getMonths(data.duration_months)}`,
+        title: `${getMonths(data.duration_months)}`,
         description: "длительность",
       },
     ],
