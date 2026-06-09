@@ -58,7 +58,6 @@
     padding-top: 60px !important;
     padding-bottom: 10px !important;
 
-
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -82,7 +81,8 @@
         background-color: var(--main-green-neon);
       }
 
-      a, span {
+      a,
+      span {
         padding: 10px 5px 10px 20px;
         border-radius: 100px;
         transition: 0.3s all;

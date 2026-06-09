@@ -2,7 +2,7 @@
 
 import classNames from "classnames";
 import Image, { type StaticImageData } from "next/image";
-import { FC, useCallback, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
 import { EffectCoverflow } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -20,6 +20,7 @@ import imgProgramming from "@/src/assets/images/templates/homepage/whatWeLearn/p
 import WhatWeLearnAccordionItem from "./WhatWeLearnAaccordionItem";
 
 import { PAGE_ANCHORS } from "@/src/utils/constant";
+
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
@@ -46,22 +47,107 @@ export type WhatWeLearnProps = {
   }[];
 };
 
+const TABLET_MAX_CSS_VAR = "--layout-tablet-max";
+
+const SLIDE_TRANSITION_MS = 400;
+
 const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => {
   const swiperRef = useRef<SwiperType | null>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const galleryRef = useRef<HTMLDivElement | null>(null);
+  const pendingRefreshRef = useRef(false);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  const goToSlide = useCallback((index: number) => {
-    setActiveIndex(index);
-    swiperRef.current?.slideToLoop(index, 400);
-  }, []);
+  const handleAccordionSelect = useCallback(
+    (index: number) => {
+      if (openIndex === index) {
+        setOpenIndex(null);
+        return;
+      }
+
+      setOpenIndex(index);
+      swiperRef.current?.slideToLoop(index, SLIDE_TRANSITION_MS);
+    },
+    [openIndex]
+  );
 
   const onSwiper = useCallback((swiper: SwiperType) => {
     swiperRef.current = swiper;
   }, []);
 
-  const onRealIndexChange = useCallback((swiper: SwiperType) => {
-    setActiveIndex(swiper.realIndex);
+  const refreshSwiper = useCallback(() => {
+    requestAnimationFrame(() => {
+      const sw = swiperRef.current;
+      if (!sw || sw.destroyed) {
+        return;
+      }
+
+      if (sw.animating) {
+        pendingRefreshRef.current = true;
+        return;
+      }
+
+      sw.update();
+    });
   }, []);
+
+  const onSlideChangeTransitionEnd = useCallback(
+    (swiper: SwiperType) => {
+      if (!pendingRefreshRef.current) {
+        return;
+      }
+
+      pendingRefreshRef.current = false;
+      requestAnimationFrame(() => {
+        if (swiper.destroyed || swiper.animating) {
+          return;
+        }
+
+        swiper.update();
+      });
+    },
+    []
+  );
+
+  useEffect(() => {
+
+    const rootStyle = getComputedStyle(document.documentElement);
+    const tabletMaxPx = Number.parseFloat(rootStyle.getPropertyValue(TABLET_MAX_CSS_VAR).trim());
+
+    let mq: MediaQueryList | undefined;
+
+    const onGalleryVisible = () => {
+      refreshSwiper();
+      window.setTimeout(refreshSwiper, 100);
+    };
+
+    if (Number.isFinite(tabletMaxPx)) {
+      mq = window.matchMedia(`(min-width: ${tabletMaxPx + 1}px)`);
+      mq.addEventListener("change", onGalleryVisible);
+    }
+
+    let galleryResizeRafId = 0;
+    let galleryResizeObserver: ResizeObserver | undefined;
+    const galleryEl = galleryRef.current;
+
+    if (galleryEl) {
+      galleryResizeObserver = new ResizeObserver(() => {
+        cancelAnimationFrame(galleryResizeRafId);
+        galleryResizeRafId = requestAnimationFrame(refreshSwiper);
+      });
+      galleryResizeObserver.observe(galleryEl);
+    }
+
+    window.addEventListener("resize", refreshSwiper);
+    window.visualViewport?.addEventListener("resize", refreshSwiper);
+
+    return () => {
+      cancelAnimationFrame(galleryResizeRafId);
+      mq?.removeEventListener("change", onGalleryVisible);
+      galleryResizeObserver?.disconnect();
+      window.removeEventListener("resize", refreshSwiper);
+      window.visualViewport?.removeEventListener("resize", refreshSwiper);
+    };
+  }, [refreshSwiper]);
 
   if (!items.length) {
     return null;
@@ -111,17 +197,18 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
                     key={item.key || index}
                     item={item}
                     index={index}
-                    isOpen={index === activeIndex}
-                    onSelect={goToSlide}
+                    isOpen={openIndex === index}
+                    onSelect={handleAccordionSelect}
                   />
                 ))}
               </ul>
             </div>
 
-            <div className="home-page__what-we-learn-gallery">
+            <div ref={galleryRef} className="home-page__what-we-learn-gallery">
               <Swiper
                 className="home-page__what-we-learn-swiper"
                 effect="coverflow"
+                speed={SLIDE_TRANSITION_MS}
                 allowTouchMove={false}
                 simulateTouch={false}
                 centeredSlides
@@ -129,7 +216,7 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
                 initialSlide={0}
                 loop={true}
                 onSwiper={onSwiper}
-                onRealIndexChange={onRealIndexChange}
+                onSlideChangeTransitionEnd={onSlideChangeTransitionEnd}
                 modules={[EffectCoverflow]}
                 breakpoints={{
                   1920: {

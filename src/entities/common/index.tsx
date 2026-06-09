@@ -2,6 +2,9 @@ export enum ModalType {
   NOTICE = "notice",
   COOKIE_POLICY = "cookie_policy",
   PLACE_SELECT = "place_select",
+  SUCCESSFULLY = "successfully",
+  PAYMENT = "payment",
+  PAYMENT_STATUS = "payment_status",
 }
 
 export enum HttpStatus {
@@ -20,3 +23,17 @@ export enum HttpStatus {
   ManyRequests = 429,
   InternalServerError = 500,
 }
+
+export type UserProfile = {
+  id: number;
+  role: string;
+  full_name: string;
+  phone: string;
+};
+
+export type Meta = {
+  page: number;
+  page_size: number;
+  total_count: number;
+  total_pages: number;
+};

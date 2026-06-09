@@ -10,8 +10,8 @@ import imgCoders from "@/src/assets/images/templates/programPage/coders.jpg";
 import imgCreators from "@/src/assets/images/templates/programPage/creators.jpg";
 import lessonImage from "@/src/assets/images/templates/programPage/girl.jpg";
 
-import ProgramLessonsBlocks from "@/src/components/templates/ProgramLessonsBlocks";
 import HomePageForm from "@/src/components/template-parts/Form";
+import ProgramLessonsBlocks from "@/src/components/templates/ProgramLessonsBlocks";
 import Breadcrumb from "@/src/components/ui/Breadcrumb/Breadcrumb";
 
 import { Page } from "@/src/lib/content/types";

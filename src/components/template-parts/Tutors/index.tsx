@@ -4,11 +4,11 @@ import classNames from "classnames";
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
 
-import Button from "@/src/components/ui/Button/Button";
-import Icon from "@/src/components/ui/Icon/Icon";
-
+import TutorsDetail from "./TutorsDetail";
+import TutorsSlider, { type TutorsSliderTransition } from "./TutorsSlider";
 import TutorsSwiper from "./TutorsSwiper";
 import { TUTOR_IMAGES } from "./tutorImages";
+import type { TutorsSliderSlide } from "./tutorSlideMetrics";
 
 import type { TutorItem } from "./types";
 
@@ -22,6 +22,7 @@ type PropTypes = {
 };
 
 const MAX_TUTORS_TAIL_IN_VIEW = 3;
+
 /** Чтобы активный всегда у левого края был один узкий превью-слайд. */
 function orderedTutorIndices(activeIndex: number, n: number): number[] {
   if (n <= 1) return [activeIndex];
@@ -36,8 +37,8 @@ function orderedTutorIndices(activeIndex: number, n: number): number[] {
 
 const AUTOPLAY_DELAY_MS = 4_000;
 const IDLE_RESUME_MS = 10_000;
+const DESKTOP_ACTIVE_SLOT = 1;
 
-// TODO effects
 const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const tutorCountRef = useRef(0);
@@ -46,8 +47,23 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
   const pausedRef = useRef(false);
   const inViewportRef = useRef(false);
   const swiperRef = useRef<SwiperType | null>(null);
+  const activeIndexRef = useRef(0);
+  const slidesWithImagesRef = useRef<TutorItem[]>([]);
+  const desktopTransitionIdRef = useRef(0);
+  const slideTransitionRef = useRef<{
+    direction: TutorsSliderTransition;
+    slides: TutorsSliderSlide[];
+    id: number;
+    withEnterSlide: boolean;
+  } | null>(null);
   const tutorsPaginationElRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [slideTransition, setSlideTransition] = useState<{
+    direction: TutorsSliderTransition;
+    slides: TutorsSliderSlide[];
+    id: number;
+    withEnterSlide: boolean;
+  } | null>(null);
   const [isTabletLandscapeTutors, setIsTabletLandscapeTutors] = useState(false);
   const [isTutorsPagination, setIsTutorsPagination] = useState(false);
 
@@ -66,22 +82,91 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
     () =>
       orderedIndices.map((tutorIdx, slot) => ({
         item: slidesWithImages[tutorIdx],
-        key: `${slidesWithImages[tutorIdx]?.id ?? slot}-${slot}`,
+        key: `tutor-${slidesWithImages[tutorIdx]?.id ?? slot}`,
         tutorIdx,
       })),
     [orderedIndices, slidesWithImages]
   );
 
+  const desktopSlides = useMemo(
+    () => orderedSlides.map(({ item, key }) => ({ item, key })),
+    [orderedSlides]
+  );
+
+  const buildDesktopSlideSnapshot = useCallback(
+    (fromIndex: number, direction: TutorsSliderTransition) => {
+      const n = tutorCountRef.current;
+      const items = slidesWithImagesRef.current;
+      const base = orderedTutorIndices(fromIndex, n).map((tutorIdx, slot) => ({
+        item: items[tutorIdx],
+        key: `tutor-${items[tutorIdx]?.id ?? slot}`,
+      }));
+
+      if (direction !== "prev" || n < 3) {
+        return { slides: base, withEnterSlide: false };
+      }
+
+      const baseIndices = orderedTutorIndices(fromIndex, n);
+      const newActive = (fromIndex - 1 + n) % n;
+      const enterIdx = (newActive - 1 + n) % n;
+
+      if (!baseIndices.includes(enterIdx)) {
+        return {
+          slides: [
+            {
+              item: items[enterIdx],
+              key: `tutor-${items[enterIdx]?.id ?? enterIdx}`,
+            },
+            ...base,
+          ],
+          withEnterSlide: true,
+        };
+      }
+
+      return { slides: base, withEnterSlide: false };
+    },
+    []
+  );
+
+  const startDesktopTransition = useCallback(
+    (direction: TutorsSliderTransition) => {
+      if (slideTransitionRef.current) return false;
+
+      const n = tutorCountRef.current;
+      if (n < 2) return false;
+
+      const snapshot = buildDesktopSlideSnapshot(activeIndexRef.current, direction);
+      desktopTransitionIdRef.current += 1;
+      const nextTransition = {
+        direction,
+        slides: snapshot.slides,
+        withEnterSlide: snapshot.withEnterSlide,
+        id: desktopTransitionIdRef.current,
+      };
+
+      slideTransitionRef.current = nextTransition;
+      setSlideTransition(nextTransition);
+
+      setActiveIndex((i) => (direction === "next" ? (i + 1) % n : (i - 1 + n) % n));
+
+      return true;
+    },
+    [buildDesktopSlideSnapshot]
+  );
+
+  const onDesktopTransitionEnd = useCallback(() => {
+    slideTransitionRef.current = null;
+    setSlideTransition(null);
+  }, []);
+
   const slidesForSwiper = useMemo(
     () =>
-      isTabletLandscapeTutors
-        ? slidesWithImages.map((item, tutorIdx) => ({
-            item,
-            key: `compact-${item.id}-${tutorIdx}`,
-            tutorIdx,
-          }))
-        : orderedSlides,
-    [isTabletLandscapeTutors, orderedSlides, slidesWithImages]
+      slidesWithImages.map((item, tutorIdx) => ({
+        item,
+        key: `compact-${item.id}-${tutorIdx}`,
+        tutorIdx,
+      })),
+    [slidesWithImages]
   );
 
   const activeItem = useMemo(
@@ -89,7 +174,11 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
     [activeIndex, slidesWithImages]
   );
 
-  const initialSlideMid = useMemo(() => (tutorCount >= 2 ? 1 : 0), [tutorCount]);
+  const resolveTutorIndexFromSlot = useCallback((slot: number, fromIndex: number) => {
+    const ring = orderedTutorIndices(fromIndex, tutorCountRef.current);
+    const next = ring[slot];
+    return next !== undefined ? next : fromIndex;
+  }, []);
 
   const clearAutoplayTimer = useCallback(() => {
     if (autoplayTimerRef.current) {
@@ -120,12 +209,22 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
       const n = tutorCountRef.current;
       if (n < 1) return;
 
+      if (slideTransitionRef.current) {
+        autoplayTimerRef.current = setTimeout(tick, 400);
+        return;
+      }
+
+      if (!isTabletLandscapeTutors && startDesktopTransition("next")) {
+        autoplayTimerRef.current = setTimeout(tick, AUTOPLAY_DELAY_MS);
+        return;
+      }
+
       setActiveIndex((prev) => (prev + 1) % n);
       autoplayTimerRef.current = setTimeout(tick, AUTOPLAY_DELAY_MS);
     };
 
     autoplayTimerRef.current = setTimeout(tick, AUTOPLAY_DELAY_MS);
-  }, [clearAutoplayTimer]);
+  }, [clearAutoplayTimer, isTabletLandscapeTutors, startDesktopTransition]);
 
   const onUserInteraction = useCallback(() => {
     pausedRef.current = true;
@@ -144,53 +243,75 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
     onUserInteraction();
     const n = tutorCount;
     if (n < 1) return;
+
+    if (!isTabletLandscapeTutors && startDesktopTransition("prev")) {
+      return;
+    }
+
     setActiveIndex((i) => (i - 1 + n) % n);
-  }, [onUserInteraction, tutorCount]);
+  }, [isTabletLandscapeTutors, onUserInteraction, startDesktopTransition, tutorCount]);
 
   const goNext = useCallback(() => {
     onUserInteraction();
     const n = tutorCount;
     if (n < 1) return;
+
+    if (!isTabletLandscapeTutors && startDesktopTransition("next")) {
+      return;
+    }
+
     setActiveIndex((i) => (i + 1) % n);
-  }, [onUserInteraction, tutorCount]);
+  }, [isTabletLandscapeTutors, onUserInteraction, startDesktopTransition, tutorCount]);
+
+  const onDesktopSlideClick = useCallback(
+    (slot: number) => {
+      if (slideTransitionRef.current) return;
+
+      if (slot === DESKTOP_ACTIVE_SLOT) {
+        onUserInteraction();
+        return;
+      }
+
+      onUserInteraction();
+
+      if (slot === 0) {
+        if (!startDesktopTransition("prev")) {
+          setActiveIndex((prev) => resolveTutorIndexFromSlot(slot, prev));
+        }
+        return;
+      }
+
+      if (slot === 2) {
+        if (!startDesktopTransition("next")) {
+          setActiveIndex((prev) => resolveTutorIndexFromSlot(slot, prev));
+        }
+        return;
+      }
+
+      setActiveIndex((prev) => resolveTutorIndexFromSlot(slot, prev));
+    },
+    [onUserInteraction, resolveTutorIndexFromSlot, startDesktopTransition]
+  );
 
   const onSwiper = useCallback(
     (swiper: SwiperType) => {
       swiperRef.current = swiper;
-      // Не сбрасывать паузу здесь: при смене activeIndex key пересоздаёт Swiper,
-      // иначе onUserInteraction теряется (снова включается автоплей и сбрасывается 10s resume).
-      if (!isTabletLandscapeTutors && initialSlideMid === 1 && swiper.realIndex !== 1) {
-        swiper.slideTo(1, 0, false);
-      }
       if (inViewportRef.current && !pausedRef.current) {
         scheduleAutoplayStep();
       }
     },
-    [initialSlideMid, isTabletLandscapeTutors, scheduleAutoplayStep]
+    [scheduleAutoplayStep]
   );
 
-  const onSlideChange = useCallback(
-    (swiper: SwiperType) => {
-      const slot = swiper.realIndex;
+  const onSlideChange = useCallback((swiper: SwiperType) => {
+    setActiveIndex(swiper.realIndex);
 
-      if (isTabletLandscapeTutors) {
-        setActiveIndex(slot);
-      } else {
-        setActiveIndex((prev) => {
-          const ring = orderedTutorIndices(prev, tutorCountRef.current);
-          const next = ring[slot];
-          return next !== undefined ? next : prev;
-        });
-      }
-
-      requestAnimationFrame(() => {
-        if (swiper.destroyed) return;
-        swiper.updateSlides();
-        swiper.updateSlidesClasses();
-      });
-    },
-    [isTabletLandscapeTutors]
-  );
+    requestAnimationFrame(() => {
+      if (swiper.destroyed) return;
+      swiper.updateSlides();
+      swiper.updateSlidesClasses();
+    });
+  }, []);
 
   const onSwiperClick = useCallback(
     (swiper: SwiperType) => {
@@ -205,20 +326,10 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
         return;
       }
 
-      const n = tutorCountRef.current;
-
       onUserInteraction();
-      if (isTabletLandscapeTutors) {
-        setActiveIndex(slot);
-      } else {
-        setActiveIndex((prev) => {
-          const ring = orderedTutorIndices(prev, n);
-          const tutorIdx = ring[slot];
-          return tutorIdx !== undefined ? tutorIdx : prev;
-        });
-      }
+      setActiveIndex(slot);
     },
-    [isTabletLandscapeTutors, onUserInteraction]
+    [onUserInteraction]
   );
 
   const onSwiperSliderFirstMove = useCallback(() => {
@@ -228,6 +339,14 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
   useEffect(() => {
     tutorCountRef.current = tutorCount;
   }, [tutorCount]);
+
+  useEffect(() => {
+    slidesWithImagesRef.current = slidesWithImages;
+  }, [slidesWithImages]);
+
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
 
   useEffect(() => {
     const rootStyle = getComputedStyle(document.documentElement);
@@ -327,67 +446,32 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
               <div ref={tutorsPaginationElRef} className="home-page__tutors-pagination-root" />
             ) : null}
             <div className="home-page__tutors-slider-viewport">
-              {activeItem && (
-                <aside className="home-page__tutors-detail" aria-live="polite" aria-atomic="true">
-                  <div className="home-page__tutors-detail__inner">
-                    <div className="home-page__tutors-detail__text" key={activeItem.id}>
-                      <h3 className="home-page__tutors-detail__name">{activeItem.name}</h3>
+              {activeItem && <TutorsDetail item={activeItem} onPrev={goPrev} onNext={goNext} />}
 
-                      <p className="home-page__tutors-detail__position">{activeItem.position}</p>
-                    </div>
-
-                    <p className="home-page__tutors-detail__description">{activeItem.text}</p>
-
-                    <div className="home-page__tutors-detail__location">
-                      <Icon name="pin" />
-
-                      {activeItem.location}
-                    </div>
-
-                    <div className="home-page__tutors-detail__nav">
-                      <Button
-                        variant="orange"
-                        type="button"
-                        className={classNames(
-                          "home-page__tutors-nav",
-                          "home-page__tutors-nav--prev"
-                        )}
-                        aria-label="Предыдущий наставник"
-                        onClick={goPrev}
-                      >
-                        <Icon className="home-page__tutors-nav-icon" name="arrow" />
-                      </Button>
-
-                      <Button
-                        variant="orange"
-                        type="button"
-                        className={classNames(
-                          "home-page__tutors-nav",
-                          "home-page__tutors-nav--next"
-                        )}
-                        aria-label="Следующий наставник"
-                        onClick={goNext}
-                      >
-                        <Icon className="home-page__tutors-nav-icon" name="arrow" />
-                      </Button>
-                    </div>
-                  </div>
-                </aside>
+              {isTabletLandscapeTutors ? (
+                <TutorsSwiper
+                  slidesForSwiper={slidesForSwiper}
+                  activeIndex={activeIndex}
+                  tutorCount={tutorCount}
+                  tutorsPaginationEnabled={tutorsPaginationEnabled}
+                  paginationElRef={tutorsPaginationElRef}
+                  onSwiper={onSwiper}
+                  onSwiperClick={onSwiperClick}
+                  onSlideChange={onSlideChange}
+                  onSwiperSliderFirstMove={onSwiperSliderFirstMove}
+                />
+              ) : (
+                <TutorsSlider
+                  slides={slideTransition?.slides ?? desktopSlides}
+                  transition={slideTransition?.direction ?? null}
+                  transitionId={slideTransition?.id ?? 0}
+                  withEnterSlide={slideTransition?.withEnterSlide ?? false}
+                  onSlideClick={onDesktopSlideClick}
+                  onSwipeNext={goNext}
+                  onSwipePrev={goPrev}
+                  onTransitionEnd={onDesktopTransitionEnd}
+                />
               )}
-
-              <TutorsSwiper
-                slidesForSwiper={slidesForSwiper}
-                isTabletLandscapeTutors={isTabletLandscapeTutors}
-                activeIndex={activeIndex}
-                initialSlideMid={initialSlideMid}
-                tutorCount={tutorCount}
-                tutorsPaginationEnabled={tutorsPaginationEnabled}
-                paginationElRef={tutorsPaginationElRef}
-                onSwiper={onSwiper}
-                onSwiperClick={onSwiperClick}
-                onSlideChange={onSlideChange}
-                onSwiperSliderFirstMove={onSwiperSliderFirstMove}
-              />
             </div>
           </div>
         </div>

@@ -21,7 +21,24 @@ main {
   flex: 1 0 auto;
   padding-top: 232px;
 
+  @media screen and (max-width: 942px) {
+    padding-top: 150px;
+  }
+
   @media screen and (max-width: $tablet-size) {
     padding-top: 148px;
+  }
+}
+
+@media screen and (max-width: $mobile-size) {
+  html,
+  body {
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
+
+  body {
+    width: 100%;
+    touch-action: pan-y pinch-zoom;
   }
 }

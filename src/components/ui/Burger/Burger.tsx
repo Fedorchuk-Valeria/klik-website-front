@@ -5,11 +5,7 @@ type Props = {
 
 export default function Burger({ isOpen, onClick }: Props) {
   return (
-    <button
-      className={`burger ${isOpen ? "active" : ""}`}
-      aria-label="Меню"
-      onClick={onClick}
-    >
+    <button className={`burger ${isOpen ? "active" : ""}`} aria-label="Меню" onClick={onClick}>
       <span></span>
       <span></span>
       <span></span>

@@ -43,7 +43,7 @@
 
   .home-page__form-error {
     @include fonts(14px, 500, "Manrope");
-    color: #e31b1b;
+    color: var(--error-color);
     margin-left: 30px;
   }
 
@@ -156,14 +156,28 @@
       flex: 1 1 100%;
       width: 100%;
       min-width: 0;
+
+      &.text-input--error {
+        padding-bottom: 0;
+
+        .text-input__error {
+          position: static;
+        }
+      }
     }
 
     .home-page__form-button {
       padding: 16px;
       margin-top: 8px;
+      max-width: 100%;
 
       .button__arrow {
+        @include icon(36px);
         right: 7px;
+
+        svg {
+          @include icon(22px);
+        }
       }
     }
 

@@ -54,4 +54,44 @@
     opacity: 0.7;
     pointer-events: none;
   }
+
+  &.checkbox--test {
+    border-color: var(--main-black);
+    background-color: var(--main-light);
+
+    &.checkbox-color--red {
+      &:checked {
+        border-color: var(--error-color);
+
+        &:before {
+          color: var(--error-color);
+        }
+      }
+    }
+
+    &.checkbox-color--green {
+      &:checked {
+        border-color: var(--main-green-dark);
+
+        &:before {
+          color: var(--main-green-dark);
+        }
+      }
+    }
+
+    &:before {
+      mask: none;
+    }
+
+    &:checked {
+      border-color: var(--main-orange);
+
+      &:before {
+        mask: none;
+        color: var(--main-orange);
+        transform: scale(0.6);
+        border-radius: 2px;
+      }
+    }
+  }
 }

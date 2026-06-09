@@ -14,7 +14,7 @@ type Props = {
   onClose?: () => void;
 };
 
-const HeaderMobileList = ({ menuItems, onClose}: Props) => {
+const HeaderMobileList = ({ menuItems, onClose }: Props) => {
   const getAnchorId = getAnchorIdFromHref;
 
   return (

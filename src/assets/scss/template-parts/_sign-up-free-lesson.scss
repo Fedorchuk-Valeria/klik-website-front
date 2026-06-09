@@ -16,7 +16,9 @@
   .sign-up-free-lesson__container {
     position: relative;
     z-index: 1;
-    min-width: 750px;
+    flex: 1 1 calc((100% - 50px) / 2);
+    min-width: 0;
+    max-width: min(750px, calc((100% - 50px) / 2));
   }
 
   .sign-up-free-lesson__image {
@@ -79,6 +81,11 @@
     border-radius: 50px;
     padding: 100px;
     z-index: 1;
+    flex: 1 1 calc((100% - 50px) / 2);
+    min-width: 0;
+    max-width: min(900px, calc((100% - 50px) / 2));
+    width: auto;
+    box-sizing: border-box;
 
     .sign-up-free-lesson__form-title {
       @include fonts(24px, 500, "Etude Noire");
@@ -128,6 +135,41 @@
     pointer-events: none;
   }
 
+  @media (min-width: #{$desktop + 1px}) {
+    .sign-up-free-lesson__container {
+      flex: 1 1 0;
+      min-width: 0;
+      max-width: calc(100% - 900px - 50px);
+    }
+
+    .sign-up-free-lesson__form {
+      flex: 0 0 900px;
+      max-width: 900px;
+      width: 900px;
+    }
+
+    @media (max-width: #{$desktop-wide - 1px}) {
+      .sign-up-free-lesson__container {
+        flex: 1 1 calc((100% - 50px) / 2);
+        min-width: 0;
+        max-width: calc((100% - 50px) / 2);
+      }
+
+      .sign-up-free-lesson__form {
+        flex: 1 1 calc((100% - 50px) / 2);
+        min-width: 0;
+        max-width: min(900px, calc((100% - 50px) / 2));
+        width: auto;
+      }
+    }
+  }
+
+  @media screen and (max-width: 1679px) {
+    .sign-up-free-lesson__title .sign-up-free-lesson__title-underline {
+      bottom: 50px;
+    }
+  }
+
   @media (max-width: $desktop) {
     .sign-up-free-lesson__block {
       gap: 20px;
@@ -135,7 +177,9 @@
     }
 
     .sign-up-free-lesson__container {
-      min-width: 444px;
+      flex: 1 1 0;
+      min-width: 0;
+      max-width: calc(100% - 767px - 20px);
     }
 
     .sign-up-free-lesson__image {
@@ -149,6 +193,7 @@
         left: 53px;
         width: 226px;
         height: 16px;
+        bottom: -3px;
       }
     }
 
@@ -189,7 +234,17 @@
     }
 
     .sign-up-free-lesson__form {
+      flex: 0 0 767px;
+      min-width: 767px;
+      max-width: 767px;
+      width: 767px;
+      box-sizing: border-box;
       padding: 70px;
+
+      .home-page__form-body {
+        min-width: 0;
+        width: 100%;
+      }
 
       .sign-up-free-lesson__form-title {
         font-size: 30px;
@@ -222,6 +277,36 @@
     }
   }
 
+  @media screen and (max-width: 1377px) {
+    .sign-up-free-lesson__title .sign-up-free-lesson__title-underline {
+      bottom: 30px;
+    }
+  }
+
+  @media screen and (max-width: $desktop-compact) {
+    .sign-up-free-lesson__container {
+      flex: 1 1 calc((100% - 20px) / 2);
+      max-width: calc((100% - 20px) / 2);
+    }
+
+    .sign-up-free-lesson__form {
+      flex: 1 1 calc((100% - 20px) / 2);
+      min-width: 0;
+      max-width: min(767px, calc((100% - 20px) / 2));
+      width: auto;
+    }
+
+    .sign-up-free-lesson__title .sign-up-free-lesson__title-underline {
+      bottom: 0px;
+    }
+  }
+
+  @media screen and (max-width: 1051px) {
+    .sign-up-free-lesson__title .sign-up-free-lesson__title-underline {
+      bottom: 30px;
+    }
+  }
+
   @media (max-width: $landscape-tablet-size) {
     .sign-up-free-lesson__block {
       gap: 20px;
@@ -230,7 +315,9 @@
     }
 
     .sign-up-free-lesson__container {
-      min-width: 383px;
+      flex: 1 1 calc((100% - 20px) / 2);
+      min-width: 0;
+      max-width: calc((100% - 20px) / 2);
     }
 
     .sign-up-free-lesson__image {
@@ -294,8 +381,22 @@
     }
 
     .sign-up-free-lesson__form {
+      flex: 1 1 calc((100% - 20px) / 2);
+      min-width: 0;
+      max-width: min(467px, calc((100% - 20px) / 2));
+      width: auto;
+      box-sizing: border-box;
       border-radius: 30px;
       padding: 60px 40px;
+
+      .home-page__form-body {
+        min-width: 0;
+        width: 100%;
+
+        .home-page__form-checkbox-container .home-page__form-checkbox--text {
+          white-space: wrap;
+        }
+      }
 
       .sign-up-free-lesson__form-title {
         font-size: 28px;
@@ -346,7 +447,10 @@
     }
 
     .sign-up-free-lesson__container {
-      min-width: 528px;
+      flex: 1 1 100%;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
     }
 
     .sign-up-free-lesson__image {
@@ -407,8 +511,18 @@
     }
 
     .sign-up-free-lesson__form {
+      flex: 1 1 100%;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
       border-radius: 50px;
       padding: 60px 30px;
+
+      .home-page__form-body {
+        min-width: 0;
+        width: 100%;
+      }
 
       .sign-up-free-lesson__form-title {
         font-size: 30px;

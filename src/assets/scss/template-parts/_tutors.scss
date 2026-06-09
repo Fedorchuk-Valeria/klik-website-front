@@ -1,4 +1,6 @@
 .home-page__tutors {
+  --tutors-detail-fade-duration: 0.3s;
+
   .home-page__tutors-top {
     display: flex;
     align-items: flex-end;
@@ -17,13 +19,19 @@
     }
   }
 
+  .home-page__tutors-body {
+    width: 100%;
+  }
+
   .home-page__tutors-carousel {
     --tutors-viewport-w: 1720px;
     --tutors-detail-spacer-w: 850px;
+    width: 100%;
 
     .home-page__tutors-slider-viewport {
       position: relative;
-      width: min(100%, var(--tutors-viewport-w));
+      width: 100%;
+      max-width: var(--tutors-viewport-w);
       margin: 0 auto;
       overflow: hidden;
       box-sizing: border-box;
@@ -42,9 +50,52 @@
     pointer-events: none;
 
     .home-page__tutors-detail__inner {
-      @include flex-list(20px);
+      position: relative;
       min-height: 270px;
       width: 100%;
+
+      .home-page__tutors-detail__layers {
+        display: grid;
+        width: 100%;
+
+        .home-page__tutors-detail__layer {
+          @include flex-list(20px);
+          grid-area: 1 / 1;
+          min-width: 0;
+        }
+
+        .home-page__tutors-detail__layer--out {
+          z-index: 2;
+          pointer-events: none;
+          opacity: 1;
+          transition: opacity var(--tutors-detail-fade-duration) ease-in-out;
+
+          &.is-fading {
+            opacity: 0;
+          }
+        }
+
+        .home-page__tutors-detail__layer--in {
+          z-index: 1;
+          opacity: 0;
+          transition: opacity var(--tutors-detail-fade-duration) ease-in-out;
+
+          &.is-static {
+            opacity: 1;
+            transition: none;
+          }
+
+          &.is-fading {
+            opacity: 1;
+          }
+        }
+
+        &--crossfade {
+          .home-page__tutors-detail__layer--in:not(.is-fading) {
+            opacity: 0;
+          }
+        }
+      }
 
       .home-page__tutors-detail__text {
         display: flex;
@@ -127,40 +178,85 @@
     }
   }
 
-  .home-page__tutors-swiper {
-    &.swiper {
-      position: relative;
-      z-index: 0;
-      width: 100%;
-      overflow-x: clip;
-      overflow-y: visible;
+  .home-page__tutors-slider {
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    overflow-x: clip;
+    overflow-y: visible;
+    box-sizing: border-box;
+    touch-action: pan-y;
+
+    &--animating {
+      cursor: grab;
+      user-select: none;
     }
 
-    .swiper-wrapper {
+    &__track {
+      display: flex;
       align-items: flex-end;
-      transition: none !important;
+      gap: 20px;
+      width: max-content;
+      min-height: 700px;
     }
 
     .home-page__tutors-slide {
-      &.swiper-slide {
-        box-sizing: border-box;
-        width: 270px !important;
-        max-width: 270px !important;
-        height: 400px;
-        position: relative;
-        flex-shrink: 0;
-        opacity: 0.5;
-        overflow: hidden;
-      }
+      box-sizing: border-box;
+      width: 270px;
+      max-width: 270px;
+      height: 400px;
+      position: relative;
+      flex-shrink: 0;
+      opacity: 0.5;
+      overflow: hidden;
+      cursor: pointer;
 
-      &.swiper-slide-active {
-        width: 560px !important;
-        max-width: 560px !important;
+      &--active {
+        width: 560px;
+        max-width: 560px;
         height: 700px;
         opacity: 1;
 
         .home-page__tutors-thumb__img-wrap {
           border: 2px solid var(--main-orange);
+        }
+      }
+
+      &--incoming-active {
+        .home-page__tutors-thumb__img-wrap {
+          border: 2px solid var(--main-orange);
+        }
+      }
+
+      &--animating {
+        max-width: none;
+        overflow: hidden;
+        cursor: default;
+        pointer-events: none;
+
+        &.home-page__tutors-slide--active,
+        &.home-page__tutors-slide--incoming-active {
+          width: unset;
+          max-width: none;
+          height: unset;
+        }
+
+        &:not(.home-page__tutors-slide--active):not(.home-page__tutors-slide--incoming-active) {
+          width: auto;
+          height: auto;
+        }
+
+        &.home-page__tutors-slide--active,
+        &.home-page__tutors-slide--incoming-active {
+          .home-page__tutors-thumb__img-wrap {
+            transition: border-color 0.5s ease-in-out;
+          }
+        }
+      }
+
+      &:not(.home-page__tutors-slide--active) {
+        .home-page__tutors-thumb__tags {
+          display: none;
         }
       }
     }
@@ -204,12 +300,6 @@
     }
   }
 
-  .swiper-slide:not(.swiper-slide-active) {
-    .home-page__tutors-thumb__tags {
-      display: none;
-    }
-  }
-
   @media screen and (max-width: $desktop) {
     .home-page__tutors-top {
       margin-bottom: 50px;
@@ -223,10 +313,11 @@
 
     .home-page__tutors-carousel {
       --tutors-viewport-w: 1385px;
-      --tutors-detail-spacer-w: 700px;
+      --tutors-detail-spacer-w: 630px;
 
       .home-page__tutors-slider-viewport {
-        width: min(100%, var(--tutors-viewport-w));
+        width: 100%;
+        max-width: var(--tutors-viewport-w);
       }
     }
 
@@ -270,7 +361,7 @@
 
         .home-page__tutors-detail__nav {
           gap: 5px;
-          right: 20px;
+          right: 90px;
 
           .home-page__tutors-nav {
             @include icon(50px);
@@ -279,19 +370,24 @@
       }
     }
 
-    .home-page__tutors-swiper {
+    .home-page__tutors-slider {
+      &__track {
+        min-height: 518px;
+      }
+
       .home-page__tutors-slide {
-        &.swiper-slide {
-          box-sizing: border-box;
-          width: 200px !important;
-          max-width: 200px !important;
-          height: 296px;
+        width: 200px;
+        max-width: 200px;
+        height: 296px;
+
+        &--active {
+          width: 414px;
+          max-width: 414px;
+          height: 518px;
         }
 
-        &.swiper-slide-active {
-          width: 414px !important;
-          max-width: 414px !important;
-          height: 518px;
+        &--animating {
+          max-width: none;
         }
       }
     }
@@ -425,6 +521,7 @@
 
         .swiper-wrapper {
           align-items: stretch;
+          min-height: 450px;
         }
 
         .home-page__tutors-slide {
@@ -531,13 +628,16 @@
 
       .home-page__tutors-pagination-bullet {
         @include icon(10px);
+        border: none;
+        padding: 0;
+        cursor: pointer;
         border-radius: 50%;
         background: var(--secondary-burgundy-40);
         opacity: 1;
         transition:
-          width 0.25s ease,
-          border-radius 0.25s ease,
-          background-color 0.25s ease;
+          width 0.2s ease,
+          border-radius 0.2s ease,
+          background-color 0.2s ease;
 
         &.home-page__tutors-pagination-bullet--active {
           width: 110px;

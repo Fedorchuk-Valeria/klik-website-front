@@ -3,9 +3,20 @@
 import classNames from "classnames";
 import { FC, memo, SyntheticEvent, useMemo, useState } from "react";
 
+import { VALIDATION_CLASS } from "@/src/utils/constant";
+
 import { CheckboxPropTypes } from "./index.type";
 
-const Checkbox: FC<CheckboxPropTypes> = ({ id, error, checked, onChange, className, ...props }) => {
+const Checkbox: FC<CheckboxPropTypes> = ({
+  id,
+  error,
+  checked,
+  onChange,
+  className,
+  variant,
+  color = "default",
+  ...props
+}) => {
   const isControlled = checked !== undefined;
   const [internalChecked, setInternalChecked] = useState(false);
 
@@ -28,9 +39,15 @@ const Checkbox: FC<CheckboxPropTypes> = ({ id, error, checked, onChange, classNa
       type="checkbox"
       checked={isChecked}
       onChange={handleChange}
-      className={classNames("checkbox", className, {
-        VALIDATION_CLASS: !!error,
-      })}
+      className={classNames(
+        "checkbox",
+        className,
+        `checkbox--${variant}`,
+        `checkbox-color--${color}`,
+        {
+          [VALIDATION_CLASS]: !!error,
+        }
+      )}
     />
   );
 };

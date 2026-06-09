@@ -1,4 +1,6 @@
 .home-page__why-we-are {
+  overflow-x: visible;
+
   .home-page__why-we-are-top {
     display: flex;
     align-items: flex-end;
@@ -28,6 +30,139 @@
   }
 
   .home-page__why-we-are-body {
+    overflow-x: visible;
+
+    .home-page__why-we-are-slider {
+      position: relative;
+      z-index: 0;
+      width: 100%;
+      overflow-x: visible;
+      overflow-y: visible;
+      box-sizing: border-box;
+      touch-action: pan-y;
+
+      @media screen and (min-width: 801px) {
+        width: 100vw;
+        max-width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+      }
+
+      &--animating {
+        cursor: grab;
+        user-select: none;
+      }
+
+      &__track {
+        display: flex;
+        align-items: flex-end;
+        width: max-content;
+        min-height: 224px;
+
+        @media screen and (min-width: 801px) {
+          min-height: 450px;
+        }
+      }
+
+      .home-page__why-we-are-slide {
+        box-sizing: border-box;
+        position: relative;
+        flex-shrink: 0;
+        overflow: hidden;
+        cursor: pointer;
+
+        &:not(.home-page__why-we-are-slide--active):not(
+            .home-page__why-we-are-slide--incoming-active
+          ) {
+          overflow: visible;
+        }
+
+        &--active,
+        &--incoming-active {
+          .home-page__why-we-are-item {
+            height: 100%;
+            box-sizing: border-box;
+
+            .home-page__why-we-are-item--meta {
+              margin-top: auto;
+            }
+          }
+        }
+
+        &--animating {
+          max-width: none;
+          overflow: hidden;
+          cursor: default;
+          pointer-events: none;
+
+          &.home-page__why-we-are-slide--active,
+          &.home-page__why-we-are-slide--incoming-active {
+            width: unset;
+            height: unset;
+          }
+
+          &:not(.home-page__why-we-are-slide--active):not(
+              .home-page__why-we-are-slide--incoming-active
+            ) {
+            width: auto;
+            height: auto;
+          }
+        }
+
+        &:not(.home-page__why-we-are-slide--active):not(
+            .home-page__why-we-are-slide--incoming-active
+          ) {
+          .home-page__why-we-are-item {
+            background: transparent;
+            border: 2px solid var(--main-green-dark);
+            border-radius: 50px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            column-gap: 12px;
+            min-height: 224px;
+
+            .home-page__why-we-are-item__headline {
+              width: 100%;
+
+              .home-page__why-we-are-item--avatar {
+                display: none;
+              }
+
+              .home-page__why-we-are-item--info {
+                flex: 1 1 100%;
+                min-width: 0;
+
+                .home-page__why-we-are-item--info-title {
+                  @include fonts(50px, 500);
+                  color: var(--main-green-dark);
+                }
+
+                .home-page__why-we-are-item--info-text {
+                  display: none;
+                }
+              }
+            }
+
+            .home-page__why-we-are-item--text {
+              display: none;
+            }
+
+            .home-page__why-we-are-item--star {
+              flex-shrink: 0;
+              order: 2;
+              margin-left: auto;
+            }
+
+            .home-page__why-we-are-item--created-at {
+              color: var(--secondary-burgundy-40);
+              order: 1;
+            }
+          }
+        }
+      }
+    }
+
     .home-page__why-we-are-swiper {
       width: 100%;
 
@@ -231,6 +366,24 @@
     }
 
     .home-page__why-we-are-body {
+      .home-page__why-we-are-slider {
+        .home-page__why-we-are-slide {
+          &:not(.home-page__why-we-are-slide--active):not(
+              .home-page__why-we-are-slide--incoming-active
+            ) {
+            .home-page__why-we-are-item {
+              .home-page__why-we-are-item__headline {
+                .home-page__why-we-are-item--info {
+                  .home-page__why-we-are-item--info-title {
+                    font-size: 34px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
       .home-page__why-we-are-swiper {
         .swiper-slide {
           min-width: 650px;
