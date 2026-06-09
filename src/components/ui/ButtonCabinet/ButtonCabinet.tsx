@@ -6,7 +6,7 @@ export default function ButtonCabinet() {
   return (
     <Button className="header__cabinet-button">
       <Icon className="header__cabinet-icon" name="user" />
-      Личный кабинет
+      <span>Личный кабинет</span>
     </Button>
   );
 }

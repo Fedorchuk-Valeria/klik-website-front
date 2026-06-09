@@ -19,25 +19,21 @@ body {
 main {
   overflow-x: hidden;
   flex: 1 0 auto;
-  padding-top: 232px;
+  padding-top: 140px;
 
-  @media screen and (max-width: 942px) {
-    padding-top: 150px;
+  @media screen and (max-width: $landscape-tablet-size) {
+    padding-top: 160px;
   }
 
-  @media screen and (max-width: $tablet-size) {
-    padding-top: 148px;
+  @media screen and (max-width: 942px) {
+    padding-top: 110px;
   }
 }
 
 @media screen and (max-width: $mobile-size) {
-  html,
   body {
     overflow-x: hidden;
     overscroll-behavior-x: none;
-  }
-
-  body {
     width: 100%;
     touch-action: pan-y pinch-zoom;
   }
