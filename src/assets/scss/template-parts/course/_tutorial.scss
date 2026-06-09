@@ -1,0 +1,111 @@
+.course-tutorial {
+  margin-top: 100px;
+  max-width: 1042px;
+
+  .course-tutorial__content {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 50px;
+
+    .course-tutorial__content-title {
+      @include fonts(40px, 500, "Etude Noire");
+      color: var(--main-black);
+    }
+
+    .course-tutorial__content-description {
+      @include fonts(20px, 400, "Manrope");
+      color: var(--secondary-burgundy-40);
+    }
+  }
+
+  .course-tutorial__list {
+    margin-top: 50px;
+    margin-bottom: 100px;
+  }
+
+  @media screen and (max-width: $desktop) {
+    margin-top: 80px;
+    max-width: 764px;
+
+    .course-tutorial__content {
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .course-tutorial__list {
+      margin-bottom: 120px;
+    }
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    margin-top: 50px;
+    max-width: 504px;
+
+    .course-tutorial__content {
+      margin-top: 30px;
+      gap: 10px;
+
+      .course-tutorial__content-title {
+        font-size: 30px;
+      }
+
+      .course-tutorial__content-description {
+        font-size: 14px;
+      }
+    }
+
+    .course-tutorial__list {
+      margin-top: 30px;
+      margin-bottom: 100px;
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    margin-top: 100px;
+    max-width: 100%;
+
+    .course-tutorial__content {
+      margin-top: 50px;
+      gap: 20px;
+
+      .course-tutorial__content-title {
+        font-size: 38px;
+      }
+
+      .course-tutorial__content-description {
+        font-size: 20px;
+      }
+    }
+
+    .course-tutorial__list {
+      margin-top: 50px;
+      margin-bottom: 120px;
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    margin-top: 80px;
+
+    .course-tutorial__content {
+      margin-top: 30px;
+      gap: 10px;
+
+      .course-tutorial__content-title {
+        font-size: 24px;
+      }
+
+      .course-tutorial__content-description {
+        font-size: 14px;
+      }
+    }
+
+    .course-tutorial__list {
+      margin-top: 30px;
+      margin-bottom: 80px;
+    }
+  }
+}

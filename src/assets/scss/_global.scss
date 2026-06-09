@@ -38,3 +38,16 @@ main {
     touch-action: pan-y pinch-zoom;
   }
 }
+
+@media screen and (max-width: $mobile-size) {
+  html,
+  body {
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
+
+  body {
+    width: 100%;
+    touch-action: pan-y pinch-zoom;
+  }
+}

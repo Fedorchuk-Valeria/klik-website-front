@@ -90,26 +90,22 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
     });
   }, []);
 
-  const onSlideChangeTransitionEnd = useCallback(
-    (swiper: SwiperType) => {
-      if (!pendingRefreshRef.current) {
+  const onSlideChangeTransitionEnd = useCallback((swiper: SwiperType) => {
+    if (!pendingRefreshRef.current) {
+      return;
+    }
+
+    pendingRefreshRef.current = false;
+    requestAnimationFrame(() => {
+      if (swiper.destroyed || swiper.animating) {
         return;
       }
 
-      pendingRefreshRef.current = false;
-      requestAnimationFrame(() => {
-        if (swiper.destroyed || swiper.animating) {
-          return;
-        }
-
-        swiper.update();
-      });
-    },
-    []
-  );
+      swiper.update();
+    });
+  }, []);
 
   useEffect(() => {
-
     const rootStyle = getComputedStyle(document.documentElement);
     const tabletMaxPx = Number.parseFloat(rootStyle.getPropertyValue(TABLET_MAX_CSS_VAR).trim());
 
@@ -215,6 +211,9 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
                 slidesPerView="auto"
                 initialSlide={0}
                 loop={true}
+                observer
+                observeSlideChildren
+                resizeObserver
                 onSwiper={onSwiper}
                 onSlideChangeTransitionEnd={onSlideChangeTransitionEnd}
                 modules={[EffectCoverflow]}

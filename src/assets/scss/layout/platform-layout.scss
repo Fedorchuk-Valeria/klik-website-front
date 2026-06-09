@@ -1,0 +1,31 @@
+.platform-layout {
+  &__content {
+    padding-top: 150px;
+  }
+
+  .header__cabinet {
+    display: block;
+  }
+
+  &__container {
+    max-width: 1740px;
+    margin: 0 auto;
+    padding: 0 10px;
+
+    @media screen and (max-width: $desktop) {
+      max-width: 1340px;
+    }
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      max-width: 964px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      max-width: 740px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      padding: 0 20px;
+    }
+  }
+}

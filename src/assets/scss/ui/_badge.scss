@@ -1,0 +1,28 @@
+.badge {
+  @include center;
+  @include fonts(18px, 500, "Manrope");
+  padding: 8px 20px;
+  border-radius: 100px;
+  background: var(--main-green-neon);
+  border: 1px solid var(--main-green-dark);
+  color: var(--main-green-dark);
+
+  @media screen and (max-width: $desktop) {
+    font-size: 16px;
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    font-size: 14px;
+    padding: 6px 16px;
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    font-size: 16px;
+    padding: 6px 16px;
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    font-size: 12px;
+    padding: 6px 14px;
+  }
+}

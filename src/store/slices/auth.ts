@@ -1,0 +1,206 @@
+import { UserProfile } from "@/src/entities/common";
+import {
+  AuthChangePasswordRequest,
+  AuthForgotPasswordRequest,
+  AuthRegisterRequest,
+  AuthResendCodeRequest,
+  AuthResetPasswordRequest,
+  AuthSignInRequest,
+  AuthVerifyCodeRequest,
+} from "@/src/entities/common/auth";
+import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/src/utils/constant";
+import { CookieHelper } from "@/src/utils/helpers";
+import { createSlice } from "@reduxjs/toolkit";
+
+type AuthState = {
+  user_profile: UserProfile | null;
+  user: unknown | null;
+  errors: Record<string, string> | null;
+  isRegisterSuccess: boolean;
+  isCodeSent: boolean;
+  isCodeCorrect: boolean;
+  isLoading: boolean;
+  isLogoutLoading: false;
+  isResetPasswordSuccess: boolean;
+  isPersonalAccountChanged: boolean;
+  isLoggedIn: boolean;
+  isPasswordChanged: boolean;
+};
+
+const initialState: AuthState = {
+  user_profile: null,
+  user: null,
+  errors: null,
+  isRegisterSuccess: false,
+  isCodeSent: false,
+  isCodeCorrect: false,
+  isLoading: false,
+  isLogoutLoading: false,
+  isResetPasswordSuccess: false,
+  isPersonalAccountChanged: false,
+  isLoggedIn: !!CookieHelper.getCookie(TOKEN_KEY) && !!CookieHelper.getCookie(REFRESH_TOKEN_KEY),
+  isPasswordChanged: false,
+};
+
+const authSlice = createSlice({
+  name: "auth",
+  initialState,
+  reducers: {
+    // payload нужен для саги, в редьюсере не используется
+    loginRequest(state, action: { payload: AuthSignInRequest }) {
+      void action.payload;
+      state.isLoading = true;
+      state.errors = null;
+    },
+    registerRequest(state, action: { payload: AuthRegisterRequest }) {
+      void action.payload;
+      state.isLoading = true;
+      state.errors = null;
+    },
+    forgotPasswordRequest(state, action: { payload: AuthForgotPasswordRequest }) {
+      void action.payload;
+      state.isLoading = true;
+      state.errors = null;
+      state.isCodeSent = false;
+    },
+    verifyCodeRequest(state, action: { payload: AuthVerifyCodeRequest }) {
+      void action.payload;
+      state.isLoading = true;
+      state.errors = null;
+      state.isCodeCorrect = false;
+    },
+    resetPasswordRequest(state, action: { payload: AuthResetPasswordRequest }) {
+      void action.payload;
+      state.isLoading = true;
+      state.errors = null;
+    },
+    resendCodeRequest(state, action: { payload: AuthResendCodeRequest }) {
+      void action.payload;
+      state.isLoading = true;
+      state.errors = null;
+    },
+    logoutRequest(state) {
+      state.isLoading = true;
+      state.errors = null;
+    },
+
+    loginSuccess(state, action: { payload: unknown }) {
+      state.isLoading = false;
+      state.user = action.payload;
+      state.isLoggedIn = true;
+    },
+    registerSuccess(state) {
+      state.isLoading = false;
+      state.isRegisterSuccess = true;
+    },
+    forgotPasswordSuccess(state) {
+      state.isLoading = false;
+      state.isCodeSent = true;
+    },
+    verifyCodeSuccess(state) {
+      state.isLoading = false;
+      state.isCodeCorrect = true;
+    },
+    resetPasswordSuccess(state) {
+      state.isLoading = false;
+      state.isResetPasswordSuccess = true;
+    },
+    logoutSuccess(state) {
+      state.isLoading = false;
+      state.user = null;
+      state.isLoggedIn = false;
+    },
+
+    setUser(state, action: { payload: unknown | null }) {
+      state.user = action.payload;
+      state.isLoading = false;
+    },
+    setCodeSent(state, action: { payload: boolean }) {
+      state.isCodeSent = action.payload;
+    },
+    setCodeCorrect(state, action: { payload: boolean }) {
+      state.isCodeCorrect = action.payload;
+    },
+    setErrors(state, action: { payload: Record<string, string> | null }) {
+      state.errors = action.payload;
+      state.isLoading = false;
+    },
+    setLoggedIn(state, action: { payload: boolean }) {
+      state.isLoggedIn = action.payload;
+    },
+
+    clearRegister(state) {
+      state.isRegisterSuccess = false;
+      state.errors = null;
+    },
+    clearResetPassword(state) {
+      state.isCodeCorrect = false;
+      state.isCodeSent = false;
+      state.isResetPasswordSuccess = false;
+      state.errors = null;
+    },
+    clearPersonalAccountChanged(state) {
+      state.isPersonalAccountChanged = false;
+    },
+    profileRequest: (state) => {
+      state.isLoading = true;
+    },
+
+    profileSuccess: (state, action) => {
+      state.isLoading = false;
+      state.user_profile = action.payload;
+    },
+
+    changePasswordRequest(
+      state,
+      action: { payload: AuthChangePasswordRequest }
+    ) {
+      void action.payload;
+      state.isLoading = true;
+      state.errors = null;
+    },
+
+    changePasswordSuccess(state) {
+      state.isLoading = false;
+      state.isPasswordChanged = true;
+    },
+
+    clearPasswordChanged(state) {
+      state.isPasswordChanged = false;
+    }
+  },
+});
+
+export const {
+  setUser,
+  setErrors,
+  setCodeSent,
+  setCodeCorrect,
+  setLoggedIn,
+  loginRequest,
+  loginSuccess,
+  logoutRequest,
+  logoutSuccess,
+  registerRequest,
+  registerSuccess,
+
+  forgotPasswordRequest,
+  forgotPasswordSuccess,
+  verifyCodeRequest,
+  verifyCodeSuccess,
+  resetPasswordRequest,
+  resetPasswordSuccess,
+  resendCodeRequest,
+
+  clearPersonalAccountChanged,
+
+  clearRegister,
+  clearResetPassword,
+
+  profileRequest,
+  profileSuccess,
+
+  changePasswordRequest,
+  changePasswordSuccess,
+} = authSlice.actions;
+export default authSlice.reducer;

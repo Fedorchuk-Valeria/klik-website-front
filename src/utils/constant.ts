@@ -8,7 +8,41 @@ export const PLACE_STORAGE_KEY = "place";
 export const COOKIE_CONSENT_STORAGE_KEY = "cookie_policy_accepted";
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const VALIDATION_CLASS = "is-validation-error";
+export const TOKEN_KEY = "token";
+export const REFRESH_TOKEN_KEY = "refresh_token";
+export const USER = "user_data";
+
+export const COURSES_PAGE_SIZE = 12;
+
+export const QUERY_PARAMS = {
+  PAGE: "page",
+  PAGE_SIZE: "page_size",
+
+  PHONE: "phone",
+  IS_RESET_PASSWORD: "is_reset_password",
+
+  FILTER: "filter",
+  SCOPE: "scope",
+  CATEGORIES: "categories",
+};
+
+export const PAGES = {
+  HOME: "/",
+  NOT_FOUND: "/404",
+
+  LOGIN: "/login",
+  SIGN_UP: "/sign-up",
+  CONFIRM_CODE: "/confirm-code",
+  FORGOT_PASSWORD: "/reset-password",
+  SET_NEW_PASSWORD: "/set-new-password",
+
+  PROFILE: "/profile",
+  PROFILE_PASSWORD: "/profile/password",
+
+  COURSES: "/courses",
+  COURSE: "/courses/:id",
+  LESSON: "/courses/:id/lesson/:lessonId",
+};
 
 export const PAGE_ANCHORS = {
   SELECT_TRAINING: "select-training",
@@ -21,6 +55,8 @@ export const PAGE_ANCHORS = {
   WHAT: "what",
   TUTORS: "tutors",
   SIGN_UP_FREE_LESSON: "sign-up-free-lesson",
+
+  COURSES: "courses",
 } as const;
 
 export const CITY_DISPLAY_NAME = {
@@ -31,3 +67,12 @@ export const CITY_DISPLAY_NAME = {
 };
 
 export const MAP_API_KEY = process.env.NEXT_PUBLIC_YANDEX_API_KEY;
+export const PASSWORD_REGEX =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/;
+
+export const PASSWORD_INPUT_STRIP_REGEX = /[^a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/g;
+
+export const PUBLIC_OFFER_URL =
+  "https://drive.google.com/file/d/1SsbIcZF38PtcCaR4w9p6w8jxR1F8P5Ey/view";
+
+export const VALIDATION_CLASS = "validatio-error";

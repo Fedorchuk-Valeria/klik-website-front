@@ -1,0 +1,145 @@
+.modal-payment {
+  dialog {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    padding: 50px 30px;
+    width: 560px;
+    overflow-x: hidden;
+
+    @media screen and (max-width: $mobile-size) {
+      padding: 40px 20px;
+    }
+
+    .modal__close {
+      @media screen and (max-width: $mobile-size) {
+        top: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  &__body {
+    width: 100%;
+    font-size: 18px;
+
+    a {
+      color: var(--main-orange);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  &__value {
+    @include fonts(18px, 500, "Etude Noire");
+    color: var(--main-orange);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px;
+    flex-shrink: 0;
+  }
+
+  &__currency {
+    width: 16px;
+    height: 15px;
+    color: var(--main-orange);
+    margin-top: 1px;
+  }
+
+  &__name {
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    &.dotted {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      min-width: 0; /* важно */
+
+      &::after {
+        content: "..................................................................................";
+        flex: 1;
+        min-width: 0; /* важно */
+        overflow: hidden;
+        white-space: nowrap;
+        margin: 0 20px;
+        color: var(--secondary-burgundy-40);
+      }
+    }
+  }
+
+  &__agreement {
+    padding-left: 34px;
+    position: relative;
+    margin-top: 20px;
+
+    @media screen and (max-width: $mobile-size) {
+      font-size: 16px;
+    }
+
+    .checkbox {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    a {
+      color: var(--main-green-dark);
+      position: relative;
+      font-weight: 700;
+
+      &:after {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 100%;
+        height: 1.5px;
+        background-color: var(--main-orange);
+        transition: 0.3s all;
+      }
+
+      &:hover {
+        &:after {
+          opacity: 0;
+        }
+      }
+    }
+  }
+
+  &__error {
+    position: absolute;
+    font-size: 14px;
+    bottom: -25px;
+    color: var(--error-color);
+
+    @media screen and (max-width: $mobile-size) {
+      font-size: 12px;
+      left: 5px;
+    }
+  }
+
+  &__btn {
+    margin-top: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}

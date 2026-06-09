@@ -12,6 +12,10 @@ import { hideModal } from "@/src/store/slices/modalSlice";
 import WidgetModalCookiePolicy from "./CookiePolicy";
 import WidgetModalNotice from "./Notice";
 import WidgetModalPlace from "./Place";
+import WidgetModalSuccessfully from "./Successfully";
+import WidgetModalPayment from "@/src/widgets/Modal/Payment";
+import {Course} from "@/src/lib/getCourses";
+import WidgetModalPaymentStatus from "./PaymentStatus";
 
 const WidgetModal = () => {
   const dispatch = useAppDispatch();
@@ -39,7 +43,12 @@ const WidgetModal = () => {
         return <WidgetModalCookiePolicy isVisible={active} {...modalProps} />;
       case ModalType.PLACE_SELECT:
         return <WidgetModalPlace isVisible={active} {...modalProps} />;
-
+      case ModalType.SUCCESSFULLY:
+        return <WidgetModalSuccessfully isVisible={active} {...modalProps} />;
+      case ModalType.PAYMENT:
+        return <WidgetModalPayment isVisible={active}  {...(modalProps as { course: Course })} />;
+      case ModalType.PAYMENT_STATUS:
+        return <WidgetModalPaymentStatus isVisible={active}  {...modalProps} />;
       default:
         return null;
     }

@@ -1,6 +1,7 @@
 @import "./reset.scss";
 @import "./sizes.scss";
 @import "./global.scss";
+@import "./layout/index.scss";
 @import "./fonts.scss";
 @import "./colors.scss";
 @import "./mixins.scss";
@@ -8,7 +9,23 @@
 @import "./template-parts/index.scss";
 @import "./templates/index.scss";
 @import "./widgets/index.scss";
+@import "./views/index.scss";
 
 body {
   color: var(--main-black);
+}
+
+.password-popover-list {
+  & > ul {
+    list-style: decimal;
+    padding-left: 15px;
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    padding: 8px;
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    max-width: 230px;
+  }
 }

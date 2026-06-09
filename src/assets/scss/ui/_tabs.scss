@@ -1,0 +1,49 @@
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #f0f6e8;
+  border-radius: 100px;
+  max-width: fit-content;
+
+  .tabs__tab {
+    @include fonts(20px, 400);
+    border: none;
+    border-radius: 100px;
+    color: var(--main-black);
+    background: #f0f6e8;
+    cursor: pointer;
+    padding: 20px 50px;
+
+    &--active {
+      background: var(--main-green-dark);
+      color: var(--main-light);
+      pointer-events: none;
+    }
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    gap: 10px;
+
+    .tabs__tab {
+      font-size: 16px;
+      padding: 16px 30px;
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    gap: 20px;
+
+    .tabs__tab {
+      font-size: 20px;
+      padding: 20px 50px;
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    .tabs__tab {
+      font-size: 14px;
+      padding: 16px 42px;
+    }
+  }
+}
