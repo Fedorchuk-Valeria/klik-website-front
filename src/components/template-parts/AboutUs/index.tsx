@@ -75,7 +75,15 @@ const AboutUs: FC<PropTypes> = ({ title, text, subtitle, items, slides }) => {
             <TextBorder
               text="Дополнительное IT-образование для детей"
               cornerRadius={60}
-              cornerRadiusByWidth={{ 1920: 60, 1440: 50, 1024: 30, 800: 50, 500: 40 }}
+              cornerRadiusByWidth={{
+                1920: 60,
+                1440: 50,
+                1280: 40,
+                1024: 30,
+                960: 30,
+                800: 50,
+                500: 40,
+              }}
             >
               <div className="home-page__about-us--text-image">
                 <Image
