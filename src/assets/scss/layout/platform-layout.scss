@@ -1,6 +1,18 @@
 .platform-layout {
   &__content {
-    padding-top: 150px;
+    padding-top: 135px;
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      padding-top: 95px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      padding-top: 105px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      padding-top: 80px;
+    }
   }
 
   .header__cabinet {
