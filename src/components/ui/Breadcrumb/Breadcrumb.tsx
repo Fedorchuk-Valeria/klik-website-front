@@ -7,15 +7,20 @@ export type BreadcrumbProps = {
   currentLabel: string;
   homeLabel?: string;
   className?: string;
+  variant?: "green" | "orange";
 };
 
 export default function Breadcrumb({
   currentLabel,
   homeLabel = "Главная",
   className,
+  variant = "green",
 }: BreadcrumbProps) {
   return (
-    <nav aria-label="Хлебные крошки" className={classNames("breadcrumb", className)}>
+    <nav
+      aria-label="Хлебные крошки"
+      className={classNames("breadcrumb", `breadcrumb--${variant}`, className)}
+    >
       <ol className="breadcrumb__list">
         <li className="breadcrumb__item">
           <Link className="breadcrumb__link" href="/">

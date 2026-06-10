@@ -1,0 +1,1121 @@
+.contacts-view {
+  max-width: 1800px;
+  width: 100%;
+  padding: 0 40px;
+  margin: 0 auto 180px;
+
+  .contacts-view__breadcrumb {
+    margin-top: 40px;
+    padding: 15px;
+  }
+
+  .contacts-view__title {
+    @include fonts(24px, 500);
+    color: var(--main-orange);
+    margin-top: 50px;
+  }
+
+  .contacts-view__content {
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+
+    .contacts-view__info {
+      @include flex-list(50px);
+      padding: 50px;
+      border-radius: 50px;
+      background: var(--main-green-neon);
+
+      .contacts-view__info-item {
+        display: flex;
+        gap: 20px;
+
+        .contacts-view__info-item__icon {
+          @include icon(50px);
+          @include center;
+          min-width: 50px;
+          border-radius: 100%;
+          border: 1px solid var(--main-light);
+          background: var(--secondary-light-30);
+
+          svg {
+            @include icon(24px);
+            color: var(--main-green-dark);
+            fill: var(--main-green-dark);
+          }
+        }
+
+        .contacts-view__info-item__content {
+          @include flex-list(32px);
+
+          .contacts-view__info-item__content-title {
+            @include fonts(18px, 400, "Manrope");
+            color: var(--main-black);
+            margin-top: 12px;
+          }
+
+          .contacts-view__info-item__content-list {
+            @include flex-list(30px);
+
+            .contacts-view__info-item__content-list_item {
+              display: flex;
+              gap: 32px;
+
+              p {
+                @include fonts(18px, 500);
+                color: var(--main-black);
+
+                &:first-child {
+                  opacity: 0.8;
+                  min-width: 155px;
+                }
+
+                &:last-child {
+                  color: var(--main-green-dark);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .contacts-view__image {
+      position: relative;
+      max-height: 603px;
+
+      img {
+        @include perfect-img;
+        border-radius: 50px;
+      }
+
+      .contacts-view__image-line-clip {
+        position: absolute;
+        inset: 0;
+        border-radius: 50px;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .contacts-view__image-arrow {
+        position: absolute;
+        bottom: -27px;
+        right: -24px;
+        width: 82px;
+        height: 93px;
+        color: var(--main-orange);
+        z-index: 2;
+      }
+
+      .contacts-view__image-line {
+        position: absolute;
+        bottom: 80px;
+        left: -165px;
+        width: 100%;
+        height: 95%;
+        color: var(--main-green-neon);
+      }
+    }
+
+    .contacts-view__payment {
+      @include flex-list(20px);
+
+      .contacts-view__payment-item {
+        padding: 50px;
+        border: 1px solid var(--main-green-dark);
+        border-radius: 50px;
+
+        .contacts-view__payment-item_headline {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+
+          span {
+            @include center;
+            @include icon(50px);
+            display: flex;
+            background: rgba(238, 108, 77, 0.1);
+            border-radius: 100%;
+            color: var(--main-orange);
+
+            svg {
+              @include icon(24px);
+            }
+          }
+
+          p {
+            @include fonts(20px, 500);
+            color: var(--main-green-dark);
+          }
+        }
+
+        .contacts-view__payment-item_list {
+          margin-top: 30px;
+
+          .contacts-view__payment-item_list-item {
+            @include fonts(18px, 400);
+            @include center-between;
+            gap: 20px;
+            position: relative;
+
+            &:not(:first-child) {
+              padding-top: 20px;
+            }
+
+            &:not(:last-child) {
+              padding-bottom: 20px;
+
+              &:after {
+                content: "";
+                display: block;
+                width: 100%;
+                height: 1px;
+                background: var(--main-blue);
+                position: absolute;
+                bottom: 0px;
+                left: 0;
+              }
+            }
+
+            .contacts-view__payment-item_list-item_title {
+              font-family: "Manrope", sans-serif;
+              color: var(--main-black);
+            }
+
+            .contacts-view__payment-item_list-item_value {
+              color: var(--main-orange);
+              font-weight: 500;
+            }
+          }
+        }
+      }
+
+      .contacts-view__payment-button {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        width: 100%;
+        border-radius: 50px;
+        padding: 20px;
+        background: var(--main-blue);
+
+        .contacts-view__payment-button--download {
+          button {
+            @include center;
+            @include icon(50px);
+            color: var(--main-orange);
+            background: var(--main-light);
+            border-radius: 50%;
+            border: 1px solid var(--main-orange);
+            cursor: pointer;
+
+            svg {
+              @include icon(24px);
+            }
+          }
+        }
+
+        p {
+          @include fonts(24px, 500);
+          color: var(--main-green-dark);
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $desktop) {
+    max-width: 1400px;
+    margin: 0 auto 120px;
+
+    .contacts-view__breadcrumb {
+      margin-top: 20px;
+    }
+
+    .contacts-view__title {
+      font-size: 20px;
+      margin-top: 30px;
+    }
+
+    .contacts-view__content {
+      margin-top: 30px;
+
+      .contacts-view__info {
+        gap: 40px;
+        padding: 40px;
+        border-radius: 40px;
+
+        .contacts-view__info-item {
+          gap: 16px;
+
+          .contacts-view__info-item__icon {
+            @include icon(40px);
+            min-width: 40px;
+
+            svg {
+              @include icon(19px);
+            }
+          }
+
+          .contacts-view__info-item__content {
+            @include flex-list(29px);
+
+            .contacts-view__info-item__content-title {
+              font-size: 16px;
+              margin-top: 9px;
+            }
+
+            .contacts-view__info-item__content-list {
+              gap: 20px;
+
+              .contacts-view__info-item__content-list_item {
+                display: flex;
+                gap: 20px;
+
+                p {
+                  font-size: 16px;
+                  color: var(--main-black);
+
+                  &:first-child {
+                    min-width: 147px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .contacts-view__image {
+        max-height: 516px;
+
+        img {
+          border-radius: 40px;
+        }
+
+        .contacts-view__image-line-clip {
+          border-radius: 40px;
+        }
+
+        .contacts-view__image-arrow {
+          bottom: 0px;
+          right: -26px;
+          width: 67px;
+          height: 77px;
+        }
+      }
+
+      .contacts-view__payment {
+        @include flex-list(20px);
+
+        .contacts-view__payment-item {
+          padding: 40px;
+          border-radius: 40px;
+
+          .contacts-view__payment-item_headline {
+            span {
+              @include icon(40px);
+
+              svg {
+                @include icon(19px);
+              }
+            }
+
+            p {
+              font-size: 18px;
+            }
+          }
+
+          .contacts-view__payment-item_list {
+            .contacts-view__payment-item_list-item {
+              font-size: 16px;
+            }
+          }
+        }
+
+        .contacts-view__payment-button {
+          gap: 20px;
+          padding: 16px;
+
+          .contacts-view__payment-button--download {
+            button {
+              @include icon(58px);
+
+              svg {
+                @include icon(24px);
+              }
+            }
+          }
+
+          p {
+            font-size: 22px;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $desktop-compact) {
+    max-width: 1260px;
+    margin: 0 auto 120px;
+
+    .contacts-view__breadcrumb {
+      margin-top: 10px;
+    }
+
+    .contacts-view__title {
+      font-size: 18px;
+      margin-top: 40px;
+    }
+
+    .contacts-view__content {
+      margin-top: 30px;
+      grid-template-columns: minmax(300px, 570px) minmax(300px, 594px);
+      gap: 16px;
+
+      .contacts-view__info {
+        gap: 30px;
+        padding: 30px;
+        border-radius: 30px;
+
+        .contacts-view__info-item {
+          display: flex;
+          gap: 12px;
+
+          .contacts-view__info-item__icon {
+            @include icon(34px);
+            min-width: 34px;
+
+            svg {
+              @include icon(16px);
+            }
+          }
+
+          .contacts-view__info-item__content {
+            gap: 24px;
+
+            .contacts-view__info-item__content-title {
+              font-size: 14px;
+              margin-top: 7px;
+            }
+
+            .contacts-view__info-item__content-list {
+              gap: 20px;
+
+              .contacts-view__info-item__content-list_item {
+                gap: 38px;
+
+                p {
+                  font-size: 14px;
+
+                  &:first-child {
+                    min-width: 130px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .contacts-view__image {
+        max-height: 428px;
+
+        img {
+          border-radius: 30px;
+        }
+
+        .contacts-view__image-line-clip {
+          border-radius: 30px;
+        }
+
+        .contacts-view__image-arrow {
+          position: absolute;
+          bottom: 2px;
+          right: -21px;
+          width: 57px;
+          height: 65px;
+        }
+
+        .contacts-view__image-line {
+          position: absolute;
+          bottom: -50px;
+          left: -165px;
+          height: 130%;
+
+          path {
+            stroke-width: 30px;
+          }
+        }
+      }
+
+      .contacts-view__payment {
+        .contacts-view__payment-item {
+          padding: 30px;
+          border-radius: 30px;
+
+          .contacts-view__payment-item_headline {
+            gap: 12px;
+
+            span {
+              @include icon(34px);
+
+              svg {
+                @include icon(16px);
+              }
+            }
+
+            p {
+              font-size: 16px;
+            }
+          }
+
+          .contacts-view__payment-item_list {
+            margin-top: 30px;
+
+            .contacts-view__payment-item_list-item {
+              font-size: 14px;
+
+              &:not(:first-child) {
+                padding-top: 16px;
+              }
+
+              &:not(:last-child) {
+                padding-bottom: 16px;
+              }
+            }
+          }
+        }
+
+        .contacts-view__payment-button {
+          gap: 16px;
+          padding: 14px;
+
+          .contacts-view__payment-button--download {
+            button {
+              @include icon(50px);
+
+              svg {
+                @include icon(20px);
+              }
+            }
+          }
+
+          p {
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    max-width: 100%;
+    margin: 0 auto 100px;
+
+    .contacts-view__breadcrumb {
+      margin-top: 20px;
+    }
+
+    .contacts-view__title {
+      font-size: 16px;
+      margin-top: 30px;
+    }
+
+    .contacts-view__content {
+      grid-template-columns: minmax(300px, 548px) minmax(300px, 380px);
+
+      .contacts-view__info {
+        gap: 20px;
+        padding: 30px;
+        border-radius: 40px;
+
+        .contacts-view__info-item {
+          gap: 16px;
+
+          .contacts-view__info-item__icon {
+            @include icon(40px);
+            min-width: 40px;
+
+            svg {
+              @include icon(20px);
+            }
+          }
+
+          .contacts-view__info-item__content {
+            @include flex-list(26px);
+
+            .contacts-view__info-item__content-title {
+              font-size: 14px;
+              margin-top: 10px;
+            }
+
+            .contacts-view__info-item__content-list {
+              gap: 16px;
+
+              .contacts-view__info-item__content-list_item {
+                display: flex;
+                gap: 19px;
+
+                p {
+                  font-size: 14px;
+
+                  &:first-child {
+                    min-width: 129px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .contacts-view__image {
+        max-height: 435px;
+
+        img {
+          border-radius: 40px;
+        }
+
+        .contacts-view__image-line-clip {
+          border-radius: 40px;
+        }
+
+        .contacts-view__image-arrow {
+          bottom: 0;
+          right: -24px;
+          width: 61px;
+          height: 71px;
+        }
+
+        .contacts-view__image-line {
+          position: absolute;
+          bottom: 60px;
+          left: -110px;
+          width: 100%;
+          height: 90%;
+
+          path {
+            stroke-width: 24px;
+          }
+        }
+      }
+
+      .contacts-view__payment {
+        gap: 16px;
+
+        .contacts-view__payment-item {
+          padding: 30px;
+          border-radius: 40px;
+
+          .contacts-view__payment-item_headline {
+            gap: 20px;
+
+            span {
+              @include icon(40px);
+
+              svg {
+                @include icon(20px);
+              }
+            }
+
+            p {
+              font-size: 16px;
+            }
+          }
+
+          .contacts-view__payment-item_list {
+            margin-top: 20px;
+
+            .contacts-view__payment-item_list-item {
+              font-size: 14px;
+              gap: 24px;
+
+              &:not(:first-child) {
+                padding-top: 16px;
+              }
+
+              &:not(:last-child) {
+                padding-bottom: 16px;
+              }
+            }
+          }
+        }
+
+        .contacts-view__payment-button {
+          gap: 16px;
+          padding: 10px;
+
+          .contacts-view__payment-button--download {
+            button {
+              @include icon(40px);
+
+              svg {
+                @include icon(20px);
+              }
+            }
+          }
+
+          p {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    max-width: 100%;
+    margin: 0 auto 120px;
+
+    .contacts-view__breadcrumb {
+      margin-top: 10px;
+    }
+
+    .contacts-view__title {
+      font-size: 22px;
+      margin-top: 30px;
+    }
+
+    .contacts-view__content {
+      grid-template-columns: 100%;
+      gap: 16px;
+      margin-top: 30px;
+
+      .contacts-view__info {
+        padding: 30px;
+        border-radius: 30px;
+        gap: 30px;
+
+        .contacts-view__info-item {
+          gap: 16px;
+
+          .contacts-view__info-item__icon {
+            @include icon(36px);
+            min-width: 36px;
+
+            svg {
+              @include icon(17px);
+            }
+          }
+
+          .contacts-view__info-item__content {
+            gap: 24px;
+
+            .contacts-view__info-item__content-title {
+              font-size: 14px;
+              margin-top: 8px;
+            }
+
+            .contacts-view__info-item__content-list {
+              gap: 16px;
+
+              .contacts-view__info-item__content-list_item {
+                display: flex;
+                gap: 38px;
+
+                p {
+                  font-size: 14px;
+
+                  &:first-child {
+                    min-width: 130px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .contacts-view__image {
+        max-height: 100%;
+        width: 100%;
+        height: 398px;
+
+        img {
+          border-radius: 30px;
+        }
+
+        .contacts-view__image-line-clip {
+          border-radius: 30px;
+        }
+
+        .contacts-view__image-arrow {
+          display: none;
+        }
+
+        .contacts-view__image-line {
+          position: absolute;
+          bottom: -120px;
+          left: -230px;
+          width: 100%;
+          height: 140%;
+          color: var(--main-green-neon);
+
+          path {
+            stroke-width: 30px;
+          }
+        }
+      }
+
+      .contacts-view__payment {
+        gap: 16px;
+
+        .contacts-view__payment-item {
+          padding: 30px;
+          border-radius: 30px;
+
+          .contacts-view__payment-item_headline {
+            gap: 20px;
+
+            span {
+              @include icon(40px);
+
+              svg {
+                @include icon(19px);
+              }
+            }
+
+            p {
+              font-size: 18px;
+            }
+          }
+
+          .contacts-view__payment-item_list {
+            margin-top: 20px;
+
+            .contacts-view__payment-item_list-item {
+              font-size: 16px;
+
+              &:not(:first-child) {
+                padding-top: 16px;
+              }
+
+              &:not(:last-child) {
+                padding-bottom: 16px;
+              }
+            }
+          }
+        }
+
+        .contacts-view__payment-button {
+          gap: 16px;
+          border-radius: 50px;
+          padding: 10px;
+
+          .contacts-view__payment-button--download {
+            button {
+              @include icon(40px);
+
+              svg {
+                @include icon(20px);
+              }
+            }
+          }
+
+          p {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    max-width: 100%;
+    margin: 0 auto 120px;
+
+    .contacts-view__title {
+      font-size: 20px;
+      margin-top: 20px;
+    }
+
+    .contacts-view__content {
+      gap: 20px;
+
+      .contacts-view__info {
+        padding: 40px;
+        border-radius: 40px;
+        gap: 40px;
+
+        .contacts-view__info-item {
+          .contacts-view__info-item__icon {
+            @include icon(40px);
+            min-width: 40px;
+
+            svg {
+              @include icon(19px);
+            }
+          }
+
+          .contacts-view__info-item__content {
+            gap: 20px;
+
+            .contacts-view__info-item__content-title {
+              font-size: 16px;
+              margin-top: 9px;
+            }
+
+            .contacts-view__info-item__content-list {
+              gap: 20px;
+
+              .contacts-view__info-item__content-list_item {
+                display: flex;
+                gap: 20px;
+
+                p {
+                  font-size: 16px;
+
+                  &:first-child {
+                    min-width: 147px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .contacts-view__image {
+        height: 554px;
+
+        img {
+          border-radius: 40px;
+        }
+
+        .contacts-view__image-line-clip {
+          border-radius: 40px;
+        }
+
+        .contacts-view__image-arrow {
+          display: flex;
+          bottom: 17px;
+          right: -22px;
+          width: 61px;
+          height: 69px;
+        }
+
+        .contacts-view__image-line {
+          position: absolute;
+          bottom: 60px;
+          left: -190px;
+          height: 90%;
+
+          path {
+            stroke-width: 40px;
+          }
+        }
+      }
+
+      .contacts-view__payment {
+        gap: 20px;
+
+        .contacts-view__payment-item {
+          padding: 40px;
+          border-radius: 40px;
+
+          .contacts-view__payment-item_headline {
+            gap: 20px;
+          }
+
+          .contacts-view__payment-item_list {
+            margin-top: 30px;
+
+            .contacts-view__payment-item_list-item {
+              font-size: 16px;
+
+              &:not(:first-child) {
+                padding-top: 16px;
+              }
+
+              &:not(:last-child) {
+                padding-bottom: 16px;
+              }
+            }
+          }
+        }
+
+        .contacts-view__payment-button {
+          gap: 20px;
+          padding: 10px;
+
+          .contacts-view__payment-button--download {
+            button {
+              @include icon(50px);
+
+              svg {
+                @include icon(24px);
+              }
+            }
+          }
+
+          p {
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    max-width: 100%;
+    padding: 0 20px;
+    margin: 0 auto 80px;
+
+    .contacts-view__breadcrumb {
+      margin-top: 0;
+    }
+
+    .contacts-view__title {
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    .contacts-view__content {
+      gap: 14px;
+      margin-top: 20px;
+
+      .contacts-view__info {
+        padding: 20px;
+        border-radius: 20px;
+        gap: 20px;
+
+        .contacts-view__info-item {
+          gap: 12px;
+
+          .contacts-view__info-item__icon {
+            @include icon(36px);
+            min-width: 36px;
+
+            svg {
+              @include icon(17px);
+            }
+          }
+
+          .contacts-view__info-item__content {
+            gap: 10px;
+
+            .contacts-view__info-item__content-title {
+              font-size: 14px;
+              margin-top: 0;
+            }
+
+            .contacts-view__info-item__content-list {
+              gap: 16px;
+
+              .contacts-view__info-item__content-list_item {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                p {
+                  font-size: 12px;
+
+                  &:first-child {
+                    min-width: 100%;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .contacts-view__image {
+        height: 404px;
+        overflow: hidden;
+        border-radius: 20px;
+
+        img {
+          transform: translate3d(0, 0, 1px) scale(1.2);
+        }
+
+        .contacts-view__image-line-clip {
+          border-radius: 20px;
+        }
+
+        .contacts-view__image-arrow {
+          display: none;
+        }
+
+        .contacts-view__image-line {
+          bottom: -80px;
+          left: -110px;
+          height: 160%;
+
+          path {
+            stroke-width: 30px;
+          }
+        }
+      }
+
+      .contacts-view__payment {
+        gap: 14px;
+
+        .contacts-view__payment-item {
+          padding: 20px;
+          border-radius: 20px;
+
+          .contacts-view__payment-item_headline {
+            gap: 12px;
+
+            span {
+              @include icon(36px);
+
+              svg {
+                @include icon(17px);
+              }
+            }
+
+            p {
+              font-size: 14px;
+            }
+          }
+
+          .contacts-view__payment-item_list {
+            margin-top: 20px;
+
+            .contacts-view__payment-item_list-item {
+              font-size: 14px;
+              gap: 10px;
+              flex-direction: column;
+              align-items: flex-start;
+
+              &:not(:first-child) {
+                padding-top: 12px;
+              }
+
+              &:not(:last-child) {
+                padding-bottom: 12px;
+              }
+
+              .contacts-view__payment-item_list-item_value {
+                font-size: 12px;
+              }
+            }
+          }
+        }
+
+        .contacts-view__payment-button {
+          gap: 12px;
+          padding: 6px;
+
+          .contacts-view__payment-button--download {
+            button {
+              @include icon(40px);
+
+              svg {
+                @include icon(20px);
+              }
+            }
+          }
+
+          p {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+}
