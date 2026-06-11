@@ -9,8 +9,15 @@ import image from "@/src/assets/images/view/courses/girl.png";
 
 import { Meta } from "@/src/entities/common";
 import { Course } from "@/src/lib/getCourses";
-import { COURSES_PAGE_SIZE, PAGE_ANCHORS, PAGES, QUERY_PARAMS } from "@/src/utils/constant";
-import { QueryHelper } from "@/src/utils/helpers";
+import {
+  COURSES_PAGE_SIZE,
+  PAGE_ANCHORS,
+  PAGES,
+  QUERY_PARAMS,
+  REFRESH_TOKEN_KEY,
+  TOKEN_KEY,
+} from "@/src/utils/constant";
+import { CookieHelper, QueryHelper } from "@/src/utils/helpers";
 
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
@@ -20,6 +27,7 @@ import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import Loader from "@/src/components/ui/Loader/Loader";
 import Select from "@/src/components/ui/Select";
+import { MAX_AGE } from "@/src/store/sagas/auth.saga";
 
 type Props = {
   initialCourses?: Course[];
@@ -57,10 +65,6 @@ const PagesCourses = ({
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const isLoadingRef = useRef(isLoading);
   const prevFiltersKeyRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    isLoadingRef.current = isLoading;
-  }, [isLoading]);
 
   const filtersKey = useMemo(
     () => `${selectedFilter.id}:${selectedCategory.join(",")}`,
@@ -156,6 +160,37 @@ const PagesCourses = ({
   const handleSelectCategories = (options: { id: string; name: string }[]) => {
     setSelectedCategory(options.map((item) => item.id));
   };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash.slice(1);
+
+      const params = new URLSearchParams(hash);
+
+      const access = params.get("access");
+      const refresh = params.get("refresh");
+      const role = params.get("role");
+      const source = params.get("source");
+
+      if (!!access && !!refresh && role === "admin" && source === "admin") {
+        CookieHelper.setCookie(TOKEN_KEY, access, {
+          path: "/",
+          expires: new Date(Date.now() + MAX_AGE),
+        });
+
+        CookieHelper.setCookie(REFRESH_TOKEN_KEY, refresh, {
+          path: "/",
+          expires: new Date(Date.now() + MAX_AGE),
+        });
+
+        window.location.replace(`${window.location.pathname}${window.location.search}`);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    isLoadingRef.current = isLoading;
+  }, [isLoading]);
 
   useEffect(() => {
     if (initialErrors) {

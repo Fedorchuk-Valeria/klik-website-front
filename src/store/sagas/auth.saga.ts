@@ -1,5 +1,6 @@
 import { call, fork, put, takeLatest } from "redux-saga/effects";
 
+import { UserProfile } from "@/src/entities/common";
 import {
   AuthChangePasswordRequest,
   AuthForgotPasswordRequest,
@@ -17,7 +18,9 @@ import {
   loginRequest,
   loginSuccess,
   logoutRequest,
-  logoutSuccess, profileRequest, profileSuccess,
+  logoutSuccess,
+  profileRequest,
+  profileSuccess,
   registerRequest,
   registerSuccess,
   resendCodeRequest,
@@ -27,12 +30,11 @@ import {
   verifyCodeRequest,
   verifyCodeSuccess,
 } from "@/src/store/slices/auth";
-import {PAGES, REFRESH_TOKEN_KEY, TOKEN_KEY, USER} from "@/src/utils/constant";
+import { PAGES, REFRESH_TOKEN_KEY, TOKEN_KEY, USER } from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
 import localStorage from "@/src/utils/helpers/localStorage";
-import {UserProfile} from "@/src/entities/common";
 
-const MAX_AGE = 7 * 24 * 60 * 60 * 1000;
+export const MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 
 function* workerAuthLogin({ payload }: { payload: AuthSignInRequest }): unknown {
   try {
@@ -227,9 +229,7 @@ function* watchProfile() {
   );
 }
 
-function* workerChangePassword({payload}: {
-  payload: AuthChangePasswordRequest;
-}) {
+function* workerChangePassword({ payload }: { payload: AuthChangePasswordRequest }) {
   try {
     yield call(UsersApi.changePassword, payload);
 
@@ -245,7 +245,6 @@ function* watchChangePassword() {
     workerChangePassword
   );
 }
-
 
 export const authWatchers = [
   fork(watchAuthLogin),
