@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { FC, useEffect, useMemo } from "react";
 
 import CourseAbout from "@/src/components/template-parts/Course/About";
@@ -15,7 +16,6 @@ import { getPlural } from "@/src/helper/getPlural";
 import { CitySettings } from "@/src/lib/getCitySettings";
 import { useAppDispatch } from "@/src/store/hooks";
 import { showModal } from "@/src/store/slices/modalSlice";
-import { useSearchParams } from "next/navigation";
 
 type PropTypes = {
   data: Course;
