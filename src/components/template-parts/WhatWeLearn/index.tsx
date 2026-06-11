@@ -90,26 +90,22 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
     });
   }, []);
 
-  const onSlideChangeTransitionEnd = useCallback(
-    (swiper: SwiperType) => {
-      if (!pendingRefreshRef.current) {
+  const onSlideChangeTransitionEnd = useCallback((swiper: SwiperType) => {
+    if (!pendingRefreshRef.current) {
+      return;
+    }
+
+    pendingRefreshRef.current = false;
+    requestAnimationFrame(() => {
+      if (swiper.destroyed || swiper.animating) {
         return;
       }
 
-      pendingRefreshRef.current = false;
-      requestAnimationFrame(() => {
-        if (swiper.destroyed || swiper.animating) {
-          return;
-        }
-
-        swiper.update();
-      });
-    },
-    []
-  );
+      swiper.update();
+    });
+  }, []);
 
   useEffect(() => {
-
     const rootStyle = getComputedStyle(document.documentElement);
     const tabletMaxPx = Number.parseFloat(rootStyle.getPropertyValue(TABLET_MAX_CSS_VAR).trim());
 
@@ -233,6 +229,16 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
                     coverflowEffect: {
                       rotate: 15,
                       stretch: 278,
+                      depth: 100,
+                      scale: 0.95,
+                      modifier: 1,
+                      slideShadows: false,
+                    },
+                  },
+                  1280: {
+                    coverflowEffect: {
+                      rotate: 15,
+                      stretch: 236,
                       depth: 100,
                       scale: 0.95,
                       modifier: 1,

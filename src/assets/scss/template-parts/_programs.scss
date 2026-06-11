@@ -217,6 +217,63 @@
     }
   }
 
+  @media screen and (max-width: $desktop-compact) {
+    .home-page__programs-top {
+      gap: 16px;
+    }
+
+    .home-page__programs-text {
+      font-size: 18px;
+      max-width: 700px;
+    }
+
+    .home-page__programs-item {
+      .home-page__programs-item_quote {
+        font-size: 14px;
+        margin-bottom: 26px;
+      }
+
+      .home-page__programs-item_body {
+        .home-page__programs-item_title {
+          font-size: 22px;
+          margin-bottom: 12px;
+        }
+
+        .home-page__programs-item_text {
+          font-size: 16px;
+          max-width: 266px;
+        }
+      }
+
+      .home-page__programs-item_more {
+        @include icon(70px);
+
+        .home-page__programs-item_icon {
+          @include icon(42px);
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 1200px) {
+    .home-page__programs-item {
+      .home-page__programs-item_body {
+        .home-page__programs-item_text {
+          max-width: 233px;
+        }
+      }
+
+      .home-page__programs-item_more {
+        @include icon(60px);
+        bottom: 33px;
+
+        .home-page__programs-item_icon {
+          @include icon(36px);
+        }
+      }
+    }
+  }
+
   @media screen and (max-width: $landscape-tablet-size) {
     .home-page__programs-top {
       gap: 12px;
@@ -251,17 +308,20 @@
 
       .home-page__programs-item_quote {
         font-size: 12px;
+        margin-bottom: 20px;
       }
 
-      .home-page__programs-item_title {
-        font-size: 20px;
-        margin-bottom: 6px;
-      }
+      .home-page__programs-item_body {
+        .home-page__programs-item_title {
+          font-size: 20px;
+          margin-bottom: 6px;
+        }
 
-      .home-page__programs-item_text {
-        font-size: 14px;
-        max-width: 208px;
-        height: 76px;
+        .home-page__programs-item_text {
+          font-size: 14px;
+          max-width: 193px;
+          height: 76px;
+        }
       }
 
       .home-page__programs-item_more {
@@ -271,6 +331,180 @@
 
         .home-page__programs-item_icon {
           @include icon(36px);
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    .home-page__programs-top {
+      gap: 10px;
+    }
+
+    .home-page__programs-text {
+      font-size: 16px;
+      max-width: 720px;
+    }
+
+    .home-page__programs-slider-viewport {
+      width: 100%;
+    }
+
+    .home-page__programs-swiper {
+      display: block;
+
+      &.swiper-pagination-disabled .swiper-pagination {
+        display: none;
+      }
+
+      .swiper-wrapper {
+        align-items: stretch;
+      }
+
+      .swiper-slide {
+        display: flex;
+        width: 100%;
+        height: auto;
+        box-sizing: border-box;
+      }
+
+      .home-page__programs-item {
+        flex: 1 1 auto;
+        width: 100%;
+        min-width: 0;
+
+        &:before {
+          content: none;
+        }
+      }
+
+      .swiper-pagination {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        top: auto;
+        right: auto;
+        transform: none;
+        margin-top: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        line-height: 0;
+      }
+
+      .swiper-pagination-clickable .home-page__programs-pagination-bullet {
+        cursor: pointer;
+      }
+
+      .home-page__programs-pagination-bullet {
+        @include icon(10px);
+        display: inline-block;
+        margin: 0;
+        border-radius: 50%;
+        background: var(--secondary-burgundy-40);
+        opacity: 1;
+        transition:
+          width 0.25s ease,
+          border-radius 0.25s ease,
+          background-color 0.25s ease;
+      }
+
+      .home-page__programs-pagination-bullet--active {
+        width: 110px;
+        height: 10px;
+        border-radius: 999px;
+        background: var(--main-green-dark);
+      }
+    }
+
+    .home-page__programs-body {
+      grid-template-columns: repeat(1, 1fr);
+      gap: 0;
+    }
+
+    .home-page__programs-item {
+      padding: 20px;
+      border-radius: 30px;
+
+      grid-template-columns: minmax(0, 366px) minmax(0, 1fr);
+      grid-template-rows: auto 1fr auto;
+      column-gap: 20px;
+      row-gap: 0;
+      align-items: stretch;
+      min-height: 0;
+
+      .home-page__programs-item_media {
+        grid-column: 1;
+        grid-row: 1 / -1;
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 260px;
+        height: 100%;
+        align-self: stretch;
+      }
+
+      .home-page__programs-item_tag {
+        padding: 8px 16px;
+        top: -10px;
+        left: -10px;
+      }
+
+      .home-page__programs-item_image_wrapper {
+        flex: 1 1 auto;
+        min-width: 0;
+        width: 100%;
+        min-height: 162px;
+        height: 100%;
+      }
+
+      .home-page__programs-item_image {
+        border-radius: 20px;
+      }
+
+      .home-page__programs-item_quote {
+        grid-column: 2;
+        grid-row: 2;
+        align-self: start;
+        padding-bottom: 50px;
+        margin: 0;
+        font-size: 14px;
+        margin-top: auto;
+      }
+
+      .home-page__programs-item_body {
+        grid-column: 2;
+        grid-row: 3;
+        margin-top: 0;
+        min-width: 0;
+
+        .home-page__programs-item_title {
+          @include fonts(24px, 500, "Etude Noire");
+        }
+
+        .home-page__programs-item_text {
+          @include fonts(16px, 400, "Manrope");
+          color: var(--main-black);
+          max-width: 359px;
+          height: auto;
+        }
+      }
+
+      .home-page__programs-item_more {
+        @include icon(50px);
+        position: relative;
+        bottom: auto;
+        right: auto;
+        grid-column: 2;
+        grid-row: 3;
+        justify-self: end;
+        align-self: end;
+        margin-top: 12px;
+
+        .home-page__programs-item_icon {
+          @include icon(30px);
         }
       }
     }
@@ -418,17 +652,18 @@
         grid-row: 3;
         margin-top: 0;
         min-width: 0;
-      }
 
-      .home-page__programs-item_title {
-        @include fonts(24px, 500, "Etude Noire");
-      }
+        .home-page__programs-item_title {
+          @include fonts(24px, 500, "Etude Noire");
+          margin-bottom: 10px;
+        }
 
-      .home-page__programs-item_text {
-        @include fonts(18px, 400, "Manrope");
-        color: var(--main-black);
-        max-width: 260px;
-        height: auto;
+        .home-page__programs-item_text {
+          @include fonts(18px, 400, "Manrope");
+          color: var(--main-black);
+          max-width: 260px;
+          height: auto;
+        }
       }
 
       .home-page__programs-item_more {
@@ -451,9 +686,9 @@
 
   @media screen and (max-width: $mobile-size) {
     .home-page__programs-slider-viewport {
-      margin-left: -10px;
-      margin-right: -10px;
-      width: calc(100% + 20px);
+      margin-left: 0px;
+      margin-right: 0px;
+      width: 100%;
     }
 
     &.home-page__programs--slider .home-page__programs-top {
