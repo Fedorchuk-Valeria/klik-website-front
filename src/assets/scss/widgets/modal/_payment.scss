@@ -141,5 +141,9 @@
     width: 100%;
     display: flex;
     justify-content: center;
+
+    &.last {
+      margin-top: 10px;
+    }
   }
 }

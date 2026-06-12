@@ -67,6 +67,8 @@ function* workerPurchase(action: { payload: PurchasePayload }): unknown {
   try {
     const response = yield call(CoursesApi.purchase, action.payload);
 
+    console.log(response);
+
     yield put(purchaseSuccess());
 
     if (response?.data?.form_url) {

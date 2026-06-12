@@ -130,6 +130,26 @@
     }
   }
 
+  &--outline-orange {
+    border: 2px solid var(--main-orange);
+    background: var(--main-bg);
+    color: var(--main-orange);
+    transition:
+      0.3s background-color,
+      0.3s color;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background: var(--main-orange);
+        color: var(--main-light);
+      }
+    }
+
+    &:active {
+      background: var(--main-green-dark-active);
+    }
+  }
+
   &:disabled {
     opacity: 0.5;
     pointer-events: none;
