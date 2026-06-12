@@ -4,7 +4,7 @@ import React from "react";
 
 import Icon from "@/src/components/ui/Icon/Icon";
 
-export type ButtonVariant = "orange" | "main-light" | "main-green-dark" | "outline-green-dark";
+export type ButtonVariant = "orange" | "main-light" | "main-green-dark" | "outline-green-dark" | "outline-orange";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant;

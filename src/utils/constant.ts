@@ -76,3 +76,6 @@ export const PUBLIC_OFFER_URL =
   "https://drive.google.com/file/d/1SsbIcZF38PtcCaR4w9p6w8jxR1F8P5Ey/view";
 
 export const VALIDATION_CLASS = "validatio-error";
+
+export const PAYMENT_STATUS_SUCCESSFULL = "paid";
+export const PAYMENT_STATUS_FAILED = "failed";

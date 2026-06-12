@@ -3,10 +3,31 @@ import { cookies } from "next/headers";
 import { Meta } from "@/src/entities/common";
 
 import { buildApiUrl } from "@/src/utils/buildApiUrl";
-import { COURSES_PAGE_SIZE, QUERY_PARAMS, TOKEN_KEY } from "@/src/utils/constant";
+import {
+  COURSES_PAGE_SIZE,
+  PAYMENT_STATUS_FAILED,
+  PAYMENT_STATUS_SUCCESSFULL,
+  QUERY_PARAMS,
+  TOKEN_KEY
+} from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 import { normalizeToken } from "@/src/utils/http";
 import { normalizeCoursesResponse } from "@/src/utils/normalizeCoursesPayload";
+
+export type CoursePaymentStatus =
+  | typeof PAYMENT_STATUS_SUCCESSFULL
+  | typeof PAYMENT_STATUS_FAILED;
+
+export type CoursePayment = {
+  download_url: string;
+  error: string;
+  has_receipt: boolean;
+  payment_id: number;
+  receipt_url: string;
+  saved_at: string;
+  show_status_modal: boolean;
+  status: CoursePaymentStatus;
+};
 
 export type Course = {
   categories: CourseCategory[];
@@ -24,6 +45,7 @@ export type Course = {
   progress_percent: number;
   title: string;
   updated_at: string;
+  payment: CoursePayment | null;
 };
 
 export type LessonTestResult = {

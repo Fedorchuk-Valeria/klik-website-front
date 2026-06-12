@@ -9,7 +9,7 @@ import Icon from "@/src/components/ui/Icon/Icon";
 
 import { ModalType } from "@/src/entities/common";
 import { Course } from "@/src/lib/getCourses";
-import { PAGES } from "@/src/utils/constant";
+import {PAGES, PAYMENT_STATUS_FAILED, PAYMENT_STATUS_SUCCESSFULL} from "@/src/utils/constant";
 
 import { getPlural } from "@/src/helper/getPlural";
 import { CitySettings } from "@/src/lib/getCitySettings";
@@ -61,20 +61,22 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
   };
 
   useEffect(() => {
-    const payment = searchParams.get("payment");
+    const payment = data?.payment;
 
-    if (payment === "success" || payment === "fail") {
-      dispatch(
-        showModal({
-          modalType: ModalType.PAYMENT_STATUS,
-          modalProps: {
-            status: payment,
-            settings: settings,
-          },
-        })
-      );
+    if (!payment || !payment.show_status_modal) {
+      return;
     }
-  }, [dispatch, searchParams]);
+
+    dispatch(
+      showModal({
+        modalType: ModalType.PAYMENT_STATUS,
+        modalProps: {
+          payment: payment,
+          settings,
+        },
+      })
+    );
+  }, [dispatch, settings, data?.payment]);
 
   return (
     <div className="course-page">

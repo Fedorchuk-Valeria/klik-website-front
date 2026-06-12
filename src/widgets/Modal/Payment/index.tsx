@@ -23,14 +23,10 @@ const WidgetModalPayment: FC<PropTypes> = ({course, className, isVisible}) => {
 
   const coursePath = PAGES.COURSE.replace(":id", String(course.id));
 
-  const successUrl = `${origin}${coursePath}?payment=success`;
-  const failUrl = `${origin}${coursePath}?payment=fail`;
+  const returnUrl = `${origin}${coursePath}`;
 
   const [agree, setAgree] = useState(false);
   const [error, setError] = useState("");
-
-  console.log('successUrl=', successUrl);
-  console.log('failUrl=', failUrl);
 
   const handlePayment = (id: number) => {
     if (!agree) {
@@ -42,8 +38,7 @@ const WidgetModalPayment: FC<PropTypes> = ({course, className, isVisible}) => {
     dispatch(
       purchaseRequest({
         course_id: id,
-        success_url: successUrl,
-        fail_url: failUrl,
+        return_url: returnUrl
       })
     );
   };
