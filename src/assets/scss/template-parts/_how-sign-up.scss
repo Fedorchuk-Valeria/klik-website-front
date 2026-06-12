@@ -129,6 +129,10 @@
         }
 
         .how-sign-up__card-headline {
+          .how-sign-up__card-headline-text {
+            color: var(--main-green-neon);
+          }
+
           .how-sign-up__card-title {
             color: var(--main-green-neon);
           }
@@ -160,24 +164,57 @@
       }
 
       .how-sign-up__card-headline {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
         position: relative;
+        width: 100%;
 
-        .how-sign-up__card-title {
+        .how-sign-up__card-headline-text {
           @include fonts(24px, 400);
+          margin: 0;
+          max-width: 260px;
+          line-height: 1.1;
           color: var(--main-green-dark);
         }
 
+        .how-sign-up__card-title {
+          display: inline;
+          font-size: inherit;
+          font-weight: 400;
+          line-height: inherit;
+          color: var(--main-green-dark);
+
+          &::after {
+            content: "";
+            display: inline-block;
+            vertical-align: baseline;
+            width: 10px;
+            height: 3px;
+            margin: 0 10px;
+            position: static;
+            transform: translateY(-0.15em);
+            top: auto;
+            right: auto;
+          }
+        }
+
         .how-sign-up__card-subtitle {
-          @include fonts(24px, 500);
+          display: inline;
+          font-size: inherit;
+          font-weight: 700;
+          line-height: inherit;
           color: var(--main-green-dark);
         }
 
         .how-sign-up__card-number {
+          flex-shrink: 0;
+          position: relative;
+          right: auto;
+          top: auto;
           @include fonts(40px, 400);
           color: var(--main-green-dark);
-          position: absolute;
-          right: 0;
-          top: 0;
           isolation: isolate;
 
           &::before {
@@ -363,12 +400,9 @@
         }
 
         .how-sign-up__card-headline {
-          .how-sign-up__card-title {
+          .how-sign-up__card-headline-text {
             font-size: 22px;
-          }
-
-          .how-sign-up__card-subtitle {
-            font-size: 22px;
+            max-width: 240px;
           }
         }
 
@@ -397,50 +431,45 @@
     }
   }
 
-  @media screen and (max-width: $landscape-tablet-size) {
-    padding: 30px;
-    border-radius: 30px;
+  @media screen and (max-width: $desktop-compact) {
+    padding: 40px;
+    border-radius: 40px;
 
     .how-sign-up__icon {
       &.how-sign-up__icon--top {
-        top: -20px;
+        top: -25px;
         right: 0;
-        width: 177px;
-        height: 250px;
+        width: 230px;
       }
 
       &.how-sign-up__icon--bottom {
-        bottom: -180px;
+        bottom: -70px;
         left: 0;
-        width: 339px;
-        height: 417px;
+        width: 350px;
+        height: 300px;
       }
     }
 
     .how-sign-up-top {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 12px;
-
       .how-sign-up__text {
-        font-size: 16px;
+        font-size: 18px;
       }
     }
 
     .how-sign-up-body {
-      gap: 16px;
+      gap: 17px;
 
       .how-sign-up__card {
-        padding: 20px;
-        border-radius: 30px;
+        padding: 24px;
+        border-radius: 40px;
 
         &.how-sign-up__card--last {
           .how-sign-up__card-leaf.how-sign-up__card-leaf--placement-last {
-            max-width: 200px;
-            max-height: 200px;
-            top: -100px;
-            left: -125px;
-            transform: rotate(43deg);
+            max-width: 186px;
+            max-height: 186px;
+            top: -90px;
+            left: -140px;
+            transform: rotate(45deg);
           }
 
           .how-sign-up__card-image {
@@ -451,46 +480,42 @@
         }
 
         .how-sign-up__card-headline {
-          position: relative;
-          margin-top: 8px;
+          margin-top: 10px;
 
-          .how-sign-up__card-title {
-            font-size: 20px;
-          }
-
-          .how-sign-up__card-subtitle {
+          .how-sign-up__card-headline-text {
             font-size: 20px;
           }
 
           .how-sign-up__card-number {
-            font-size: 30px;
-            margin-top: -8px;
+            font-size: 35px;
+            margin-top: 4px;
 
             &::before {
-              width: 30px;
-              height: 40px;
-              right: 4px;
-              top: -7px;
+              width: 27px;
+              height: 53px;
+              right: 10px;
+              top: -12px;
             }
           }
         }
 
         .how-sign-up-item__text {
-          font-size: 14px;
+          font-size: 16px;
+          max-width: 246px;
         }
 
         .how-sign-up__card-list {
-          gap: 6px;
-          margin-top: 20px;
+          gap: 8px;
+          margin-top: 10px;
 
           .how-sign-up__card-list--item {
             .how-sign-up__card-list--item-icon {
-              @include icon(21px);
-              min-width: 21px;
+              @include icon(22px);
+              min-width: 22px;
             }
 
             .how-sign-up__card-list--item-text {
-              font-size: 14px;
+              font-size: 16px;
             }
           }
         }
@@ -502,7 +527,7 @@
         }
 
         .how-sign-up__card-dropdown {
-          margin-top: 30px;
+          margin-top: 20px;
 
           .how-sign-up__dropdown-item {
             border: 2px solid var(--main-orange);
@@ -537,14 +562,182 @@
     }
   }
 
-  @media screen and (max-width: $tablet-size) {
-    border-radius: 50px;
+  @media screen and (max-width: $landscape-tablet-size) {
+    padding: 30px;
+    border-radius: 30px;
 
     .how-sign-up__icon {
       &.how-sign-up__icon--top {
-        height: 361px;
+        top: -20px;
+        right: 0;
+        width: 177px;
+        height: 250px;
+      }
+
+      &.how-sign-up__icon--bottom {
+        bottom: -180px;
+        left: 0;
+        width: 339px;
+        height: 417px;
+      }
+    }
+
+    .how-sign-up-top {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 30px;
+
+      .how-sign-up__text {
+        font-size: 16px;
+      }
+    }
+
+    .how-sign-up-body {
+      gap: clamp(10px, 1.2vw, 16px);
+
+      .how-sign-up__card {
+        flex: 1 1 0;
+        min-width: 0;
+        width: auto;
+        padding: clamp(14px, 1.5vw, 20px);
+        border-radius: 30px;
+
+        &.how-sign-up__card--last {
+          .how-sign-up__card-leaf.how-sign-up__card-leaf--placement-last {
+            max-width: clamp(90px, 12vw, 160px);
+            max-height: clamp(90px, 12vw, 160px);
+            top: clamp(-50px, -6vw, -80px);
+            left: clamp(-40px, -6vw, -80px);
+            z-index: -1;
+          }
+
+          .how-sign-up__card-image {
+            min-height: unset;
+            max-height: clamp(110px, 16vw, 180px);
+            height: auto;
+            border-radius: 10px;
+            z-index: 2;
+            margin-bottom: clamp(10px, 1.5vw, 20px);
+          }
+        }
+
+        .how-sign-up__card-headline {
+          margin-top: 8px;
+
+          .how-sign-up__card-headline-text {
+            max-width: 100%;
+            font-size: clamp(16px, 1.8vw, 20px);
+
+            .how-sign-up__card-subtitle {
+              white-space: normal;
+            }
+          }
+
+          .how-sign-up__card-number {
+            font-size: clamp(22px, 2.4vw, 30px);
+            margin-top: -8px;
+
+            &::before {
+              width: clamp(22px, 2.5vw, 30px);
+              height: clamp(30px, 3.5vw, 40px);
+              right: 4px;
+              top: -7px;
+            }
+          }
+        }
+
+        .how-sign-up-item__text {
+          font-size: clamp(12px, 1.3vw, 14px);
+          max-width: 100%;
+          margin-top: 6px;
+        }
+
+        .how-sign-up__card-list {
+          gap: 6px;
+          margin-top: 10px;
+
+          .how-sign-up__card-list--item {
+            gap: clamp(6px, 0.8vw, 10px);
+
+            .how-sign-up__card-list--item-icon {
+              @include icon(clamp(16px, 1.8vw, 21px));
+              min-width: clamp(16px, 1.8vw, 21px);
+            }
+
+            .how-sign-up__card-list--item-text {
+              font-size: clamp(12px, 1.3vw, 14px);
+            }
+          }
+        }
+
+        .how-sign-up__card-button {
+          margin-top: 20px;
+          font-size: clamp(13px, 1.4vw, 16px);
+          padding: clamp(12px, 1.2vw, 16px) clamp(12px, 1.4vw, 20px);
+          width: 100%;
+
+          .button__arrow {
+            @include icon(clamp(30px, 3.2vw, 36px));
+            right: 7px;
+
+            svg {
+              @include icon(clamp(18px, 2vw, 22px));
+            }
+          }
+        }
+
+        .how-sign-up__card-dropdown {
+          margin-top: clamp(16px, 2vw, 30px);
+          width: 100%;
+
+          .how-sign-up__dropdown-item {
+            border: 2px solid var(--main-orange);
+            border-radius: 100px;
+            overflow: hidden;
+            transition: border-radius 0.3s ease 0.3s;
+
+            &:has(.is-open) {
+              border-radius: 30px;
+              transition: none;
+            }
+          }
+
+          .how-sign-up__dropdown-trigger {
+            gap: clamp(10px, 1.2vw, 18px);
+            padding: 5px 5px 5px clamp(12px, 1.5vw, 20px);
+            text-align: left;
+            border-radius: 26px;
+
+            .how-sign-up__dropdown-trigger-title {
+              font-size: clamp(13px, 1.4vw, 16px);
+              max-width: 100%;
+            }
+          }
+
+          .how-sign-up__dropdown-panel {
+            .how-sign-up__dropdown-panel-inner {
+              padding: 15px 20px 20px;
+            }
+
+            .how-sign-up__dropdown-panel-text {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    padding: 30px;
+    border-radius: 30px;
+
+    .how-sign-up__icon {
+      &.how-sign-up__icon--top {
+        height: 366px;
         width: 261px;
-        top: -10px;
+        top: -30px;
       }
 
       &.how-sign-up__icon--bottom {
@@ -553,25 +746,35 @@
     }
 
     .how-sign-up-top {
-      gap: 5px;
+      gap: 10px;
       margin-bottom: 30px;
 
+      .how-sign-up__title {
+        font-size: 44px;
+      }
+
       .how-sign-up__text {
-        font-size: 20px;
+        font-size: 16px;
       }
     }
 
     .how-sign-up-body {
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
 
       .how-sign-up__card {
+        width: 100%;
+        height: 100%;
         border-radius: 30px;
+        padding: 20px;
 
         &:first-child {
           z-index: 1;
           isolation: isolate;
           background: transparent;
           border-color: transparent;
+          padding: 20px 24px 20px 20px;
 
           &::before {
             content: "";
@@ -607,43 +810,104 @@
             z-index: -1;
             pointer-events: none;
           }
+
+          .how-sign-up__card-button {
+            margin-top: auto;
+            padding: 16px;
+            font-size: 16px;
+
+            .button__arrow {
+              @include icon(45px);
+
+              svg {
+                @include icon(27px);
+              }
+            }
+          }
         }
 
         &.how-sign-up__card--last {
+          grid-column: 1 / -1;
+          display: grid;
+          grid-template-columns: 264px 1fr;
+          grid-template-rows: auto auto auto auto;
+          column-gap: 20px;
+          row-gap: 12px;
+          padding: 20px;
+          align-items: start;
+          position: relative;
+
           .how-sign-up__card-leaf.how-sign-up__card-leaf--placement-last {
             display: none;
           }
 
           .how-sign-up__card-image {
+            grid-column: 1;
+            grid-row: 1 / 4;
+            display: block;
+            width: 264px;
             max-width: 264px;
+            height: 160px;
             max-height: 160px;
             min-height: 160px;
+            object-fit: cover;
             border-radius: 16px;
-            margin-bottom: 10px;
+            margin-bottom: 0;
+            align-self: start;
           }
 
           .how-sign-up__card-headline {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 5px;
-            position: absolute;
-            top: 120px;
-            right: 30px;
-            width: calc(100% - 344px);
+            grid-column: 2;
+            grid-row: 1;
+            display: block;
+            position: static;
+            width: 100%;
+            padding-right: 50px;
+            margin-top: 0;
+
+            .how-sign-up__card-headline-text {
+              max-width: 100%;
+            }
 
             .how-sign-up__card-title {
               &::after {
                 background: var(--main-green-neon);
               }
             }
+
+            .how-sign-up__card-number {
+              position: absolute;
+              font-size: 34px;
+              top: 27px;
+              right: 25px;
+              margin-top: 0;
+
+              &::before {
+                width: 25px;
+                height: 48px;
+                right: 12px;
+                top: -10px;
+              }
+            }
+          }
+
+          .how-sign-up-item__text {
+            grid-column: 2;
+            grid-row: 2;
+            margin-top: 0;
+            max-width: none;
+            margin-top: -30px;
           }
 
           .how-sign-up__card-list {
-            margin-top: 10px;
+            grid-column: 2;
+            grid-row: 3;
+            margin-top: 0;
             display: grid;
-            grid-template-columns: auto 1fr;
-            column-gap: 50px;
+            grid-template-columns: auto auto;
+            column-gap: 20px;
             row-gap: 10px;
+            margin-top: -30px;
 
             .how-sign-up__card-list--item {
               &:nth-child(1) {
@@ -663,48 +927,418 @@
               }
             }
           }
+
+          .how-sign-up__card-button {
+            grid-column: 1 / -1;
+            grid-row: 4;
+            margin-top: 10px;
+            width: calc(100% - 10px);
+          }
         }
 
-        .how-sign-up__card-headline {
-          display: flex;
-          align-items: center;
-          gap: 30px;
+        &:not(.how-sign-up__card--last) {
+          .how-sign-up__card-headline {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            width: 100%;
 
-          .how-sign-up__card-title {
-            font-size: 22px;
-            position: relative;
+            .how-sign-up__card-headline-text {
+              max-width: 215px;
+              font-size: 18px;
+              line-height: 1.1;
+              color: var(--main-green-dark);
+            }
 
-            &::after {
-              content: "";
-              position: absolute;
-              background: var(--main-green-dark);
-              width: 10px;
-              height: 3px;
-              top: calc(50% - 2px);
-              transform: translateY(-50%);
-              right: -20px;
+            .how-sign-up__card-title {
+              display: inline;
+              font-size: inherit;
+              font-weight: 400;
+              line-height: inherit;
+              position: relative;
+
+              &::after {
+                content: "";
+                display: inline-block;
+                vertical-align: baseline;
+                background: var(--main-green-dark);
+                width: 10px;
+                height: 3px;
+                margin: 0 10px;
+                position: static;
+                transform: translateY(-0.15em);
+                top: auto;
+                right: auto;
+              }
+            }
+
+            .how-sign-up__card-subtitle {
+              display: inline;
+              font-size: inherit;
+              font-weight: 700;
+              line-height: inherit;
+            }
+
+            .how-sign-up__card-number {
+              flex-shrink: 0;
+              position: relative;
+              right: auto;
+              top: auto;
+              font-size: 34px;
+
+              &::before {
+                width: 25px;
+                height: 48px;
+                right: 12px;
+                top: -12px;
+              }
+            }
+          }
+        }
+
+        .how-sign-up-item__text {
+          font-size: 14px;
+          margin-top: 0;
+        }
+
+        .how-sign-up__card-list {
+          margin-top: 10px;
+          gap: 10px;
+
+          .how-sign-up__card-list--item {
+            gap: 10px;
+
+            .how-sign-up__card-list--item-icon {
+              @include icon(20px);
+              min-width: 20px;
+            }
+
+            .how-sign-up__card-list--item-text {
+              font-size: 14px;
+            }
+          }
+        }
+
+        .how-sign-up__card-button {
+          margin-top: 20px;
+        }
+
+        .how-sign-up__card-dropdown {
+          margin-top: 10px;
+
+          .how-sign-up__dropdown-trigger {
+            padding: 10px 10px 10px 30px;
+
+            .how-sign-up__dropdown-trigger-title {
+              font-size: 14px;
+              max-width: 100%;
+            }
+
+            .how-sign-up__dropdown-trigger-icon {
+              @include icon(36px);
+              min-width: 36px;
+              min-height: 36px;
+
+              svg {
+                @include icon(22px);
+              }
             }
           }
 
-          .how-sign-up__card-subtitle {
-            font-size: 22px;
-            font-weight: 700;
+          .how-sign-up__dropdown-panel {
+            .how-sign-up__dropdown-panel-inner {
+              padding: 20px 30px 30px;
+            }
+
+            .how-sign-up__dropdown-panel-text {
+              font-size: 16px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    border-radius: 50px;
+    padding: 30px 24px 30px 30px;
+
+    .home-page__tag {
+      &::before {
+        background: var(--main-light);
+      }
+    }
+
+    .how-sign-up__icon {
+      &.how-sign-up__icon--top {
+        height: 361px;
+        width: 261px;
+        top: -10px;
+      }
+
+      &.how-sign-up__icon--bottom {
+        display: none;
+      }
+    }
+
+    .how-sign-up-top {
+      gap: 5px;
+      margin-bottom: 30px;
+
+      .how-sign-up__title {
+        font-size: 50px;
+      }
+
+      .how-sign-up__text {
+        font-size: 20px;
+      }
+    }
+
+    .how-sign-up-body {
+      display: flex;
+      flex-direction: column;
+
+      .how-sign-up__card {
+        height: fit-content;
+        border-radius: 30px;
+        padding: 30px 24px 30px 30px;
+
+        &.how-sign-up__card--last {
+          grid-column: auto;
+        }
+
+        &:first-child {
+          z-index: 1;
+          isolation: isolate;
+          background: transparent;
+          border-color: transparent;
+          padding: 30px 24px 30px 30px;
+
+          &::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            box-sizing: border-box;
+            border-radius: inherit;
+            border: 2px solid var(--main-green-dark);
+            background: var(--main-light);
+            z-index: 0;
+            pointer-events: none;
           }
 
-          .how-sign-up__card-number {
-            font-size: 40px;
+          &.how-sign-up__card--last::before {
+            background: var(--secondary-light-10);
+          }
 
-            &::before {
-              width: 30px;
-              height: 60px;
-              right: 12px;
-              top: -12px;
+          > *:not(.how-sign-up__card-leaf) {
+            position: relative;
+            z-index: 1;
+          }
+
+          .how-sign-up__card-leaf.how-sign-up__card-leaf--placement-first {
+            @include icon(100%);
+            display: block;
+            max-width: 180px;
+            max-height: 180px;
+            aspect-ratio: 1;
+            position: absolute;
+            top: -110px;
+            right: -25px;
+            transform: rotate(0);
+            z-index: -1;
+            pointer-events: none;
+          }
+
+          .how-sign-up__card-button {
+            margin-top: 20px;
+          }
+        }
+
+        &.how-sign-up__card--last {
+          display: grid;
+          grid-template-columns: 284px 1fr;
+          grid-template-rows: auto auto auto auto;
+          column-gap: 20px;
+          row-gap: 12px;
+          padding: 30px;
+          align-items: start;
+          position: relative;
+
+          .how-sign-up__card-leaf.how-sign-up__card-leaf--placement-last {
+            display: none;
+          }
+
+          .how-sign-up__card-image {
+            grid-column: 1;
+            grid-row: 1;
+            display: block;
+            width: 284px;
+            max-width: 284px;
+            height: 160px;
+            max-height: 160px;
+            min-height: 160px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-bottom: 0;
+            align-self: start;
+          }
+
+          .how-sign-up__card-headline {
+            grid-column: 2;
+            grid-row: 1;
+            display: block;
+            position: relative;
+            width: 100%;
+            padding-right: 50px;
+            margin-top: auto;
+
+            .how-sign-up__card-headline-text {
+              max-width: 100%;
+              font-size: 22px;
+            }
+
+            .how-sign-up__card-title {
+              &::after {
+                background: var(--main-green-neon);
+              }
+            }
+
+            .how-sign-up__card-number {
+              position: absolute;
+              font-size: 40px;
+              top: auto;
+              bottom: 0;
+              right: 0;
+              margin-top: 0;
+
+              &::before {
+                width: 30px;
+                height: 58px;
+                right: 12px;
+                top: -12px;
+              }
+            }
+          }
+
+          .how-sign-up-item__text {
+            grid-column: 1/3;
+            grid-row: 2;
+            max-width: none;
+            margin-top: 10px;
+          }
+
+          .how-sign-up__card-list {
+            grid-column: 1 / -1;
+            grid-row: 3;
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            column-gap: 50px;
+            row-gap: 10px;
+
+            .how-sign-up__card-list--item {
+              gap: 12px;
+
+              &:nth-child(1) {
+                order: 1;
+              }
+
+              &:nth-child(2) {
+                order: 3;
+              }
+
+              &:nth-child(3) {
+                order: 2;
+              }
+
+              &:nth-child(4) {
+                order: 4;
+              }
+            }
+          }
+
+          .how-sign-up__card-button {
+            grid-column: 1 / -1;
+            grid-row: 4;
+            margin-top: 20px;
+            width: calc(100% - 15px);
+
+            .button__arrow {
+              @include icon(45px);
+
+              svg {
+                @include icon(27px);
+              }
+            }
+          }
+        }
+
+        &:not(.how-sign-up__card--last) {
+          .how-sign-up__card-headline {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            width: 100%;
+
+            .how-sign-up__card-headline-text {
+              max-width: 100%;
+              font-size: 22px;
+              line-height: 1.1;
+              color: var(--main-green-dark);
+            }
+
+            .how-sign-up__card-title {
+              display: inline;
+              font-size: inherit;
+              font-weight: 400;
+              line-height: inherit;
+              position: relative;
+
+              &::after {
+                content: "";
+                display: inline-block;
+                vertical-align: baseline;
+                background: var(--main-green-dark);
+                width: 10px;
+                height: 3px;
+                margin: 0 10px;
+                position: static;
+                transform: translateY(-0.15em);
+                top: auto;
+                right: auto;
+              }
+            }
+
+            .how-sign-up__card-subtitle {
+              display: inline;
+              font-size: inherit;
+              font-weight: 700;
+              line-height: inherit;
+            }
+
+            .how-sign-up__card-number {
+              flex-shrink: 0;
+              position: relative;
+              right: auto;
+              top: 9px;
+              font-size: 40px;
+
+              &::before {
+                width: 30px;
+                height: 60px;
+                right: 12px;
+                top: -12px;
+              }
             }
           }
         }
 
         .how-sign-up-item__text {
           font-size: 18px;
+          max-width: 100%;
+          margin-top: -10px;
         }
 
         .how-sign-up__card-list {
@@ -732,10 +1366,18 @@
 
           .how-sign-up__dropdown-trigger {
             padding: 12px 12px 12px 30px;
-          }
 
-          .how-sign-up__dropdown-trigger-title {
-            font-size: 18px;
+            .how-sign-up__dropdown-trigger-title {
+              font-size: 18px;
+            }
+
+            .how-sign-up__dropdown-trigger-icon {
+              @include icon(40px);
+
+              svg {
+                @include icon(24px);
+              }
+            }
           }
 
           .how-sign-up__dropdown-panel {
@@ -752,7 +1394,7 @@
     }
   }
 
-  @media screen and (max-width: $mobile-size) {
+  @media screen and (max-width: 720px) {
     padding: 20px 10px 10px;
     border-radius: 30px;
 
@@ -782,77 +1424,89 @@
       gap: 12px;
 
       .how-sign-up__card {
-        padding: 15px 10px 10px;
+        padding: 15px 20px 10px;
         border-radius: 20px;
 
         &:first-child {
+          padding: 15px 20px 10px;
+
           .how-sign-up__card-leaf.how-sign-up__card-leaf--placement-first {
             display: none;
           }
-        }
 
-        &.how-sign-up__card--last {
-          padding: 10px;
-          border-radius: 20px;
+          .how-sign-up__card-button {
+            margin: 10px -10px 0;
+            width: calc(100% + 10px);
 
-          .how-sign-up__card-image {
-            width: 100%;
-            max-width: 100%;
-            min-width: 100%;
-            height: auto;
-            max-height: 155px;
-            min-height: 155px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-          }
+            .button__arrow {
+              @include icon(36px);
 
-          .how-sign-up__card-headline {
-            position: relative;
-            width: calc(100% - 20px);
-            top: auto;
-            right: auto;
-
-            .how-sign-up__card-number {
-              margin-top: 7px;
-
-              &::before {
-                top: -7px;
+              svg {
+                @include icon(22px);
               }
             }
           }
+        }
 
-          .how-sign-up-item__text {
-            margin-top: 7px;
-          }
+        &:not(.how-sign-up__card--last) {
+          .how-sign-up__card-headline {
+            .how-sign-up__card-headline-text {
+              font-size: 18px;
+            }
 
-          .how-sign-up__card-list {
-            grid-template-columns: 1fr;
-            margin-top: 0;
-            row-gap: 5px;
+            .how-sign-up__card-number {
+              font-size: 30px;
+
+              &::before {
+                width: 32px;
+                height: 46px;
+                right: 6px;
+                top: -10px;
+              }
+            }
           }
         }
 
         .how-sign-up__card-headline {
-          position: relative;
-          flex-direction: column;
+          display: flex;
           align-items: flex-start;
-          gap: 0;
+          justify-content: space-between;
+          gap: 10px;
+          position: relative;
           margin-top: 0;
-          margin-left: 10px;
+          width: calc(100% - 10px);
+
+          .how-sign-up__card-headline-text {
+            display: flex;
+            flex-direction: column;
+            font-size: 18px;
+            line-height: 1.1;
+            color: var(--main-green-dark);
+          }
 
           .how-sign-up__card-title {
-            font-size: 18px;
+            display: inline;
+            font-size: inherit;
+            font-weight: 400;
+            line-height: inherit;
 
             &::after {
-              display: none;
+              content: none !important;
             }
           }
 
           .how-sign-up__card-subtitle {
-            font-size: 18px;
+            display: inline;
+            font-size: inherit;
+            font-weight: 700;
+            line-height: inherit;
           }
 
           .how-sign-up__card-number {
+            flex-shrink: 0;
+            position: relative;
+            right: auto;
+            top: auto;
             font-size: 30px;
             margin-top: 2px;
 
@@ -867,13 +1521,12 @@
 
         .how-sign-up-item__text {
           font-size: 14px;
-          margin-left: 10px;
+          margin-top: 0px;
         }
 
         .how-sign-up__card-list {
           gap: 5px;
           margin-top: 10px;
-          margin-left: 10px;
 
           .how-sign-up__card-list--item {
             .how-sign-up__card-list--item-icon {
@@ -892,10 +1545,139 @@
         }
 
         .how-sign-up__card-dropdown {
-          margin-top: 10px;
+          margin: 10px -10px 0;
+          width: calc(100% + 20px);
 
           .how-sign-up__dropdown-trigger {
             padding: 7px 7px 7px 20px;
+
+            .how-sign-up__dropdown-trigger-title {
+              font-size: 16px;
+            }
+          }
+
+          .how-sign-up__dropdown-panel {
+            .how-sign-up__dropdown-panel-inner {
+              padding: 20px;
+            }
+          }
+        }
+
+        &.how-sign-up__card--last {
+          display: flex;
+          flex-direction: column;
+          padding: 10px;
+          border-radius: 28px;
+          background: var(--secondary-light-10);
+
+          .how-sign-up__card-leaf.how-sign-up__card-leaf--placement-last {
+            display: none;
+          }
+
+          .how-sign-up__card-image {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            min-width: 100%;
+            height: auto;
+            max-height: 155px;
+            min-height: 155px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+          }
+
+          .how-sign-up__card-headline {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            position: relative;
+            width: 100%;
+            padding-right: 10px;
+            padding-left: 10px;
+            margin-top: 0;
+
+            .how-sign-up__card-headline-text {
+              max-width: calc(100% - 50px);
+              font-size: 18px;
+              line-height: 1.1;
+              color: var(--main-green-neon);
+            }
+
+            .how-sign-up__card-title {
+              color: var(--main-green-neon);
+
+              &::after {
+                background: var(--main-green-neon);
+              }
+            }
+
+            .how-sign-up__card-subtitle {
+              color: var(--main-green-neon);
+            }
+
+            .how-sign-up__card-number {
+              position: relative;
+              flex-shrink: 0;
+              top: auto;
+              right: auto;
+              bottom: auto;
+              font-size: 30px;
+              margin-top: 2px;
+              color: var(--main-light);
+
+              &::before {
+                width: 32px;
+                height: 46px;
+                right: 6px;
+                top: -7px;
+                background: var(--main-orange);
+              }
+            }
+          }
+
+          .how-sign-up-item__text {
+            color: var(--main-light);
+            font-size: 14px;
+            margin-top: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+          }
+
+          .how-sign-up__card-list {
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+            gap: 5px;
+
+            .how-sign-up__card-list--item {
+              &:nth-child(1),
+              &:nth-child(2),
+              &:nth-child(3),
+              &:nth-child(4) {
+                order: unset;
+              }
+
+              .how-sign-up__card-list--item-text {
+                color: var(--main-light);
+              }
+            }
+          }
+
+          .how-sign-up__card-button {
+            margin-top: 15px;
+            width: calc(100% - 10px);
+
+            .button__arrow {
+              @include icon(36px);
+
+              svg {
+                @include icon(22px);
+              }
+            }
           }
         }
       }

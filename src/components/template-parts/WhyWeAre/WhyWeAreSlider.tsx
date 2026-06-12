@@ -4,16 +4,18 @@ import classNames from "classnames";
 import { CSSProperties, FC, useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import WhyWeAreReviewCard from "./WhyWeAreReviewCard";
+import WhyWeAreReviewHeightProbe from "./WhyWeAreReviewHeightProbe";
 import {
   buildReviewMetrics,
   getNextReviewTransitionLayouts,
   getPrevReviewTransitionLayouts,
   getReviewSlotLayout,
+  pickReviewMetricsBase,
   REVIEW_ACTIVE_SLOT,
   REVIEW_CAROUSEL_HEIGHT,
-  REVIEW_SLIDE_METRICS_1440,
   REVIEW_SLIDE_METRICS_1920,
   REVIEWS_SLIDE_TRANSITION_MS,
+  type ReviewItem,
   type ReviewSlideMetrics,
   type WhyWeAreSliderSlide,
 } from "./whyWeAreSlideMetrics";
@@ -22,87 +24,70 @@ export type WhyWeAreSliderTransition = "next" | "prev";
 
 export type WhyWeAreSliderProps = {
   slides: WhyWeAreSliderSlide[];
+  allItems: ReviewItem[];
   transition: WhyWeAreSliderTransition | null;
   transitionId: number;
   withEnterSlide?: boolean;
-  activeHeights: Record<string, number>;
   onSlideClick: (slot: number) => void;
   onSwipeNext: () => void;
   onSwipePrev: () => void;
   onTransitionEnd: () => void;
-  onMeasureActiveHeight: (itemId: string, height: number) => void;
 };
 
 const SWIPE_THRESHOLD_PX = 48;
+const SWIPE_ACTIVATION_PX = 8;
 
 const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
   slides,
+  allItems,
   transition,
   transitionId,
   withEnterSlide = false,
-  activeHeights,
   onSlideClick,
   onSwipeNext,
   onSwipePrev,
   onTransitionEnd,
-  onMeasureActiveHeight,
 }) => {
   const [metrics, setMetrics] = useState<ReviewSlideMetrics>(() =>
     buildReviewMetrics(REVIEW_SLIDE_METRICS_1920, 1920)
   );
-  const [animPhase, setAnimPhase] = useState<"idle" | "start" | "run">("idle");
+  const [carouselHeight, setCarouselHeight] = useState(REVIEW_CAROUSEL_HEIGHT);
+  const [runTransitionId, setRunTransitionId] = useState(0);
   const pointerStartXRef = useRef<number | null>(null);
   const pointerIdRef = useRef<number | null>(null);
+  const pointerCapturedRef = useRef(false);
   const sliderRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+
+  const onMaxHeightChange = useCallback((height: number) => {
+    setCarouselHeight((prev) => (prev === height ? prev : height));
+  }, []);
 
   useLayoutEffect(() => {
     const sliderEl = sliderRef.current;
     if (!sliderEl) return;
 
-    const mq = window.matchMedia("(max-width: 1440px)");
-
     const sync = () => {
-      const base = mq.matches ? REVIEW_SLIDE_METRICS_1440 : REVIEW_SLIDE_METRICS_1920;
       const viewportWidth = window.innerWidth;
-      setMetrics(buildReviewMetrics(base, viewportWidth));
+      setMetrics(buildReviewMetrics(pickReviewMetricsBase(viewportWidth), viewportWidth));
     };
 
     sync();
 
     const resizeObserver = new ResizeObserver(sync);
     resizeObserver.observe(sliderEl);
-    mq.addEventListener("change", sync);
+    window.addEventListener("resize", sync);
 
     return () => {
       resizeObserver.disconnect();
-      mq.removeEventListener("change", sync);
+      window.removeEventListener("resize", sync);
     };
   }, []);
 
   useLayoutEffect(() => {
-    if (transition) return;
-
-    const activeSlide = slides[REVIEW_ACTIVE_SLOT];
-    if (!activeSlide) return;
-
-    const el = itemRefs.current.get(activeSlide.key);
-    if (!el) return;
-
-    const height = Math.round(el.getBoundingClientRect().height);
-    if (height > 0) {
-      onMeasureActiveHeight(activeSlide.item.id, height);
-    }
-  }, [slides, transition, onMeasureActiveHeight]);
-
-  useLayoutEffect(() => {
     if (!transition || transitionId === 0) {
-      queueMicrotask(() => setAnimPhase("idle"));
       return;
     }
-
-    queueMicrotask(() => setAnimPhase("start"));
 
     let raf2 = 0;
     const raf1 = requestAnimationFrame(() => {
@@ -111,7 +96,7 @@ const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
       }
 
       raf2 = requestAnimationFrame(() => {
-        setAnimPhase("run");
+        setRunTransitionId(transitionId);
       });
     });
 
@@ -128,6 +113,9 @@ const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
     };
   }, [transition, transitionId, onTransitionEnd]);
 
+  const animPhase: "idle" | "start" | "run" =
+    !transition || transitionId === 0 ? "idle" : runTransitionId === transitionId ? "run" : "start";
+
   const incomingActiveSlot = useMemo(() => {
     if (slides.length === 2) return 0;
     if (transition === "next") return 2;
@@ -137,15 +125,13 @@ const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
 
   const getSlideHeight = useCallback(
     (slot: number, isActiveVisual: boolean) => {
-      const slideItem = slides[slot]?.item;
-
       if (isActiveVisual) {
-        return REVIEW_CAROUSEL_HEIGHT;
+        return carouselHeight;
       }
 
       return metrics.inactiveH;
     },
-    [metrics.inactiveH]
+    [carouselHeight, metrics.inactiveH]
   );
 
   const getSlideStyle = useCallback(
@@ -153,13 +139,12 @@ const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
       if (transition) {
         const layouts =
           transition === "next"
-            ? getNextReviewTransitionLayouts(slot, slides.length, metrics, activeHeights, slides)
+            ? getNextReviewTransitionLayouts(slot, slides.length, metrics, carouselHeight)
             : getPrevReviewTransitionLayouts(
                 slot,
                 slides.length,
                 metrics,
-                activeHeights,
-                slides,
+                carouselHeight,
                 withEnterSlide
               );
 
@@ -198,12 +183,12 @@ const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
       };
     },
     [
-      activeHeights,
       animPhase,
+      carouselHeight,
       getSlideHeight,
       incomingActiveSlot,
       metrics,
-      slides,
+      slides.length,
       transition,
       withEnterSlide,
     ]
@@ -273,10 +258,20 @@ const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
 
       pointerStartXRef.current = event.clientX;
       pointerIdRef.current = event.pointerId;
-      event.currentTarget.setPointerCapture(event.pointerId);
+      pointerCapturedRef.current = false;
     },
     [transition]
   );
+
+  const onPointerMove = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+    if (pointerStartXRef.current == null || pointerIdRef.current !== event.pointerId) return;
+
+    const deltaX = event.clientX - pointerStartXRef.current;
+    if (!pointerCapturedRef.current && Math.abs(deltaX) >= SWIPE_ACTIVATION_PX) {
+      pointerCapturedRef.current = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
+  }, []);
 
   const onPointerUp = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
@@ -289,6 +284,8 @@ const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
       if (event.currentTarget.hasPointerCapture(event.pointerId)) {
         event.currentTarget.releasePointerCapture(event.pointerId);
       }
+
+      pointerCapturedRef.current = false;
 
       if (Math.abs(deltaX) < SWIPE_THRESHOLD_PX) return;
 
@@ -305,6 +302,7 @@ const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
     if (pointerIdRef.current === event.pointerId) {
       pointerStartXRef.current = null;
       pointerIdRef.current = null;
+      pointerCapturedRef.current = false;
     }
   }, []);
 
@@ -314,8 +312,9 @@ const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
       className={classNames("home-page__why-we-are-slider", {
         "home-page__why-we-are-slider--animating": isAnimating,
       })}
-      style={{ height: REVIEW_CAROUSEL_HEIGHT }}
+      style={{ height: carouselHeight }}
       onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerCancel}
     >
@@ -324,10 +323,15 @@ const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
         className="home-page__why-we-are-slider__track"
         style={{
           position: "relative",
-          height: REVIEW_CAROUSEL_HEIGHT,
+          height: carouselHeight,
           width: trackBounds.width,
         }}
       >
+        <WhyWeAreReviewHeightProbe
+          items={allItems}
+          activeWidth={metrics.activeW}
+          onMaxHeightChange={onMaxHeightChange}
+        />
         {slides.map(({ item, key }, slot) => {
           const isOutgoing = isOutgoingActive(slot);
           const isIncoming = isIncomingActive(slot);
@@ -353,17 +357,7 @@ const WhyWeAreSlider: FC<WhyWeAreSliderProps> = ({
               tabIndex={isAnimating ? -1 : 0}
               aria-current={isIncoming ? "true" : undefined}
             >
-              <WhyWeAreReviewCard
-                item={item}
-                cardKey={key}
-                ref={(node) => {
-                  if (node) {
-                    itemRefs.current.set(key, node);
-                  } else {
-                    itemRefs.current.delete(key);
-                  }
-                }}
-              />
+              <WhyWeAreReviewCard item={item} cardKey={key} />
             </div>
           );
         })}

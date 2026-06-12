@@ -42,6 +42,7 @@ export type TutorsSliderProps = {
 };
 
 const SWIPE_THRESHOLD_PX = 48;
+const SWIPE_ACTIVATION_PX = 8;
 
 const TutorsSlider: FC<TutorsSliderProps> = ({
   slides,
@@ -54,9 +55,10 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
   onTransitionEnd,
 }) => {
   const [metrics, setMetrics] = useState<TutorSlideMetrics>(TUTOR_SLIDE_METRICS_1920);
-  const [animPhase, setAnimPhase] = useState<"idle" | "start" | "run">("idle");
+  const [runTransitionId, setRunTransitionId] = useState(0);
   const pointerStartXRef = useRef<number | null>(null);
   const pointerIdRef = useRef<number | null>(null);
+  const pointerCapturedRef = useRef(false);
   const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -69,11 +71,8 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
 
   useLayoutEffect(() => {
     if (!transition || transitionId === 0) {
-      setAnimPhase("idle");
       return;
     }
-
-    setAnimPhase("start");
 
     let raf2 = 0;
     const raf1 = requestAnimationFrame(() => {
@@ -82,7 +81,7 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
       }
 
       raf2 = requestAnimationFrame(() => {
-        setAnimPhase("run");
+        setRunTransitionId(transitionId);
       });
     });
 
@@ -98,6 +97,13 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
       window.clearTimeout(timerId);
     };
   }, [transition, transitionId, onTransitionEnd]);
+
+  const animPhase: "idle" | "start" | "run" =
+    !transition || transitionId === 0
+      ? "idle"
+      : runTransitionId === transitionId
+        ? "run"
+        : "start";
 
   const incomingActiveSlot = useMemo(() => {
     if (slides.length === 2) return 0;
@@ -187,10 +193,20 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
 
       pointerStartXRef.current = event.clientX;
       pointerIdRef.current = event.pointerId;
-      event.currentTarget.setPointerCapture(event.pointerId);
+      pointerCapturedRef.current = false;
     },
     [transition]
   );
+
+  const onPointerMove = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+    if (pointerStartXRef.current == null || pointerIdRef.current !== event.pointerId) return;
+
+    const deltaX = event.clientX - pointerStartXRef.current;
+    if (!pointerCapturedRef.current && Math.abs(deltaX) >= SWIPE_ACTIVATION_PX) {
+      pointerCapturedRef.current = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
+  }, []);
 
   const onPointerUp = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
@@ -203,6 +219,7 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
       if (event.currentTarget.hasPointerCapture(event.pointerId)) {
         event.currentTarget.releasePointerCapture(event.pointerId);
       }
+      pointerCapturedRef.current = false;
 
       if (Math.abs(deltaX) < SWIPE_THRESHOLD_PX) return;
 
@@ -219,6 +236,7 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
     if (pointerIdRef.current === event.pointerId) {
       pointerStartXRef.current = null;
       pointerIdRef.current = null;
+      pointerCapturedRef.current = false;
     }
   }, []);
 
@@ -263,6 +281,7 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
       })}
       style={{ minHeight: trackMinHeight }}
       onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerCancel}
     >
