@@ -42,6 +42,9 @@
       }
     }
 
+    @media screen and (max-width: $small-landscape-tablet-size) {
+    }
+
     @media screen and (max-width: $tablet-size) {
       .footer__row {
         margin-bottom: 50px;
@@ -85,6 +88,12 @@
       right: 20px;
     }
 
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      width: 150px;
+      top: -105px;
+      right: 10px;
+    }
+
     @media screen and (max-width: $tablet-size) {
       width: 150px;
       top: -110px;
@@ -124,14 +133,27 @@
       gap: 100px;
     }
 
+    @media screen and (max-width: $desktop-compact) {
+      padding: 40px;
+      border-radius: 40px;
+    }
+
     @media screen and (max-width: $landscape-tablet-size) {
       padding: 30px;
       border-radius: 30px;
       gap: 60px;
     }
 
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      padding: 40px;
+      border-radius: 30px;
+      gap: 35px;
+    }
+
     @media screen and (max-width: $tablet-size) {
+      padding: 40px;
       border-radius: 50px;
+      gap: 50px;
       flex-direction: column;
     }
 
@@ -146,9 +168,18 @@
     max-width: 260px;
     margin-bottom: 50px;
 
+    @media screen and (max-width: $desktop-compact) {
+      max-width: 191px;
+    }
+
     @media screen and (max-width: $landscape-tablet-size) {
       max-width: 210px;
       margin-bottom: 30px;
+    }
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      max-width: 139px;
+      margin-bottom: 50px;
     }
 
     @media screen and (max-width: $tablet-size) {
@@ -157,6 +188,11 @@
       max-width: none;
       margin-bottom: 0;
       gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      margin-bottom: 0;
     }
   }
 
@@ -179,15 +215,29 @@
       gap: 60px;
     }
 
+    @media screen and (max-width: $desktop-compact) {
+      gap: 50px;
+    }
+
     @media screen and (max-width: $landscape-tablet-size) {
       gap: 40px;
       margin-bottom: 50px;
+    }
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      gap: 50px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      gap: 37px;
+      flex-wrap: wrap;
     }
 
     @media screen and (max-width: $mobile-size) {
       flex-direction: column;
       gap: 21px;
       margin-bottom: 30px;
+      gap: 40px;
     }
   }
 
@@ -196,9 +246,17 @@
     position: relative;
     margin-bottom: 100px;
 
+    @media screen and (max-width: $desktop-compact) {
+      margin-bottom: 70px;
+    }
+
     @media screen and (max-width: $landscape-tablet-size) {
       margin-bottom: 50px;
       padding-left: 30px;
+    }
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      margin-bottom: 40px;
     }
 
     @media screen and (max-width: $tablet-size) {
@@ -217,26 +275,39 @@
       opacity: 0.3;
       font-size: 18px;
 
+      @media screen and (max-width: $desktop-compact) {
+        font-size: 16px;
+      }
+
       @media screen and (max-width: $landscape-tablet-size) {
         font-size: 14px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        font-size: 18px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        font-size: 16px;
       }
     }
 
     &-icon {
-      width: 24px;
-      height: 24px;
+      @include icon(24px);
       position: absolute;
       top: 0;
       left: 0;
 
       svg {
-        width: 24px;
-        height: 24px;
+        @include icon(24px);
         fill: var(--main-light);
 
         @media screen and (max-width: $landscape-tablet-size) {
-          width: 20px;
-          height: 20px;
+          @include icon(20px);
+        }
+
+        @media screen and (max-width: $tablet-size) {
+          @include icon(24px);
         }
       }
     }
@@ -253,8 +324,23 @@
         white-space: wrap;
       }
 
+      @media screen and (max-width: $desktop-compact) {
+        font-size: 16px;
+        font-weight: 400;
+      }
+
       @media screen and (max-width: $landscape-tablet-size) {
         font-size: 14px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        font-size: 18px;
+        max-width: 230px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        font-size: 16px;
+        max-width: 100%;
       }
 
       a {
@@ -317,8 +403,16 @@
       padding-left: 12px;
       font-size: 14px;
 
+      @media screen and (max-width: $desktop-compact) {
+        font-size: 12px;
+      }
+
       @media screen and (max-width: $landscape-tablet-size) {
         font-size: 10px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        font-size: 14px;
       }
 
       @media screen and (max-width: $tablet-size) {
@@ -357,6 +451,7 @@
 
     @media screen and (max-width: $tablet-size) {
       gap: 100px;
+      flex-wrap: wrap;
     }
 
     @media screen and (max-width: $mobile-size) {
@@ -371,8 +466,21 @@
   &__widget {
     font-size: 18px;
 
+    @media screen and (max-width: $desktop-compact) {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
     @media screen and (max-width: $landscape-tablet-size) {
       font-size: 14px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      font-size: 18px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      font-size: 16px;
     }
 
     &-title {
@@ -395,9 +503,15 @@
         gap: 10px;
       }
 
+      @media screen and (max-width: $tablet-size) {
+        gap: 20px;
+      }
+
       @media screen and (max-width: $mobile-size) {
         flex-direction: row;
         flex-wrap: wrap;
+        row-gap: 10px;
+        column-gap: 20px;
       }
 
       li {
@@ -405,6 +519,10 @@
           font-weight: 600;
           color: var(--main-light);
           position: relative;
+
+          @media screen and (max-width: $desktop-compact) {
+            font-weight: 400;
+          }
 
           @media screen and (max-width: $mobile-size) {
             white-space: nowrap;
@@ -447,6 +565,11 @@
         padding: 30px 50px;
       }
 
+      @media screen and (max-width: $desktop-compact) {
+        flex-direction: column;
+        justify-content: center;
+      }
+
       @media screen and (max-width: $landscape-tablet-size) {
         font-size: 12px;
       }
@@ -463,6 +586,11 @@
       color: var(--bardoe);
       opacity: 0.4;
 
+      @media screen and (max-width: $desktop-compact) {
+        margin-right: 0;
+        font-size: 14px;
+      }
+
       @media screen and (max-width: $tablet-size) {
         margin-right: 0;
         font-size: 16px;
@@ -478,6 +606,7 @@
   &__left {
     @media screen and (max-width: $tablet-size) {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
     }
 
@@ -492,8 +621,18 @@
     align-items: center;
     gap: 30px;
 
+    @media screen and (max-width: $desktop-compact) {
+      gap: 20px;
+      font-size: 14px;
+    }
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      gap: 30px;
+    }
+
     @media screen and (max-width: $tablet-size) {
       font-size: 16px;
+      gap: 50px;
     }
 
     @media screen and (max-width: $mobile-size) {

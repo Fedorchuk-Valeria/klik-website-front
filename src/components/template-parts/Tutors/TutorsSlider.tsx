@@ -20,7 +20,10 @@ import {
   getNextTransitionLayouts,
   getPrevTransitionLayouts,
   getSlotLayout,
-  TUTOR_SLIDE_METRICS_1440,
+  getTutorMetricsPreset,
+  resolveTutorSlideMetrics,
+  TUTOR_COMPACT_BREAKPOINT,
+  TUTOR_DESKTOP_BREAKPOINT,
   TUTOR_SLIDE_METRICS_1920,
   TUTORS_SLIDE_TRANSITION_MS,
   type TutorSlideMetrics,
@@ -42,6 +45,7 @@ export type TutorsSliderProps = {
 };
 
 const SWIPE_THRESHOLD_PX = 48;
+const SWIPE_ACTIVATION_PX = 8;
 
 const TutorsSlider: FC<TutorsSliderProps> = ({
   slides,
@@ -54,26 +58,53 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
   onTransitionEnd,
 }) => {
   const [metrics, setMetrics] = useState<TutorSlideMetrics>(TUTOR_SLIDE_METRICS_1920);
-  const [animPhase, setAnimPhase] = useState<"idle" | "start" | "run">("idle");
+  const [runTransitionId, setRunTransitionId] = useState(0);
   const pointerStartXRef = useRef<number | null>(null);
   const pointerIdRef = useRef<number | null>(null);
+  const pointerCapturedRef = useRef(false);
+  const sliderRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
+  const stableSlotCount = useMemo(() => {
+    if (transition === "prev" && withEnterSlide && slides.length > 2) {
+      return slides.length - 1;
+    }
+
+    return slides.length;
+  }, [slides.length, transition, withEnterSlide]);
+
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 1440px)");
-    const sync = () => setMetrics(mq.matches ? TUTOR_SLIDE_METRICS_1440 : TUTOR_SLIDE_METRICS_1920);
+    const el = sliderRef.current;
+    if (!el) return;
+
+    const mq1440 = window.matchMedia(`(max-width: ${TUTOR_DESKTOP_BREAKPOINT}px)`);
+    const mq1280 = window.matchMedia(`(max-width: ${TUTOR_COMPACT_BREAKPOINT}px)`);
+
+    const sync = () => {
+      const viewportEl = el.closest<HTMLElement>(".home-page__tutors-slider-viewport") ?? el;
+      const preset = getTutorMetricsPreset(mq1280.matches, mq1440.matches);
+      setMetrics(resolveTutorSlideMetrics(viewportEl.clientWidth, stableSlotCount, preset));
+    };
+
     sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
+
+    const viewportEl = el.closest<HTMLElement>(".home-page__tutors-slider-viewport") ?? el;
+    const observer = new ResizeObserver(sync);
+    observer.observe(viewportEl);
+    mq1440.addEventListener("change", sync);
+    mq1280.addEventListener("change", sync);
+
+    return () => {
+      observer.disconnect();
+      mq1440.removeEventListener("change", sync);
+      mq1280.removeEventListener("change", sync);
+    };
+  }, [stableSlotCount]);
 
   useLayoutEffect(() => {
     if (!transition || transitionId === 0) {
-      setAnimPhase("idle");
       return;
     }
-
-    setAnimPhase("start");
 
     let raf2 = 0;
     const raf1 = requestAnimationFrame(() => {
@@ -82,7 +113,7 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
       }
 
       raf2 = requestAnimationFrame(() => {
-        setAnimPhase("run");
+        setRunTransitionId(transitionId);
       });
     });
 
@@ -98,6 +129,9 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
       window.clearTimeout(timerId);
     };
   }, [transition, transitionId, onTransitionEnd]);
+
+  const animPhase: "idle" | "start" | "run" =
+    !transition || transitionId === 0 ? "idle" : runTransitionId === transitionId ? "run" : "start";
 
   const incomingActiveSlot = useMemo(() => {
     if (slides.length === 2) return 0;
@@ -121,6 +155,7 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
           position: "absolute",
           left: layout.left,
           width: layout.width,
+          maxWidth: layout.width,
           height: layout.height,
           opacity: layout.opacity,
           bottom: 0,
@@ -137,6 +172,7 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
         position: "absolute",
         left: layout.left,
         width: layout.width,
+        maxWidth: layout.width,
         height: layout.height,
         opacity: layout.opacity,
         bottom: 0,
@@ -187,10 +223,20 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
 
       pointerStartXRef.current = event.clientX;
       pointerIdRef.current = event.pointerId;
-      event.currentTarget.setPointerCapture(event.pointerId);
+      pointerCapturedRef.current = false;
     },
     [transition]
   );
+
+  const onPointerMove = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+    if (pointerStartXRef.current == null || pointerIdRef.current !== event.pointerId) return;
+
+    const deltaX = event.clientX - pointerStartXRef.current;
+    if (!pointerCapturedRef.current && Math.abs(deltaX) >= SWIPE_ACTIVATION_PX) {
+      pointerCapturedRef.current = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
+  }, []);
 
   const onPointerUp = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
@@ -203,6 +249,7 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
       if (event.currentTarget.hasPointerCapture(event.pointerId)) {
         event.currentTarget.releasePointerCapture(event.pointerId);
       }
+      pointerCapturedRef.current = false;
 
       if (Math.abs(deltaX) < SWIPE_THRESHOLD_PX) return;
 
@@ -219,6 +266,7 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
     if (pointerIdRef.current === event.pointerId) {
       pointerStartXRef.current = null;
       pointerIdRef.current = null;
+      pointerCapturedRef.current = false;
     }
   }, []);
 
@@ -241,14 +289,6 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
     return maxH;
   }, [metrics, slides.length, transition, withEnterSlide]);
 
-  const stableSlotCount = useMemo(() => {
-    if (transition === "prev" && withEnterSlide && slides.length > 2) {
-      return slides.length - 1;
-    }
-
-    return slides.length;
-  }, [slides.length, transition, withEnterSlide]);
-
   const trackWidth = useMemo(() => {
     if (stableSlotCount <= 0) return 0;
 
@@ -258,11 +298,13 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
 
   return (
     <div
+      ref={sliderRef}
       className={classNames("home-page__tutors-slider", {
         "home-page__tutors-slider--animating": isAnimating,
       })}
       style={{ minHeight: trackMinHeight }}
       onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerCancel}
     >
@@ -322,7 +364,7 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
                     alt=""
                     width={560}
                     height={700}
-                    sizes="(max-width: 1440px) 414px, 560px"
+                    sizes="(max-width: 1280px) 452px, (max-width: 1440px) 414px, 560px"
                     draggable={false}
                   />
                 </div>

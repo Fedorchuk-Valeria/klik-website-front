@@ -222,6 +222,16 @@ const AboutUsSlider: FC<PropTypes> = ({ slides }) => {
           bulletActiveClass: "home-page__about-us-pagination-bullet--active",
         }}
         breakpoints={{
+          1439: {
+            slidesPerView: slides.length,
+            spaceBetween: 20,
+            pagination: { enabled: false },
+          },
+          799: {
+            slidesPerView: slides.length,
+            spaceBetween: 10,
+            pagination: { enabled: false },
+          },
           501: {
             slidesPerView: slides.length,
             spaceBetween: 19,

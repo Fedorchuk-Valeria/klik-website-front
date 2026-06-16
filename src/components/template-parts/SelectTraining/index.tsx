@@ -14,6 +14,7 @@ type PropTypes = {
   items?: { title: string; text: string }[];
 };
 
+// TODO adaptive 1280, 960
 const SelectTraining: FC<PropTypes> = ({ tag, title, text, items }) => {
   return (
     <section id="select-training" className="select-training">
