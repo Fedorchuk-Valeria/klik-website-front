@@ -6,12 +6,10 @@ import bannerTabletImg from "@/src/assets/images/templates/homepage/banner_table
 import Button from "@/src/components/ui/Button/Button";
 
 import AboutUs from "@/src/components/template-parts/AboutUs";
-import CookiePolicyListener from "@/src/components/template-parts/CookiePolicyListener";
 import FAQPage from "@/src/components/template-parts/FAQ";
 import Formats from "@/src/components/template-parts/Formats";
 import HowSignUp from "@/src/components/template-parts/HowSignUp";
 import Location from "@/src/components/template-parts/Location";
-import PlaceListener from "@/src/components/template-parts/PlaceListener";
 import Programs from "@/src/components/template-parts/Programs";
 import SelectTraining from "@/src/components/template-parts/SelectTraining";
 import SignUpFreeLesson from "@/src/components/template-parts/SignUpFreeLesson";
@@ -91,9 +89,6 @@ export default function Home({ page }: Props) {
       {signUpFreeLesson && <SignUpFreeLesson {...signUpFreeLesson} />}
       <Tutors {...tutors} />
       {faq && <FAQPage {...faq} />}
-
-      <CookiePolicyListener />
-      <PlaceListener />
     </main>
   );
 }

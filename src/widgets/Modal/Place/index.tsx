@@ -1,7 +1,6 @@
 "use client";
 
 import classNames from "classnames";
-import { useRouter } from "next/navigation";
 import { FC, useCallback, useMemo, useState } from "react";
 
 import Button from "@/src/components/ui/Button/Button";
@@ -20,7 +19,6 @@ type PropTypes = {
 };
 
 const WidgetModalPlace: FC<PropTypes> = ({ className, isVisible }) => {
-  const router = useRouter();
   const dispatch = useAppDispatch();
   const cities = useMemo(() => getCities(), []);
   const [city, setCity] = useState<City>(cities[0]);
@@ -28,10 +26,11 @@ const WidgetModalPlace: FC<PropTypes> = ({ className, isVisible }) => {
   const handleAccept = useCallback(() => {
     setClientCookie(PLACE_STORAGE_KEY, city.url);
 
-    router.push(city.url);
+    const target = new URL(`${window.location.pathname}${window.location.search}`, city.url);
+    window.location.assign(target.href);
 
     dispatch(hideModal());
-  }, [dispatch, city.url, router]);
+  }, [dispatch, city.url]);
 
   return (
     <Modal className={classNames("place-select-modal", className)} isVisible={isVisible}>

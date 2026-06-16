@@ -159,7 +159,7 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
                   (data?.lessons || [])?.map((lesson) => ({
                     id: lesson.id,
                     title: lesson.title,
-                    duration: `${lesson.duration_minutes} ${getTime(lesson.duration_minutes)}`,
+                    duration: getTime(lesson.duration_minutes) || "",
                     test_result: lesson.test_result,
                     status: lesson.is_completed ? "done" : lesson.is_locked ? "disabled" : "active",
                   })) ?? []

@@ -10,7 +10,7 @@ import Icon from "@/src/components/ui/Icon/Icon";
 
 import { ModalType } from "@/src/entities/common";
 import { Course } from "@/src/lib/getCourses";
-import {PAGES, PAYMENT_STATUS_FAILED, PAYMENT_STATUS_SUCCESSFULL} from "@/src/utils/constant";
+import { PAGES } from "@/src/utils/constant";
 
 import { getPlural } from "@/src/helper/getPlural";
 import { CitySettings } from "@/src/lib/getCitySettings";
@@ -124,7 +124,7 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
               id: lesson.id,
               title: lesson.title,
               test_result: lesson.test_result,
-              duration: `${lesson.duration_minutes} ${getTime(lesson.duration_minutes)}`,
+              duration: getTime(lesson.duration_minutes) || "",
               status: lesson.is_completed ? "done" : lesson.is_locked ? "disabled" : "active",
             })) ?? []
           }
