@@ -147,6 +147,10 @@
       padding: 0 40px;
     }
 
+    h1 {
+      font-size: 48px;
+    }
+
     &__h2 {
       font-size: 42px;
     }
@@ -156,8 +160,36 @@
     }
 
     &__header {
+      &-wrapper {
+        padding: 110px 40px 40px;
+        border-radius: 0 0 40px 40px;
+      }
+
       &-text {
-        font-size: 18px;
+        font-size: 20px;
+        margin-bottom: 30px;
+      }
+
+      &-button {
+        padding: 16px;
+        min-width: 314px;
+
+        .button__arrow {
+          @include icon(36px);
+          right: 5px;
+
+          svg {
+            @include icon(22px);
+          }
+        }
+      }
+
+      .home-page__header-img-layer {
+        border-radius: 20px;
+      }
+
+      .home-page__header-img {
+        margin-top: -20px;
       }
     }
   }
@@ -214,6 +246,20 @@
     &__header {
       &-text {
         font-size: 16px;
+      }
+
+      &-button {
+        .button__arrow {
+          @include icon(32px);
+
+          svg {
+            @include icon(20px);
+          }
+        }
+      }
+
+      .home-page__header-img-layer {
+        border-radius: 10px;
       }
     }
   }

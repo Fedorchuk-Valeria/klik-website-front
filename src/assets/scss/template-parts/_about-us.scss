@@ -446,13 +446,23 @@
       .button {
         @include center;
         width: 100%;
+        padding: 16px;
+        font-size: 16px;
+
+        .button__arrow {
+          @include icon(36px);
+
+          svg {
+            @include icon(22px);
+          }
+        }
       }
     }
 
     .home-page__about-us--text-image {
       width: 100%;
       max-width: 586px;
-      height: 648px;
+      height: 590px;
     }
 
     .home-page__about-us--slider {
@@ -672,6 +682,13 @@
       }
     }
 
+    .home-page__about-us--heart {
+      bottom: -18px;
+      right: -18px;
+      width: 175px;
+      height: 193px;
+    }
+
     .home-page__about-us--tag {
       font-size: 14px;
       margin-bottom: 22px;
@@ -736,7 +753,7 @@
 
         .card-content {
           .home-page__about-us--text-image {
-            height: 926px;
+            height: 788px;
             max-width: 100%;
           }
 

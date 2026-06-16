@@ -235,7 +235,8 @@
 
   @media (hover: hover) {
     .header__menu li a:hover {
-      background: var(--main-orange-active);
+      opacity: 0.9;
+      background: var(--main-orange);
     }
   }
 
@@ -293,6 +294,45 @@
       font-size: 12px;
       max-width: 174px;
       min-width: 174px;
+    }
+  }
+
+  @media screen and (max-width: $desktop-compact) {
+    .header__wrapper {
+      border-radius: 40px;
+      padding: 30px;
+    }
+
+    .header__logo {
+      max-width: 120px;
+
+      svg {
+        width: 120px;
+      }
+    }
+
+    .city-switcher {
+      .city-switcher__icon {
+        @include icon(18px);
+      }
+
+      .city-switcher__current-btn {
+        @include icon(30px);
+
+        .city-switcher__current-icon {
+          @include icon(18px);
+        }
+      }
+    }
+
+    .socials {
+      .socials__link {
+        @include icon(40px);
+
+        svg {
+          @include icon(20px);
+        }
+      }
     }
   }
 
@@ -413,6 +453,88 @@
     }
   }
 
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    .city-switcher {
+      .city-switcher__icon {
+        @include icon(18px);
+      }
+    }
+
+    .header__wrapper {
+      padding: 20px;
+      gap: 16px;
+      border-radius: 30px;
+      width: calc(100% - 2px);
+    }
+
+    .header__right:not(.last) {
+      gap: 20px;
+    }
+
+    .socials {
+      gap: 8px;
+
+      .socials__item a {
+        @include icon(36px);
+
+        svg {
+          @include icon(18px);
+        }
+      }
+    }
+
+    .header__menu li a {
+      padding: 10px 12px;
+      font-size: 12px;
+    }
+
+    .header__user-button {
+      font-size: 16px;
+    }
+
+    .header__logout-button {
+      @include icon(36px);
+      @include center;
+      font-size: 0;
+      border-radius: 100%;
+      padding: 0;
+
+      .button__text {
+        gap: 0;
+      }
+    }
+
+    .header__cabinet-button {
+      @include icon(36px);
+      @include center;
+      font-size: 0;
+      border-radius: 100%;
+      padding: 0;
+      max-width: 36px;
+      min-width: 36px;
+
+      .header__cabinet-icon {
+        @include icon(18px);
+      }
+
+      .button__text {
+        gap: 0;
+
+        span {
+          display: none;
+        }
+      }
+    }
+
+    .header__call {
+      padding: 10px 30px;
+      font-size: 12px;
+      max-width: 127px;
+      min-width: 127px;
+      height: 36px;
+    }
+  }
+
   @media screen and (max-width: 942px) {
     .header__wrapper {
       position: relative;
@@ -507,6 +629,7 @@
     }
 
     .header__top {
+      align-items: flex-start;
       min-height: 40px;
     }
 
@@ -538,26 +661,22 @@
       }
     }
 
-    &:has(.burger.active) .header__left {
-      .header__brand {
-        flex-direction: column;
-        max-width: 150px;
-        align-items: flex-start;
-      }
+    .header__brand {
+      flex-direction: column;
+      align-items: flex-start;
+      max-width: 150px;
+    }
 
+    .header__logo-text {
+      display: none;
+    }
+
+    &:has(.burger.active) .header__left {
       .header__logo-text {
         display: flex;
         margin-right: -40px;
         font-size: 14px;
       }
-    }
-
-    .header__brand {
-      flex-direction: column;
-    }
-
-    .header__logo-text {
-      display: none;
     }
 
     .header__auth {
