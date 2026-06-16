@@ -5,6 +5,8 @@ export enum ModalType {
   SUCCESSFULLY = "successfully",
   PAYMENT = "payment",
   PAYMENT_STATUS = "payment_status",
+  CREATE_CHILDREN = "create_children",
+  PAYMENT_CHILDREN = "payment_children",
 }
 
 export enum HttpStatus {

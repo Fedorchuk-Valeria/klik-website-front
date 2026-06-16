@@ -1,0 +1,75 @@
+.modal-children {
+
+  .modal__title {
+    text-align: left;
+    margin-bottom: 50px;
+    font-size: 24px;
+    width: 100%;
+
+    @media screen and (max-width: $desktop) {
+      margin-bottom: 30px;
+    }
+  }
+
+  dialog {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    padding: 100px;
+    width: 900px;
+    overflow-x: hidden;
+    background-color: var(--main-blue);
+    border: none;
+
+    @media screen and (max-width: $desktop) {
+      padding: 50px;
+      width: 800px;
+      border-radius: 40px;
+    }
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      padding: 40px;
+      width: 580px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      width: 720px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      width: 370px;
+      padding: 30px;
+      border-radius: 30px;
+    }
+  }
+
+  &__body {
+    width: 100%;
+    font-size: 18px;
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    a {
+      color: var(--main-orange);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .page-profile__row-form {
+    &.landscape {
+      flex-direction: row;
+
+      @media screen and (max-width: $mobile-size) {
+        flex-direction: column;
+      }
+    }
+  }
+}
