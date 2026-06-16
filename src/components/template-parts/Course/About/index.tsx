@@ -9,6 +9,7 @@ import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 
 import { CourseCategory } from "@/src/lib/getCourses";
+import {useAuth} from "@/src/utils/useAuth";
 
 type PropTypes = {
   title: string;
@@ -32,8 +33,16 @@ const CourseAbout: FC<PropTypes> = ({
   onPayment,
 }) => {
   const router = useRouter();
+  const { isAuthenticated, isMounted } = useAuth();
 
   const handleClick = () => {
+    if (!isMounted) return;
+
+    if (!isAuthenticated) {
+      router.push(PAGES.LOGIN);
+      return;
+    }
+
     if (isPayment) {
       router.push(
         PAGES.COURSES +
