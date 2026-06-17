@@ -14,7 +14,7 @@ import TextInput from "@/src/components/ui/TextInput";
 
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import { clearRegister, registerRequest } from "@/src/store/slices/auth";
+import { clearErrors, clearRegister, registerRequest } from "@/src/store/slices/auth";
 import { PAGES, PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
 
 const RegisterForm = () => {
@@ -45,6 +45,7 @@ const RegisterForm = () => {
   });
 
   const handleChangeTab = (tab: string) => {
+    dispatch(clearErrors());
     router.push(tab);
   };
 
@@ -81,6 +82,12 @@ const RegisterForm = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errors]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearErrors());
+    };
+  }, [dispatch]);
 
   return (
     <div className="login-page__form-content">
