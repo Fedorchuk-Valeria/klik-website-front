@@ -8,7 +8,7 @@
   }
 
   @media screen and (max-width: $landscape-tablet-size) {
-    gap: 10px;
+    gap: 12px;
   }
 
   @media screen and (max-width: $small-landscape-tablet-size) {
@@ -28,7 +28,7 @@
     @include icon(50px);
     border-radius: 100%;
     border: 1px solid var(--main-light);
-    background-color: var(--secondary-light-30);
+    background-color: var(--secondary-light-10);
     transition: 0.3s all;
     overflow: hidden;
 
@@ -36,7 +36,7 @@
       @include icon(40px);
     }
 
-    @media screen and (max-width: $small-landscape-tablet-size) {
+    @media screen and (max-width: $landscape-tablet-size) {
       @include icon(36px);
     }
 
@@ -56,7 +56,7 @@
         @include icon(20px);
       }
 
-      @media screen and (max-width: $small-landscape-tablet-size) {
+      @media screen and (max-width: $landscape-tablet-size) {
         @include icon(18px);
       }
 
