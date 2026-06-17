@@ -27,6 +27,7 @@ import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import Loader from "@/src/components/ui/Loader/Loader";
 import Select from "@/src/components/ui/Select";
+
 import { MAX_AGE } from "@/src/store/sagas/auth.saga";
 
 type Props = {

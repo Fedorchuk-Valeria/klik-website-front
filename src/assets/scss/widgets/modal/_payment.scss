@@ -134,6 +134,10 @@
       font-size: 12px;
       left: 5px;
     }
+
+    @media screen and (max-width: 370px) {
+      bottom: -30px;
+    }
   }
 
   &__btn {

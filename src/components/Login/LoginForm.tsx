@@ -45,7 +45,7 @@ const LoginForm = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    void form.setFieldValue(name, value, true);
+    void form.setFieldValue(name, value);
   };
 
   useEffect(() => {
@@ -97,6 +97,7 @@ const LoginForm = () => {
           variant="outline"
           placeholder="********"
           disabled={isLoading}
+          maxLength={64}
         />
 
         <Button

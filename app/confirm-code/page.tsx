@@ -12,6 +12,7 @@ import CodeInput from "@/src/components/ui/CodeInput";
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { resendCodeRequest, verifyCodeRequest } from "@/src/store/slices/auth";
+
 import { PAGES, QUERY_PARAMS, TOKEN_KEY } from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
 
@@ -45,7 +46,7 @@ const ConfirmCodeContent = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    void form.setFieldValue(name, value, true);
+    void form.setFieldValue(name, value);
   };
 
   const handleResendCode = (event: React.MouseEvent<HTMLAnchorElement>) => {

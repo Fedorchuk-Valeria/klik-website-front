@@ -3,7 +3,7 @@
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FC, useCallback, useMemo } from "react";
+import { FC, useCallback, useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 
 import { getTime } from "@/src/components/Pages/CoursePage";
@@ -31,12 +31,16 @@ type PropTypes = {
   data: Lesson | null;
 };
 
-// TODO tests
-// TODO download homework and materials
 const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { isTestLoading, test, result, review } = useAppSelector((state) => state.lesson);
+  const {
+    isTestLoading,
+    test,
+    result,
+    review,
+    data: lessonData,
+  } = useAppSelector((state) => state.lesson);
 
   const nextLesson = useMemo(() => {
     if (!data?.lessons?.length) return null;
@@ -116,6 +120,12 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
     [id, lessonId, dispatch]
   );
 
+  useEffect(() => {
+    return () => {
+      dispatch(clearTestResult());
+    };
+  }, [dispatch]);
+
   return (
     <div className="lesson-page">
       <div className="lesson-page__container">
@@ -161,7 +171,15 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
                     title: lesson.title,
                     duration: getTime(lesson.duration_minutes) || "",
                     test_result: lesson.test_result,
-                    status: lesson.is_completed ? "done" : lesson.is_locked ? "disabled" : "active",
+                    status: lesson.is_completed
+                      ? "done"
+                      : lesson.is_locked
+                        ? result?.total_questions && nextLesson?.id === lesson.id
+                          ? "active"
+                          : "disabled"
+                        : result?.total_questions
+                          ? "done"
+                          : "active",
                   })) ?? []
                 }
               />

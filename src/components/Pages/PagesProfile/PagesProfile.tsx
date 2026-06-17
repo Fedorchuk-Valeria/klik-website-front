@@ -8,12 +8,13 @@ import avatar from "@/src/assets/images/view/profile/avatar.png";
 
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { profileRequest } from "@/src/store/slices/auth";
-import { PAGES } from "@/src/utils/constant";
+import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 
 import Icon from "@/src/components/ui/Icon/Icon";
 import Loader from "@/src/components/ui/Loader/Loader";
 import PhoneInput from "@/src/components/ui/PhoneInput";
 import TextInput from "@/src/components/ui/TextInput";
+import { QueryHelper } from "@/src/utils/helpers";
 
 const PagesProfile = () => {
   const dispatch = useAppDispatch();
@@ -54,7 +55,15 @@ const PagesProfile = () => {
             </div>
           </div>
           <div className="page-profile__list">
-            <Link className="page-profile__link" href={PAGES.COURSES}>
+            <Link
+              className="page-profile__link"
+              href={
+                PAGES.COURSES +
+                QueryHelper.getQueryString({
+                  [QUERY_PARAMS.SCOPE]: "my",
+                })
+              }
+            >
               Мои курсы
               <span>
                 <Icon className="page-profile__link-icon" name="arrow" />
