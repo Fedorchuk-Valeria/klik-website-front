@@ -1,6 +1,5 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { FC, useEffect, useMemo } from "react";
 
 import CourseAbout from "@/src/components/template-parts/Course/About";
@@ -25,7 +24,6 @@ type PropTypes = {
 
 const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
   const dispatch = useAppDispatch();
-  const searchParams = useSearchParams();
 
   if (errors) {
     console.error(errors);
@@ -35,18 +33,18 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
     () => [
       {
         id: 1,
-        title: data?.lessons_count,
+        title: data.lessons_count,
         icon: "player",
-        description: getLessons(data?.lessons_count ?? 0),
+        description: getLessons(data?.lessons_count ?? 0).split(" ")[1] || "",
       },
       {
         id: 2,
         icon: "clock",
-        title: `${getMonths(data.duration_months)}`,
+        title: `${getMonths(data?.duration_months)}`,
         description: "длительность",
       },
     ],
-    [data?.lessons_count, data.duration_months]
+    [data.lessons_count, data.duration_months]
   );
 
   const handlePayment = () => {

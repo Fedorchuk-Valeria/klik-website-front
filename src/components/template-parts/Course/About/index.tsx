@@ -9,7 +9,7 @@ import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 
 import { CourseCategory } from "@/src/lib/getCourses";
-import {useAuth} from "@/src/utils/useAuth";
+import { useAuth } from "@/src/utils/useAuth";
 
 type PropTypes = {
   title: string;
@@ -84,7 +84,7 @@ const CourseAbout: FC<PropTypes> = ({
         <p className="course-about__info-description">{description}</p>
 
         <p className="course-about__info-price">
-          <span>{price}</span>
+          <span>{price?.toLocaleString("ru-RU")}</span>
           <Icon name="ruble" />
         </p>
 

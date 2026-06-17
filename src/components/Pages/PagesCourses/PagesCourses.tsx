@@ -28,6 +28,7 @@ import Icon from "@/src/components/ui/Icon/Icon";
 import Loader from "@/src/components/ui/Loader/Loader";
 import Select from "@/src/components/ui/Select";
 
+import { getPlural } from "@/src/helper/getPlural";
 import { MAX_AGE } from "@/src/store/sagas/auth.saga";
 
 type Props = {
@@ -88,6 +89,8 @@ const PagesCourses = ({
   const courses = useMemo(() => {
     return hasRequested ? data : initialCourses;
   }, [data, hasRequested, initialCourses]);
+
+  console.log(courses);
 
   const hasMore = activeMeta.page < activeMeta.total_pages;
 
@@ -405,7 +408,8 @@ const PagesCourses = ({
                 <p className="courses-list__item-description">{item.description}</p>
 
                 <span className="courses-list__item-duration">
-                  <Icon name="clock" /> {item.duration_months} месяцев
+                  <Icon name="clock" /> {item.duration_months}{" "}
+                  {getPlural(item.duration_months, ["месяц", "месяца", "месяцев"])}
                 </span>
 
                 <p className="courses-list__item-price">
