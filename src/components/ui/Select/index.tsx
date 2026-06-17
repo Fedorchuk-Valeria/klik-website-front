@@ -52,7 +52,6 @@ const SelectView: FC<SelectViewPropTypes> = ({
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isOpen, setOpen] = useState(false);
-  const [openCount, setOpenCount] = useState(0);
   const dropdownKey = dropdownOptions.map((item) => item.id).join("|");
 
   const handleClose = () => {
@@ -60,13 +59,7 @@ const SelectView: FC<SelectViewPropTypes> = ({
   };
 
   const toggleDropdown = () => {
-    setOpen((prev) => {
-      if (!prev) {
-        setOpenCount((count) => count + 1);
-      }
-
-      return !prev;
-    });
+    setOpen((prev) => !prev);
   };
 
   useClickOutside(ref, handleClose);
@@ -96,29 +89,36 @@ const SelectView: FC<SelectViewPropTypes> = ({
         </span>
       </button>
 
-      {isOpen && (
-        <ul key={`${openCount}-${dropdownKey}`} className="select__dropdown">
-          {dropdownOptions.map((item, index) => {
-            return (
-              <li
-                onClick={() => {
-                  onOptionSelect(item, index);
+      <div
+        className={classNames("select__dropdown-wrap", {
+          "select__dropdown-wrap--open": isOpen,
+        })}
+        aria-hidden={!isOpen}
+      >
+        <div className="select__dropdown-inner">
+          <ul key={dropdownKey} className="select__dropdown">
+            {dropdownOptions.map((item, index) => {
+              return (
+                <li
+                  onClick={() => {
+                    onOptionSelect(item, index);
 
-                  if (closeOnSelect) {
-                    setOpen(false);
-                  }
-                }}
-                className={classNames("select__item", {
-                  "select__item--active": isOptionActive(item, index),
-                })}
-                key={item.id}
-              >
-                {item.name}
-              </li>
-            );
-          })}
-        </ul>
-      )}
+                    if (closeOnSelect) {
+                      setOpen(false);
+                    }
+                  }}
+                  className={classNames("select__item", {
+                    "select__item--active": isOptionActive(item, index),
+                  })}
+                  key={item.id}
+                >
+                  {item.name}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };

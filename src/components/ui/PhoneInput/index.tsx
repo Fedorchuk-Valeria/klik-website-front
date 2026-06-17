@@ -134,6 +134,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     emitMasked(nextDigits, el);
 
     const newMasked = formatMaskedPhone(nextDigits);
+    const renderedValue = resolveDisplayValue(nextDigits, focused);
     const newPositions = nationalDigitPositions(newMasked, nextDigits);
 
     let caret: number;
@@ -147,7 +148,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     }
 
     requestAnimationFrame(() => {
-      const c = Math.min(Math.max(0, caret), newMasked.length);
+      const c = Math.min(Math.max(0, caret), renderedValue.length);
       el?.setSelectionRange(c, c);
     });
   };

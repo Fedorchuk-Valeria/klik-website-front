@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 
 import ArrowSVG from "@/src/assets/images/view/contacts/arrow.svg";
 import image from "@/src/assets/images/view/contacts/boy.jpg";
@@ -8,6 +7,8 @@ import LineSVG from "@/src/assets/images/view/contacts/line.svg";
 import LayoutPlatform from "@/src/components/Layouts/LayoutPlatform";
 import Breadcrumb from "@/src/components/ui/Breadcrumb/Breadcrumb";
 import Icon from "@/src/components/ui/Icon/Icon";
+
+const PUBLIC_CONTRACT_URL = "/files/public-contract.pdf";
 
 const ContactsPage = () => {
   const info = [
@@ -136,17 +137,16 @@ const ContactsPage = () => {
             </div>
 
             <div className="contacts-view__payment-button">
-              <Link
-                download
-                href={"https://placehold.co/600x400"}
+              <a
+                href={PUBLIC_CONTRACT_URL}
+                download="public-contract.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={"contacts-view__payment-button--download"}
+                className="contacts-view__payment-button--download"
+                aria-label="Скачать публичный договор"
               >
-                <button>
-                  <Icon name="pdf" />
-                </button>
-              </Link>
+                <Icon name="pdf" />
+              </a>
 
               <p>Публичный договор (файл PDF)</p>
             </div>

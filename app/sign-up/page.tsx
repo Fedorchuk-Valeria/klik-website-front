@@ -8,6 +8,7 @@ import { registerValidationSchema } from "@/src/components/Login/validationSchem
 import Button from "@/src/components/ui/Button/Button";
 import PasswordInput from "@/src/components/ui/PasswordInput";
 import PhoneInput from "@/src/components/ui/PhoneInput";
+import PopoverPassword from "@/src/components/ui/Popovers/PopoverPassword";
 import Tabs from "@/src/components/ui/Tabs";
 import TextInput from "@/src/components/ui/TextInput";
 
@@ -15,7 +16,6 @@ import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { clearRegister, registerRequest } from "@/src/store/slices/auth";
 import { PAGES, PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
-import PopoverPassword from "@/src/components/ui/Popovers/PopoverPassword";
 
 const RegisterForm = () => {
   const dispatch = useAppDispatch();
@@ -50,7 +50,7 @@ const RegisterForm = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    void form.setFieldValue(name, value, true);
+    void form.setFieldValue(name, value);
   };
 
   const handleBlur = (name: keyof typeof form.values) => {
@@ -61,7 +61,7 @@ const RegisterForm = () => {
     const { name, value } = e.target;
     const filtered = value.replace(PASSWORD_INPUT_STRIP_REGEX, "");
 
-    void form.setFieldValue(name, filtered, true);
+    void form.setFieldValue(name, filtered);
   };
 
   useEffect(() => {
@@ -79,7 +79,8 @@ const RegisterForm = () => {
       form.setFieldError("password", errors.password);
       form.setFieldError("confirmPassword", errors.confirm_password);
     }
-  }, [errors, form]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errors]);
 
   return (
     <div className="login-page__form-content">
@@ -118,6 +119,7 @@ const RegisterForm = () => {
           className="login-page__form-input"
           onBlur={() => handleBlur("name")}
           disabled={isLoading}
+          maxLength={100}
         />
 
         <PasswordInput
@@ -135,6 +137,7 @@ const RegisterForm = () => {
           error={form.errors.password}
           className="login-page__form-input"
           disabled={isLoading}
+          maxLength={64}
         />
 
         <PasswordInput
@@ -147,6 +150,7 @@ const RegisterForm = () => {
           variant="outline"
           placeholder="********"
           disabled={isLoading}
+          maxLength={64}
         />
 
         <Button

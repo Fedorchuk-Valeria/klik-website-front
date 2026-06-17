@@ -39,7 +39,7 @@ const ResetNewPassword = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    void form.setFieldValue(name, value, true);
+    void form.setFieldValue(name, value);
   };
 
   useEffect(() => {
