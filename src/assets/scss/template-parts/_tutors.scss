@@ -675,6 +675,28 @@
     }
   }
 
+  @media screen and (max-width: 880px) {
+    .home-page__tutors-detail {
+      .home-page__tutors-detail__inner {
+        .home-page__tutors-detail__text {
+          gap: 10px;
+          align-items: flex-start;
+          flex-direction: column;
+
+          .home-page__tutors-detail__name {
+            &::after {
+              display: none;
+            }
+          }
+
+          .home-page__tutors-detail__position {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+
   @media screen and (max-width: $tablet-size) {
     .home-page__tutors-top {
       gap: 5px;

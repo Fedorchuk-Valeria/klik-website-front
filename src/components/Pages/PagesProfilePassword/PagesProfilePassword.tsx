@@ -1,19 +1,22 @@
 "use client";
 
+import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, useEffect } from "react";
+
 import { setNewPasswordValidationSchema } from "@/src/components/Login/validationSchema";
 import Button from "@/src/components/ui/Button/Button";
 import ButtonBack from "@/src/components/ui/ButtonBack/ButtonBack";
 import PasswordInput from "@/src/components/ui/PasswordInput";
 import PopoverPassword from "@/src/components/ui/Popovers/PopoverPassword";
-import { ModalType } from "@/src/entities/common";
+
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import { changePasswordRequest } from "@/src/store/slices/auth";
+import { changePasswordRequest, clearPasswordChanged } from "@/src/store/slices/auth";
 import { showModal } from "@/src/store/slices/modalSlice";
+
+import { ModalType } from "@/src/entities/common";
 import { PAGES, PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
-import { useFormik } from "formik";
-import { useRouter } from "next/navigation";
-import { ChangeEvent, useEffect } from "react";
 
 const PagesProfilePassword = () => {
   const router = useRouter();
@@ -54,6 +57,12 @@ const PagesProfilePassword = () => {
   }, [errors]);
 
   useEffect(() => {
+    return () => {
+      dispatch(clearPasswordChanged());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     if (isPasswordChanged) {
       dispatch(
         showModal({
@@ -67,9 +76,11 @@ const PagesProfilePassword = () => {
         })
       );
 
+      dispatch(clearPasswordChanged());
+
       router.push(PAGES.PROFILE);
     }
-  }, [isPasswordChanged]);
+  }, [isPasswordChanged, dispatch, router]);
 
   const handleBack = () => {
     router.push(PAGES.PROFILE);

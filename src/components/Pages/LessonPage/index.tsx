@@ -61,13 +61,13 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
 
   const handleUrlClick = useCallback(
     (itemId: number | null) => {
-      if (!itemId) return;
+      if (!itemId || itemId === Number(lessonId)) return;
 
       dispatch(clearTestResult());
 
       router.push(PAGES.LESSON.replace(":id", id).replace(":lessonId", itemId.toString()));
     },
-    [id, dispatch]
+    [id, lessonId, dispatch, router]
   );
 
   const handleNextLessonClick = useCallback(() => {
@@ -165,20 +165,21 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
                 isHideButton={true}
                 courseId={id}
                 onClick={handleUrlClick}
+                currentLessonId={Number(lessonId)}
                 list={
                   (data?.lessons || [])?.map((lesson) => ({
                     id: lesson.id,
                     title: lesson.title,
                     duration: getTime(lesson.duration_minutes) || "",
                     test_result: lesson.test_result,
-                    status: lesson.is_completed
-                      ? "done"
-                      : lesson.is_locked
-                        ? result?.total_questions && nextLesson?.id === lesson.id
-                          ? "active"
-                          : "disabled"
-                        : result?.total_questions
-                          ? "done"
+                    status:
+                      lesson.is_completed ||
+                      (result?.total_questions && lesson.id === Number(lessonId))
+                        ? "done"
+                        : lesson.is_locked
+                          ? result?.total_questions && nextLesson?.id === lesson.id
+                            ? "active"
+                            : "disabled"
                           : "active",
                   })) ?? []
                 }
@@ -252,6 +253,7 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
         </div>
 
         <Test
+          key={lessonId}
           data={test}
           review={review}
           isTestLoading={isTestLoading}

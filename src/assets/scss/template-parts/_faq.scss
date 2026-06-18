@@ -370,6 +370,10 @@
       margin: 0;
       position: static;
 
+      &:after {
+        display: none;
+      }
+
       .home-page__faq-bottom_body {
         max-width: 100%;
 

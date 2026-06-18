@@ -493,6 +493,7 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
                     activeIndex={activeIndex}
                     tutorCount={tutorCount}
                     tutorsPaginationEnabled={tutorsPaginationEnabled}
+                    swipeEnabled={isTutorsPagination}
                     paginationElRef={tutorsPaginationElRef}
                     onSwiper={onSwiper}
                     onSwiperClick={onSwiperClick}

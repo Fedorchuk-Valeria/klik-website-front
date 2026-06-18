@@ -202,5 +202,6 @@ export const {
 
   changePasswordRequest,
   changePasswordSuccess,
+  clearPasswordChanged,
 } = authSlice.actions;
 export default authSlice.reducer;
