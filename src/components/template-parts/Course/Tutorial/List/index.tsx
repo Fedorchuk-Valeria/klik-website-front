@@ -17,7 +17,7 @@ type PropTypes = {
   onClick?: (id: number | null) => void;
   isHideButton?: boolean;
   courseId?: string;
-  currentLessonId: number;
+  currentLessonId?: number;
   list: {
     id: number;
     title: string;

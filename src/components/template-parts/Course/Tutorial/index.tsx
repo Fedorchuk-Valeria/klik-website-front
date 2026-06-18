@@ -1,10 +1,10 @@
 import classNames from "classnames";
+import { useParams } from "next/navigation";
 import { FC, memo } from "react";
 
 import TutorialList from "@/src/components/template-parts/Course/Tutorial/List";
 import CourseProgress from "@/src/components/template-parts/Course/Tutorial/Progress";
 import { LessonTestResult } from "@/src/lib/getCourses";
-import { useParams } from "next/navigation";
 
 type PropTypes = {
   progress: number;
