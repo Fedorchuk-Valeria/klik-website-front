@@ -38,11 +38,13 @@
     border: 1px solid var(--main-orange);
     color: var(--main-light);
 
-    &:hover {
-      background-color: var(--main-orange-hover);
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: var(--main-orange-hover);
 
-      .button__arrow {
-        transform: translate(50%, -50%) scale(1.42);
+        .button__arrow {
+          transform: translate(50%, -50%) scale(1.42);
+        }
       }
     }
 
@@ -68,9 +70,11 @@
     background-color: var(--main-light);
     color: var(--main-green-dark);
 
-    &:hover {
-      background-color: var(--main-orange);
-      color: var(--main-light);
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background-color: var(--main-orange);
+        color: var(--main-light);
+      }
     }
 
     &:active {
@@ -91,9 +95,11 @@
     background-color: var(--main-green-dark);
     color: var(--main-light);
 
-    &:hover {
-      .button__arrow {
-        transform: translate(50%, -50%) scale(1.42);
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        .button__arrow {
+          transform: translate(50%, -50%) scale(1.42);
+        }
       }
     }
 

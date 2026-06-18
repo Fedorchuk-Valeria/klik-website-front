@@ -35,6 +35,7 @@ type Props = {
   initialCourses?: Course[];
   initialMeta?: Meta;
   initialErrors?: Record<string, string> | null;
+  initialIsLoggedIn?: boolean;
 };
 
 const buildCoursesQuery = (page: number, scope: string, categories: string[]): string =>
@@ -54,10 +55,12 @@ const PagesCourses = ({
     total_pages: 0,
   },
   initialErrors = null,
+  initialIsLoggedIn = false,
 }: Props) => {
   const dispatch = useAppDispatch();
   const { data, meta, isLoading } = useAppSelector((state: RootStore) => state.courses);
   const { isLoggedIn } = useAppSelector((state: RootStore) => state.auth);
+  const [isHydrated, setIsHydrated] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<{ id: string; name: string }>({
     id: "all",
     name: "Все курсы",
@@ -90,16 +93,16 @@ const PagesCourses = ({
     return hasRequested ? data : initialCourses;
   }, [data, hasRequested, initialCourses]);
 
-  console.log(courses);
-
   const hasMore = activeMeta.page < activeMeta.total_pages;
+
+  const showMyCoursesFilter = isHydrated ? isLoggedIn : initialIsLoggedIn;
 
   const options = useMemo(
     () => [
       { id: "all", name: "Все курсы" },
-      ...(isLoggedIn ? [{ id: "my", name: "Мои курсы" }] : []),
+      ...(showMyCoursesFilter ? [{ id: "my", name: "Мои курсы" }] : []),
     ],
-    [isLoggedIn]
+    [showMyCoursesFilter]
   );
 
   const categoryOptions = useMemo(
@@ -164,6 +167,12 @@ const PagesCourses = ({
   const handleSelectCategories = (options: { id: string; name: string }[]) => {
     setSelectedCategory(options.map((item) => item.id));
   };
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      setIsHydrated(true);
+    });
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
