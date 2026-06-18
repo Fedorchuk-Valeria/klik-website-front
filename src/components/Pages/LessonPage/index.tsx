@@ -3,7 +3,7 @@
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FC, useCallback, useMemo } from "react";
+import { FC, useCallback, useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 
 import { getTime } from "@/src/components/Pages/CoursePage";
@@ -31,12 +31,16 @@ type PropTypes = {
   data: Lesson | null;
 };
 
-// TODO tests
-// TODO download homework and materials
 const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { isTestLoading, test, result, review } = useAppSelector((state) => state.lesson);
+  const {
+    isTestLoading,
+    test,
+    result,
+    review,
+    data: lessonData,
+  } = useAppSelector((state) => state.lesson);
 
   const nextLesson = useMemo(() => {
     if (!data?.lessons?.length) return null;
@@ -57,13 +61,13 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
 
   const handleUrlClick = useCallback(
     (itemId: number | null) => {
-      if (!itemId) return;
+      if (!itemId || itemId === Number(lessonId)) return;
 
       dispatch(clearTestResult());
 
       router.push(PAGES.LESSON.replace(":id", id).replace(":lessonId", itemId.toString()));
     },
-    [id, dispatch]
+    [id, lessonId, dispatch, router]
   );
 
   const handleNextLessonClick = useCallback(() => {
@@ -116,6 +120,12 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
     [id, lessonId, dispatch]
   );
 
+  useEffect(() => {
+    return () => {
+      dispatch(clearTestResult());
+    };
+  }, [dispatch]);
+
   return (
     <div className="lesson-page">
       <div className="lesson-page__container">
@@ -155,13 +165,22 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
                 isHideButton={true}
                 courseId={id}
                 onClick={handleUrlClick}
+                currentLessonId={Number(lessonId)}
                 list={
                   (data?.lessons || [])?.map((lesson) => ({
                     id: lesson.id,
                     title: lesson.title,
-                    duration: `${lesson.duration_minutes} ${getTime(lesson.duration_minutes)}`,
+                    duration: getTime(lesson.duration_minutes) || "",
                     test_result: lesson.test_result,
-                    status: lesson.is_completed ? "done" : lesson.is_locked ? "disabled" : "active",
+                    status:
+                      lesson.is_completed ||
+                      (result?.total_questions && lesson.id === Number(lessonId))
+                        ? "done"
+                        : lesson.is_locked
+                          ? result?.total_questions && nextLesson?.id === lesson.id
+                            ? "active"
+                            : "disabled"
+                          : "active",
                   })) ?? []
                 }
               />
@@ -234,6 +253,7 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
         </div>
 
         <Test
+          key={lessonId}
           data={test}
           review={review}
           isTestLoading={isTestLoading}

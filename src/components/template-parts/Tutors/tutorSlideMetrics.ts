@@ -25,11 +25,147 @@ export const TUTOR_SLIDE_METRICS_1920: TutorSlideMetrics = {
 
 export const TUTOR_SLIDE_METRICS_1440: TutorSlideMetrics = {
   inactiveW: 200,
-  inactiveH: 296,
+  inactiveH: 298,
   activeW: 414,
   activeH: 518,
-  gap: 20,
+  gap: 16,
 };
+
+export const TUTOR_SLIDE_METRICS_1280: TutorSlideMetrics = {
+  inactiveW: 218,
+  inactiveH: 323,
+  activeW: 452,
+  activeH: 566,
+  gap: 18,
+};
+
+export const TUTOR_DESKTOP_VIEWPORT_MAX = 1720;
+export const TUTOR_DESKTOP_BREAKPOINT = 1440;
+export const TUTOR_COMPACT_BREAKPOINT = 1280;
+export const TUTOR_COMPACT_VIEWPORT_MAX = 1280;
+
+export type TutorMetricsPreset = "wide" | "desktop1440" | "desktop1280";
+
+const INACTIVE_ASPECT_RATIO_1920 =
+  TUTOR_SLIDE_METRICS_1920.inactiveH / TUTOR_SLIDE_METRICS_1920.inactiveW;
+const INACTIVE_ASPECT_RATIO_1440 =
+  TUTOR_SLIDE_METRICS_1440.inactiveH / TUTOR_SLIDE_METRICS_1440.inactiveW;
+const INACTIVE_ASPECT_RATIO_1280 =
+  TUTOR_SLIDE_METRICS_1280.inactiveH / TUTOR_SLIDE_METRICS_1280.inactiveW;
+
+export function getTutorMetricsPreset(
+  matchesCompact1280: boolean,
+  matchesCompact1440: boolean
+): TutorMetricsPreset {
+  if (matchesCompact1280) return "desktop1280";
+  if (matchesCompact1440) return "desktop1440";
+  return "wide";
+}
+
+/** На 1280 — 2 превью справа (всего 4 слайда: 3 неактивных + 1 активный). */
+export function getMaxTutorsTailInView(preset: TutorMetricsPreset): number {
+  return preset === "desktop1280" ? 2 : 3;
+}
+
+export function getTutorTrackWidth(slideCount: number, metrics: TutorSlideMetrics): number {
+  if (slideCount <= 0) return 0;
+  if (slideCount === 1) return metrics.activeW;
+
+  const { inactiveW, activeW, gap } = metrics;
+  const gapsCount = slideCount - 1;
+  const inactiveSlots = slideCount - 1;
+
+  return activeW + gapsCount * gap + inactiveSlots * inactiveW;
+}
+
+function fitMetricsToWidth(
+  availableW: number,
+  slideCount: number,
+  base: TutorSlideMetrics,
+  inactiveAspectRatio: number
+): TutorSlideMetrics {
+  if (slideCount <= 1 || availableW <= 0) {
+    return base;
+  }
+
+  if (getTutorTrackWidth(slideCount, base) <= availableW) {
+    return base;
+  }
+
+  const { activeW, activeH, gap } = base;
+  const gapsCount = slideCount - 1;
+  const inactiveSlots = slideCount - 1;
+  const activeAspectRatio = activeH / activeW;
+
+  const requiredInactiveW = (availableW - activeW - gapsCount * gap) / inactiveSlots;
+
+  if (requiredInactiveW >= base.inactiveW) {
+    return base;
+  }
+
+  if (requiredInactiveW >= 1) {
+    const inactiveW = Math.floor(requiredInactiveW);
+    return {
+      ...base,
+      inactiveW,
+      inactiveH: Math.round(inactiveW * inactiveAspectRatio),
+    };
+  }
+
+  const fittedActiveW = Math.max(1, availableW - gapsCount * gap - inactiveSlots);
+  const nextActiveW = Math.min(activeW, Math.floor(fittedActiveW));
+
+  return {
+    ...base,
+    inactiveW: 1,
+    inactiveH: Math.round(inactiveAspectRatio),
+    activeW: nextActiveW,
+    activeH: Math.round(nextActiveW * activeAspectRatio),
+    gap,
+  };
+}
+
+/** Подгоняет превью под ширину контейнера; активный в wide-режиме держим в размере 1920, пока хватает места. */
+export function resolveTutorSlideMetrics(
+  viewportWidth: number,
+  slideCount: number,
+  preset: TutorMetricsPreset
+): TutorSlideMetrics {
+  if (viewportWidth <= 0) {
+    switch (preset) {
+      case "desktop1280":
+        return TUTOR_SLIDE_METRICS_1280;
+      case "desktop1440":
+        return TUTOR_SLIDE_METRICS_1440;
+      default:
+        return TUTOR_SLIDE_METRICS_1920;
+    }
+  }
+
+  switch (preset) {
+    case "desktop1280":
+      return fitMetricsToWidth(
+        viewportWidth,
+        slideCount,
+        TUTOR_SLIDE_METRICS_1280,
+        INACTIVE_ASPECT_RATIO_1280
+      );
+    case "desktop1440":
+      return fitMetricsToWidth(
+        viewportWidth,
+        slideCount,
+        TUTOR_SLIDE_METRICS_1440,
+        INACTIVE_ASPECT_RATIO_1440
+      );
+    default:
+      return fitMetricsToWidth(
+        Math.min(viewportWidth, TUTOR_DESKTOP_VIEWPORT_MAX),
+        slideCount,
+        TUTOR_SLIDE_METRICS_1920,
+        INACTIVE_ASPECT_RATIO_1920
+      );
+  }
+}
 
 export const DESKTOP_ACTIVE_SLOT = 1;
 

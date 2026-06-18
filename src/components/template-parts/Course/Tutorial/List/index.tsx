@@ -17,6 +17,7 @@ type PropTypes = {
   onClick?: (id: number | null) => void;
   isHideButton?: boolean;
   courseId?: string;
+  currentLessonId?: number;
   list: {
     id: number;
     title: string;
@@ -26,7 +27,14 @@ type PropTypes = {
   }[];
 };
 
-const TutorialList: FC<PropTypes> = ({ list, className, onClick, isHideButton, courseId }) => {
+const TutorialList: FC<PropTypes> = ({
+  list,
+  className,
+  onClick,
+  isHideButton,
+  courseId,
+  currentLessonId,
+}) => {
   return (
     <ul className={classNames("course-tutorial__list", className)}>
       {list.map((item, index) => {
@@ -66,7 +74,7 @@ const TutorialList: FC<PropTypes> = ({ list, className, onClick, isHideButton, c
               {!isHideButton && (
                 <Link
                   href={
-                    isDisabled
+                    isDisabled || item.id === currentLessonId
                       ? "#"
                       : PAGES.LESSON.replace(":id", courseId ?? "").replace(
                           ":lessonId",

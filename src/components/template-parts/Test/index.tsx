@@ -44,8 +44,10 @@ const Test: FC<PropTypes> = ({
   onStartTestClick,
   onNextLessonClick,
 }) => {
+  const testRef = useRef<HTMLDivElement>(null);
   const contentListRef = useRef<HTMLDivElement>(null);
   const shouldScrollToErrorRef = useRef(false);
+  const shouldScrollToTestRef = useRef(false);
   const [isStarted, setStarted] = useState(false);
   const [isResultsVisible, setResultsVisible] = useState(false);
   const [answers, setAnswers] = useState<TestAnswers>({});
@@ -123,6 +125,7 @@ const Test: FC<PropTypes> = ({
         return;
       }
 
+      shouldScrollToTestRef.current = true;
       onSendAnswers(answers);
       setStarted(false);
       setResultsVisible(false);
@@ -183,8 +186,19 @@ const Test: FC<PropTypes> = ({
     firstErrorCard?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [errors]);
 
+  useEffect(() => {
+    if (!shouldScrollToTestRef.current || isTestLoading) return;
+
+    shouldScrollToTestRef.current = false;
+
+    if (!result) return;
+
+    testRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [result, isTestLoading]);
+
   return (
     <div
+      ref={testRef}
       className={classNames("test", className, {
         "test--started": isStarted || isResultsVisible,
       })}

@@ -22,6 +22,8 @@ export type TutorsSwiperProps = {
   activeIndex: number;
   tutorCount: number;
   tutorsPaginationEnabled: boolean;
+  /** swipte only at <=800px, >=1024 */
+  swipeEnabled: boolean;
   paginationElRef: RefObject<HTMLDivElement | null>;
   onSwiper: (swiper: SwiperType) => void;
   onSwiperClick: (swiper: SwiperType) => void;
@@ -34,6 +36,7 @@ const TutorsSwiper: FC<TutorsSwiperProps> = ({
   activeIndex,
   tutorCount,
   tutorsPaginationEnabled,
+  swipeEnabled,
   paginationElRef,
   onSwiper,
   onSwiperClick,
@@ -91,7 +94,9 @@ const TutorsSwiper: FC<TutorsSwiperProps> = ({
       <Swiper
         modules={[Pagination]}
         speed={0}
-        grabCursor
+        grabCursor={swipeEnabled}
+        allowTouchMove={swipeEnabled}
+        simulateTouch={swipeEnabled}
         resizeObserver
         slidesPerView={1}
         initialSlide={activeIndex}

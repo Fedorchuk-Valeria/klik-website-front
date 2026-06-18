@@ -13,7 +13,7 @@ import Tabs from "@/src/components/ui/Tabs";
 
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import { loginRequest } from "@/src/store/slices/auth";
+import { clearErrors, loginRequest } from "@/src/store/slices/auth";
 import { PAGES } from "@/src/utils/constant";
 
 const LoginForm = () => {
@@ -40,12 +40,13 @@ const LoginForm = () => {
   });
 
   const handleChangeTab = (tab: string) => {
+    dispatch(clearErrors());
     router.push(tab);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    void form.setFieldValue(name, value, true);
+    void form.setFieldValue(name, value);
   };
 
   useEffect(() => {
@@ -60,6 +61,12 @@ const LoginForm = () => {
       router.push(PAGES.COURSES);
     }
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearErrors());
+    };
+  }, [dispatch]);
 
   return (
     <div className="login-page__form-content">
@@ -97,6 +104,7 @@ const LoginForm = () => {
           variant="outline"
           placeholder="********"
           disabled={isLoading}
+          maxLength={64}
         />
 
         <Button

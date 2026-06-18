@@ -129,6 +129,9 @@ const authSlice = createSlice({
       state.isLoggedIn = action.payload;
     },
 
+    clearErrors(state) {
+      state.errors = null;
+    },
     clearRegister(state) {
       state.isRegisterSuccess = false;
       state.errors = null;
@@ -151,10 +154,7 @@ const authSlice = createSlice({
       state.user_profile = action.payload;
     },
 
-    changePasswordRequest(
-      state,
-      action: { payload: AuthChangePasswordRequest }
-    ) {
+    changePasswordRequest(state, action: { payload: AuthChangePasswordRequest }) {
       void action.payload;
       state.isLoading = true;
       state.errors = null;
@@ -167,7 +167,7 @@ const authSlice = createSlice({
 
     clearPasswordChanged(state) {
       state.isPasswordChanged = false;
-    }
+    },
   },
 });
 
@@ -193,7 +193,7 @@ export const {
   resendCodeRequest,
 
   clearPersonalAccountChanged,
-
+  clearErrors,
   clearRegister,
   clearResetPassword,
 
@@ -202,5 +202,6 @@ export const {
 
   changePasswordRequest,
   changePasswordSuccess,
+  clearPasswordChanged,
 } = authSlice.actions;
 export default authSlice.reducer;

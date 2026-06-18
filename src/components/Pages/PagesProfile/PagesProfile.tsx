@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {useEffect} from "react";
+import { useEffect } from "react";
 
 import avatar from "@/src/assets/images/view/profile/avatar.png";
 import EyeSvg from "@/src/assets/images/view/profile/eyes.svg";
@@ -11,24 +11,27 @@ import Line2Svg from "@/src/assets/images/view/profile/line2.svg";
 
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { profileRequest } from "@/src/store/slices/auth";
-import { PAGES } from "@/src/utils/constant";
+import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 
+import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import Loader from "@/src/components/ui/Loader/Loader";
+import { Partners } from "@/src/components/ui/Partners";
 import PhoneInput from "@/src/components/ui/PhoneInput";
 import TextInput from "@/src/components/ui/TextInput";
-import {CitySettings} from "@/src/lib/getCitySettings";
-import {phoneToLink} from "@/src/lib/utils/phoneLink";
-import Button from "@/src/components/ui/Button/Button";
-import {showModal} from "@/src/store/slices/modalSlice";
-import {ModalType} from "@/src/entities/common";
-import {Partners} from "@/src/components/ui/Partners";
+
+import { CitySettings } from "@/src/lib/getCitySettings";
+import { phoneToLink } from "@/src/lib/utils/phoneLink";
+
+import { ModalType } from "@/src/entities/common";
+import { showModal } from "@/src/store/slices/modalSlice";
+import { QueryHelper } from "@/src/utils/helpers";
 
 type PropTypes = {
   settings: CitySettings;
 };
 
-const PagesProfile = ({ settings }:PropTypes) => {
+const PagesProfile = ({ settings }: PropTypes) => {
   const dispatch = useAppDispatch();
 
   const { user_profile, isLoading } = useAppSelector((state) => state.auth);
@@ -47,8 +50,7 @@ const PagesProfile = ({ settings }:PropTypes) => {
     dispatch(
       showModal({
         modalType: ModalType.CREATE_CHILDREN,
-        modalProps: {
-        },
+        modalProps: {},
       })
     );
   };
@@ -57,8 +59,7 @@ const PagesProfile = ({ settings }:PropTypes) => {
     dispatch(
       showModal({
         modalType: ModalType.PAYMENT_CHILDREN,
-        modalProps: {
-        },
+        modalProps: {},
       })
     );
   };
@@ -89,7 +90,15 @@ const PagesProfile = ({ settings }:PropTypes) => {
             </div>
           </div>
           <div className="page-profile__list">
-            <Link className="page-profile__link" href={PAGES.COURSES}>
+            <Link
+              className="page-profile__link"
+              href={
+                PAGES.COURSES +
+                QueryHelper.getQueryString({
+                  [QUERY_PARAMS.SCOPE]: "my",
+                })
+              }
+            >
               Мои курсы
               <span>
                 <Icon className="page-profile__link-icon" name="arrow" />
@@ -104,7 +113,8 @@ const PagesProfile = ({ settings }:PropTypes) => {
           </div>
           <div className="page-profile__info">
             <Icon className="page-profile__info-icon" name="info-circle-outline" />
-            По всем вопросам вы можете связаться с нами по номеру телефона <a href={phoneToLink(phone)}>{phone}</a>
+            По всем вопросам вы можете связаться с нами по номеру телефона{" "}
+            <a href={phoneToLink(phone)}>{phone}</a>
           </div>
           <Partners />
           <div className="page-profile__childrens">
@@ -124,7 +134,9 @@ const PagesProfile = ({ settings }:PropTypes) => {
             <div className="page-profile__childrens-list">
               {[...Array(3)].map((_, i) => (
                 <div className="page-profile__children" key={i}>
-                  <div className="page-profile__children-name">Фамилия Имя Отчество Ребёнка 0{i+1}</div>
+                  <div className="page-profile__children-name">
+                    Фамилия Имя Отчество Ребёнка 0{i + 1}
+                  </div>
                   <div className="page-profile__children-tags">
                     <div className="page-profile__children-tag">
                       <Icon className="page-profile__children-icon" name="info-circle-outline" />
@@ -155,22 +167,30 @@ const PagesProfile = ({ settings }:PropTypes) => {
                         <Icon className="page-profile__children-icon" name="people" />
                         Оффлайн занятия в группе
                       </div>
-                        <div className="page-profile__children-list">
-                          <div className="page-profile__children-item">
-                            <Icon className="page-profile__children-icon" name="disk" />
-                            Программа «Креаторы» :
-                            <span>@Klik-tg-chat</span>
-                          </div>
-                          <div className="page-profile__children-item">
-                            <Icon className="page-profile__children-icon" name="disk" />
-                            Программа «Лето» :
-                            <span>@Klik-tg-chat</span>
-                          </div>
+                      <div className="page-profile__children-list">
+                        <div className="page-profile__children-item">
+                          <Icon className="page-profile__children-icon" name="disk" />
+                          Программа «Креаторы» :<span>@Klik-tg-chat</span>
                         </div>
+                        <div className="page-profile__children-item">
+                          <Icon className="page-profile__children-icon" name="disk" />
+                          Программа «Лето» :<span>@Klik-tg-chat</span>
+                        </div>
+                      </div>
                     </div>
-                    <Button variant="main-light-outline" className="page-profile__children-pay" onClick={handleCreatePayment}>Оплатить обучение</Button>
+                    <Button
+                      variant="main-light-outline"
+                      className="page-profile__children-pay"
+                      onClick={handleCreatePayment}
+                    >
+                      Оплатить обучение
+                    </Button>
                   </div>
-                  <Button variant="main-light" className="page-profile__children-more" withArrow={true}>
+                  <Button
+                    variant="main-light"
+                    className="page-profile__children-more"
+                    withArrow={true}
+                  >
                     Подробнее
                   </Button>
                 </div>
@@ -182,7 +202,11 @@ const PagesProfile = ({ settings }:PropTypes) => {
               <div className="page-profile__empty-body">
                 <EyeSvg className="page-profile__empty-image" />
                 <div className="page-profile__empty-title">Профили детей не созданы</div>
-                <Button variant="orange" className="page-profile__empty-btn" onClick={handleCreateChildren}>
+                <Button
+                  variant="orange"
+                  className="page-profile__empty-btn"
+                  onClick={handleCreateChildren}
+                >
                   <Icon className="page-profile__children-icon" name="plus" />
                   Создать профиль ребёнка
                 </Button>

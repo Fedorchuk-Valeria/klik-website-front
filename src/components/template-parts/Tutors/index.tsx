@@ -9,6 +9,12 @@ import TutorsSlider, { type TutorsSliderTransition } from "./TutorsSlider";
 import TutorsSwiper from "./TutorsSwiper";
 import { TUTOR_IMAGES } from "./tutorImages";
 import type { TutorsSliderSlide } from "./tutorSlideMetrics";
+import {
+  getMaxTutorsTailInView,
+  getTutorMetricsPreset,
+  TUTOR_COMPACT_BREAKPOINT,
+  TUTOR_DESKTOP_BREAKPOINT,
+} from "./tutorSlideMetrics";
 
 import type { TutorItem } from "./types";
 
@@ -24,10 +30,14 @@ type PropTypes = {
 const MAX_TUTORS_TAIL_IN_VIEW = 3;
 
 /** Чтобы активный всегда у левого края был один узкий превью-слайд. */
-function orderedTutorIndices(activeIndex: number, n: number): number[] {
+function orderedTutorIndices(
+  activeIndex: number,
+  n: number,
+  maxTailInView = MAX_TUTORS_TAIL_IN_VIEW
+): number[] {
   if (n <= 1) return [activeIndex];
   const prevIdx = (activeIndex - 1 + n) % n;
-  const tailCount = Math.min(n - 2, MAX_TUTORS_TAIL_IN_VIEW);
+  const tailCount = Math.min(n - 2, maxTailInView);
   const tail: number[] = [];
   for (let step = 0; step < tailCount; step += 1) {
     tail.push((activeIndex + 1 + step) % n);
@@ -56,6 +66,7 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
     id: number;
     withEnterSlide: boolean;
   } | null>(null);
+  const maxTutorsTailInViewRef = useRef(MAX_TUTORS_TAIL_IN_VIEW);
   const tutorsPaginationElRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [slideTransition, setSlideTransition] = useState<{
@@ -66,6 +77,7 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
   } | null>(null);
   const [isTabletLandscapeTutors, setIsTabletLandscapeTutors] = useState(false);
   const [isTutorsPagination, setIsTutorsPagination] = useState(false);
+  const [maxTutorsTailInView, setMaxTutorsTailInView] = useState(MAX_TUTORS_TAIL_IN_VIEW);
 
   const slidesWithImages = useMemo(
     () => items.filter((item) => TUTOR_IMAGES[item.id] != null),
@@ -74,8 +86,8 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
   const tutorCount = useMemo(() => slidesWithImages.length, [slidesWithImages]);
 
   const orderedIndices = useMemo(
-    () => orderedTutorIndices(activeIndex, tutorCount),
-    [activeIndex, tutorCount]
+    () => orderedTutorIndices(activeIndex, tutorCount, maxTutorsTailInView),
+    [activeIndex, maxTutorsTailInView, tutorCount]
   );
 
   const orderedSlides = useMemo(
@@ -97,16 +109,18 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
     (fromIndex: number, direction: TutorsSliderTransition) => {
       const n = tutorCountRef.current;
       const items = slidesWithImagesRef.current;
-      const base = orderedTutorIndices(fromIndex, n).map((tutorIdx, slot) => ({
-        item: items[tutorIdx],
-        key: `tutor-${items[tutorIdx]?.id ?? slot}`,
-      }));
+      const base = orderedTutorIndices(fromIndex, n, maxTutorsTailInViewRef.current).map(
+        (tutorIdx, slot) => ({
+          item: items[tutorIdx],
+          key: `tutor-${items[tutorIdx]?.id ?? slot}`,
+        })
+      );
 
       if (direction !== "prev" || n < 3) {
         return { slides: base, withEnterSlide: false };
       }
 
-      const baseIndices = orderedTutorIndices(fromIndex, n);
+      const baseIndices = orderedTutorIndices(fromIndex, n, maxTutorsTailInViewRef.current);
       const newActive = (fromIndex - 1 + n) % n;
       const enterIdx = (newActive - 1 + n) % n;
 
@@ -175,7 +189,11 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
   );
 
   const resolveTutorIndexFromSlot = useCallback((slot: number, fromIndex: number) => {
-    const ring = orderedTutorIndices(fromIndex, tutorCountRef.current);
+    const ring = orderedTutorIndices(
+      fromIndex,
+      tutorCountRef.current,
+      maxTutorsTailInViewRef.current
+    );
     const next = ring[slot];
     return next !== undefined ? next : fromIndex;
   }, []);
@@ -349,6 +367,28 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
   }, [activeIndex]);
 
   useEffect(() => {
+    const mq1440 = window.matchMedia(`(max-width: ${TUTOR_DESKTOP_BREAKPOINT}px)`);
+    const mq1280 = window.matchMedia(`(max-width: ${TUTOR_COMPACT_BREAKPOINT}px)`);
+
+    const syncTailCount = () => {
+      const preset = getTutorMetricsPreset(mq1280.matches, mq1440.matches);
+      const nextTail = getMaxTutorsTailInView(preset);
+      maxTutorsTailInViewRef.current = nextTail;
+      setMaxTutorsTailInView(nextTail);
+    };
+
+    syncTailCount();
+
+    mq1440.addEventListener("change", syncTailCount);
+    mq1280.addEventListener("change", syncTailCount);
+
+    return () => {
+      mq1440.removeEventListener("change", syncTailCount);
+      mq1280.removeEventListener("change", syncTailCount);
+    };
+  }, []);
+
+  useEffect(() => {
     const rootStyle = getComputedStyle(document.documentElement);
     const landscapeMaxPx = Number.parseFloat(
       rootStyle.getPropertyValue("--layout-landscape-tablet-max").trim()
@@ -438,40 +478,41 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
               <div className={classNames("home-page__text", "home-page__tutors-text")}>{text}</div>
             )}
           </div>
-        </div>
 
-        <div className="home-page__tutors-body">
-          <div className="home-page__tutors-carousel">
-            {isTabletLandscapeTutors ? (
-              <div ref={tutorsPaginationElRef} className="home-page__tutors-pagination-root" />
-            ) : null}
-            <div className="home-page__tutors-slider-viewport">
-              {activeItem && <TutorsDetail item={activeItem} onPrev={goPrev} onNext={goNext} />}
-
+          <div className="home-page__tutors-body">
+            <div className="home-page__tutors-carousel">
               {isTabletLandscapeTutors ? (
-                <TutorsSwiper
-                  slidesForSwiper={slidesForSwiper}
-                  activeIndex={activeIndex}
-                  tutorCount={tutorCount}
-                  tutorsPaginationEnabled={tutorsPaginationEnabled}
-                  paginationElRef={tutorsPaginationElRef}
-                  onSwiper={onSwiper}
-                  onSwiperClick={onSwiperClick}
-                  onSlideChange={onSlideChange}
-                  onSwiperSliderFirstMove={onSwiperSliderFirstMove}
-                />
-              ) : (
-                <TutorsSlider
-                  slides={slideTransition?.slides ?? desktopSlides}
-                  transition={slideTransition?.direction ?? null}
-                  transitionId={slideTransition?.id ?? 0}
-                  withEnterSlide={slideTransition?.withEnterSlide ?? false}
-                  onSlideClick={onDesktopSlideClick}
-                  onSwipeNext={goNext}
-                  onSwipePrev={goPrev}
-                  onTransitionEnd={onDesktopTransitionEnd}
-                />
-              )}
+                <div ref={tutorsPaginationElRef} className="home-page__tutors-pagination-root" />
+              ) : null}
+              <div className="home-page__tutors-slider-viewport">
+                {activeItem && <TutorsDetail item={activeItem} onPrev={goPrev} onNext={goNext} />}
+
+                {isTabletLandscapeTutors ? (
+                  <TutorsSwiper
+                    slidesForSwiper={slidesForSwiper}
+                    activeIndex={activeIndex}
+                    tutorCount={tutorCount}
+                    tutorsPaginationEnabled={tutorsPaginationEnabled}
+                    swipeEnabled={isTutorsPagination}
+                    paginationElRef={tutorsPaginationElRef}
+                    onSwiper={onSwiper}
+                    onSwiperClick={onSwiperClick}
+                    onSlideChange={onSlideChange}
+                    onSwiperSliderFirstMove={onSwiperSliderFirstMove}
+                  />
+                ) : (
+                  <TutorsSlider
+                    slides={slideTransition?.slides ?? desktopSlides}
+                    transition={slideTransition?.direction ?? null}
+                    transitionId={slideTransition?.id ?? 0}
+                    withEnterSlide={slideTransition?.withEnterSlide ?? false}
+                    onSlideClick={onDesktopSlideClick}
+                    onSwipeNext={goNext}
+                    onSwipePrev={goPrev}
+                    onTransitionEnd={onDesktopTransitionEnd}
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>

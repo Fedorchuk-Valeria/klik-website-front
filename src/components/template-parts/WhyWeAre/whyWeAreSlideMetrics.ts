@@ -18,24 +18,45 @@ export type WhyWeAreSliderSlide = {
 };
 
 export type ReviewSlideMetrics = {
-  slideW: number;
+  inactiveW: number;
+  activeW: number;
   inactiveH: number;
   gap: number;
   centerOffset: number;
   defaultActiveH: number;
 };
 
-export const REVIEW_SLIDE_METRICS_1920: Omit<ReviewSlideMetrics, "centerOffset"> = {
-  slideW: 770,
+export type ReviewSlideMetricsBase = Omit<ReviewSlideMetrics, "centerOffset">;
+
+export const REVIEW_SLIDE_METRICS_1920: ReviewSlideMetricsBase = {
+  inactiveW: 770,
+  activeW: 770,
   inactiveH: 224,
   gap: 40,
   defaultActiveH: REVIEW_CAROUSEL_HEIGHT,
 };
 
-export const REVIEW_SLIDE_METRICS_1440: Omit<ReviewSlideMetrics, "centerOffset"> = {
-  slideW: 770,
+export const REVIEW_SLIDE_METRICS_1440: ReviewSlideMetricsBase = {
+  inactiveW: 770,
+  activeW: 770,
   inactiveH: 224,
   gap: 20,
+  defaultActiveH: REVIEW_CAROUSEL_HEIGHT,
+};
+
+export const REVIEW_SLIDE_METRICS_1280: ReviewSlideMetricsBase = {
+  inactiveW: 770,
+  activeW: 700,
+  inactiveH: 171,
+  gap: 20,
+  defaultActiveH: REVIEW_CAROUSEL_HEIGHT,
+};
+
+export const REVIEW_SLIDE_METRICS_960: ReviewSlideMetricsBase = {
+  inactiveW: 770,
+  activeW: 586,
+  inactiveH: 134,
+  gap: 10,
   defaultActiveH: REVIEW_CAROUSEL_HEIGHT,
 };
 
@@ -46,22 +67,55 @@ export type SlideLayout = {
   opacity: number;
 };
 
+export function pickReviewMetricsBase(viewportW: number): ReviewSlideMetricsBase {
+  if (viewportW <= 960) return REVIEW_SLIDE_METRICS_960;
+  if (viewportW <= 1280) return REVIEW_SLIDE_METRICS_1280;
+  if (viewportW <= 1440) return REVIEW_SLIDE_METRICS_1440;
+  return REVIEW_SLIDE_METRICS_1920;
+}
+
 export function buildReviewMetrics(
-  base: Omit<ReviewSlideMetrics, "centerOffset">,
+  base: ReviewSlideMetricsBase,
   viewportW: number
 ): ReviewSlideMetrics {
   return {
     ...base,
-    centerOffset: Math.round((viewportW - base.slideW) / 2),
+    centerOffset: Math.round((viewportW - base.activeW) / 2),
   };
 }
 
-function getStep(metrics: ReviewSlideMetrics) {
-  return metrics.slideW + metrics.gap;
+function getInactiveStep(metrics: ReviewSlideMetrics) {
+  return metrics.inactiveW + metrics.gap;
 }
 
-function resolveActiveHeight() {
-  return REVIEW_CAROUSEL_HEIGHT;
+function resolveActiveHeight(activeHeight: number) {
+  return activeHeight;
+}
+
+function getReviewSlotLeft(
+  slot: number,
+  metrics: ReviewSlideMetrics,
+  activeSlot = REVIEW_ACTIVE_SLOT
+): number {
+  const { inactiveW, activeW, gap, centerOffset } = metrics;
+
+  if (slot === activeSlot) {
+    return centerOffset;
+  }
+
+  if (slot < activeSlot) {
+    let left = centerOffset - gap - inactiveW;
+    for (let i = activeSlot - 2; i >= slot; i -= 1) {
+      left -= gap + inactiveW;
+    }
+    return left;
+  }
+
+  let left = centerOffset + activeW + gap;
+  for (let i = activeSlot + 1; i < slot; i += 1) {
+    left += inactiveW + gap;
+  }
+  return left;
 }
 
 export function getReviewSlotLayout(
@@ -71,12 +125,9 @@ export function getReviewSlotLayout(
   isActiveVisual: boolean,
   activeSlot = REVIEW_ACTIVE_SLOT
 ): SlideLayout {
-  const step = getStep(metrics);
-  const left = metrics.centerOffset + (slot - activeSlot) * step;
-
   return {
-    left,
-    width: metrics.slideW,
+    left: getReviewSlotLeft(slot, metrics, activeSlot),
+    width: isActiveVisual ? metrics.activeW : metrics.inactiveW,
     height,
     opacity: 1,
   };
@@ -86,15 +137,12 @@ export function getNextReviewTransitionLayouts(
   slot: number,
   slideCount: number,
   metrics: ReviewSlideMetrics,
-  heights: Record<string, number>,
-  slides: WhyWeAreSliderSlide[]
+  activeHeight: number
 ): { from: SlideLayout; to: SlideLayout } {
-  const { inactiveH, defaultActiveH } = metrics;
-  const step = getStep(metrics);
-  const outgoingItem = slides[REVIEW_ACTIVE_SLOT]?.item;
-  const incomingItem = slides[2]?.item;
-  const outgoingH = resolveActiveHeight();
-  const incomingH = resolveActiveHeight();
+  const { inactiveH, inactiveW } = metrics;
+  const step = getInactiveStep(metrics);
+  const outgoingH = resolveActiveHeight(activeHeight);
+  const incomingH = resolveActiveHeight(activeHeight);
 
   if (slideCount === 2) {
     const from0 = getReviewSlotLayout(0, metrics, inactiveH, false);
@@ -125,7 +173,7 @@ export function getNextReviewTransitionLayouts(
       from,
       to: {
         left: from.left,
-        width: metrics.slideW,
+        width: inactiveW,
         height: inactiveH,
         opacity: 0,
       },
@@ -148,7 +196,7 @@ export function getNextReviewTransitionLayouts(
         from,
         to: {
           left: from.left + step,
-          width: metrics.slideW,
+          width: inactiveW,
           height: inactiveH,
           opacity: 0,
         },
@@ -166,18 +214,13 @@ export function getPrevReviewTransitionLayouts(
   slot: number,
   slideCount: number,
   metrics: ReviewSlideMetrics,
-  heights: Record<string, number>,
-  slides: WhyWeAreSliderSlide[],
+  activeHeight: number,
   withEnterSlide = false
 ): { from: SlideLayout; to: SlideLayout } {
-  const { inactiveH, defaultActiveH } = metrics;
-  const step = getStep(metrics);
-  const outgoingItem = withEnterSlide
-    ? slides[2]?.item
-    : slides[REVIEW_ACTIVE_SLOT]?.item;
-  const incomingItem = withEnterSlide ? slides[1]?.item : slides[0]?.item;
-  const outgoingH = resolveActiveHeight();
-  const incomingH = resolveActiveHeight();
+  const { inactiveH, inactiveW } = metrics;
+  const step = getInactiveStep(metrics);
+  const outgoingH = resolveActiveHeight(activeHeight);
+  const incomingH = resolveActiveHeight(activeHeight);
 
   if (withEnterSlide && slideCount > 2) {
     if (slot === 0) {
@@ -185,7 +228,7 @@ export function getPrevReviewTransitionLayouts(
       return {
         from: {
           left: toSlot.left - step,
-          width: metrics.slideW,
+          width: inactiveW,
           height: inactiveH,
           opacity: 0,
         },
@@ -217,7 +260,7 @@ export function getPrevReviewTransitionLayouts(
         from,
         to: {
           left: from.left + step,
-          width: metrics.slideW,
+          width: inactiveW,
           height: inactiveH,
           opacity: 0,
         },
@@ -268,7 +311,7 @@ export function getPrevReviewTransitionLayouts(
         from,
         to: {
           left: from.left + step,
-          width: metrics.slideW,
+          width: inactiveW,
           height: inactiveH,
           opacity: 0,
         },

@@ -1,6 +1,7 @@
 "use client";
 
 import classNames from "classnames";
+import Link from "next/link";
 import { Fragment, useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import type { Swiper as SwiperType } from "swiper";
 import { Pagination } from "swiper/modules";
@@ -15,7 +16,6 @@ import Icon from "@/src/components/ui/Icon/Icon";
 
 import { stripHtml } from "@/src/helper/stripHtml";
 
-import Link from "next/link";
 import "swiper/css";
 
 type ListItem = {
@@ -43,7 +43,7 @@ export const formatImages: Record<string, string> = {
   green: imgGreen.src,
 };
 
-const TABLET_MAX_CSS_VAR = "--layout-tablet-max";
+const FORMATS_SLIDER_MAX_CSS_VAR = "--layout-small-landscape-tablet-max";
 
 const FORMATS_AUTOPLAY_DELAY_MS = 5_000;
 const FORMATS_IDLE_RESUME_MS = 10_000;
@@ -53,10 +53,12 @@ function useFormatsSliderMatch() {
 
   useEffect(() => {
     const rootStyle = getComputedStyle(document.documentElement);
-    const tabletMaxPx = Number.parseFloat(rootStyle.getPropertyValue(TABLET_MAX_CSS_VAR).trim());
-    if (!Number.isFinite(tabletMaxPx)) return;
+    const sliderMaxPx = Number.parseFloat(
+      rootStyle.getPropertyValue(FORMATS_SLIDER_MAX_CSS_VAR).trim()
+    );
+    if (!Number.isFinite(sliderMaxPx)) return;
 
-    const mq = window.matchMedia(`(max-width: ${tabletMaxPx}px)`);
+    const mq = window.matchMedia(`(max-width: ${sliderMaxPx}px)`);
     const sync = () => setUseSliderLayout(mq.matches);
 
     sync();

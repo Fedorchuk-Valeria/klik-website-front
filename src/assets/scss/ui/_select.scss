@@ -1,6 +1,7 @@
 .select {
   position: relative;
   border-radius: 100px;
+  transition: border-radius 0.3s ease-in-out;
 
   &.select--open {
     border: 2px solid var(--main-orange);
@@ -12,6 +13,7 @@
       left: -2px;
       width: calc(100% + 4px);
       position: relative;
+      border-radius: 0;
     }
   }
 
@@ -45,6 +47,7 @@
     color: var(--main-black);
     cursor: pointer;
     background: transparent;
+    transition: border-radius 0.3s ease-in-out;
 
     span {
       display: flex;
@@ -53,11 +56,15 @@
 
       .select__icon {
         @include icon(24px);
+        min-width: 24px;
+        min-height: 24px;
       }
 
       &.select__current-button {
         @include center;
         @include icon(40px);
+        min-width: 40px;
+        min-height: 40px;
         background: var(--main-green-dark);
         border-radius: 50%;
         transition: transform 0.3s ease;
@@ -73,12 +80,32 @@
     }
   }
 
+  .select__dropdown-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease-in-out;
+    pointer-events: none;
+
+    &--open {
+      grid-template-rows: 1fr;
+      pointer-events: auto;
+    }
+  }
+
+  .select__dropdown-inner {
+    min-height: 0;
+    max-height: 70vh;
+    overflow: hidden;
+
+    .select__dropdown-wrap--open & {
+      overflow-y: auto;
+    }
+  }
+
   .select__dropdown {
     margin: 0;
     padding-bottom: 5px;
     list-style: none;
-    max-height: 70vh;
-    overflow-y: auto;
   }
 
   .select__item {

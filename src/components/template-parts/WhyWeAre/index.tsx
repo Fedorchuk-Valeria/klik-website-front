@@ -54,7 +54,6 @@ const WhyWeAre: FC<PropTypes> = ({ tag, title, text, items, info }) => {
   const slideCountRef = useRef(0);
   const activeIndexRef = useRef(0);
   const itemsRef = useRef<ReviewItem[]>([]);
-  const activeHeightsRef = useRef<Record<string, number>>({});
   const desktopTransitionIdRef = useRef(0);
   const slideTransitionRef = useRef<{
     direction: WhyWeAreSliderTransition;
@@ -64,7 +63,6 @@ const WhyWeAre: FC<PropTypes> = ({ tag, title, text, items, info }) => {
   } | null>(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [activeHeights, setActiveHeights] = useState<Record<string, number>>({});
   const [isDesktopReviews, setIsDesktopReviews] = useState(false);
   const [slideTransition, setSlideTransition] = useState<{
     direction: WhyWeAreSliderTransition;
@@ -158,12 +156,6 @@ const WhyWeAre: FC<PropTypes> = ({ tag, title, text, items, info }) => {
   const onDesktopTransitionEnd = useCallback(() => {
     slideTransitionRef.current = null;
     setSlideTransition(null);
-  }, []);
-
-  const onMeasureActiveHeight = useCallback((itemId: string, height: number) => {
-    if (activeHeightsRef.current[itemId] === height) return;
-    activeHeightsRef.current = { ...activeHeightsRef.current, [itemId]: height };
-    setActiveHeights(activeHeightsRef.current);
   }, []);
 
   const resolveReviewIndexFromSlot = useCallback((slot: number, fromIndex: number) => {
@@ -417,15 +409,14 @@ const WhyWeAre: FC<PropTypes> = ({ tag, title, text, items, info }) => {
           {isDesktopReviews ? (
             <WhyWeAreSlider
               slides={slideTransition?.slides ?? desktopSlides}
+              allItems={items}
               transition={slideTransition?.direction ?? null}
               transitionId={slideTransition?.id ?? 0}
               withEnterSlide={slideTransition?.withEnterSlide ?? false}
-              activeHeights={activeHeights}
               onSlideClick={onDesktopSlideClick}
               onSwipeNext={goNext}
               onSwipePrev={goPrev}
               onTransitionEnd={onDesktopTransitionEnd}
-              onMeasureActiveHeight={onMeasureActiveHeight}
             />
           ) : (
             <Swiper

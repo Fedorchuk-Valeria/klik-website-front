@@ -851,6 +851,8 @@
           }
 
           .courses-list__item-categories {
+            max-height: 70px;
+
             .courses-list__item-category {
               font-size: 12px;
               padding: 6px 14px;

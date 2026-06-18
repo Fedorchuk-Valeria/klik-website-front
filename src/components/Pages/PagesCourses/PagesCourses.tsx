@@ -27,12 +27,15 @@ import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import Loader from "@/src/components/ui/Loader/Loader";
 import Select from "@/src/components/ui/Select";
+
+import { getPlural } from "@/src/helper/getPlural";
 import { MAX_AGE } from "@/src/store/sagas/auth.saga";
 
 type Props = {
   initialCourses?: Course[];
   initialMeta?: Meta;
   initialErrors?: Record<string, string> | null;
+  initialIsLoggedIn?: boolean;
 };
 
 const buildCoursesQuery = (page: number, scope: string, categories: string[]): string =>
@@ -52,10 +55,12 @@ const PagesCourses = ({
     total_pages: 0,
   },
   initialErrors = null,
+  initialIsLoggedIn = false,
 }: Props) => {
   const dispatch = useAppDispatch();
   const { data, meta, isLoading } = useAppSelector((state: RootStore) => state.courses);
   const { isLoggedIn } = useAppSelector((state: RootStore) => state.auth);
+  const [isHydrated, setIsHydrated] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<{ id: string; name: string }>({
     id: "all",
     name: "Все курсы",
@@ -90,12 +95,14 @@ const PagesCourses = ({
 
   const hasMore = activeMeta.page < activeMeta.total_pages;
 
+  const showMyCoursesFilter = isHydrated ? isLoggedIn : initialIsLoggedIn;
+
   const options = useMemo(
     () => [
       { id: "all", name: "Все курсы" },
-      ...(isLoggedIn ? [{ id: "my", name: "Мои курсы" }] : []),
+      ...(showMyCoursesFilter ? [{ id: "my", name: "Мои курсы" }] : []),
     ],
-    [isLoggedIn]
+    [showMyCoursesFilter]
   );
 
   const categoryOptions = useMemo(
@@ -160,6 +167,12 @@ const PagesCourses = ({
   const handleSelectCategories = (options: { id: string; name: string }[]) => {
     setSelectedCategory(options.map((item) => item.id));
   };
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      setIsHydrated(true);
+    });
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -404,7 +417,8 @@ const PagesCourses = ({
                 <p className="courses-list__item-description">{item.description}</p>
 
                 <span className="courses-list__item-duration">
-                  <Icon name="clock" /> {item.duration_months} месяцев
+                  <Icon name="clock" /> {item.duration_months}{" "}
+                  {getPlural(item.duration_months, ["месяц", "месяца", "месяцев"])}
                 </span>
 
                 <p className="courses-list__item-price">

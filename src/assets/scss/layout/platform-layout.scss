@@ -1,3 +1,5 @@
+@import "@/src/assets/scss/mixins";
+
 .platform-layout {
   &__content {
     padding-top: 135px;
@@ -9,14 +11,36 @@
     @media screen and (max-width: $tablet-size) {
       padding-top: 105px;
     }
-
-    @media screen and (max-width: $mobile-size) {
-      padding-top: 80px;
-    }
   }
 
-  .header__cabinet {
-    display: block;
+  .header {
+    .header__cabinet {
+      display: block;
+
+      @media screen and (max-width: 942px) {
+        display: block;
+      }
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      .header__logout-button {
+        @include icon(44px);
+
+        .header__logout-icon {
+          @include icon(22px);
+        }
+      }
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      .header__wrapper {
+        padding: 10px 20px;
+      }
+
+      .header__top {
+        align-items: center;
+      }
+    }
   }
 
   &__container {

@@ -238,6 +238,16 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
                       slideShadows: false,
                     },
                   },
+                  1280: {
+                    coverflowEffect: {
+                      rotate: 15,
+                      stretch: 236,
+                      depth: 100,
+                      scale: 0.95,
+                      modifier: 1,
+                      slideShadows: false,
+                    },
+                  },
                 }}
               >
                 {items.map((item, index) => {

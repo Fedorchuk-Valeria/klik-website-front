@@ -42,6 +42,8 @@ export const PAGES = {
   COURSES: "/courses",
   COURSE: "/courses/:id",
   LESSON: "/courses/:id/lesson/:lessonId",
+
+  CONTACTS_PAGE: "/contacts",
 };
 
 export const PAGE_ANCHORS = {

@@ -30,14 +30,18 @@
       padding: 0;
 
       .home-page__what-we-learn-item {
-        border: 2px solid var(--main-orange);
-        border-radius: 40px;
+        border: 2px solid rgba(238, 108, 77, 0.4);
+        border-radius: 50px;
         background: var(--secondary-white-80);
         overflow: hidden;
+        transition:
+          border-radius 0.3s ease 0.3s,
+          border-color 0.3s ease 0.3s;
 
-        &:not(:has(.is-open)) {
-          border: 2px solid rgba(238, 108, 77, 0.4);
-          border-radius: 50px;
+        &:has(.is-open) {
+          border-color: var(--main-orange);
+          border-radius: 40px;
+          transition: none;
         }
       }
 
@@ -278,7 +282,127 @@
     }
   }
 
+  @media screen and (max-width: $desktop-compact) {
+    .home-page__what-we-learn-line {
+      & > svg:first-child {
+        width: 1280px;
+        height: 930px;
+      }
+
+      .home-page__what-we-learn-line-message {
+        right: 90px;
+        bottom: 50px;
+
+        svg {
+          width: 180px;
+          height: 164px;
+        }
+      }
+    }
+
+    .home-page__what-we-learn-top {
+      gap: 16px;
+
+      .home-page__what-we-learn-text {
+        font-size: 18px;
+      }
+    }
+
+    .home-page__what-we-learn-body {
+      margin-top: 40px;
+      gap: 40px;
+    }
+
+    .home-page__what-we-learn-accordion {
+      flex: 0 0 min(464px, 60%);
+
+      .home-page__what-we-learn-list {
+        gap: 10px;
+
+        .home-page__what-we-learn-item {
+          &:not(:has(.is-open)) {
+            .home-page__what-we-learn-trigger {
+              padding: 8px 8px 18px 30px;
+            }
+          }
+
+          .home-page__what-we-learn-trigger {
+            padding: 14px 14px 5px 30px;
+
+            .home-page__what-we-learn-trigger-title {
+              font-size: 18px;
+            }
+
+            .home-page__what-we-learn-trigger-icon {
+              @include icon(50px);
+            }
+          }
+
+          .home-page__what-we-learn-panel {
+            margin-top: -10px;
+
+            .home-page__what-we-learn-panel-text {
+              font-size: 14px;
+              max-width: calc(100% - 60px);
+            }
+
+            .home-page__what-we-learn-tags {
+              display: grid;
+              grid-template-columns: repeat(1, 1fr);
+              column-gap: 50px;
+              row-gap: 0px;
+              width: fit-content;
+
+              li {
+                font-size: 14px;
+                width: fit-content;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .home-page__what-we-learn-gallery {
+      .home-page__what-we-learn-swiper {
+        .swiper-slide {
+          width: min(396px, 42vw);
+        }
+      }
+
+      .home-page__what-we-learn-slide-frame {
+        border-radius: 40px;
+
+        .home-page__what-we-learn-slide-tag {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
   @media screen and (max-width: $landscape-tablet-size) {
+    &.home-page__block {
+      padding-bottom: 200px;
+    }
+
+    .home-page__what-we-learn-line {
+      & > svg:first-child {
+        width: 1024px;
+        height: 870px;
+        transform: translateX(-57%);
+      }
+
+      .home-page__what-we-learn-line-message {
+        right: 90px;
+        bottom: 100px;
+
+        svg {
+          width: 165px;
+          height: 150px;
+        }
+      }
+    }
+
     .home-page__what-we-learn-top {
       gap: 12px;
 
@@ -305,6 +429,8 @@
           }
 
           .home-page__what-we-learn-trigger {
+            padding: 10px 10px 0px 30px;
+
             .home-page__what-we-learn-trigger-title {
               font-size: 18px;
             }
@@ -340,7 +466,7 @@
     .home-page__what-we-learn-gallery {
       .home-page__what-we-learn-swiper {
         .swiper-slide {
-          width: min(450px, 42vw);
+          width: min(450px, 44vw);
         }
       }
 
@@ -354,30 +480,132 @@
     }
   }
 
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    &.home-page__block {
+      padding-bottom: 120px;
+    }
+
+    .home-page__what-we-learn-top {
+      gap: 10px;
+
+      .home-page__what-we-learn-title {
+        font-size: 44px;
+        max-width: 700px;
+      }
+
+      .home-page__what-we-learn-text {
+        font-size: 16px;
+        max-width: 663px;
+      }
+    }
+
+    .home-page__what-we-learn-line {
+      & > svg:first-child {
+        width: 100%;
+        height: 820px;
+        transform: translateX(-60%);
+      }
+
+      .home-page__what-we-learn-line-message {
+        top: -44px;
+        right: 14px;
+
+        svg {
+          width: 146px;
+          height: 133px;
+        }
+      }
+    }
+
+    .home-page__what-we-learn-accordion {
+      flex: 0 0 min(100%, 100%);
+
+      .home-page__what-we-learn-list {
+        gap: 10px;
+
+        .home-page__what-we-learn-item {
+          &:not(:has(.is-open)) {
+            .home-page__what-we-learn-trigger {
+              padding: 5px 5px 10px 25px;
+            }
+          }
+
+          .home-page__what-we-learn-trigger {
+            padding: 5px 5px 5px 25px;
+
+            .home-page__what-we-learn-trigger-title {
+              font-size: 20px;
+            }
+
+            .home-page__what-we-learn-trigger-icon {
+              @include icon(50px);
+
+              svg {
+                @include icon(21px);
+              }
+            }
+          }
+
+          .home-page__what-we-learn-panel {
+            margin-top: -5px;
+            max-width: 100%;
+
+            .home-page__what-we-learn-panel-inner {
+              padding: 0 10px 20px 25px;
+            }
+
+            .home-page__what-we-learn-tags {
+              margin-top: 10px;
+            }
+
+            .home-page__what-we-learn-panel-text {
+              max-width: calc(100% - 68px);
+            }
+          }
+        }
+      }
+    }
+
+    .home-page__what-we-learn-gallery {
+      display: none;
+    }
+  }
+
   @media screen and (max-width: $tablet-size) {
+    &.home-page__block {
+      padding-bottom: 100px;
+    }
+
+    .home-page__what-we-learn-line {
+      & > svg:first-child {
+        width: 100%;
+        height: 950px;
+        transform: translateX(-68%);
+        top: 25px;
+      }
+
+      .home-page__what-we-learn-line-message {
+        top: -18px;
+        right: 0px;
+
+        svg {
+          width: 165px;
+          height: 150px;
+        }
+      }
+    }
+
     .home-page__what-we-learn-top {
       gap: 5px;
 
       .home-page__what-we-learn-title {
         max-width: 550px;
+        font-size: 50px;
       }
 
       .home-page__what-we-learn-text {
         font-size: 20px;
-      }
-    }
-
-    .home-page__what-we-learn-line {
-      left: -200px;
-    }
-
-    .home-page__what-we-learn-line-message {
-      top: 0;
-      right: -200px;
-
-      svg {
-        width: 165px;
-        height: 150px;
+        max-width: 550px;
       }
     }
 
@@ -409,6 +637,10 @@
           .home-page__what-we-learn-panel {
             margin-top: -5px;
 
+            .home-page__what-we-learn-panel-inner {
+              padding: 0 10px 20px 30px;
+            }
+
             .home-page__what-we-learn-panel-text {
               max-width: calc(100% - 68px);
             }
@@ -423,8 +655,40 @@
   }
 
   @media screen and (max-width: $mobile-size) {
+    &.home-page__block {
+      padding-bottom: 80px;
+    }
+
+    .home-page__what-we-learn-line {
+      & > svg:first-child {
+        width: 100%;
+        height: 960px;
+        transform: translateX(-60%);
+        top: -140px;
+
+        path {
+          stroke-width: 20px;
+        }
+      }
+
+      .home-page__what-we-learn-line-message {
+        top: -18px;
+        right: 0px;
+
+        svg {
+          width: 165px;
+          height: 150px;
+        }
+      }
+    }
+
     .home-page__what-we-learn-top {
       gap: 12px;
+
+      .home-page__what-we-learn-title {
+        font-size: 28px;
+        max-width: 100%;
+      }
 
       .home-page__what-we-learn-text {
         font-size: 16px;
@@ -443,6 +707,10 @@
         .home-page__what-we-learn-item {
           border-radius: 24px;
 
+          &:has(.is-open) {
+            border-radius: 24px;
+          }
+
           .home-page__what-we-learn-trigger {
             padding: 5px 5px 5px 20px;
 
@@ -452,6 +720,10 @@
 
             .home-page__what-we-learn-trigger-icon {
               @include icon(44px);
+
+              svg {
+                @include icon(18px);
+              }
             }
           }
 

@@ -312,7 +312,7 @@
     }
 
     .home-page__tutors-carousel {
-      --tutors-viewport-w: 1385px;
+      --tutors-viewport-w: 1280px;
       --tutors-detail-spacer-w: 630px;
 
       .home-page__tutors-slider-viewport {
@@ -361,7 +361,7 @@
 
         .home-page__tutors-detail__nav {
           gap: 5px;
-          right: 90px;
+          right: 0;
 
           .home-page__tutors-nav {
             @include icon(50px);
@@ -372,13 +372,14 @@
 
     .home-page__tutors-slider {
       &__track {
+        gap: 16px;
         min-height: 518px;
       }
 
       .home-page__tutors-slide {
         width: 200px;
         max-width: 200px;
-        height: 296px;
+        height: 298px;
 
         &--active {
           width: 414px;
@@ -399,6 +400,70 @@
         left: 10px;
         right: 10px;
         gap: 5px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $desktop-compact) {
+    .home-page__tutors-carousel {
+      --tutors-detail-spacer-w: 40vw + 172px;
+    }
+
+    .home-page__tutors-slider {
+      &__track {
+        gap: 18px;
+        min-height: 566px;
+      }
+
+      .home-page__tutors-slide {
+        width: 218px;
+        max-width: 218px;
+        height: 323px;
+
+        &--active {
+          width: 452px;
+          max-width: 452px;
+          height: 566px;
+        }
+      }
+    }
+
+    .home-page__tutors-thumb {
+      .home-page__tutors-tag {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+    }
+
+    .home-page__tutors-detail {
+      .home-page__tutors-detail__inner {
+        .home-page__tutors-detail__text {
+          gap: 20px;
+
+          .home-page__tutors-detail__name {
+            font-size: 32px;
+            width: fit-content;
+          }
+
+          .home-page__tutors-detail__position {
+            font-size: 14px;
+          }
+        }
+
+        .home-page__tutors-detail__location {
+          margin-top: 13px;
+        }
+
+        .home-page__tutors-detail__layers {
+          .home-page__tutors-detail__layer {
+            gap: 10px;
+            font-size: 12px;
+          }
+        }
+
+        .home-page__tutors-detail__nav {
+          bottom: 0;
+        }
       }
     }
   }
@@ -465,6 +530,7 @@
 
         .home-page__tutors-detail__text {
           align-items: flex-end;
+          gap: 30px;
 
           .home-page__tutors-detail__name {
             font-size: 30px;
@@ -488,6 +554,7 @@
         .home-page__tutors-detail__location {
           font-size: 12px;
           padding: 6px 10px;
+          margin-top: 10px;
 
           svg {
             @include icon(20px);
@@ -555,9 +622,88 @@
     }
   }
 
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    .home-page__tutors-top {
+      gap: 10px;
+
+      .home-page__tutors-title {
+        font-size: 44px;
+      }
+
+      .home-page__tutors-text {
+        max-width: 100%;
+      }
+    }
+
+    .home-page__tutors-thumb {
+      .home-page__tutors-thumb__tags {
+        .home-page__tutors-tag {
+          padding: 6px 12px;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .home-page__tutors-detail {
+      .home-page__tutors-detail__inner {
+        .home-page__tutors-detail__text {
+          gap: 40px;
+
+          .home-page__tutors-detail__name {
+            font-size: 28px;
+
+            &::after {
+              right: -20px;
+            }
+          }
+
+          .home-page__tutors-detail__position {
+            font-size: 12px;
+          }
+        }
+
+        .home-page__tutors-detail__location {
+          svg {
+            @include icon(18px);
+          }
+        }
+
+        .home-page__tutors-detail__layers .home-page__tutors-detail__layer {
+          gap: 14px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 880px) {
+    .home-page__tutors-detail {
+      .home-page__tutors-detail__inner {
+        .home-page__tutors-detail__text {
+          gap: 10px;
+          align-items: flex-start;
+          flex-direction: column;
+
+          .home-page__tutors-detail__name {
+            &::after {
+              display: none;
+            }
+          }
+
+          .home-page__tutors-detail__position {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+
   @media screen and (max-width: $tablet-size) {
     .home-page__tutors-top {
       gap: 5px;
+
+      .home-page__tutors-title {
+        font-size: 50px;
+      }
 
       .home-page__tutors-text {
         font-size: 20px;
@@ -567,9 +713,21 @@
 
     .home-page__tutors-detail {
       .home-page__tutors-detail__inner {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
         gap: 14px;
         padding-top: 30px;
         padding-bottom: 30px;
+
+        .home-page__tutors-detail__layers {
+          flex: 1;
+          min-height: 0;
+
+          .home-page__tutors-detail__layer {
+            height: 100%;
+          }
+        }
 
         .home-page__tutors-detail__text {
           flex-direction: column;
@@ -611,9 +769,11 @@
     }
 
     .home-page__tutors-thumb {
-      .home-page__tutors-tag {
-        font-size: 14px;
-        padding: 6px 20px;
+      .home-page__tutors-thumb__tags {
+        .home-page__tutors-tag {
+          font-size: 14px;
+          padding: 6px 20px;
+        }
       }
     }
 
@@ -655,6 +815,10 @@
     .home-page__tutors-top {
       gap: 12px;
 
+      .home-page__tutors-title {
+        font-size: 28px;
+      }
+
       .home-page__tutors-text {
         font-size: 16px;
       }
@@ -672,9 +836,21 @@
       margin: 0 auto;
 
       .home-page__tutors-detail__inner {
+        display: block;
+        height: auto;
         gap: 10px;
         padding-top: 0;
         padding-bottom: 10px;
+
+        .home-page__tutors-detail__layers {
+          flex: none;
+          min-height: 0;
+
+          .home-page__tutors-detail__layer {
+            height: auto;
+            gap: 10px;
+          }
+        }
 
         .home-page__tutors-detail__text {
           gap: 10px;

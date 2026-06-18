@@ -1,27 +1,27 @@
 "use client";
 
+import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, useEffect } from "react";
+
+import { setNewPasswordValidationSchema } from "@/src/components/Login/validationSchema";
+import Button from "@/src/components/ui/Button/Button";
 import ButtonBack from "@/src/components/ui/ButtonBack/ButtonBack";
 import PasswordInput from "@/src/components/ui/PasswordInput";
-import Button from "@/src/components/ui/Button/Button";
-import {useRouter} from "next/navigation";
-import {useAppDispatch, useAppSelector} from "@/src/store/hooks";
-import {RootStore} from "@/src/store";
-import {useFormik} from "formik";
-import {setNewPasswordValidationSchema} from "@/src/components/Login/validationSchema";
-import {PAGES, PASSWORD_INPUT_STRIP_REGEX} from "@/src/utils/constant";
-import {changePasswordRequest} from "@/src/store/slices/auth";
-import {ChangeEvent, useEffect} from "react";
-import {showModal} from "@/src/store/slices/modalSlice";
-import {ModalType} from "@/src/entities/common";
 import PopoverPassword from "@/src/components/ui/Popovers/PopoverPassword";
 
-const PagesProfilePassword = () => {
+import { RootStore } from "@/src/store";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { changePasswordRequest, clearPasswordChanged } from "@/src/store/slices/auth";
+import { showModal } from "@/src/store/slices/modalSlice";
 
+import { ModalType } from "@/src/entities/common";
+import { PAGES, PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
+
+const PagesProfilePassword = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isLoading, errors, isPasswordChanged } = useAppSelector(
-    (state: RootStore) => state.auth
-  );
+  const { isLoading, errors, isPasswordChanged } = useAppSelector((state: RootStore) => state.auth);
 
   const form = useFormik({
     initialValues: {
@@ -57,6 +57,12 @@ const PagesProfilePassword = () => {
   }, [errors]);
 
   useEffect(() => {
+    return () => {
+      dispatch(clearPasswordChanged());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     if (isPasswordChanged) {
       dispatch(
         showModal({
@@ -70,19 +76,25 @@ const PagesProfilePassword = () => {
         })
       );
 
+      dispatch(clearPasswordChanged());
+
       router.push(PAGES.PROFILE);
     }
-  }, [isPasswordChanged]);
+  }, [isPasswordChanged, dispatch, router]);
 
   const handleBack = () => {
-    router.push(PAGES.PROFILE)
+    router.push(PAGES.PROFILE);
   };
 
   return (
     <div className="page-profile">
       <div className="platform-layout__container">
         <div className="page-profile__content">
-          <ButtonBack label="Вернуться в личный профиль" className="page-profile__back" onClick={handleBack} />
+          <ButtonBack
+            label="Вернуться в личный профиль"
+            className="page-profile__back"
+            onClick={handleBack}
+          />
           <h1>Изменить пароль</h1>
           <form className="page-profile__form password" onSubmit={form.handleSubmit}>
             <PasswordInput
@@ -100,6 +112,7 @@ const PagesProfilePassword = () => {
               error={form.errors.password}
               className="login-page__form-input"
               disabled={isLoading}
+              maxLength={64}
             />
 
             <PasswordInput
@@ -112,6 +125,7 @@ const PagesProfilePassword = () => {
               error={form.errors.confirmPassword}
               className="login-page__form-input"
               disabled={isLoading}
+              maxLength={64}
             />
 
             <div className="page-profile__row-form">
@@ -124,7 +138,9 @@ const PagesProfilePassword = () => {
               >
                 Сохранить изменения
               </Button>
-              <Button variant='outline-green-dark' onClick={handleBack}>Отмена</Button>
+              <Button variant="outline-green-dark" onClick={handleBack}>
+                Отмена
+              </Button>
             </div>
           </form>
         </div>

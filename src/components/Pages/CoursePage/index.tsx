@@ -1,6 +1,5 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { FC, useEffect, useMemo } from "react";
 
 import CourseAbout from "@/src/components/template-parts/Course/About";
@@ -10,7 +9,7 @@ import Icon from "@/src/components/ui/Icon/Icon";
 
 import { ModalType } from "@/src/entities/common";
 import { Course } from "@/src/lib/getCourses";
-import {PAGES, PAYMENT_STATUS_FAILED, PAYMENT_STATUS_SUCCESSFULL} from "@/src/utils/constant";
+import { PAGES } from "@/src/utils/constant";
 
 import { getPlural } from "@/src/helper/getPlural";
 import { CitySettings } from "@/src/lib/getCitySettings";
@@ -25,7 +24,6 @@ type PropTypes = {
 
 const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
   const dispatch = useAppDispatch();
-  const searchParams = useSearchParams();
 
   if (errors) {
     console.error(errors);
@@ -35,18 +33,18 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
     () => [
       {
         id: 1,
-        title: data?.lessons_count,
+        title: data.lessons_count,
         icon: "player",
-        description: getLessons(data?.lessons_count ?? 0),
+        description: getLessons(data?.lessons_count ?? 0).split(" ")[1] || "",
       },
       {
         id: 2,
         icon: "clock",
-        title: `${getMonths(data.duration_months)}`,
+        title: `${getMonths(data?.duration_months)}`,
         description: "длительность",
       },
     ],
-    [data?.lessons_count, data.duration_months]
+    [data.lessons_count, data.duration_months]
   );
 
   const handlePayment = () => {
@@ -124,7 +122,7 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
               id: lesson.id,
               title: lesson.title,
               test_result: lesson.test_result,
-              duration: `${lesson.duration_minutes} ${getTime(lesson.duration_minutes)}`,
+              duration: getTime(lesson.duration_minutes) || "",
               status: lesson.is_completed ? "done" : lesson.is_locked ? "disabled" : "active",
             })) ?? []
           }

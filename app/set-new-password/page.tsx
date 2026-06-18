@@ -51,7 +51,7 @@ const SetNewPasswordForm = () => {
     const { name, value } = e.target;
     const filtered = value.replace(PASSWORD_INPUT_STRIP_REGEX, "");
 
-    void form.setFieldValue(name, filtered, true);
+    void form.setFieldValue(name, filtered);
   };
 
   useEffect(() => {
@@ -96,6 +96,7 @@ const SetNewPasswordForm = () => {
           error={form.errors.password}
           className="login-page__form-input"
           disabled={isLoading}
+          maxLength={64}
         />
 
         <PasswordInput
@@ -108,6 +109,7 @@ const SetNewPasswordForm = () => {
           error={form.errors.confirmPassword}
           className="login-page__form-input"
           disabled={isLoading}
+          maxLength={64}
         />
 
         <Button

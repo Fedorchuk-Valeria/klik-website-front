@@ -202,18 +202,18 @@
         background: var(--main-blue);
 
         .contacts-view__payment-button--download {
-          button {
-            @include center;
-            @include icon(50px);
-            color: var(--main-orange);
-            background: var(--main-light);
-            border-radius: 50%;
-            border: 1px solid var(--main-orange);
-            cursor: pointer;
+          @include center;
+          @include icon(50px);
+          color: var(--main-orange);
+          background: var(--main-light);
+          border-radius: 50%;
+          border: 1px solid var(--main-orange);
+          cursor: pointer;
+          text-decoration: none;
+          flex-shrink: 0;
 
-            svg {
-              @include icon(24px);
-            }
+          svg {
+            @include icon(24px);
           }
         }
 
@@ -339,12 +339,10 @@
           padding: 16px;
 
           .contacts-view__payment-button--download {
-            button {
-              @include icon(58px);
+            @include icon(58px);
 
-              svg {
-                @include icon(24px);
-              }
+            svg {
+              @include icon(24px);
             }
           }
 
@@ -493,12 +491,10 @@
           padding: 14px;
 
           .contacts-view__payment-button--download {
-            button {
-              @include icon(50px);
+            @include icon(50px);
 
-              svg {
-                @include icon(20px);
-              }
+            svg {
+              @include icon(20px);
             }
           }
 
@@ -630,7 +626,7 @@
 
             .contacts-view__payment-item_list-item {
               font-size: 14px;
-              gap: 24px;
+              gap: 22px;
 
               &:not(:first-child) {
                 padding-top: 16px;
@@ -648,12 +644,10 @@
           padding: 10px;
 
           .contacts-view__payment-button--download {
-            button {
-              @include icon(40px);
+            @include icon(40px);
 
-              svg {
-                @include icon(20px);
-              }
+            svg {
+              @include icon(20px);
             }
           }
 
@@ -805,12 +799,10 @@
           padding: 10px;
 
           .contacts-view__payment-button--download {
-            button {
-              @include icon(40px);
+            @include icon(40px);
 
-              svg {
-                @include icon(20px);
-              }
+            svg {
+              @include icon(20px);
             }
           }
 
@@ -941,12 +933,10 @@
           padding: 10px;
 
           .contacts-view__payment-button--download {
-            button {
-              @include icon(50px);
+            @include icon(50px);
 
-              svg {
-                @include icon(24px);
-              }
+            svg {
+              @include icon(24px);
             }
           }
 
@@ -1102,12 +1092,10 @@
           padding: 6px;
 
           .contacts-view__payment-button--download {
-            button {
-              @include icon(40px);
+            @include icon(40px);
 
-              svg {
-                @include icon(20px);
-              }
+            svg {
+              @include icon(20px);
             }
           }
 
