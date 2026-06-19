@@ -882,4 +882,66 @@
       }
     }
   }
+
+  &__payment {
+
+    display: flex;
+    gap: 50px;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 20px;
+
+    @media screen and (max-width: $desktop-compact) {
+      gap: 37px;
+    }
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      gap: 29px;
+    }
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      gap: 37px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      gap: 47px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      gap: 16px;
+    }
+
+    &-belkart {
+      width: 24px;
+      height: 26px;
+    }
+    &-visa {
+      width: 36px;
+      height: 12px;
+    }
+    &-visasecure {
+      width: 21px;
+      height: 18px;
+    }
+    &-mastercard {
+      width: 30px;
+      height: 19px;
+    }
+    &-idcheck {
+      width: 27px;
+      height: 19px;
+    }
+    &-belkartsecurity {
+      width: 37px;
+      height: 15px;
+    }
+    &-bepaid {
+      width: 39px;
+      height: 10px;
+    }
+    &-gpay {
+      width: 31px;
+      height: 16px;
+    }
+  }
 }
