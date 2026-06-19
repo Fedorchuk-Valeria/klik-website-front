@@ -13,6 +13,7 @@ import PhoneInput from "@/src/components/ui/PhoneInput";
 import Popover from "@/src/components/ui/Popover";
 import TextInput from "@/src/components/ui/TextInput";
 
+import Button from "@/src/components/ui/Button/Button";
 import { getPlural } from "@/src/helper/getPlural";
 import { PAGES } from "@/src/utils/constant";
 
@@ -69,6 +70,71 @@ const ChildrenDetailsPage = () => {
       title: "Занятия",
       value: 4,
       plural: ["оплаченное занятие", "оплаченных занятия", "оплаченных занятий"],
+    },
+  ];
+
+  const programs = [
+    {
+      title: "Программа «Креаторы»",
+      items: [
+        {
+          title: "Ссылка на чат группы в тг",
+          value: "@Klik-tg-chat",
+          link: "https://t.me/Klik-tg-chat",
+        },
+        {
+          title: "Локация",
+          value: "Арэна, г. Минск, Пр. Победителей 84, ТЦ Arena City, 2 этаж",
+        },
+        {
+          title: "Менеджер-ссылка на аккаунт в Telegram",
+          value: "@Klik-tg-manager",
+          link: "https://t.me/Klik-tg-manager",
+        },
+        {
+          title: "Абонемент (+скидка)",
+          value: "220р/4 занятия, скидка 10%",
+        },
+        {
+          title: "День и время занятия",
+          value: "пн, 16:00",
+        },
+        {
+          title: "Тема следующего занятия",
+          value: "JavaScript: основы языка",
+        },
+      ],
+    },
+    {
+      title: "Программа «Креаторы»",
+      items: [
+        {
+          title: "Ссылка на чат группы в тг",
+          value: "@Klik-tg-chat",
+          link: "https://t.me/Klik-tg-chat",
+        },
+        {
+          title: "Локация",
+          value: "Арэна, г. Минск, Пр. Победителей 84, ТЦ Arena City, 2 этаж",
+        },
+        {
+          title: "Менеджер-ссылка на аккаунт в Telegram",
+          value: "@Klik-tg-manager",
+          link: "https://t.me/Klik-tg-manager",
+        },
+        {
+          title: "Абонемент (+скидка)",
+          value: "220р/4 занятия, скидка 10%",
+        },
+        {
+          title: "День и время занятия",
+          value: "пн, 16:00",
+        },
+        {
+          title: "Тема следующего занятия",
+          value: "JavaScript: основы языка",
+        },
+      ],
     },
   ];
 
@@ -178,6 +244,139 @@ const ChildrenDetailsPage = () => {
 
                 <span>Показать еще</span>
               </button>
+            </div>
+          </div>
+
+          <div className="children-details-page__formats">
+            <div className="home-page__tag children-details-page__formats_tag">
+              Форматы обучения
+            </div>
+
+            <p className="children-details-page__formats_text">
+              Со всеми форматами обучения школы вы можете ознакомиться на нашем{" "}
+              <Link href={PAGES.HOME}>сайте.</Link>
+            </p>
+
+            <div className="children-details-page__formats_wrapper">
+              <div className="children-details-page__formats_item">
+                <p className="children-details-page__formats_item-title">
+                  Самостоятельное обучение
+                </p>
+
+                <p className="children-details-page__formats_item-text">
+                  Перейдите к обучению на платформе
+                </p>
+
+                <Link href={PAGES.COURSES} className="children-details-page__formats_item-button">
+                  <Button variant="main-green-dark" withArrow>
+                    Перейти к курсам
+                  </Button>
+                </Link>
+              </div>
+
+              <ul className="children-details-page__formats_list">
+                <li className="children-details-page__formats_list-item">
+                  <div className="children-details-page__formats_item-status">
+                    <Icon name="success-circle" />
+
+                    <span>Активный</span>
+                  </div>
+
+                  <div className="children-details-page__formats_item-content">
+                    <div className="children-details-page__formats_item-content-text">
+                      <p>Web-разработка: HTML, CSS, JavaScript</p>
+
+                      <span>Срок доступа к курсу: 20.01.2026 - 20.05.2026</span>
+                    </div>
+
+                    <Link
+                      className="children-details-page__formats_item-content-button"
+                      href={PAGES.LESSON.replace(":id", "1").replace(":lessonId", "1")}
+                    >
+                      <Button variant="main-green-dark">
+                        <Icon name="arrow-long" />
+                      </Button>
+                    </Link>
+                  </div>
+                </li>
+
+                <li
+                  className={classNames(
+                    "children-details-page__formats_list-item",
+                    "children-details-page__formats_list-item--disabled"
+                  )}
+                >
+                  <div className="children-details-page__formats_item-status">
+                    <Icon name="success-circle" />
+
+                    <span>Активный</span>
+                  </div>
+
+                  <div className="children-details-page__formats_item-content">
+                    <div className="children-details-page__formats_item-content-text">
+                      <p>Web-разработка: HTML, CSS, JavaScript</p>
+
+                      <span>Срок доступа к курсу: 20.01.2026 - 20.05.2026</span>
+                    </div>
+
+                    <Link
+                      className="children-details-page__formats_item-content-button"
+                      href={PAGES.LESSON.replace(":id", "1").replace(":lessonId", "1")}
+                    >
+                      <Button variant="main-green-dark">
+                        <Icon name="arrow-long" />
+                      </Button>
+                    </Link>
+                  </div>
+                </li>
+
+                <button className="children-details-page__formats_item-more">
+                  <Icon name="arrow" />
+
+                  <span>Показать еще</span>
+                </button>
+              </ul>
+            </div>
+          </div>
+
+          <div className="children-details-page__offline">
+            <div className="children-details-page__offline_headline">
+              <p className="children-details-page__offline_headline-title">
+                Офлайн-занятия в группе
+              </p>
+
+              <div className="children-details-page__offline_headline-actions">
+                <Button variant="outline-orange">История платежей</Button>
+                <Button variant="main-green-dark" withArrow>
+                  Оплатить обучение
+                </Button>
+              </div>
+            </div>
+
+            <div className="children-details-page__offline_list">
+              {programs.map((item, index) => (
+                <div key={index} className="children-details-page__offline_list-item">
+                  <p className="children-details-page__offline_list-item-title">{item.title}</p>
+
+                  <ul className="children-details-page__offline_list-item-info">
+                    {item.items.map((info, infoIndex) => (
+                      <li
+                        key={`${index}-${infoIndex}`}
+                        className="children-details-page__offline_list-item-info-item"
+                      >
+                        <span>{info.title}</span>
+                        {!!info.link ? (
+                          <a href={info.value} target="_blank" rel="noopener noreferrer">
+                            <p>{info.value}</p>
+                          </a>
+                        ) : (
+                          <p>{info.value}</p>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </div>
         </div>

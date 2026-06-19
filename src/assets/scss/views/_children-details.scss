@@ -237,4 +237,239 @@
       }
     }
   }
+
+  .children-details-page__formats {
+    margin-bottom: 100px;
+
+    .children-details-page__formats_tag {
+      margin-bottom: 30px;
+    }
+
+    .children-details-page__formats_text {
+      @include fonts(16px, 400, "Manrope");
+      margin-bottom: 100px;
+
+      a {
+        color: var(--main-green-dark);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        text-decoration-thickness: 1px;
+        text-decoration-color: var(--main-orange);
+      }
+    }
+
+    .children-details-page__formats_wrapper {
+      display: flex;
+      gap: 50px;
+
+      .children-details-page__formats_item {
+        width: 100%;
+
+        .children-details-page__formats_item-title {
+          @include fonts(40px, 500, "Etude Noire");
+          color: var(--main-green-dark);
+          margin-bottom: 20px;
+        }
+
+        .children-details-page__formats_item-text {
+          @include fonts(20px, 400, "Manrope");
+          color: var(--main-black);
+          margin-bottom: 60px;
+        }
+
+        .children-details-page__formats_item-button {
+          width: 100%;
+
+          button {
+            @include center;
+            width: calc(100% - 23px);
+          }
+        }
+      }
+
+      .children-details-page__formats_list {
+        @include flex-list(20px);
+        width: 100%;
+
+        .children-details-page__formats_list-item {
+          padding: 30px;
+          border-radius: 30px;
+          background: var(--main-blue);
+          width: 100%;
+
+          &.children-details-page__formats_list-item--disabled {
+            opacity: 0.5;
+
+            .children-details-page__formats_item-content-button {
+              display: none;
+            }
+          }
+
+          .children-details-page__formats_item-status {
+            @include fonts(14px, 500, "Manrope");
+            display: flex;
+            padding: 10px 20px 10px 10px;
+            border-radius: 100px;
+            background: var(--main-light);
+            gap: 10px;
+            color: var(--main-orange);
+            line-height: 170%;
+            max-width: fit-content;
+            margin-bottom: 10px;
+
+            svg {
+              @include icon(24px);
+            }
+          }
+
+          .children-details-page__formats_item-content {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+
+            .children-details-page__formats_item-content-text {
+              @include flex-list(10px);
+
+              p {
+                @include fonts(24px, 500, "Manrope");
+                color: var(--main-green-dark);
+              }
+
+              span {
+                @include fonts(20px, 400, "Manrope");
+                color: var(--main-black);
+                opacity: 0.5;
+              }
+            }
+
+            .children-details-page__formats_item-content-button {
+              margin-left: auto;
+
+              button {
+                @include center;
+                @include icon(80px);
+
+                svg {
+                  @include icon(48px);
+                  transform: rotate(330deg);
+                  fill: var(--main-light);
+                }
+              }
+            }
+          }
+        }
+
+        .children-details-page__formats_item-more {
+          @include fonts(16px, 600, "Manrope");
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          color: var(--main-green-dark);
+          max-width: fit-content;
+          cursor: pointer;
+
+          svg {
+            @include icon(24px);
+            fill: var(--main-green-dark);
+          }
+
+          span {
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-thickness: 1px;
+            text-decoration-color: var(--main-orange);
+          }
+        }
+      }
+    }
+  }
+
+  .children-details-page__offline {
+    margin-bottom: 180px;
+
+    .children-details-page__offline_headline {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 50px;
+
+      .children-details-page__offline_headline-title {
+        @include fonts(40px, 500, "Etude Noire");
+        color: var(--main-green-dark);
+      }
+
+      .children-details-page__offline_headline-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        max-width: 600px;
+        width: 100%;
+
+        button {
+          @include center;
+          max-width: 262px;
+          width: 100%;
+
+          &:last-child {
+            max-width: 318px;
+          }
+        }
+      }
+    }
+
+    .children-details-page__offline_list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+
+      .children-details-page__offline_list-item {
+        padding: 50px 30px 30px 30px;
+        border-radius: 50px;
+        background: #f0f6e8;
+
+        .children-details-page__offline_list-item-title {
+          @include fonts(30px, 500, "Etude Noire");
+          color: var(--main-green-dark);
+          margin-bottom: 30px;
+        }
+
+        .children-details-page__offline_list-item-info {
+          @include flex-list(48px);
+          border-radius: 20px;
+          background: var(--main-bg);
+          padding: 30px;
+
+          .children-details-page__offline_list-item-info-item {
+            @include center-between;
+            @include fonts(18px, 400, "Manrope");
+            color: var(--main-black);
+            position: relative;
+
+            &:not(:last-child) {
+              &::after {
+                content: "";
+                position: absolute;
+                bottom: -24px;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background: var(--main-blue);
+              }
+            }
+
+            a {
+              color: var(--main-orange);
+            }
+
+            p {
+              font-weight: 500;
+              opacity: 0.8;
+              max-width: 421px;
+              text-align: right;
+            }
+          }
+        }
+      }
+    }
+  }
 }
