@@ -19,6 +19,7 @@ import Socials from "@/src/components/ui/Socials/Socials";
 import { MenuItem } from "@/src/lib/content/types";
 import { CitySettings } from "@/src/lib/getCitySettings";
 import { PAGE_ANCHORS, PAGES } from "@/src/utils/constant";
+import Icon from "@/src/components/ui/Icon/Icon";
 
 type Props = {
   settings: CitySettings;
@@ -195,6 +196,16 @@ export default function FooterClient({ settings }: Props) {
               </p>
             </div>
           </div>
+        </div>
+        <div className="footer__payment">
+          <Icon className="footer__payment-visa" name="visa" />
+          <Icon className="footer__payment-visasecure" name="visa-secure" />
+          <Icon className="footer__payment-mastercard" name="mastercard" />
+          <Icon className="footer__payment-idcheck" name="id-check" />
+          <Icon className="footer__payment-belkart" name="belkart" />
+          <Icon className="footer__payment-belkartsecurity" name="belkart-security" />
+          <Icon className="footer__payment-bepaid" name="bepaid" />
+          <Icon className="footer__payment-gpay" name="gpay" />
         </div>
       </div>
     </footer>

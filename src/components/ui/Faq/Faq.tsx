@@ -42,9 +42,7 @@ function Item({ item, isOpen, onToggle }: ItemProps) {
       </button>
 
       <div className="faq-answer" style={{ height }}>
-        <div ref={contentRef} className="faq-answer-inner">
-          {item.answer}
-        </div>
+        <div ref={contentRef} className="faq-answer-inner" dangerouslySetInnerHTML={{ __html: item.answer }} />
       </div>
     </div>
   );
