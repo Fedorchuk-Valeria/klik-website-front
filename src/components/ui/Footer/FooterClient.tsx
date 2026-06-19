@@ -131,7 +131,9 @@ export default function FooterClient({ settings }: Props) {
                 {isProgram && <LogoFillSvg />}
               </div>
 
-              <div className="footer__logo-text">Дополнительное IT-образование детей 6–16 лет</div>
+              <div className="footer__logo-text">
+                Дополнительное IT-образование для детей 6–16 лет
+              </div>
             </div>
 
             {settings?.socials && (

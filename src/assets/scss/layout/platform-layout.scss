@@ -33,6 +33,14 @@
     }
 
     @media screen and (max-width: $mobile-size) {
+      .header__logout-button {
+        @include icon(40px);
+
+        .header__logout-icon {
+          @include icon(20px);
+        }
+      }
+
       .header__wrapper {
         padding: 10px 20px;
       }

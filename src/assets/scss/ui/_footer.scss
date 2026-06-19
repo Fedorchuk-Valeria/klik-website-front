@@ -68,12 +68,13 @@
 
   &__sticker {
     position: absolute;
-    top: -80px;
+    top: -90px;
     right: 90px;
-    width: 200px;
+    width: 226px;
 
     @media screen and (max-width: 1580px) {
       top: -95px;
+      width: 200px;
     }
 
     @media screen and (max-width: $desktop) {
@@ -254,6 +255,10 @@
     position: relative;
     margin-bottom: 100px;
 
+    @media screen and (max-width: $desktop) {
+      margin-bottom: 80px;
+    }
+
     @media screen and (max-width: $desktop-compact) {
       margin-bottom: 70px;
     }
@@ -409,6 +414,10 @@
   &__info {
     margin-top: 15px;
 
+    @media screen and (max-width: $landscape-tablet-size) {
+      margin-top: 5px;
+    }
+
     @media screen and (max-width: $tablet-size) {
       margin-top: 0;
     }
@@ -416,6 +425,7 @@
 
   &__logo {
     margin-bottom: 20px;
+    display: flex;
 
     @media screen and (max-width: $desktop-compact) {
       max-width: 191px;
@@ -660,10 +670,12 @@
     margin-bottom: 10px;
 
     &-wrapper {
+      @include flex-list(20px);
       padding: 30px 90px;
 
       @media screen and (max-width: $desktop) {
         padding: 30px 50px;
+        gap: 0;
       }
 
       @media screen and (max-width: $desktop-compact) {
