@@ -1,0 +1,29 @@
+.table {
+  padding: 50px;
+  border-radius: 20px;
+  background-color: var(--main-bg);
+  width: 100%;
+  border-spacing: 0;
+  color: var(--main-black);
+
+  th {
+    padding-bottom: 20px;
+    font-weight: 400;
+    opacity: 0.5;
+    text-align: left;
+  }
+
+  td {
+    padding-top: 30px;
+    @include fonts(18px, 500, "Etude Noire");
+  }
+
+  tr {
+    &:not(:last-child) {
+      td {
+        border-bottom: 1px solid var(--main-blue);
+        padding-bottom: 30px;
+      }
+    }
+  }
+}

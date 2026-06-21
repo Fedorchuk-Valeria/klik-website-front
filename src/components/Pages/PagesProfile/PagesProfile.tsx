@@ -67,8 +67,10 @@ const PagesProfile = ({ settings }: PropTypes) => {
   return (
     <div className="page-profile">
       <div className="platform-layout__container">
-        <div className="page-profile__content">
+        <div className="page-profile__header">
           <h1>Личный кабинет</h1>
+        </div>
+        <div className="page-profile__content">
           <div className="page-profile__wrapper">
             <Image src={avatar} alt="avatar" className="page-profile__avatar" />
 
@@ -124,7 +126,9 @@ const PagesProfile = ({ settings }: PropTypes) => {
                 <div className="page-profile__childrens-text">Управление учебными профилями</div>
               </div>
               <div className="page-profile__childrens-actions">
-                <Button variant="outline-green-dark">История платежей</Button>
+                <Link href={PAGES.PROFILE_PAYMENTS}>
+                  <Button variant="outline-green-dark">История платежей</Button>
+                </Link>
                 <Button variant="orange" onClick={handleCreateChildren}>
                   <Icon className="page-profile__children-icon" name="plus" />
                   Добавить ребёнка
