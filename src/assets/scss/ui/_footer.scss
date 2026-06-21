@@ -701,6 +701,18 @@
         align-items: center;
         gap: 20px;
 
+        @media screen and (max-width: $desktop) {
+          flex-direction: column;
+        }
+
+        @media screen and (max-width: $desktop-compact) {
+          flex-direction: row;
+        }
+
+        @media screen and (max-width: $landscape-tablet-size) {
+          flex-direction: column;
+        }
+
         p {
           color: var(--bardoe);
           opacity: 0.4;
@@ -808,6 +820,10 @@
       color: var(--bardoe);
       opacity: 0.4;
 
+      @media screen and (max-width: $desktop) {
+        margin-right: 0;
+      }
+
       @media screen and (max-width: $desktop-compact) {
         margin-right: 0;
         font-size: 14px;
@@ -876,6 +892,10 @@
       color: var(--bardoe);
       opacity: 0.4;
       cursor: pointer;
+
+      @media screen and (max-width: $mobile-size) {
+        text-align: center;
+      }
 
       &:hover {
         opacity: 1;
