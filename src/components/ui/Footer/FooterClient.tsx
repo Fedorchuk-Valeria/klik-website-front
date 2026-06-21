@@ -31,12 +31,12 @@ export default function FooterClient({ settings }: Props) {
 
   const footerLinks: MenuItem[] = [
     {
-      url: cookiePolicyPdf,
-      title: "Политика обработки файлов cookies",
+      url: privacyPolicyPdf,
+      title: "Политика в отношении обработки персональных данных",
     },
     {
-      url: privacyPolicyPdf,
-      title: "Политика конфиденциальности",
+      url: cookiePolicyPdf,
+      title: "Положение о файлах cookies",
     },
   ];
 
