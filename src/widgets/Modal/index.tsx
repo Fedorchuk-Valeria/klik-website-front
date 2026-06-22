@@ -16,6 +16,8 @@ import WidgetModalSuccessfully from "./Successfully";
 import WidgetModalPayment from "@/src/widgets/Modal/Payment";
 import {Course} from "@/src/lib/getCourses";
 import WidgetModalPaymentStatus from "./PaymentStatus";
+import WidgetModalCreateChildren from "@/src/widgets/Modal/CreateChildren";
+import WidgetModalPaymentChildren from "@/src/widgets/Modal/PaymentChildren";
 
 const WidgetModal = () => {
   const dispatch = useAppDispatch();
@@ -49,6 +51,10 @@ const WidgetModal = () => {
         return <WidgetModalPayment isVisible={active}  {...(modalProps as { course: Course })} />;
       case ModalType.PAYMENT_STATUS:
         return <WidgetModalPaymentStatus isVisible={active}  {...modalProps} />;
+      case ModalType.CREATE_CHILDREN:
+        return <WidgetModalCreateChildren isVisible={active}  {...modalProps} />;
+      case ModalType.PAYMENT_CHILDREN:
+        return <WidgetModalPaymentChildren isVisible={active}  {...modalProps} />;
       default:
         return null;
     }

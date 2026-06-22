@@ -43,6 +43,8 @@ export const PAGES = {
   COURSE: "/courses/:id",
   LESSON: "/courses/:id/lesson/:lessonId",
 
+  PROFILE_CHILDREN_DETAILS: "/profile/children/:id",
+
   CONTACTS_PAGE: "/contacts",
 };
 

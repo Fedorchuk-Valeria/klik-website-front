@@ -118,7 +118,7 @@
 
   &--outline-green-dark {
     border: 2px solid var(--main-green-dark);
-    background: var(--main-bg);
+    background: transparent;
     color: var(--main-green-dark);
     transition:
       0.3s background-color,
@@ -133,6 +133,7 @@
 
     &:active {
       background: var(--main-green-dark-active);
+      color: var(--main-light);
     }
   }
 
@@ -140,6 +141,26 @@
     border: 2px solid var(--main-orange);
     background: var(--main-bg);
     color: var(--main-orange);
+    transition:
+      0.3s background-color,
+      0.3s color;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background: var(--main-orange);
+        color: var(--main-light);
+      }
+    }
+
+    &:active {
+      background: var(--main-green-dark-active);
+    }
+  }
+
+  &--main-light-outline {
+    border: 1.5px solid var(--main-light);
+    background: transparent;
+    color: var(--main-light);
     transition:
       0.3s background-color,
       0.3s color;
