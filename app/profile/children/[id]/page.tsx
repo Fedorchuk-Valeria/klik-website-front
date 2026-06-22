@@ -205,6 +205,7 @@ const ChildrenDetailsPage = () => {
                       positionY="bottom-end"
                       content={item.info}
                       className="children-details-page__general_headline-info"
+                      popoverClassName="children-details-page__general_headline-info-popover"
                     >
                       <Icon name="info-circle-outline" />
                     </Popover>
