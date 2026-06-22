@@ -68,12 +68,13 @@
 
   &__sticker {
     position: absolute;
-    top: -80px;
+    top: -90px;
     right: 90px;
-    width: 200px;
+    width: 226px;
 
     @media screen and (max-width: 1580px) {
       top: -95px;
+      width: 200px;
     }
 
     @media screen and (max-width: $desktop) {
@@ -254,6 +255,10 @@
     position: relative;
     margin-bottom: 100px;
 
+    @media screen and (max-width: $desktop) {
+      margin-bottom: 80px;
+    }
+
     @media screen and (max-width: $desktop-compact) {
       margin-bottom: 70px;
     }
@@ -409,6 +414,10 @@
   &__info {
     margin-top: 15px;
 
+    @media screen and (max-width: $landscape-tablet-size) {
+      margin-top: 5px;
+    }
+
     @media screen and (max-width: $tablet-size) {
       margin-top: 0;
     }
@@ -416,6 +425,7 @@
 
   &__logo {
     margin-bottom: 20px;
+    display: flex;
 
     @media screen and (max-width: $desktop-compact) {
       max-width: 191px;
@@ -660,10 +670,12 @@
     margin-bottom: 10px;
 
     &-wrapper {
+      @include flex-list(20px);
       padding: 30px 90px;
 
       @media screen and (max-width: $desktop) {
         padding: 30px 50px;
+        gap: 0;
       }
 
       @media screen and (max-width: $desktop-compact) {
@@ -688,6 +700,18 @@
         justify-content: space-between;
         align-items: center;
         gap: 20px;
+
+        @media screen and (max-width: $desktop) {
+          flex-direction: column;
+        }
+
+        @media screen and (max-width: $desktop-compact) {
+          flex-direction: row;
+        }
+
+        @media screen and (max-width: $landscape-tablet-size) {
+          flex-direction: column;
+        }
 
         p {
           color: var(--bardoe);
@@ -755,6 +779,10 @@
           &.footer__bottom-item--second {
             gap: 20px;
             margin-top: 20px;
+
+            p:first-child {
+              max-width: 600px;
+            }
           }
 
           .footer__links {
@@ -795,6 +823,10 @@
       margin-right: auto;
       color: var(--bardoe);
       opacity: 0.4;
+
+      @media screen and (max-width: $desktop) {
+        margin-right: 0;
+      }
 
       @media screen and (max-width: $desktop-compact) {
         margin-right: 0;
@@ -865,9 +897,74 @@
       opacity: 0.4;
       cursor: pointer;
 
+      @media screen and (max-width: $mobile-size) {
+        text-align: center;
+      }
+
       &:hover {
         opacity: 1;
       }
+    }
+  }
+
+  &__payment {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 20px;
+
+    @media screen and (max-width: $desktop-compact) {
+      gap: 37px;
+    }
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      gap: 29px;
+    }
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      gap: 37px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      gap: 47px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      gap: 16px;
+    }
+
+    &-belkart {
+      width: 24px;
+      height: 26px;
+    }
+    &-visa {
+      width: 36px;
+      height: 12px;
+    }
+    &-visasecure {
+      width: 21px;
+      height: 18px;
+    }
+    &-mastercard {
+      width: 30px;
+      height: 19px;
+    }
+    &-idcheck {
+      width: 27px;
+      height: 19px;
+    }
+    &-belkartsecurity {
+      width: 37px;
+      height: 15px;
+    }
+    &-bepaid {
+      width: 39px;
+      height: 10px;
+    }
+    &-gpay {
+      width: 31px;
+      height: 16px;
     }
   }
 }

@@ -442,7 +442,13 @@
 
           .home-page__tutors-detail__name {
             font-size: 32px;
-            width: fit-content;
+            width: min-content;
+            max-width: 100%;
+            flex-shrink: 0;
+
+            &::after {
+              right: -10px;
+            }
           }
 
           .home-page__tutors-detail__position {
@@ -534,6 +540,7 @@
 
           .home-page__tutors-detail__name {
             font-size: 30px;
+            width: max-content;
 
             &::after {
               height: 31px;
