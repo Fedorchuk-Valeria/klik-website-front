@@ -8,12 +8,12 @@ import { useMemo, useState } from "react";
 import avatar from "@/src/assets/images/view/profile/avatar.png";
 
 import PartnerAccordionItem from "@/src/components/Pages/PagesProfile/PartnerAccordionItem";
+import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import PhoneInput from "@/src/components/ui/PhoneInput";
 import Popover from "@/src/components/ui/Popover";
 import TextInput from "@/src/components/ui/TextInput";
 
-import Button from "@/src/components/ui/Button/Button";
 import { getPlural } from "@/src/helper/getPlural";
 import { PAGES } from "@/src/utils/constant";
 
