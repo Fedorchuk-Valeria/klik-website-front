@@ -29,6 +29,14 @@ const ACCEPT_KEYS = new Set([
 ]);
 
 const MASK_PLACEHOLDER = "+375 (XX) XXX XX XX";
+const FOCUS_EMPTY_PREFIX = "+375";
+
+function resolveDisplayValue(digits: string, focused: boolean): string {
+  if (digits.length === 0) {
+    return focused ? FOCUS_EMPTY_PREFIX : "";
+  }
+  return formatMaskedPhone(digits);
+}
 
 function inputSnapshot(el: HTMLInputElement, value: string): HTMLInputElement {
   return {
@@ -70,7 +78,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
 
   const digits = isControlled ? digitsFromControl : fallbackDigits;
 
-  const displayValue = digits.length === 0 && !focused ? "" : formatMaskedPhone(digits);
+  const displayValue = resolveDisplayValue(digits, focused);
 
   const resolvedPlaceholder =
     focused && digits.length === 0 ? (placeholder ?? MASK_PLACEHOLDER) : placeholder;
@@ -97,6 +105,9 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const next = extractNationalDigits(e.target.value);
+    if (next.length === 0 && digits.length === 0) {
+      return;
+    }
     emitMasked(next, e.currentTarget, e);
   };
 
@@ -123,11 +134,12 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     emitMasked(nextDigits, el);
 
     const newMasked = formatMaskedPhone(nextDigits);
+    const renderedValue = resolveDisplayValue(nextDigits, focused);
     const newPositions = nationalDigitPositions(newMasked, nextDigits);
 
     let caret: number;
     if (newPositions.length === 0) {
-      caret = 0;
+      caret = focused ? FOCUS_EMPTY_PREFIX.length : 0;
     } else if (sortedAsc.length > 1) {
       caret = Math.min(caretHint, newMasked.length);
     } else {
@@ -136,8 +148,8 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     }
 
     requestAnimationFrame(() => {
-      const c = Math.min(Math.max(0, caret), newMasked.length);
-      el.setSelectionRange(c, c);
+      const c = Math.min(Math.max(0, caret), renderedValue.length);
+      el?.setSelectionRange(c, c);
     });
   };
 
@@ -147,6 +159,16 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
 
     if (ev.key === "Backspace" || ev.key === "Delete") {
       const el = ev.currentTarget;
+
+      if (digits.length === 0 && focused) {
+        ev.preventDefault();
+        requestAnimationFrame(() => {
+          const caret = FOCUS_EMPTY_PREFIX.length;
+          el?.setSelectionRange(caret, caret);
+        });
+        return;
+      }
+
       const start = el.selectionStart ?? 0;
       const end = el.selectionEnd ?? 0;
       const masked = formatMaskedPhone(digits);
@@ -236,6 +258,13 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
   const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
     setFocused(true);
     onFocus?.(e);
+
+    if (digits.length === 0) {
+      const caret = FOCUS_EMPTY_PREFIX.length;
+      requestAnimationFrame(() => {
+        e?.currentTarget?.setSelectionRange(caret, caret);
+      });
+    }
   };
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {

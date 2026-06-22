@@ -1,0 +1,21 @@
+.back-button {
+  @include fonts(14px, 400, "Manrope");
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: var(--main-black);
+
+  svg {
+    @include icon(24px);
+    fill: var(--main-orange);
+    transform: rotate(90deg);
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    font-size: 12px;
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    font-size: 14px;
+  }
+}

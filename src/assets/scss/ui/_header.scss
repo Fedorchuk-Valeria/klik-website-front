@@ -12,18 +12,9 @@
     padding: 0 10px;
   }
 
-  &__phone {
+  .header__phone {
     position: relative;
-    font-size: 22px;
     color: var(--main-light);
-
-    @media screen and (max-width: $landscape-tablet-size) {
-      font-size: 18px;
-    }
-
-    @media screen and (max-width: $mobile-size) {
-      display: none;
-    }
 
     &:after {
       content: "";
@@ -31,7 +22,7 @@
       bottom: -5px;
       left: 0;
       width: 100%;
-      height: 1.5px;
+      height: 1px;
       background-color: var(--main-orange);
       transition: 0.3s all;
     }
@@ -44,259 +35,774 @@
   }
 
   &__wrapper {
-    padding: 41px 90px;
+    padding: 30px 90px;
     background-color: var(--main-green-dark);
     color: var(--main-light);
     border-radius: 70px;
     display: flex;
     flex-direction: column;
-    gap: 31px;
+    gap: 20px;
     transition: 0.3s all;
 
-    @media screen and (max-width: $desktop) {
-      padding: 40px 50px;
-      gap: 25px;
-    }
+    &.light {
+      background-color: var(--main-bg);
 
-    @media screen and (max-width: $landscape-tablet-size) {
-      padding: 30px;
-      border-radius: 30px;
-    }
+      .header__logo-text {
+        color: var(--main-black);
+      }
 
-    @media screen and (max-width: $tablet-size) {
-      position: relative;
-    }
-
-    @media screen and (max-width: $mobile-size) {
-      padding: 24px 20px;
+      .header__auth .header__user-button .button__text {
+        color: var(--main-green-dark);
+      }
     }
   }
 
-  &__row {
+  .header__row {
     display: flex;
     align-items: center;
-
-    @media screen and (max-width: $tablet-size) {
-      z-index: 2;
-    }
   }
 
-  &__bottom {
-    @media screen and (max-width: $tablet-size) {
-      position: absolute;
-      right: 110px;
-      top: 45px;
-    }
-  }
-
-  &__left {
+  .header__left {
     display: flex;
     align-items: center;
-    gap: 38px;
+    gap: 50px;
   }
 
-  &__right {
+  .header__right {
     margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 30px;
-
-    @media screen and (max-width: $landscape-tablet-size) {
-      &:not(.last) {
-        gap: 50px;
-      }
-    }
+    gap: 20px;
   }
 
-  &:has(.burger.active) {
-    @media screen and (max-width: $mobile-size) {
-      .header__left {
-        .header__brand {
-          flex-direction: column;
-          max-width: 150px;
-        }
-
-        .header__logo-text {
-          display: flex;
-          margin-right: -40px;
-          margin-left: 10px;
-          font-size: 14px;
-        }
-      }
-    }
-  }
-
-  &__brand {
+  .header__brand {
     display: flex;
     gap: 10px;
     align-items: center;
-
-    @media screen and (max-width: $mobile-size) {
-      flex-direction: column;
-    }
   }
 
-  &__logo {
-    max-width: 125px;
+  .header__logo {
+    max-width: 96px;
+    display: flex;
 
     svg {
-      width: 125px;
+      width: 96px;
+    }
+  }
+
+  .header__logo-text {
+    max-width: 174px;
+    font-size: 12px;
+  }
+
+  .city-switcher {
+    .city-switcher__current {
+      width: 100%;
+      font-size: 12px;
+      padding: 5px 5px 5px 15px;
     }
 
-    &-text {
-      max-width: 174px;
-      font-size: 14px;
-      margin-top: -5px;
+    .city-switcher__icon {
+      @include icon(16px);
+    }
 
-      @media screen and (max-width: $landscape-tablet-size) {
-        font-size: 12px;
+    .city-switcher__current-btn {
+      @include icon(30px);
+      margin-left: 16px;
+
+      .city-switcher__current-icon {
+        @include icon(18px);
       }
+    }
 
-      @media screen and (max-width: $mobile-size) {
-        display: none;
+    .city-switcher__dropdown {
+      padding-top: 45px !important;
+
+      li {
+        a,
+        span {
+          @include fonts(12px, 400, "Manrope");
+        }
       }
     }
   }
 
-  &__menu {
+  .header__menu {
     background-color: var(--secondary-light-10);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
     border-radius: 100px;
-
-    @media screen and (max-width: $tablet-size) {
-      display: none;
-    }
 
     li {
       a {
-        padding: 15px 20px;
+        @include fonts(14px, 400, "Manrope");
+        padding: 10px 15px;
         display: inline-block;
-        font-size: 16px;
         color: var(--main-light);
         transition: 0.3s all;
         border-radius: 100px;
-
-        @media screen and (max-width: $desktop) {
-          padding: 10px 15px;
-        }
-
-        @media screen and (max-width: $landscape-tablet-size) {
-          padding: 12px 16px;
-          font-size: 14px;
-        }
       }
 
       &.active {
         a {
           background-color: var(--main-orange);
-
-          @media screen and (max-width: $desktop) {
-            padding: 15px 20px;
-          }
         }
       }
     }
   }
 
-  &__socials {
-    @media screen and (max-width: $tablet-size) {
-      display: none;
-    }
+  .header__auth {
+    display: flex;
+    gap: 30px;
   }
 
-  &__city {
-    @media screen and (max-width: $tablet-size) {
-      display: none;
-    }
+  .header__user-icon {
+    width: 24px;
+    height: 24px;
+    display: none;
   }
 
-  &__cabinet {
-    &-icon {
-      width: 24px;
-      height: 24px;
-    }
+  .header__user-button {
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    border: 0;
+    position: relative;
+    font-size: 20px;
 
-    @media screen and (max-width: $tablet-size) {
-      display: none;
-    }
+    &:active,
+    &:hover {
+      background: transparent;
 
-    &-button {
-      padding: 10px 30px;
-
-      @media screen and (max-width: $landscape-tablet-size) {
-        font-size: 0;
-        width: 40px;
-        height: 40px;
-        border-radius: 100%;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      &:after {
+        opacity: 0;
       }
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 5px;
+      left: 0;
+      width: 100%;
+      height: 1.5px;
+      background-color: var(--main-orange);
+      transition: 0.3s all;
+    }
+  }
+
+  .header__logout-button {
+    padding: 14px 28px;
+
+    .header__logout-icon {
+      @include icon(16px);
+    }
+  }
+
+  .header__cabinet-button {
+    padding: 14px 28px;
+    border: 0;
+
+    .button__text {
+      font-size: 14px;
+    }
+
+    .header__cabinet-icon {
+      @include icon(16px);
+    }
+  }
+
+  .header__call {
+    @include center;
+    @include fonts(14px, 400, "Manrope");
+    padding: 14px 28px;
+    min-width: 186px;
+    max-width: 186px;
+  }
+
+  .socials {
+    justify-content: center;
+    gap: 14px;
+
+    .socials__link {
+      @include icon(40px);
+
+      svg {
+        @include icon(19px);
+      }
+    }
+  }
+
+  @media (hover: hover) {
+    .header__menu li a:hover {
+      opacity: 0.9;
+      background: var(--main-orange);
+    }
+  }
+
+  @media screen and (max-width: $desktop) {
+    .header__wrapper {
+      padding: 30px 50px;
+    }
+
+    .header__cabinet-button {
+      padding: 12px 30px;
+      max-width: 174px;
+      min-width: 174px;
 
       .button__text {
-        @media screen and (max-width: $landscape-tablet-size) {
-          gap: 0;
+        font-size: 12px;
+      }
+    }
+
+    .city-switcher {
+      .city-switcher__current-btn {
+        @include icon(28px);
+
+        .city-switcher__current-icon {
+          @include icon(17px);
         }
       }
     }
+
+    .socials {
+      gap: 12px;
+
+      .socials__link {
+        @include icon(36px);
+
+        svg {
+          @include icon(17px);
+        }
+      }
+    }
+
+    .header__menu {
+      gap: 14px;
+
+      li a {
+        font-size: 12px;
+      }
+    }
+
+    .header__phone {
+      font-size: 14px;
+    }
+
+    .header__call {
+      padding: 12px 30px;
+      font-size: 12px;
+      max-width: 174px;
+      min-width: 174px;
+    }
   }
 
-  &__call {
-    padding: 20px 50px;
+  @media screen and (max-width: $desktop-compact) {
+    .header__wrapper {
+      border-radius: 40px;
+      padding: 30px;
+      gap: 19px;
+    }
 
-    @media screen and (max-width: $landscape-tablet-size) {
-      padding: 15px 50px;
+    .header__logo {
+      max-width: 120px;
+
+      svg {
+        width: 120px;
+      }
+    }
+
+    .city-switcher {
+      .city-switcher__icon {
+        @include icon(18px);
+      }
+
+      .city-switcher__current-btn {
+        @include icon(30px);
+
+        .city-switcher__current-icon {
+          @include icon(18px);
+        }
+      }
+    }
+
+    .socials {
+      .socials__link {
+        @include icon(40px);
+
+        svg {
+          @include icon(20px);
+        }
+      }
+    }
+
+    .header__menu {
+      gap: 20px;
+    }
+
+    .header__left {
+      gap: 30px;
+    }
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    .header__logo {
+      height: 36px;
+
+      svg {
+        width: 86px;
+      }
+    }
+
+    .header__logo-text {
+      font-size: 10px;
+    }
+
+    .header__brand {
+      gap: 12px;
+    }
+
+    .header__phone {
+      font-size: 12px;
+    }
+
+    .header__menu {
+      gap: 5px;
+    }
+
+    .header__left {
+      gap: 50px;
+    }
+
+    .city-switcher {
+      .city-switcher__current {
+        padding: 5px 5px 5px 10px;
+      }
+
+      .city-switcher__icon {
+        @include icon(14px);
+      }
+
+      .city-switcher__current-btn {
+        @include icon(24px);
+
+        .city-switcher__current-icon {
+          @include icon(16px);
+        }
+      }
+    }
+
+    .header__wrapper {
+      padding: 20px 30px;
+      gap: 16px;
+      border-radius: 30px;
+    }
+
+    .header__right:not(.last) {
+      gap: 20px;
+    }
+
+    .socials {
+      gap: 8px;
+
+      .socials__item a {
+        @include icon(30px);
+
+        svg {
+          @include icon(15px);
+        }
+      }
+    }
+
+    .header__menu li a {
+      padding: 10px 16px;
+      font-size: 12px;
+    }
+
+    .header__user-button {
       font-size: 16px;
     }
 
-    @media screen and (max-width: $tablet-size) {
+    .header__logout-button {
+      @include icon(30px);
+      @include center;
+      font-size: 0;
+      border-radius: 100%;
+      padding: 0;
+
+      .button__text {
+        gap: 0;
+      }
+    }
+
+    .header__cabinet-button {
+      @include icon(30px);
+      @include center;
+      font-size: 0;
+      border-radius: 100%;
+      padding: 0;
+      max-width: 30px;
+      min-width: 30px;
+
+      .header__cabinet-icon {
+        @include icon(15px);
+      }
+
+      .button__text {
+        gap: 0;
+
+        span {
+          display: none;
+        }
+      }
+    }
+
+    .header__call {
+      padding: 12px 30px;
+      font-size: 12px;
+      max-width: 127px;
+      min-width: 127px;
+      height: 40px;
+    }
+  }
+
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    .city-switcher {
+      .city-switcher__icon {
+        @include icon(18px);
+      }
+    }
+
+    .header__wrapper {
+      padding: 20px;
+      gap: 16px;
+      border-radius: 30px;
+    }
+
+    .header__right:not(.last) {
+      gap: 20px;
+    }
+
+    .socials {
+      gap: 8px;
+
+      .socials__item a {
+        @include icon(36px);
+
+        svg {
+          @include icon(18px);
+        }
+      }
+    }
+
+    .header__menu li a {
+      padding: 10px 12px;
+      font-size: 12px;
+    }
+
+    .header__user-button {
+      font-size: 16px;
+    }
+
+    .header__logout-button {
+      @include icon(36px);
+      @include center;
+      font-size: 0;
+      border-radius: 100%;
+      padding: 0;
+
+      .button__text {
+        gap: 0;
+      }
+    }
+
+    .header__cabinet-button {
+      @include icon(36px);
+      @include center;
+      font-size: 0;
+      border-radius: 100%;
+      padding: 0;
+      max-width: 36px;
+      min-width: 36px;
+
+      .header__cabinet-icon {
+        @include icon(18px);
+      }
+
+      .button__text {
+        gap: 0;
+
+        span {
+          display: none;
+        }
+      }
+    }
+
+    .header__call {
+      padding: 10px 30px;
+      font-size: 12px;
+      max-width: 127px;
+      min-width: 127px;
+      height: 36px;
+    }
+  }
+
+  @media screen and (max-width: 942px) {
+    .header__wrapper {
+      position: relative;
+      min-height: 84px;
+    }
+
+    .header__top {
+      height: 100%;
+      min-height: 44px;
+    }
+
+    .header__row {
+      z-index: 2;
+    }
+
+    .header__bottom {
+      position: absolute;
+      right: 74px;
+      top: 30px;
+    }
+
+    .header__menu {
       display: none;
+    }
+
+    .header__socials {
+      display: none;
+    }
+
+    .header__city {
+      display: none;
+    }
+
+    .header__cabinet {
+      display: none;
+    }
+
+    .header__call {
+      display: none;
+    }
+
+    .burger {
+      @include center;
+      @include icon(44px);
+      top: 20px;
+
+      span:nth-child(1) {
+        top: 15px;
+      }
+
+      span:nth-child(2) {
+        top: 21px;
+      }
+
+      span:nth-child(3) {
+        top: 27px;
+      }
+
+      &.active {
+        span:nth-child(1) {
+          top: 21px;
+          transform: translateX(-50%) rotate(45deg);
+        }
+
+        span:nth-child(2) {
+          opacity: 0;
+        }
+
+        span:nth-child(3) {
+          top: 21px;
+          transform: translateX(-50%) rotate(-45deg);
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    .header__user-button {
+      font-size: 18px;
+    }
+
+    .header__call {
+      padding: 20px;
+      font-size: 18px;
+      max-width: 100%;
+      min-width: 100%;
+      height: 65px;
+      margin-bottom: 30px;
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    .header__phone {
+      display: none;
+    }
+
+    .header__call {
+      padding: 16px;
+      font-size: 16px;
+      height: 54px;
+      margin-bottom: 10px;
+    }
+
+    .header__logout-button {
+      @include icon(40px);
+
+      .header__logout-icon {
+        @include icon(24px);
+      }
+    }
+
+    .header__wrapper {
+      padding: 10px;
+      min-height: auto;
+      border-radius: 16px;
+    }
+
+    .header__top {
+      align-items: flex-start;
+      min-height: 40px;
+    }
+
+    .burger {
+      @include icon(40px);
+      top: 10px;
+      right: 10px;
+
+      span:nth-child(1) {
+        top: 12px;
+      }
+
+      span:nth-child(2) {
+        top: 18px;
+      }
+
+      span:nth-child(3) {
+        top: 24px;
+      }
+
+      &.active {
+        span:nth-child(1) {
+          top: 18px;
+        }
+
+        span:nth-child(3) {
+          top: 18px;
+        }
+      }
+    }
+
+    .header__brand {
+      flex-direction: column;
+      align-items: flex-start;
+      max-width: 150px;
+    }
+
+    .header__logo-text {
+      display: none;
+    }
+
+    &:has(.burger.active) .header__left {
+      .header__logo-text {
+        display: flex;
+        margin-right: -40px;
+        font-size: 14px;
+      }
+    }
+
+    .header__auth {
+      gap: 10px;
+    }
+
+    .header__user-icon {
+      display: block;
+      fill: var(--main-orange) !important;
+    }
+
+    .header__user-button {
+      font-size: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 100%;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--main-light);
+      border: 1.5px solid var(--main-orange);
+
+      &:active,
+      &:hover {
+        background-color: var(--main-light);
+      }
+
+      &::after {
+        height: 0;
+      }
+
+      .button__text {
+        gap: 0;
+      }
     }
   }
 
   &__mobile {
     display: none;
 
-    @media screen and (max-width: $tablet-size) {
-      height: calc(100dvh - 168px);
+    @media screen and (max-width: 942px) {
+      height: calc(100dvh - 108px);
       display: flex;
       flex-direction: column;
       gap: 20px;
       position: relative;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
 
     @media screen and (max-width: $mobile-size) {
+      height: calc(100dvh - 132px);
       position: static;
     }
 
     .city-switcher {
-      &__current {
+      .city-switcher__current {
         width: 100%;
         font-size: 16px;
+        padding: 5px 5px 5px 20px;
 
-        &-btn {
-          width: 50px;
-          height: 50px;
+        .city-switcher__current-btn {
+          @include icon(50px);
           margin-left: auto;
         }
-      }
-      &__dropdown {
-        padding-top: 60px !important;
 
-        li {
-          a,
-          span {
-            font-size: 16px;
-          }
+        .city-switcher__current-icon {
+          @include icon(33px);
+        }
+
+        .city-switcher__icon {
+          @include icon(20px);
+        }
+      }
+
+      .city-switcher__dropdown {
+        padding-top: 70px !important;
+
+        li span,
+        li a {
+          font-size: 18px;
         }
       }
     }
 
     .socials {
       justify-content: center;
+
       &__link {
         width: 50px;
         height: 50px;
@@ -329,7 +835,7 @@
     &-bg {
       display: none;
 
-      @media screen and (max-width: $tablet-size) {
+      @media screen and (max-width: 942px) {
         display: block;
         position: absolute;
         width: 100%;
@@ -356,8 +862,8 @@
       @media screen and (max-width: $mobile-size) {
         min-width: 0;
         position: absolute;
-        top: 28px;
-        right: 80px;
+        top: 10px;
+        right: 60px;
         z-index: 4;
       }
 
@@ -367,23 +873,35 @@
         font-size: 18px;
         border-radius: 100px;
         padding: 17px 40px 18px 40px;
+        max-width: none;
+        width: 100%;
+
+        .header__cabinet-icon {
+          @include icon(24px);
+        }
 
         @media screen and (max-width: $mobile-size) {
+          @include icon(40px);
+          @include center;
           font-size: 0;
-          width: 50px;
-          height: 50px;
           border-radius: 100%;
           padding: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
         }
 
         .button__text {
           gap: 5px;
 
+          span {
+            display: flex;
+            font-size: 18px;
+          }
+
           @media screen and (max-width: $mobile-size) {
             gap: 0;
+
+            span {
+              display: none;
+            }
           }
         }
       }
@@ -392,7 +910,7 @@
     &-cities {
       min-width: 330px;
 
-      @media screen and (max-width: $tablet-size) {
+      @media screen and (max-width: 942px) {
         min-width: 0;
         max-width: 330px;
         width: 100%;

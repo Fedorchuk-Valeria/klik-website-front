@@ -11,7 +11,7 @@ import {
   type ReactNode,
 } from "react";
 
-export const TEXT_BORDER_RADIUS_WIDTHS = [1920, 1440, 1024, 800, 500] as const;
+export const TEXT_BORDER_RADIUS_WIDTHS = [1920, 1440, 1280, 1024, 960, 800, 500] as const;
 export type TextBorderCornerRadiusByWidth = Partial<
   Record<(typeof TEXT_BORDER_RADIUS_WIDTHS)[number], number>
 >;

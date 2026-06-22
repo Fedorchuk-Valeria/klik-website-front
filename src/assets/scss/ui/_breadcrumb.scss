@@ -22,16 +22,13 @@
 
     svg {
       @include icon(24px);
-      fill: var(--main-light);
     }
   }
 
   .breadcrumb__link {
-    color: var(--main-green-neon);
     text-decoration: underline;
     text-decoration-thickness: 2px;
     text-underline-offset: 4px;
-    text-decoration-color: var(--main-green-neon);
     cursor: pointer;
 
     @media (hover: hover) {
@@ -41,13 +38,52 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--main-green-neon);
       outline-offset: 2px;
     }
   }
 
-  .breadcrumb__current {
-    color: var(--secondary-light-30);
+  &.breadcrumb--green {
+    .breadcrumb__separator {
+      svg {
+        fill: var(--main-light);
+      }
+    }
+
+    .breadcrumb__link {
+      color: var(--main-green-neon);
+      text-decoration-color: var(--main-green-neon);
+
+      &:focus-visible {
+        outline: 2px solid var(--main-green-neon);
+      }
+    }
+
+    .breadcrumb__current {
+      color: var(--secondary-light-30);
+    }
+  }
+
+  &.breadcrumb--orange {
+    .breadcrumb__separator {
+      svg {
+        fill: var(--main-black);
+        opacity: 0.5;
+      }
+    }
+
+    .breadcrumb__link {
+      color: var(--main-orange);
+      text-decoration-color: var(--main-orange);
+
+      &:focus-visible {
+        outline: 2px solid var(--main-orange);
+      }
+    }
+
+    .breadcrumb__current {
+      color: var(--main-black);
+      opacity: 0.5;
+    }
   }
 
   @media screen and (max-width: $landscape-tablet-size) {

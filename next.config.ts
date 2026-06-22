@@ -9,6 +9,46 @@ const nextConfig: NextConfig = {
         hostname: "placehold.co",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "placehold.net",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "173.249.41.92",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "test.it-klik.by",
+        pathname: "/media/**",
+      },
+      {
+        protocol: "https",
+        hostname: "it-klik.by",
+        pathname: "/media/**",
+      },
+      {
+        protocol: "http",
+        hostname: "test.it-klik.by",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "test.it-klik.by",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "storage.yandexcloud.net",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "storage.yandexcloud.net",
+        pathname: "/**",
+      },
     ],
   },
   turbopack: {
@@ -31,7 +71,7 @@ const nextConfig: NextConfig = {
       {
         test: /\.pdf$/i,
         type: "asset/resource",
-      },
+      }
     );
 
     return config;

@@ -18,7 +18,8 @@ import Socials from "@/src/components/ui/Socials/Socials";
 
 import { MenuItem } from "@/src/lib/content/types";
 import { CitySettings } from "@/src/lib/getCitySettings";
-import { PAGE_ANCHORS } from "@/src/utils/constant";
+import { PAGE_ANCHORS, PAGES } from "@/src/utils/constant";
+import Icon from "@/src/components/ui/Icon/Icon";
 
 type Props = {
   settings: CitySettings;
@@ -30,12 +31,12 @@ export default function FooterClient({ settings }: Props) {
 
   const footerLinks: MenuItem[] = [
     {
-      url: cookiePolicyPdf,
-      title: "Политика обработки файлов cookies",
+      url: privacyPolicyPdf,
+      title: "Политика в отношении обработки персональных данных",
     },
     {
-      url: privacyPolicyPdf,
-      title: "Политика конфиденциальности",
+      url: cookiePolicyPdf,
+      title: "Положение о файлах cookies",
     },
   ];
 
@@ -108,6 +109,10 @@ export default function FooterClient({ settings }: Props) {
           title: "FAQ",
           url: `#${PAGE_ANCHORS.FAQ}`,
         },
+        {
+          title: "Контактная информация",
+          url: `${PAGES.CONTACTS_PAGE}`,
+        },
       ],
     },
   ];
@@ -128,7 +133,7 @@ export default function FooterClient({ settings }: Props) {
               </div>
 
               <div className="footer__logo-text">
-                KLiK — дополнительное IT-образование детей 6–16 лет
+                Дополнительное IT-образование для детей 6–16 лет
               </div>
             </div>
 
@@ -167,18 +172,40 @@ export default function FooterClient({ settings }: Props) {
 
         <div className="footer__bottom">
           <div className="footer__bottom-wrapper">
-            <div className="footer__bottom-copyright">
-              © 2026 KLiK – Дополнительное IT-образование для детей. Все права защищены
+            <div className="footer__bottom-item footer__bottom-item--first">
+              <div className="footer__bottom-copyright">
+                © 2026 KLiK – Дополнительное IT-образование для детей. Все права защищены
+              </div>
+
+              <ul className="footer__links">
+                {footerLinks.map((item, index) => (
+                  <Link key={index} href={item.url ?? ""} target="_blank" rel="noopener noreferrer">
+                    <li className="footer__links-item">{item.title}</li>
+                  </Link>
+                ))}
+              </ul>
             </div>
 
-            <ul className="footer__links">
-              {footerLinks.map((item, index) => (
-                <Link key={index} href={item.url ?? ""} target="_blank" rel="noopener noreferrer">
-                  <li className="footer__links-item">{item.title}</li>
-                </Link>
-              ))}
-            </ul>
+            <div className="footer__bottom-item footer__bottom-item--second">
+              <p>
+                Ресурс зарегистрирован в Торговом реестре Республики Беларусь 11.06.2026 с номером
+                №216355
+              </p>
+              <p>
+                ООО «ТАЙМКЛИК», УНП 193397920, зарегистрировано Минским горисполкомом 11.03.2020
+              </p>
+            </div>
           </div>
+        </div>
+        <div className="footer__payment">
+          <Icon className="footer__payment-visa" name="visa" />
+          <Icon className="footer__payment-visasecure" name="visa-secure" />
+          <Icon className="footer__payment-mastercard" name="mastercard" />
+          <Icon className="footer__payment-idcheck" name="id-check" />
+          <Icon className="footer__payment-belkart" name="belkart" />
+          <Icon className="footer__payment-belkartsecurity" name="belkart-security" />
+          <Icon className="footer__payment-bepaid" name="bepaid" />
+          <Icon className="footer__payment-gpay" name="gpay" />
         </div>
       </div>
     </footer>

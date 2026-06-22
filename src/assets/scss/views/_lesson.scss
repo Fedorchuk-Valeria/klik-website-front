@@ -1,0 +1,929 @@
+.lesson-page {
+  margin-bottom: 100px;
+
+  .lesson-page__container {
+    max-width: 1740px;
+    margin: 0 auto;
+    padding: 0 10px;
+  }
+
+  .lesson-page__back-button {
+    margin-top: 20px;
+    width: fit-content;
+  }
+
+  .lesson-page__lesson {
+    margin-top: 50px;
+
+    .lesson-page__lesson-zone {
+      display: grid;
+      grid-template-columns: minmax(300px, 1063px) minmax(300px, 647px);
+      gap: 10px;
+    }
+
+    .lesson-page__video {
+      max-width: 100%;
+      width: 100%;
+      height: 681px;
+      border-radius: 50px;
+      object-fit: contain;
+      background: var(--black);
+    }
+
+    .lesson-page__lesson-content {
+      border: 1px solid var(--border-color);
+      border-radius: 50px;
+      padding: 50px;
+      min-width: 300px;
+      width: 100%;
+
+      .lesson-page__lesson-content_title {
+        @include fonts(24px, 500, "Etude Noire");
+        color: var(--main-orange);
+      }
+
+      .lesson-page__lesson-content_progress {
+        margin-top: 30px;
+
+        .course-tutorial__progress-title_text {
+          font-size: 16px;
+        }
+
+        .course-tutorial__progress-count {
+          font-size: 14px;
+
+          span {
+            font-size: 18px;
+          }
+        }
+
+        .course-tutorial__progress-bar {
+          gap: 6px;
+
+          .course-tutorial__progress-bar_item {
+            height: 6px;
+          }
+        }
+      }
+
+      .lesson-page__lesson-content_list {
+        margin-top: 30px;
+        max-height: 458px;
+        overflow-y: auto;
+
+        &:has(li + li + li + li + li) {
+          margin-right: -40px;
+          padding-right: 26px;
+        }
+
+        &::-webkit-scrollbar {
+          width: 14px;
+        }
+
+        &::-webkit-scrollbar-track {
+          width: 14px;
+          border: 1px solid rgba(1, 82, 76, 0.5);
+          border-radius: 9999px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          width: 14px;
+          background: var(--main-green-dark);
+          border-radius: 9999px;
+        }
+
+        .course-tutorial__list-item {
+          gap: 10px;
+
+          .course-tutorial__list-item--status {
+            @include icon(60px);
+            font-size: 16px;
+            min-width: 60px;
+
+            .course-tutorial__list-item--status-line {
+              bottom: -113%;
+              @include icon(56px);
+            }
+
+            .course-tutorial__list-item--status-icon {
+              @include icon(30px);
+            }
+          }
+
+          .course-tutorial__list-item_content {
+            padding: 20px 40px;
+
+            .course-tutorial__list-item_content-title {
+              font-size: 16px;
+            }
+          }
+        }
+      }
+    }
+
+    .lesson-page__lesson-info {
+      margin-top: 50px;
+      max-width: 1063px;
+
+      .lesson-page__lesson-info_first {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+
+        .lesson-page__lesson-info_first-duration {
+          @include fonts(18px, 400, "Manrope");
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          svg {
+            @include icon(24px);
+          }
+        }
+      }
+
+      .lesson-page__lesson-info_second {
+        margin-top: 20px;
+
+        .lesson-page__lesson-info_second-title {
+          @include fonts(40px, 500, "Etude Noire");
+          color: var(--main-green-dark);
+        }
+
+        .lesson-page__lesson-info_second-description {
+          @include fonts(20px, 400, "Manrope");
+          margin-top: 10px;
+          color: var(--main-black);
+        }
+      }
+
+      .lesson-page__lesson-info_buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        margin-top: 50px;
+
+        .lesson-page__lesson-info_buttons-item--container {
+          @include flex-list(10px);
+          width: 100%;
+        }
+
+        .lesson-page__lesson-info_buttons-item--error {
+          @include fonts(18px, 400, "Manrope");
+          color: rgba(28, 26, 28, 0.4);
+          margin-left: 40px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          svg {
+            @include icon(24px);
+            color: var(--main-orange);
+          }
+        }
+
+        .lesson-page__lesson-info_buttons-item--button {
+          cursor: pointer;
+
+          &.lesson-page__lesson-info_buttons-item--button-disabled {
+            pointer-events: none;
+          }
+        }
+
+        .lesson-page__lesson-info_buttons-item {
+          @include center-between;
+          @include fonts(24px, 500);
+          line-height: 120%;
+          padding: 20px 20px 20px 40px;
+          background: var(--main-blue);
+          border-radius: 50px;
+          color: var(--main-green-dark);
+          width: 100%;
+
+          button {
+            @include center;
+            @include icon(58px);
+            color: var(--main-orange);
+            cursor: pointer;
+            border: 1px solid var(--main-orange);
+            background: var(--main-light);
+            border-radius: 50%;
+
+            svg {
+              @include icon(24px);
+            }
+
+            &:disabled {
+              opacity: 0.5;
+              pointer-events: none;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .lesson-page__test {
+    margin-top: 50px;
+    max-width: 1063px;
+
+    .test__image {
+      max-width: 381px;
+    }
+  }
+
+  @media screen and (max-width: $desktop) {
+    margin-bottom: 120px;
+
+    .lesson-page__container {
+      max-width: 1340px;
+    }
+
+    .lesson-page__back-button {
+      margin-top: 0;
+    }
+
+    .lesson-page__lesson {
+      margin-top: 30px;
+
+      .lesson-page__lesson-zone {
+        grid-template-columns: minmax(300px, 815px) minmax(300px, 497px);
+        gap: 8px;
+      }
+
+      .lesson-page__video {
+        height: 514px;
+        border-radius: 40px;
+      }
+
+      .lesson-page__lesson-content {
+        border: 1px solid var(--border-color);
+        border-radius: 40px;
+        padding: 40px;
+
+        .lesson-page__lesson-content_title {
+          font-size: 20px;
+        }
+
+        .lesson-page__lesson-content_progress {
+          margin-top: 20px;
+
+          .course-tutorial__progress-title_text {
+            font-size: 14px;
+          }
+
+          .course-tutorial__progress-count {
+            font-size: 12px;
+
+            span {
+              font-size: 16px;
+            }
+          }
+
+          .course-tutorial__progress-bar {
+            gap: 3px;
+
+            .course-tutorial__progress-bar_item {
+              height: 5px;
+            }
+          }
+        }
+
+        .lesson-page__lesson-content_list {
+          margin-top: 20px;
+          max-height: 351px;
+          gap: 13px;
+
+          &:has(li + li + li + li + li) {
+            margin-right: -32px;
+            padding-right: 22px;
+          }
+
+          &::-webkit-scrollbar {
+            width: 10px;
+          }
+
+          &::-webkit-scrollbar-track {
+            width: 10px;
+          }
+
+          &::-webkit-scrollbar-thumb {
+            width: 10px;
+          }
+
+          .course-tutorial__list-item {
+            gap: 8px;
+
+            .course-tutorial__list-item--status {
+              @include icon(46px);
+              font-size: 14px;
+              min-width: 46px;
+
+              .course-tutorial__list-item--status-line {
+                bottom: -100%;
+                @include icon(36px);
+              }
+
+              .course-tutorial__list-item--status-icon {
+                @include icon(26px);
+              }
+            }
+
+            .course-tutorial__list-item_content {
+              padding: 15px 30px;
+              border-radius: 26px;
+
+              .course-tutorial__list-item_content-title {
+                font-size: 14px;
+              }
+
+              .course-tutorial__list-item_content-duration {
+                font-size: 14px;
+                gap: 8px;
+
+                svg {
+                  @include icon(20px);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .lesson-page__lesson-info {
+        max-width: 815px;
+
+        .lesson-page__lesson-info_first {
+          display: flex;
+          align-items: center;
+          gap: 30px;
+
+          .lesson-page__lesson-info_first-duration {
+            font-size: 16px;
+          }
+        }
+
+        .lesson-page__lesson-info_second {
+          .lesson-page__lesson-info_second-title {
+            font-size: 34px;
+          }
+
+          .lesson-page__lesson-info_second-description {
+            font-size: 18px;
+          }
+        }
+
+        .lesson-page__lesson-info_buttons {
+          gap: 20px;
+
+          .lesson-page__lesson-info_buttons-item--error {
+            font-size: 16px;
+            margin-left: 20px;
+          }
+
+          .lesson-page__lesson-info_buttons-item {
+            font-size: 22px;
+            padding: 16px 16px 16px 32px;
+            border-radius: 50px;
+          }
+        }
+      }
+    }
+
+    .lesson-page__test {
+      max-width: 815px;
+
+      .test__image {
+        max-width: 307px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    margin-bottom: 100px;
+
+    .lesson-page__container {
+      max-width: 964px;
+    }
+
+    .lesson-page__back-button {
+      margin-top: 40px;
+    }
+
+    .lesson-page__lesson {
+      margin-top: 20px;
+
+      .lesson-page__lesson-zone {
+        grid-template-columns: minmax(300px, 583px) minmax(300px, 355px);
+        gap: 6px;
+      }
+
+      .lesson-page__video {
+        height: 367px;
+        border-radius: 30px;
+      }
+
+      .lesson-page__lesson-content {
+        border-radius: 30px;
+        padding: 24px 24px 0;
+
+        .lesson-page__lesson-content_title {
+          font-size: 18px;
+        }
+
+        .lesson-page__lesson-content_progress {
+          margin-top: 16px;
+
+          .course-tutorial__progress-title_text {
+            font-size: 12px;
+          }
+
+          .course-tutorial__progress-count {
+            font-size: 10px;
+
+            span {
+              font-size: 14px;
+            }
+          }
+
+          .course-tutorial__progress-bar {
+            gap: 5px;
+
+            .course-tutorial__progress-bar_item {
+              height: 4px;
+            }
+          }
+        }
+
+        .lesson-page__lesson-content_list {
+          margin-top: 20px;
+          max-height: 250px;
+          overflow-y: auto;
+          gap: 12px;
+
+          &:has(li + li + li + li),
+          &:has(li + li + li + li + li) {
+            margin-right: -22px;
+            padding-right: 15px;
+          }
+
+          &::-webkit-scrollbar {
+            width: 7px;
+          }
+
+          &::-webkit-scrollbar-track {
+            width: 7px;
+            margin-bottom: 30px;
+          }
+
+          &::-webkit-scrollbar-thumb {
+            width: 7px;
+          }
+
+          .course-tutorial__list-item {
+            gap: 8px;
+
+            .course-tutorial__list-item--status {
+              @include icon(34px);
+              font-size: 12px;
+              min-width: 34px;
+
+              .course-tutorial__list-item--status-line {
+                bottom: -130%;
+                @include icon(32px);
+              }
+
+              .course-tutorial__list-item--status-icon {
+                @include icon(18px);
+              }
+            }
+
+            .course-tutorial__list-item_content {
+              padding: 12px 22px;
+
+              .course-tutorial__list-item_content-title {
+                font-size: 12px;
+              }
+
+              .course-tutorial__list-item_content-duration {
+                margin-top: 8px;
+                font-size: 12px;
+
+                svg {
+                  @include icon(16px);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .lesson-page__lesson-info {
+        margin-top: 30px;
+        max-width: 583px;
+
+        .lesson-page__lesson-info_first {
+          gap: 20px;
+
+          .lesson-page__lesson-info_first-duration {
+            font-size: 14px;
+            gap: 6px;
+
+            svg {
+              @include icon(20px);
+            }
+          }
+        }
+
+        .lesson-page__lesson-info_second {
+          margin-top: 20px;
+
+          .lesson-page__lesson-info_second-title {
+            font-size: 30px;
+          }
+
+          .lesson-page__lesson-info_second-description {
+            font-size: 14px;
+          }
+        }
+
+        .lesson-page__lesson-info_buttons {
+          gap: 12px;
+          margin-top: 30px;
+
+          .lesson-page__lesson-info_buttons-item--error {
+            font-size: 12px;
+
+            svg {
+              @include icon(16px);
+            }
+          }
+
+          .lesson-page__lesson-info_buttons-item {
+            font-size: 16px;
+            padding: 10px 10px 10px 24px;
+            border-radius: 50px;
+
+            button {
+              @include icon(40px);
+
+              svg {
+                @include icon(17px);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .lesson-page__test {
+      margin-top: 30px;
+      max-width: 583px;
+
+      .test__image {
+        max-width: 180px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    margin-bottom: 120px;
+
+    .lesson-page__container {
+      max-width: 740px;
+    }
+
+    .lesson-page__lesson {
+      @include flex-list(50px);
+      margin-top: 30px;
+
+      .lesson-page__lesson-zone {
+        grid-template-columns: 100%;
+        gap: 20px;
+        order: 2;
+      }
+
+      .lesson-page__video {
+        height: 442px;
+        border-radius: 40px;
+      }
+
+      .lesson-page__lesson-content {
+        border-radius: 40px;
+        padding: 40px;
+
+        .lesson-page__lesson-content_title {
+          font-size: 24px;
+        }
+
+        .lesson-page__lesson-content_progress {
+          margin-top: 30px;
+
+          .course-tutorial__progress-title_text {
+            font-size: 16px;
+          }
+
+          .course-tutorial__progress-count {
+            font-size: 14px;
+
+            span {
+              font-size: 18px;
+            }
+          }
+
+          .course-tutorial__progress-bar {
+            gap: 6px;
+
+            .course-tutorial__progress-bar_item {
+              height: 6px;
+            }
+          }
+        }
+
+        .lesson-page__lesson-content_list {
+          margin-top: 30px;
+          max-height: 370px;
+
+          &:has(li + li + li + li),
+          &:has(li + li + li + li + li) {
+            margin-right: -30px;
+            padding-right: 10px;
+          }
+
+          &::-webkit-scrollbar {
+            width: 14px;
+          }
+
+          &::-webkit-scrollbar-track {
+            width: 14px;
+            margin-bottom: 0;
+          }
+
+          &::-webkit-scrollbar-thumb {
+            width: 14px;
+          }
+
+          .course-tutorial__list-item {
+            gap: 10px;
+
+            .course-tutorial__list-item--status {
+              @include icon(60px);
+              font-size: 16px;
+              min-width: 60px;
+
+              .course-tutorial__list-item--status-line {
+                bottom: -65%;
+                @include icon(32px);
+              }
+
+              .course-tutorial__list-item--status-icon {
+                @include icon(30px);
+              }
+            }
+
+            .course-tutorial__list-item_content {
+              padding: 20px 40px;
+
+              .course-tutorial__list-item_content-title {
+                font-size: 16px;
+              }
+            }
+          }
+        }
+      }
+
+      .lesson-page__lesson-info {
+        margin-top: 0;
+        max-width: 100%;
+
+        .lesson-page__lesson-info_first {
+          gap: 20px;
+
+          .lesson-page__lesson-info_first-duration {
+            font-size: 16px;
+            gap: 6px;
+
+            svg {
+              @include icon(20px);
+            }
+          }
+        }
+
+        .lesson-page__lesson-info_second {
+          margin-top: 20px;
+
+          .lesson-page__lesson-info_second-title {
+            font-size: 38px;
+          }
+
+          .lesson-page__lesson-info_second-description {
+            font-size: 20px;
+          }
+        }
+
+        .lesson-page__lesson-info_buttons {
+          margin-top: 30px;
+
+          .lesson-page__lesson-info_buttons-item--error {
+            font-size: 16px;
+            gap: 6px;
+            margin-left: 16px;
+
+            svg {
+              @include icon(24px);
+            }
+          }
+
+          .lesson-page__lesson-info_buttons-item {
+            font-size: 18px;
+            padding: 10px 10px 10px 30px;
+            border-radius: 50px;
+
+            button {
+              @include icon(50px);
+
+              svg {
+                @include icon(21px);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .lesson-page__test {
+      margin-top: 80px;
+      max-width: 100%;
+
+      .test__image {
+        max-width: 640px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    margin-bottom: 80px;
+
+    .lesson-page__container {
+      max-width: 100%;
+      padding: 0 20px;
+    }
+
+    .lesson-page__back-button {
+      margin-top: 20px;
+    }
+
+    .lesson-page__lesson {
+      gap: 30px;
+      margin-top: 50px;
+
+      .lesson-page__video {
+        height: 310px;
+        border-radius: 30px;
+      }
+
+      .lesson-page__lesson-content {
+        border-radius: 30px;
+        padding: 20px 10px;
+
+        .lesson-page__lesson-content_title {
+          font-size: 16px;
+        }
+
+        .lesson-page__lesson-content_progress {
+          margin-top: 10px;
+
+          .course-tutorial__progress-title_text {
+            font-size: 12px;
+          }
+
+          .course-tutorial__progress-count {
+            font-size: 10px;
+
+            span {
+              font-size: 14px;
+            }
+          }
+
+          .course-tutorial__progress-bar {
+            gap: 4px;
+
+            .course-tutorial__progress-bar_item {
+              height: 6px;
+            }
+          }
+        }
+
+        .lesson-page__lesson-content_list {
+          margin-top: 20px;
+          max-height: 310px;
+
+          &:has(li + li + li + li),
+          &:has(li + li + li + li + li) {
+            margin-right: -10px;
+            padding-right: 4px;
+          }
+
+          &::-webkit-scrollbar {
+            width: 4px;
+          }
+
+          &::-webkit-scrollbar-track {
+            width: 4px;
+            margin-bottom: 10px;
+          }
+
+          &::-webkit-scrollbar-thumb {
+            width: 4px;
+          }
+
+          .course-tutorial__list-item {
+            gap: 10px;
+
+            .course-tutorial__list-item--status {
+              display: none;
+            }
+
+            .course-tutorial__list-item_content {
+              padding: 16px 16px 16px 30px;
+
+              .course-tutorial__list-item_content-title {
+                font-size: 14px;
+              }
+
+              .course-tutorial__list-item_content-duration {
+                margin-top: 4px;
+              }
+            }
+          }
+        }
+      }
+
+      .lesson-page__lesson-info {
+        margin-top: 0;
+
+        .lesson-page__lesson-info_first {
+          gap: 16px;
+
+          .lesson-page__lesson-info_first-duration {
+            font-size: 14px;
+            gap: 6px;
+
+            svg {
+              @include icon(20px);
+            }
+          }
+        }
+
+        .lesson-page__lesson-info_second {
+          margin-top: 20px;
+
+          .lesson-page__lesson-info_second-title {
+            font-size: 24px;
+          }
+
+          .lesson-page__lesson-info_second-description {
+            font-size: 14px;
+          }
+        }
+
+        .lesson-page__lesson-info_buttons {
+          flex-direction: column;
+          margin-top: 30px;
+
+          .lesson-page__lesson-info_buttons-item--error {
+            font-size: 12px;
+            margin-left: 20px;
+
+            svg {
+              @include icon(16px);
+            }
+          }
+
+          .lesson-page__lesson-info_buttons-item {
+            font-size: 14px;
+            padding: 6px 6px 6px 20px;
+            border-radius: 50px;
+
+            button {
+              @include icon(40px);
+
+              svg {
+                @include icon(17px);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .lesson-page__test {
+      margin-top: 50px;
+
+      .test__image {
+        max-width: 100%;
+      }
+    }
+  }
+}

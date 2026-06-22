@@ -57,11 +57,9 @@ export default function HeaderMobileMenu({
               <CitySwitcher cities={cities} currentCity={currentCity} />
             </div>
 
-            {false && (
-              <div className="header__mobile-cabinet">
-                <ButtonCabinet />
-              </div>
-            )}
+            <div className="header__mobile-cabinet">
+              <ButtonCabinet />
+            </div>
           </div>
 
           <div className="header__mobile-center">

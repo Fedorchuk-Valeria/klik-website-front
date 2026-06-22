@@ -31,11 +31,26 @@ const WhatWeLearnAccordionItem: FC<WhatWeLearnAccordionItemProps> = ({
       return;
     }
 
-    if (isOpen) {
-      setHeight(`${contentRef.current.scrollHeight}px`);
-    } else {
-      setHeight("0px");
+    if (!isOpen) {
+      queueMicrotask(() => setHeight("0px"));
+
+      return;
     }
+
+    const el = contentRef.current;
+    const updateHeight = () => setHeight(`${el.scrollHeight}px`);
+
+    updateHeight();
+
+    const resizeObserver = new ResizeObserver(updateHeight);
+    resizeObserver.observe(el);
+
+    window.addEventListener("resize", updateHeight);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", updateHeight);
+    };
   }, [isOpen, item.text, item.items]);
 
   return (

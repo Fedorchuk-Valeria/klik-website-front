@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 
-import Footer from "@/src/components/ui/Footer/Footer";
-import Header from "@/src/components/ui/Header/Header";
+import AnchorScroll from "@/src/components/AnchorScroll/AnchorScroll";
+import CookiePolicyListener from "@/src/components/template-parts/CookiePolicyListener";
+import PlaceListener from "@/src/components/template-parts/PlaceListener";
 
 import WidgetModal from "@/src/widgets/Modal";
 
 import { StoreProvider } from "@/src/store/StoreProvider";
 
 import "@/src/assets/scss/index.scss";
-import AnchorScroll from "@/src/components/AnchorScroll/AnchorScroll";
+import GetUserListener from "@/src/components/template-parts/GetUserListener";
 
 export const metadata: Metadata = {
   title: "Онлайн школа",
@@ -28,10 +29,12 @@ export default function RootLayout({
       <body>
         <StoreProvider>
           <AnchorScroll />
-          <Header />
           {children}
           <WidgetModal />
-          <Footer />
+
+          <CookiePolicyListener />
+          <PlaceListener />
+          <GetUserListener />
         </StoreProvider>
       </body>
     </html>

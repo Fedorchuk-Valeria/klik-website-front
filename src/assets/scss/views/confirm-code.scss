@@ -1,0 +1,138 @@
+.confirm-code-page {
+  padding-top: 100px;
+
+  &.login-page__form-content {
+    .login-page__form-title--red {
+      margin-bottom: 10px;
+    }
+
+    .login-page__text {
+      margin-left: 0;
+      margin-top: 0;
+    }
+
+    .login-page__form {
+      margin-top: 50px;
+    }
+
+    .login-page__form-button {
+      max-width: 390px;
+    }
+
+    .login-page__after-text {
+      font-size: 16px;
+      margin-left: 30px;
+
+      .login-page__form-link {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $desktop) {
+    padding-top: 20px;
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    padding-top: 30px;
+
+    &.login-page__form-content {
+      .login-page__form-title--red {
+        margin-bottom: 8px;
+      }
+
+      .login-page__form {
+        margin-top: 30px;
+        gap: 10px;
+      }
+
+      .login-page__form-button {
+        max-width: 315px;
+        margin-top: 10px;
+      }
+
+      .login-page__after-text {
+        font-size: 14px;
+        margin-left: 20px;
+        margin-top: 6px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    padding-top: 40px;
+
+    &.login-page__form-content {
+      .login-page__form-title--red {
+        margin-bottom: 8px;
+      }
+
+      .login-page__form {
+        margin-top: 50px;
+        gap: 20px;
+        grid-template-columns: 1fr;
+      }
+
+      .login-page__form-button {
+        max-width: 100%;
+        margin-top: 10px;
+      }
+
+      .login-page__after-text {
+        font-size: 16px;
+        margin-left: 30px;
+        margin-top: 0;
+      }
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    padding-top: 30px;
+
+    &.login-page__form-content {
+      .login-page__form-title--red {
+        margin-bottom: 6px;
+        margin-left: 20px;
+      }
+
+      .login-page__text {
+        margin-left: 20px;
+      }
+
+      .login-page__form {
+        margin-top: 30px;
+        gap: 10px;
+        height: calc(100vh - 235px);
+      }
+
+      .confirm-code-page__code-input {
+        margin-left: 20px;
+      }
+
+      .login-page__form-button {
+        max-width: 100%;
+        margin-top: auto;
+
+        .button__arrow {
+          @include icon(36px);
+          right: 6px;
+
+          svg {
+            @include icon(22px);
+          }
+        }
+      }
+
+      .login-page__after-text {
+        @include center;
+        font-size: 14px;
+        margin-left: 0px;
+        gap: 8px;
+
+        .login-page__form-link {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}

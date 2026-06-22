@@ -1,0 +1,113 @@
+.course-tutorial__progress {
+  .course-tutorial__progress-title {
+    @include center-between;
+
+    .course-tutorial__progress-title_text {
+      @include fonts(22px, 400, "Manrope");
+      color: var(--main-black);
+    }
+
+    .course-tutorial__progress-count {
+      @include fonts(16px, 500, "Etude Noire");
+      color: rgba(28, 26, 28, 0.3);
+
+      span {
+        @include fonts(24px, 500, "Etude Noire");
+        color: var(--main-green-dark);
+      }
+    }
+  }
+
+  .course-tutorial__progress-bar {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .course-tutorial__progress-bar_item {
+      height: 10px;
+      width: 100%;
+      border-radius: 100px;
+      background: #f0f6e8;
+    }
+
+    .course-tutorial__progress-bar_item--active {
+      background: var(--main-green-dark);
+    }
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    .course-tutorial__progress-title {
+      .course-tutorial__progress-title_text {
+        font-size: 18px;
+      }
+
+      .course-tutorial__progress-count {
+        font-size: 12px;
+
+        span {
+          font-size: 16px;
+        }
+      }
+    }
+
+    .course-tutorial__progress-bar {
+      margin-top: 15px;
+      gap: 8px;
+
+      .course-tutorial__progress-bar_item {
+        height: 8px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    .course-tutorial__progress-title {
+      .course-tutorial__progress-title_text {
+        font-size: 22px;
+      }
+
+      .course-tutorial__progress-count {
+        font-size: 16px;
+
+        span {
+          font-size: 22px;
+        }
+      }
+    }
+
+    .course-tutorial__progress-bar {
+      margin-top: 10px;
+      gap: 10px;
+
+      .course-tutorial__progress-bar_item {
+        height: 10px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    .course-tutorial__progress-title {
+      .course-tutorial__progress-title_text {
+        font-size: 14px;
+      }
+
+      .course-tutorial__progress-count {
+        font-size: 10px;
+
+        span {
+          font-size: 14px;
+        }
+      }
+    }
+
+    .course-tutorial__progress-bar {
+      margin-top: 14px;
+      gap: 6px;
+
+      .course-tutorial__progress-bar_item {
+        height: 8px;
+      }
+    }
+  }
+}

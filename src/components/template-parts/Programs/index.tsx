@@ -25,7 +25,7 @@ const programImages: Record<string, string> = {
   green: imgGreen.src,
 };
 
-const TABLET_MAX_CSS_VAR = "--layout-tablet-max";
+const PROGRAMS_SLIDER_MAX_CSS_VAR = "--layout-small-landscape-tablet-max";
 
 const PROGRAMS_IDLE_RESUME_MS = 10_000;
 const PROGRAMS_AUTOPLAY_DELAY_MS = 5_000;
@@ -37,25 +37,6 @@ type PropTypes = {
   text?: string;
   items: ProgramContentItem[];
 };
-
-function useProgramsSliderMatch() {
-  const [useSliderLayout, setUseSliderLayout] = useState(false);
-
-  useEffect(() => {
-    const rootStyle = getComputedStyle(document.documentElement);
-    const tabletMaxPx = Number.parseFloat(rootStyle.getPropertyValue(TABLET_MAX_CSS_VAR).trim());
-    if (!Number.isFinite(tabletMaxPx)) return;
-
-    const mq = window.matchMedia(`(max-width: ${tabletMaxPx}px)`);
-    const sync = () => setUseSliderLayout(mq.matches);
-
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
-
-  return useSliderLayout;
-}
 
 const Programs: FC<PropTypes> = ({ tag, title, text, items }) => {
   const useSliderLayout = useProgramsSliderMatch();
@@ -293,5 +274,26 @@ const Programs: FC<PropTypes> = ({ tag, title, text, items }) => {
     </section>
   );
 };
+
+function useProgramsSliderMatch() {
+  const [useSliderLayout, setUseSliderLayout] = useState(false);
+
+  useEffect(() => {
+    const rootStyle = getComputedStyle(document.documentElement);
+    const sliderMaxPx = Number.parseFloat(
+      rootStyle.getPropertyValue(PROGRAMS_SLIDER_MAX_CSS_VAR).trim()
+    );
+    if (!Number.isFinite(sliderMaxPx)) return;
+
+    const mq = window.matchMedia(`(max-width: ${sliderMaxPx}px)`);
+    const sync = () => setUseSliderLayout(mq.matches);
+
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  return useSliderLayout;
+}
 
 export default Programs;

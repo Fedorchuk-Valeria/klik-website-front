@@ -1,10 +1,14 @@
 $desktop: 1440px;
+$desktop-wide: 1920px;
+$desktop-compact: 1280px;
 $landscape-tablet-size: 1024px;
+$small-landscape-tablet-size: 960px;
 $tablet-size: 800px;
 $mobile-size: 500px;
 
 // Для matchMedia в JS — те же значения, что и переменные выше
 :root {
   --layout-landscape-tablet-max: #{$landscape-tablet-size};
+  --layout-small-landscape-tablet-max: #{$small-landscape-tablet-size};
   --layout-tablet-max: #{$tablet-size};
 }

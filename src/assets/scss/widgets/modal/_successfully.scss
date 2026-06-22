@@ -1,0 +1,22 @@
+.modal-success {
+  dialog {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 30px 50px;
+
+    .modal-success__icon {
+      @include icon(24px);
+      color: var(--main-green-dark);
+
+      svg {
+        @include icon(24px);
+      }
+    }
+
+    .modal-success__text {
+      @include fonts(18px, 400, "Manrope");
+      color: var(--main-black);
+    }
+  }
+}

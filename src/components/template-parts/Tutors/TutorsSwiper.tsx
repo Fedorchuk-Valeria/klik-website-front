@@ -9,11 +9,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { TUTOR_IMAGES } from "./tutorImages";
 import type { TutorItem } from "./types";
 
-const SLIDE_GAP = 20;
-const SLIDE_INACTIVE_W = 270;
-const SLIDE_ACTIVE_W = 560;
-const SLIDES_OFFSET_BEFORE = SLIDE_INACTIVE_W + SLIDE_GAP;
-const SLIDES_OFFSET_AFTER = SLIDE_ACTIVE_W + SLIDE_INACTIVE_W * 2 + SLIDE_GAP * 2;
 const TUTOR_IMG_W_COMPACT = 360;
 const TUTOR_IMG_H_COMPACT = 450;
 
@@ -24,11 +19,11 @@ export type TutorsSwiperSlide = {
 
 export type TutorsSwiperProps = {
   slidesForSwiper: TutorsSwiperSlide[];
-  isTabletLandscapeTutors: boolean;
   activeIndex: number;
-  initialSlideMid: number;
   tutorCount: number;
   tutorsPaginationEnabled: boolean;
+  /** swipte only at <=800px, >=1024 */
+  swipeEnabled: boolean;
   paginationElRef: RefObject<HTMLDivElement | null>;
   onSwiper: (swiper: SwiperType) => void;
   onSwiperClick: (swiper: SwiperType) => void;
@@ -38,11 +33,10 @@ export type TutorsSwiperProps = {
 
 const TutorsSwiper: FC<TutorsSwiperProps> = ({
   slidesForSwiper,
-  isTabletLandscapeTutors,
   activeIndex,
-  initialSlideMid,
   tutorCount,
   tutorsPaginationEnabled,
+  swipeEnabled,
   paginationElRef,
   onSwiper,
   onSwiperClick,
@@ -71,13 +65,9 @@ const TutorsSwiper: FC<TutorsSwiperProps> = ({
                   className="home-page__tutors-thumb__img"
                   src={img}
                   alt=""
-                  width={isTabletLandscapeTutors ? TUTOR_IMG_W_COMPACT : 560}
-                  height={isTabletLandscapeTutors ? TUTOR_IMG_H_COMPACT : 700}
-                  sizes={
-                    isTabletLandscapeTutors
-                      ? `${TUTOR_IMG_W_COMPACT}px`
-                      : "(max-width: 1440px) 414px, 560px"
-                  }
+                  width={TUTOR_IMG_W_COMPACT}
+                  height={TUTOR_IMG_H_COMPACT}
+                  sizes={`${TUTOR_IMG_W_COMPACT}px`}
                   draggable={false}
                 />
               </div>
@@ -85,7 +75,7 @@ const TutorsSwiper: FC<TutorsSwiperProps> = ({
           </SwiperSlide>
         );
       }),
-    [isTabletLandscapeTutors, slidesForSwiper]
+    [slidesForSwiper]
   );
 
   const onPaginationBeforeInit = useCallback(
@@ -99,52 +89,44 @@ const TutorsSwiper: FC<TutorsSwiperProps> = ({
     [paginationElRef, tutorsPaginationEnabled]
   );
 
-  const swiperEl = (
-    <Swiper
-      modules={[Pagination]}
-      speed={0}
-      grabCursor
-      resizeObserver
-      slidesPerView={isTabletLandscapeTutors ? 1 : "auto"}
-      initialSlide={isTabletLandscapeTutors ? activeIndex : initialSlideMid}
-      key={
-        isTabletLandscapeTutors
-          ? `tutor-compact-${tutorCount}-pg-${tutorsPaginationEnabled ? 1 : 0}`
-          : `tutor-order-${activeIndex}`
-      }
-      className="home-page__tutors-swiper"
-      spaceBetween={isTabletLandscapeTutors ? 0 : SLIDE_GAP}
-      slidesOffsetAfter={isTabletLandscapeTutors ? 0 : SLIDES_OFFSET_AFTER}
-      slidesOffsetBefore={isTabletLandscapeTutors ? 0 : SLIDES_OFFSET_BEFORE}
-      observer={false}
-      watchOverflow={false}
-      centeredSlides={false}
-      observeSlideChildren={false}
-      pagination={
-        tutorsPaginationEnabled
-          ? {
-              clickable: true,
-              hideOnClick: false,
-              bulletClass: "home-page__tutors-pagination-bullet",
-              bulletActiveClass: "home-page__tutors-pagination-bullet--active",
-            }
-          : false
-      }
-      onBeforeInit={onPaginationBeforeInit}
-      onSwiper={onSwiper}
-      onClick={onSwiperClick}
-      onSlideChange={onSlideChange}
-      onSliderFirstMove={onSwiperSliderFirstMove}
-    >
-      {swiperSlides}
-    </Swiper>
+  return (
+    <div className="home-page__tutors-swiper-wrap">
+      <Swiper
+        modules={[Pagination]}
+        speed={0}
+        grabCursor={swipeEnabled}
+        allowTouchMove={swipeEnabled}
+        simulateTouch={swipeEnabled}
+        resizeObserver
+        slidesPerView={1}
+        initialSlide={activeIndex}
+        key={`tutor-compact-${tutorCount}-pg-${tutorsPaginationEnabled ? 1 : 0}`}
+        className="home-page__tutors-swiper"
+        spaceBetween={0}
+        observer={false}
+        watchOverflow={false}
+        centeredSlides={false}
+        observeSlideChildren={false}
+        pagination={
+          tutorsPaginationEnabled
+            ? {
+                clickable: true,
+                hideOnClick: false,
+                bulletClass: "home-page__tutors-pagination-bullet",
+                bulletActiveClass: "home-page__tutors-pagination-bullet--active",
+              }
+            : false
+        }
+        onBeforeInit={onPaginationBeforeInit}
+        onSwiper={onSwiper}
+        onClick={onSwiperClick}
+        onSlideChange={onSlideChange}
+        onSliderFirstMove={onSwiperSliderFirstMove}
+      >
+        {swiperSlides}
+      </Swiper>
+    </div>
   );
-
-  if (isTabletLandscapeTutors) {
-    return <div className="home-page__tutors-swiper-wrap">{swiperEl}</div>;
-  }
-
-  return swiperEl;
 };
 
 export default TutorsSwiper;

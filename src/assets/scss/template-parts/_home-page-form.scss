@@ -43,7 +43,7 @@
 
   .home-page__form-error {
     @include fonts(14px, 500, "Manrope");
-    color: #e31b1b;
+    color: var(--error-color);
     margin-left: 30px;
   }
 
@@ -78,6 +78,36 @@
     }
   }
 
+  @media (max-width: $desktop-compact) {
+    gap: 16px;
+
+    .home-page__form-button {
+      font-size: 16px;
+      padding: 16px;
+      margin-top: 14px;
+
+      .button__arrow {
+        @include icon(36px);
+
+        svg {
+          @include icon(22px);
+        }
+      }
+    }
+
+    .home-page__form-checkbox-container {
+      .home-page__form-checkbox {
+        @include icon(18px);
+        min-width: 18px;
+        min-height: 18px;
+      }
+
+      .home-page__form-checkbox--text {
+        font-size: 14px;
+      }
+    }
+  }
+
   @media (max-width: $landscape-tablet-size) {
     gap: 20px;
 
@@ -103,6 +133,25 @@
       .text-input__error {
         white-space: nowrap;
         margin-right: 0;
+      }
+    }
+  }
+
+  @media (max-width: $small-landscape-tablet-size) {
+    .home-page__form-button {
+      margin-top: 10px;
+      max-width: 100%;
+    }
+
+    .home-page__form-checkbox-container {
+      .home-page__form-checkbox {
+        @include icon(20px);
+        min-width: 20px;
+        min-height: 20px;
+      }
+
+      .home-page__form-checkbox--text {
+        font-size: 14px;
       }
     }
   }
@@ -156,14 +205,28 @@
       flex: 1 1 100%;
       width: 100%;
       min-width: 0;
+
+      &.text-input--error {
+        padding-bottom: 0;
+
+        .text-input__error {
+          position: static;
+        }
+      }
     }
 
     .home-page__form-button {
       padding: 16px;
       margin-top: 8px;
+      max-width: 100%;
 
       .button__arrow {
+        @include icon(36px);
         right: 7px;
+
+        svg {
+          @include icon(22px);
+        }
       }
     }
 
