@@ -779,6 +779,10 @@
           &.footer__bottom-item--second {
             gap: 20px;
             margin-top: 20px;
+
+            p:first-child {
+              max-width: 600px;
+            }
           }
 
           .footer__links {
@@ -904,7 +908,6 @@
   }
 
   &__payment {
-
     display: flex;
     gap: 50px;
     align-items: center;
