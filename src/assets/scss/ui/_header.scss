@@ -83,6 +83,7 @@
 
   .header__logo {
     max-width: 96px;
+    display: flex;
 
     svg {
       width: 96px;
@@ -301,6 +302,7 @@
     .header__wrapper {
       border-radius: 40px;
       padding: 30px;
+      gap: 19px;
     }
 
     .header__logo {
@@ -334,6 +336,14 @@
         }
       }
     }
+
+    .header__menu {
+      gap: 20px;
+    }
+
+    .header__left {
+      gap: 30px;
+    }
   }
 
   @media screen and (max-width: $landscape-tablet-size) {
@@ -359,6 +369,10 @@
 
     .header__menu {
       gap: 5px;
+    }
+
+    .header__left {
+      gap: 50px;
     }
 
     .city-switcher {
