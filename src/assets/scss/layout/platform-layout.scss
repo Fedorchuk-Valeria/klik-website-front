@@ -33,6 +33,14 @@
     }
 
     @media screen and (max-width: $mobile-size) {
+      .header__logout-button {
+        @include icon(40px);
+
+        .header__logout-icon {
+          @include icon(20px);
+        }
+      }
+
       .header__wrapper {
         padding: 10px 20px;
       }
@@ -44,20 +52,20 @@
   }
 
   &__container {
-    max-width: 1740px;
+    max-width: 1800px;
     margin: 0 auto;
-    padding: 0 10px;
+    padding: 0 40px;
 
     @media screen and (max-width: $desktop) {
-      max-width: 1340px;
+      max-width: 1400px;
+    }
+
+    @media screen and (max-width: $desktop-compact) {
+      max-width: 1260px;
     }
 
     @media screen and (max-width: $landscape-tablet-size) {
-      max-width: 964px;
-    }
-
-    @media screen and (max-width: $tablet-size) {
-      max-width: 740px;
+      max-width: 100%;
     }
 
     @media screen and (max-width: $mobile-size) {

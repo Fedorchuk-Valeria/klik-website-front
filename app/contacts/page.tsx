@@ -139,7 +139,6 @@ const ContactsPage = () => {
             <div className="contacts-view__payment-button">
               <a
                 href={PUBLIC_CONTRACT_URL}
-                download="public-contract.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="contacts-view__payment-button--download"

@@ -80,6 +80,7 @@ const PagesProfile = ({ settings }: PropTypes) => {
                 className="login-page__form-input"
                 disabled={true}
               />
+
               <PhoneInput
                 variant="outline"
                 label="Телефон"
@@ -89,6 +90,7 @@ const PagesProfile = ({ settings }: PropTypes) => {
               />
             </div>
           </div>
+
           <div className="page-profile__list">
             <Link
               className="page-profile__link"
@@ -104,6 +106,7 @@ const PagesProfile = ({ settings }: PropTypes) => {
                 <Icon className="page-profile__link-icon" name="arrow" />
               </span>
             </Link>
+
             <Link className="page-profile__link" href={PAGES.PROFILE_PASSWORD}>
               Управление паролем
               <span>
@@ -111,18 +114,22 @@ const PagesProfile = ({ settings }: PropTypes) => {
               </span>
             </Link>
           </div>
+
           <div className="page-profile__info">
             <Icon className="page-profile__info-icon" name="info-circle-outline" />
             По всем вопросам вы можете связаться с нами по номеру телефона{" "}
             <a href={phoneToLink(phone)}>{phone}</a>
           </div>
+
           <Partners />
+
           <div className="page-profile__childrens">
             <div className="page-profile__childrens-header">
               <div className="page-profile__childrens-left">
                 <div className="page-profile__childrens-title">Профили детей</div>
                 <div className="page-profile__childrens-text">Управление учебными профилями</div>
               </div>
+
               <div className="page-profile__childrens-actions">
                 <Button variant="outline-green-dark">История платежей</Button>
                 <Button variant="orange" onClick={handleCreateChildren}>
@@ -131,28 +138,34 @@ const PagesProfile = ({ settings }: PropTypes) => {
                 </Button>
               </div>
             </div>
+
             <div className="page-profile__childrens-list">
               {[...Array(3)].map((_, i) => (
                 <div className="page-profile__children" key={i}>
                   <div className="page-profile__children-name">
                     Фамилия Имя Отчество Ребёнка 0{i + 1}
                   </div>
+
                   <div className="page-profile__children-tags">
                     <div className="page-profile__children-tag">
                       <Icon className="page-profile__children-icon" name="info-circle-outline" />
                       100 кликоинов
                     </div>
+
                     <div className="page-profile__children-tag">
                       <Icon className="page-profile__children-icon" name="info-circle-outline" />
                       100 бел. руб.
                     </div>
+
                     <div className="page-profile__children-tag">4 оплаченных занятия</div>
                   </div>
+
                   <div className="page-profile__children-block">
                     <div className="page-profile__children-title">
                       <Icon className="page-profile__children-icon" name="book" />
                       Самостоятельные курсы
                     </div>
+
                     <div className="page-profile__children-list">
                       <div className="page-profile__children-item">
                         <Icon className="page-profile__children-icon" name="disk" />
@@ -161,23 +174,27 @@ const PagesProfile = ({ settings }: PropTypes) => {
                       </div>
                     </div>
                   </div>
+
                   <div className="page-profile__children-wrapper">
                     <div className="page-profile__children-block">
                       <div className="page-profile__children-title">
                         <Icon className="page-profile__children-icon" name="people" />
                         Оффлайн занятия в группе
                       </div>
+
                       <div className="page-profile__children-list">
                         <div className="page-profile__children-item">
                           <Icon className="page-profile__children-icon" name="disk" />
                           Программа «Креаторы» :<span>@Klik-tg-chat</span>
                         </div>
+
                         <div className="page-profile__children-item">
                           <Icon className="page-profile__children-icon" name="disk" />
                           Программа «Лето» :<span>@Klik-tg-chat</span>
                         </div>
                       </div>
                     </div>
+
                     <Button
                       variant="main-light-outline"
                       className="page-profile__children-pay"
@@ -186,16 +203,20 @@ const PagesProfile = ({ settings }: PropTypes) => {
                       Оплатить обучение
                     </Button>
                   </div>
-                  <Button
-                    variant="main-light"
-                    className="page-profile__children-more"
-                    withArrow={true}
-                  >
-                    Подробнее
-                  </Button>
+
+                  <Link href={PAGES.PROFILE_CHILDREN_DETAILS.replace(":id", String(i + 1))}>
+                    <Button
+                      variant="main-light"
+                      className="page-profile__children-more"
+                      withArrow={true}
+                    >
+                      Подробнее
+                    </Button>
+                  </Link>
                 </div>
               ))}
             </div>
+
             <div className="page-profile__empty">
               <Line1Svg className="page-profile__empty-line1" />
               <Line2Svg className="page-profile__empty-line2" />
