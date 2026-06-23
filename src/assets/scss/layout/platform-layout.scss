@@ -22,6 +22,37 @@
       }
     }
 
+    .header__logout-button {
+      padding: 16px 30px;
+      font-size: 16px;
+
+      svg {
+        @include icon(20px);
+      }
+    }
+
+    @media screen and (max-width: $desktop) {
+      .header__logout-button {
+        padding: 15px 30px;
+        font-size: 14px;
+
+        svg {
+          @include icon(20px);
+        }
+      }
+    }
+
+    @media screen and (max-width: $desktop-compact) {
+      .header__logout-button {
+        padding: 12px 30px;
+        font-size: 12px;
+
+        svg {
+          @include icon(18px);
+        }
+      }
+    }
+
     @media screen and (max-width: $tablet-size) {
       .header__logout-button {
         @include icon(44px);
