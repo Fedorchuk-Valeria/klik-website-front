@@ -53,9 +53,19 @@
       }
     }
 
+    @media screen and (max-width: $landscape-tablet-size) {
+      .header__logout-button {
+        .header__logout-text {
+          display: none;
+        }
+      }
+    }
+
     @media screen and (max-width: $tablet-size) {
       .header__logout-button {
         @include icon(44px);
+        aspect-ratio: 1;
+        padding: 0;
 
         .header__logout-icon {
           @include icon(22px);

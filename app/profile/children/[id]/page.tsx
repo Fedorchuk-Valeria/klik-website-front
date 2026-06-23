@@ -15,7 +15,8 @@ import Popover from "@/src/components/ui/Popover";
 import TextInput from "@/src/components/ui/TextInput";
 
 import { getPlural } from "@/src/helper/getPlural";
-import { PAGES } from "@/src/utils/constant";
+import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
+import { QueryHelper } from "@/src/utils/helpers";
 
 const ChildrenDetailsPage = () => {
   const [openPartnerIndex, setOpenPartnerIndex] = useState<number | null>(null);
@@ -268,7 +269,10 @@ const ChildrenDetailsPage = () => {
                   Перейдите к обучению на платформе
                 </p>
 
-                <Link href={PAGES.COURSES} className="children-details-page__formats_item-button">
+                <Link
+                  href={`${PAGES.COURSES}${QueryHelper.getQueryString({ [QUERY_PARAMS.SCOPE]: "my" })}`}
+                  className="children-details-page__formats_item-button"
+                >
                   <Button variant="main-green-dark" withArrow>
                     Перейти к курсам
                   </Button>
@@ -292,7 +296,7 @@ const ChildrenDetailsPage = () => {
 
                     <Link
                       className="children-details-page__formats_item-content-button"
-                      href={PAGES.LESSON.replace(":id", "1").replace(":lessonId", "1")}
+                      href={`${PAGES.COURSE.replace(":id", "22")}${QueryHelper.getQueryString({ [QUERY_PARAMS.IS_PARENT]: true })}`}
                     >
                       <Button variant="main-green-dark">
                         <Icon name="arrow-long" />

@@ -59,7 +59,7 @@ const HeaderAuth = () => {
 
       <Button className="header__logout-button" onClick={handleLogout}>
         <Icon className="header__logout-icon" name="logout" />
-        Выход
+        <span className="header__logout-text">Выход</span>
       </Button>
     </div>
   );

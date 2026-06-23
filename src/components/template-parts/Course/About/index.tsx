@@ -20,6 +20,7 @@ type PropTypes = {
   description: string;
   categories: CourseCategory[];
   onPayment: () => void;
+  isParent?: boolean;
 };
 
 const CourseAbout: FC<PropTypes> = ({
@@ -31,6 +32,7 @@ const CourseAbout: FC<PropTypes> = ({
   isPayment = false,
   imageUrl = "https://placehold.net/default.png",
   onPayment,
+  isParent = false,
 }) => {
   const router = useRouter();
   const { isAuthenticated, isMounted } = useAuth();
@@ -88,14 +90,16 @@ const CourseAbout: FC<PropTypes> = ({
           <Icon name="ruble" />
         </p>
 
-        <Button
-          className="course-about__info-button"
-          variant="main-green-dark"
-          onClick={handleClick}
-          withArrow
-        >
-          {isPayment ? "Продолжить обучение" : "Оплатить курс"}
-        </Button>
+        {!isParent && (
+          <Button
+            className="course-about__info-button"
+            variant="main-green-dark"
+            onClick={handleClick}
+            withArrow
+          >
+            {isPayment ? "Продолжить обучение" : "Оплатить курс"}
+          </Button>
+        )}
 
         {!!infoList && (
           <ul className="course-about__info-list">
@@ -106,6 +110,20 @@ const CourseAbout: FC<PropTypes> = ({
               </li>
             ))}
           </ul>
+        )}
+
+        {isParent && (
+          <div className="course-about__info-parent">
+            <p className="course-about__info-parent-badge">
+              <span>Куплен:</span>
+              <span>26.05.2026</span>
+            </p>
+
+            <p className="course-about__info-parent-badge">
+              <span>Истекает:</span>
+              <span>26.08.2026</span>
+            </p>
+          </div>
         )}
       </div>
     </div>

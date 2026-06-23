@@ -8,21 +8,21 @@ import BackButton from "@/src/components/ui/BackButton";
 import Icon from "@/src/components/ui/Icon/Icon";
 
 import { ModalType } from "@/src/entities/common";
-import { Course } from "@/src/lib/getCourses";
-import { PAGES } from "@/src/utils/constant";
-
 import { getPlural } from "@/src/helper/getPlural";
 import { CitySettings } from "@/src/lib/getCitySettings";
+import { Course } from "@/src/lib/getCourses";
 import { useAppDispatch } from "@/src/store/hooks";
 import { showModal } from "@/src/store/slices/modalSlice";
+import { PAGES } from "@/src/utils/constant";
 
 type PropTypes = {
   data: Course;
   errors: Record<string, string> | null;
   settings: CitySettings;
+  isParent?: boolean;
 };
 
-const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
+const CoursePage: FC<PropTypes> = ({ data, errors, settings, isParent = false }) => {
   const dispatch = useAppDispatch();
 
   if (errors) {
@@ -96,6 +96,7 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
           imageUrl={data.image}
           isPayment={data.is_purchased}
           onPayment={handlePayment}
+          isParent={isParent}
         />
 
         <div className="course-page__content-timing">
@@ -126,6 +127,7 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
               status: lesson.is_completed ? "done" : lesson.is_locked ? "disabled" : "active",
             })) ?? []
           }
+          isParent={isParent}
         />
       </div>
     </div>
