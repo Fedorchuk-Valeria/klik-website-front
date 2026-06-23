@@ -24,6 +24,8 @@ export const QUERY_PARAMS = {
   FILTER: "filter",
   SCOPE: "scope",
   CATEGORIES: "categories",
+
+  IS_PARENT: "is_parent",
 };
 
 export const PAGES = {
@@ -42,6 +44,7 @@ export const PAGES = {
   COURSES: "/courses",
   COURSE: "/courses/:id",
   LESSON: "/courses/:id/lesson/:lessonId",
+  TEST: "/courses/:id/test/:lessonId",
 
   PROFILE_CHILDREN_DETAILS: "/profile/children/:id",
 

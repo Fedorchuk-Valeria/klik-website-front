@@ -16,11 +16,19 @@ type PropTypes = {
     test_result: LessonTestResult | null;
     status: "done" | "active" | "disabled";
   }[];
+  isParent?: boolean;
   className?: string;
   isPurchased: boolean;
 };
 
-const CourseTutorial: FC<PropTypes> = ({ progress, total, list, className, isPurchased }) => {
+const CourseTutorial: FC<PropTypes> = ({
+  progress,
+  total,
+  list,
+  className,
+  isPurchased,
+  isParent,
+}) => {
   const courseId = useParams().id as string;
 
   return (
@@ -35,7 +43,7 @@ const CourseTutorial: FC<PropTypes> = ({ progress, total, list, className, isPur
         )}
       </div>
 
-      <TutorialList list={list} courseId={courseId} />
+      <TutorialList list={list} courseId={courseId} isParent={isParent} />
     </div>
   );
 };
