@@ -474,10 +474,18 @@
       }
     }
 
+    .header__brand {
+      gap: 10px;
+    }
+
     .header__wrapper {
       padding: 20px;
       gap: 16px;
       border-radius: 30px;
+    }
+
+    .header__left {
+      gap: 40px;
     }
 
     .header__right:not(.last) {
@@ -494,6 +502,10 @@
           @include icon(18px);
         }
       }
+    }
+
+    .header__menu {
+      gap: 6px;
     }
 
     .header__menu li a {
