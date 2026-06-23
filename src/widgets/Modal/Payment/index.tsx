@@ -3,13 +3,13 @@ import { FC, useState } from "react";
 
 import Modal from "@/src/components/ui/Modal";
 
-import { useAppDispatch } from "@/src/store/hooks";
-import { Course } from "@/src/lib/getCourses";
 import Button from "@/src/components/ui/Button/Button";
-import { purchaseRequest } from "@/src/store/slices/corses";
 import Checkbox from "@/src/components/ui/Checkbox";
-import {PAGES, PUBLIC_OFFER_URL} from "@/src/utils/constant";
 import Icon from "@/src/components/ui/Icon/Icon";
+import { Course } from "@/src/lib/getCourses";
+import { useAppDispatch } from "@/src/store/hooks";
+import { purchaseRequest } from "@/src/store/slices/corses";
+import { PAGES, PUBLIC_OFFER_URL } from "@/src/utils/constant";
 
 type PropTypes = {
   course: Course;
@@ -17,7 +17,7 @@ type PropTypes = {
   className?: string;
 };
 
-const WidgetModalPayment: FC<PropTypes> = ({course, className, isVisible}) => {
+const WidgetModalPayment: FC<PropTypes> = ({ course, className, isVisible }) => {
   const dispatch = useAppDispatch();
   const origin = window.location.origin;
 
@@ -38,7 +38,7 @@ const WidgetModalPayment: FC<PropTypes> = ({course, className, isVisible}) => {
     dispatch(
       purchaseRequest({
         course_id: id,
-        return_url: returnUrl
+        return_url: returnUrl,
       })
     );
   };
@@ -84,15 +84,16 @@ const WidgetModalPayment: FC<PropTypes> = ({course, className, isVisible}) => {
               }
             }}
           />
-          <span>Я ознакомлен с <a href={PUBLIC_OFFER_URL} target="_blank">Договором услуг</a></span>
-          {error && (
-            <div className="modal-payment__error">
-              {error}
-            </div>
-          )}
+
+          <span>
+            Я ознакомлен с{" "}
+            <a href={PUBLIC_OFFER_URL} target="_blank">
+              Договором услуг
+            </a>
+          </span>
+
+          {error && <div className="modal-payment__error">{error}</div>}
         </div>
-
-
       </div>
     </Modal>
   );
