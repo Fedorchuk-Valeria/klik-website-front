@@ -52,10 +52,14 @@
     display: -webkit-box;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 280px;
+    max-width: 335px;
     flex-shrink: 0;
     text-align: right;
     white-space: pre-wrap;
+
+    @media screen and (max-width: $mobile-size) {
+      max-width: 260px;
+    }
   }
 
   &__currency {
