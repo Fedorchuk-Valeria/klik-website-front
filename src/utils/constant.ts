@@ -76,9 +76,10 @@ export const PASSWORD_REGEX =
 
 export const PASSWORD_INPUT_STRIP_REGEX = /[^a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/g;
 
-export const PUBLIC_OFFER_URL =
-  "https://drive.google.com/file/d/1SsbIcZF38PtcCaR4w9p6w8jxR1F8P5Ey/view";
+export const PUBLIC_OFFER_SOURCE_URL =
+  "https://storage.yandexcloud.net/klikcloud/%D0%9F%D1%83%D0%B1%D0%BB%D0%B8%D1%87%D0%BD%D1%8B%D0%B8%CC%86%20%D0%B4%D0%BE%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%20%D1%84%D0%BE%D1%80%D0%BC%D0%B0_15.05.26_%D0%B23.docx.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJE7vSS1qMNjwKi6cAjzNHq%2F20260623%2Fru-central1%2Fs3%2Faws4_request&X-Amz-Date=20260623T112405Z&X-Amz-Expires=2592000&X-Amz-Signature=c0e4e9aac7b644663f423e6888536eccf0f49d158d47662e8a6e4f2c1624d352&X-Amz-SignedHeaders=host&response-content-disposition=attachment";
 
+export const PUBLIC_OFFER_URL = "/public-offer";
 export const VALIDATION_CLASS = "validatio-error";
 
 export const PAYMENT_STATUS_SUCCESSFULL = "paid";
