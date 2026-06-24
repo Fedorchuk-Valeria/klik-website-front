@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { FC, useMemo, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 
 import Icon from "@/src/components/ui/Icon/Icon";
 
@@ -31,6 +31,8 @@ type MultipleSelectPropTypes = BasePropTypes & {
 
 type PropTypes = SingleSelectPropTypes | MultipleSelectPropTypes;
 
+const SELECT_ANIMATION_MS = 300;
+
 type SelectViewPropTypes = BasePropTypes & {
   icon?: string;
   displayText: string;
@@ -51,16 +53,50 @@ const SelectView: FC<SelectViewPropTypes> = ({
   closeOnSelect = false,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
   const [isOpen, setOpen] = useState(false);
+  const [isClosing, setClosing] = useState(false);
+  const hasOpenFrame = isOpen || isClosing;
   const dropdownKey = dropdownOptions.map((item) => item.id).join("|");
 
   const handleClose = () => {
+    if (!isOpen || isClosing) {
+      return;
+    }
+
+    setClosing(true);
     setOpen(false);
+
+    closeTimerRef.current = setTimeout(() => {
+      setClosing(false);
+    }, SELECT_ANIMATION_MS);
+  };
+
+  const handleOpen = () => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+    }
+
+    setClosing(false);
+    setOpen(true);
   };
 
   const toggleDropdown = () => {
-    setOpen((prev) => !prev);
+    if (isOpen) {
+      handleClose();
+      return;
+    }
+
+    handleOpen();
   };
+
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+      }
+    };
+  }, []);
 
   useClickOutside(ref, handleClose);
 
@@ -68,7 +104,8 @@ const SelectView: FC<SelectViewPropTypes> = ({
     <div
       ref={ref}
       className={classNames("select", className, {
-        "select--open": isOpen,
+        "select--open": hasOpenFrame,
+        "select--closing": isClosing,
         "select--green": color === "green",
         "select--orange": color === "orange",
       })}
@@ -104,7 +141,7 @@ const SelectView: FC<SelectViewPropTypes> = ({
                     onOptionSelect(item, index);
 
                     if (closeOnSelect) {
-                      setOpen(false);
+                      handleClose();
                     }
                   }}
                   className={classNames("select__item", {

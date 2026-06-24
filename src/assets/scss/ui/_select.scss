@@ -8,6 +8,10 @@
     border-radius: 27px;
     overflow: hidden;
 
+    &.select--closing {
+      overflow: visible;
+    }
+
     .select__current {
       top: -2px;
       left: -2px;
