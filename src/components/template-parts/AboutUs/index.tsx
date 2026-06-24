@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { FC } from "react";
 
 import girlImg from "@/src/assets/images/templates/homepage/aboutUs/girl.png";
@@ -7,6 +6,7 @@ import HeartSVG from "@/src/assets/images/templates/homepage/aboutUs/heart.svg";
 
 import AboutUsSlider from "@/src/components/template-parts/AboutUs/AboutUsSlider";
 import Button from "@/src/components/ui/Button/Button";
+import HomeAnchorLink from "@/src/components/ui/HomeAnchorLink/HomeAnchorLink";
 import Icon from "@/src/components/ui/Icon/Icon";
 import TextBorder from "@/src/components/ui/TextBorder";
 
@@ -55,15 +55,15 @@ const AboutUs: FC<PropTypes> = ({ title, text, subtitle, items, slides }) => {
             )}
 
             <div className="home-page__about-us--actions">
-              <Link href={`#${PAGE_ANCHORS.SELECT_TRAINING}`}>
+              <HomeAnchorLink anchor={PAGE_ANCHORS.SELECT_TRAINING}>
                 <Button variant="main-green-dark" withArrow={true}>
                   Записаться на курс
                 </Button>
-              </Link>
+              </HomeAnchorLink>
 
-              <Link href={`#${PAGE_ANCHORS.PROGRAMS}`}>
+              <HomeAnchorLink anchor={PAGE_ANCHORS.PROGRAMS}>
                 <Button variant="outline-green-dark">Смотреть программы</Button>
-              </Link>
+              </HomeAnchorLink>
             </div>
           </div>
 
