@@ -41,15 +41,13 @@ export default function AnchorScroll() {
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
 
-      const link = target.closest('a[href^="#"]') as HTMLAnchorElement | null;
+      const link = target.closest("a") as HTMLAnchorElement | null;
 
       if (!link) return;
 
-      const href = link.getAttribute("href");
+      const id = resolveSamePageAnchorId(link.getAttribute("href"));
 
-      if (!href || href === "#") return;
-
-      const id = href.replace("#", "");
+      if (!id) return;
 
       const element = document.getElementById(id);
 
@@ -64,7 +62,7 @@ export default function AnchorScroll() {
         behavior: "smooth",
       });
 
-      window.history.pushState(null, "", href);
+      window.history.pushState(null, "", `#${id}`);
       notifyActiveAnchor(id);
       window.setTimeout(() => notifyActiveAnchor(id), 550);
     };
@@ -81,6 +79,26 @@ export default function AnchorScroll() {
 
 function notifyActiveAnchor(id: string) {
   window.dispatchEvent(new CustomEvent(SET_ACTIVE_ANCHOR_EVENT, { detail: { id } }));
+}
+
+function resolveSamePageAnchorId(href: string | null): string | null {
+  if (!href || href === "#") return null;
+
+  if (href.startsWith("#")) {
+    const id = decodeURIComponent(href.slice(1));
+    return id || null;
+  }
+
+  try {
+    const url = new URL(href, window.location.href);
+    if (url.pathname !== window.location.pathname) return null;
+    if (!url.hash || url.hash === "#") return null;
+
+    const id = decodeURIComponent(url.hash.slice(1));
+    return id || null;
+  } catch {
+    return null;
+  }
 }
 
 function snapScrollToAnchor(id: string) {
