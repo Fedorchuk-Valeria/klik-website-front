@@ -3,11 +3,12 @@ import { FC, memo } from "react";
 
 type PropTypes = {
   isLocal?: boolean;
+  className?: string;
 };
 
-const Loader: FC<PropTypes> = ({ isLocal = false }) => {
+const Loader: FC<PropTypes> = ({ isLocal = false, className }) => {
   return (
-    <div className={classNames("loader", { "loader--local": isLocal })}>
+    <div className={classNames("loader", { "loader--local": isLocal }, className)}>
       <div className="loader__content">
         <div className="loader__spinner">
           <span />

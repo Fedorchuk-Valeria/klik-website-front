@@ -9,6 +9,7 @@ import TextInput from "@/src/components/ui/TextInput";
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { getChatRequest, sendChatMessageRequest } from "@/src/store/slices/chat";
+import Markdown from "react-markdown";
 
 export default function Chat() {
   const { id, lessonId } = useParams();
@@ -50,6 +51,8 @@ export default function Chat() {
     setMessage("");
   };
 
+  console.log(data?.messages);
+
   return (
     <div className="chat">
       {isOpen && (
@@ -71,12 +74,9 @@ export default function Chat() {
                   {item.role === "assistant" ? "Твой AI помощник" : "Ты"}
                 </div>
 
-                <span
-                  className="text"
-                  dangerouslySetInnerHTML={{
-                    __html: item.content,
-                  }}
-                />
+                <span className="text">
+                  <Markdown>{item.content}</Markdown>
+                </span>
               </div>
             ))}
 
