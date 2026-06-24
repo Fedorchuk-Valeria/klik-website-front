@@ -76,6 +76,8 @@ const ConfirmCodeContent = () => {
         router.push(PAGES.SET_NEW_PASSWORD);
       } else {
         router.push(PAGES.LOGIN);
+
+        CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
       }
     }
   }, [isCodeCorrect, searchParams]);
