@@ -10,8 +10,7 @@ import Modal from "@/src/components/ui/Modal";
 import { City, getCities } from "@/src/lib/getCities";
 import { useAppDispatch } from "@/src/store/hooks";
 import { hideModal } from "@/src/store/slices/modalSlice";
-import { setClientCookie } from "@/src/utils/clientCookies";
-import { PLACE_STORAGE_KEY } from "@/src/utils/constant";
+import { setPlaceCookie } from "@/src/utils/clientCookies";
 
 type PropTypes = {
   isVisible: boolean;
@@ -24,7 +23,7 @@ const WidgetModalPlace: FC<PropTypes> = ({ className, isVisible }) => {
   const [city, setCity] = useState<City>(cities[0]);
 
   const handleAccept = useCallback(() => {
-    setClientCookie(PLACE_STORAGE_KEY, city.url);
+    setPlaceCookie(city.url);
 
     const target = new URL(`${window.location.pathname}${window.location.search}`, city.url);
     window.location.assign(target.href);
