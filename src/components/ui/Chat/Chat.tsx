@@ -51,8 +51,6 @@ export default function Chat() {
     setMessage("");
   };
 
-  console.log(data?.messages);
-
   return (
     <div className="chat">
       {isOpen && (
