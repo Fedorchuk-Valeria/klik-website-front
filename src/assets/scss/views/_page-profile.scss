@@ -73,11 +73,28 @@
 
     @media screen and (max-width: $landscape-tablet-size) {
       max-width: 500px;
+
+      button {
+        padding: 16px 30px;
+        font-size: 16px;
+      }
     }
 
     @media screen and (max-width: $tablet-size) {
       max-width: 100%;
       flex-direction: row;
+
+      button {
+        padding: 20px 30px;
+        font-size: 18px;
+      }
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      button {
+        padding: 16px 30px;
+        font-size: 16px;
+      }
     }
 
     &.password {
