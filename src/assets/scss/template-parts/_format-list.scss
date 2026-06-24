@@ -137,8 +137,10 @@
     padding-left: 50px;
     backdrop-filter: blur(20px);
     color: var(--main-bg);
-    transform: translateY(0);
-    transition: 0.3s;
+    transform: translate3d(0, 0, 0);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
     z-index: 1;
     opacity: 1;
   }
@@ -153,18 +155,31 @@
 
     background-size: cover;
     background-position: center;
+    transform: translate3d(0, 0, 0);
 
-    transition: all 0.5s ease;
+    transition:
+      width 0.5s ease,
+      height 0.5s ease,
+      top 0.5s ease,
+      left 0.5s ease,
+      transform 0.5s ease,
+      border-radius 0.5s ease;
   }
 
   .formats__content {
     position: absolute;
-    top: 50%;
+    top: 20px;
+    bottom: 20px;
     left: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
-    transform: translateY(-50%) translateX(40px);
+    transform: translate3d(40px, 0, 0);
     opacity: 0;
-    transition: all 0.5s ease;
+    transition:
+      transform 0.5s ease,
+      opacity 0.5s ease;
 
     width: 100%;
     max-width: calc(100% - 425px);
@@ -253,7 +268,7 @@
 
     .formats__item-footer {
       opacity: 0;
-      transform: translateY(20px);
+      transform: translate3d(0, 20px, 0);
       pointer-events: none;
     }
 
@@ -266,15 +281,15 @@
       width: 346px;
       height: 614px;
 
-      top: 50%;
-      transform: translateY(-50%);
+      top: 50px;
+      transform: translate3d(0, 0, 0);
       left: 50px;
 
       border-radius: 40px;
     }
 
     .formats__content {
-      transform: translateY(-50%) translateX(0);
+      transform: translate3d(0, 0, 0);
       opacity: 1;
     }
   }
@@ -289,7 +304,7 @@
   }
 
   @media screen and (max-width: 1580px) {
-    width: 513px;
+    width: 485px;
     height: 593px;
     border-radius: 50px;
 
@@ -300,7 +315,6 @@
     .formats__content {
       left: 380px;
       max-width: 314px;
-      height: calc(100% - 40px);
 
       .formats__content-list {
         margin-bottom: 30px;
@@ -382,8 +396,7 @@
 
     .formats__content {
       left: 284px;
-      max-width: 314px;
-      height: calc(100% - 40px);
+      max-width: 321px;
 
       .formats__content-list {
         margin-bottom: 30px;
@@ -468,7 +481,6 @@
     .formats__content {
       left: 285px;
       max-width: 320px;
-      height: calc(100% - 40px);
 
       .formats__content-list {
         margin-bottom: 30px;
