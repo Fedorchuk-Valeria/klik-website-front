@@ -1,17 +1,28 @@
 "use client";
 
 import classNames from "classnames";
-import type { ChangeEvent, ClipboardEvent, FocusEvent, KeyboardEvent } from "react";
-import { forwardRef, useState } from "react";
+import type {
+  ChangeEvent,
+  ClipboardEvent,
+  FocusEvent,
+  KeyboardEvent,
+  SyntheticEvent,
+} from "react";
+import { forwardRef, useRef, useState } from "react";
 
 import TextInput from "../TextInput";
 import type { PhoneInputProps } from "./index.type";
 
 import {
+  caretAfterDigitIndex,
+  digitInsertIndexFromCaret,
+  editableCaretBounds,
   extractNationalDigits,
   formatMaskedPhone,
+  hasPrefixCorruption,
   nationalDigitPositions,
   parsePastedToNationalDigits,
+  PHONE_NATIONAL_DIGIT_COUNT,
 } from "./phoneMask";
 
 const ACCEPT_KEYS = new Set([
@@ -78,16 +89,114 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
 
   const digits = isControlled ? digitsFromControl : fallbackDigits;
 
+  const digitsRef = useRef(digits);
+  digitsRef.current = digits;
+
+  const pendingKeyInsertRef = useRef<string | null>(null);
+
   const displayValue = resolveDisplayValue(digits, focused);
 
   const resolvedPlaceholder =
     focused && digits.length === 0 ? (placeholder ?? MASK_PLACEHOLDER) : placeholder;
+
+  const clampCaret = (el: HTMLInputElement) => {
+    const { min, max } = editableCaretBounds(digitsRef.current, focused, FOCUS_EMPTY_PREFIX);
+    const start = el.selectionStart ?? 0;
+    const end = el.selectionEnd ?? 0;
+    const newStart = Math.min(Math.max(start, min), max);
+    const newEnd = Math.min(Math.max(end, min), max);
+    if (newStart !== start || newEnd !== end) {
+      el.setSelectionRange(newStart, newEnd);
+    }
+  };
+
+  const scheduleClampCaret = (el: HTMLInputElement) => {
+    requestAnimationFrame(() => {
+      clampCaret(el);
+    });
+  };
+
+  const insertDigitsAtCaret = (el: HTMLInputElement | null, text: string) => {
+    if (!el) return;
+
+    const typedDigits = text.replace(/\D/g, "");
+    if (typedDigits.length === 0) return;
+
+    const currentDigits = digitsRef.current;
+    const { min, max } = editableCaretBounds(currentDigits, focused, FOCUS_EMPTY_PREFIX);
+    const start = Math.min(Math.max(el.selectionStart ?? 0, min), max);
+    const end = Math.min(Math.max(el.selectionEnd ?? 0, min), max);
+
+    let workingDigits = currentDigits;
+    let insertAt: number;
+
+    if (start !== end) {
+      const masked = formatMaskedPhone(workingDigits);
+      const positions = nationalDigitPositions(masked, workingDigits);
+      const toRemove = new Set<number>();
+      for (let di = 0; di < positions.length; di++) {
+        const p = positions[di];
+        if (Math.max(start, p) < Math.min(end, p + 1)) {
+          toRemove.add(di);
+        }
+      }
+      for (const ri of [...toRemove].sort((a, b) => b - a)) {
+        workingDigits = workingDigits.slice(0, ri) + workingDigits.slice(ri + 1);
+      }
+      insertAt =
+        toRemove.size > 0
+          ? Math.min(...toRemove)
+          : digitInsertIndexFromCaret(
+              start,
+              formatMaskedPhone(workingDigits),
+              workingDigits,
+              FOCUS_EMPTY_PREFIX.length
+            );
+    } else {
+      insertAt = digitInsertIndexFromCaret(
+        start,
+        formatMaskedPhone(workingDigits),
+        workingDigits,
+        FOCUS_EMPTY_PREFIX.length
+      );
+    }
+
+    let nextDigits = workingDigits;
+    let insertedCount = 0;
+    for (const ch of typedDigits) {
+      if (nextDigits.length >= PHONE_NATIONAL_DIGIT_COUNT) break;
+      nextDigits =
+        nextDigits.slice(0, insertAt + insertedCount) +
+        ch +
+        nextDigits.slice(insertAt + insertedCount);
+      insertedCount++;
+    }
+
+    if (insertedCount === 0) return;
+
+    emitMasked(nextDigits, el);
+
+    const newMasked = formatMaskedPhone(nextDigits);
+    const lastInsertedIndex = insertAt + insertedCount - 1;
+    const caret = caretAfterDigitIndex(
+      newMasked,
+      nextDigits,
+      lastInsertedIndex,
+      FOCUS_EMPTY_PREFIX.length,
+      focused
+    );
+
+    requestAnimationFrame(() => {
+      el.setSelectionRange(caret, caret);
+    });
+  };
 
   const emitMasked = (
     nextDigits: string,
     inp: HTMLInputElement,
     base?: ChangeEvent<HTMLInputElement>
   ) => {
+    digitsRef.current = nextDigits;
     const maskedVal = formatMaskedPhone(nextDigits);
     if (!isControlled) {
       setFallbackDigits(nextDigits);
@@ -104,8 +213,14 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (hasPrefixCorruption(e.target.value)) {
+      scheduleClampCaret(e.currentTarget);
+      return;
+    }
+
     const next = extractNationalDigits(e.target.value);
     if (next.length === 0 && digits.length === 0) {
+      scheduleClampCaret(e.currentTarget);
       return;
     }
     emitMasked(next, e.currentTarget, e);
@@ -126,7 +241,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     if (indicesToRemove.size === 0) return;
 
     const sortedAsc = [...indicesToRemove].sort((a, b) => a - b);
-    let nextDigits = digits;
+    let nextDigits = digitsRef.current;
     for (let i = sortedAsc.length - 1; i >= 0; i--) {
       const ri = sortedAsc[i];
       nextDigits = nextDigits.slice(0, ri) + nextDigits.slice(ri + 1);
@@ -160,7 +275,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     if (ev.key === "Backspace" || ev.key === "Delete") {
       const el = ev.currentTarget;
 
-      if (digits.length === 0 && focused) {
+      if (digitsRef.current.length === 0 && focused) {
         ev.preventDefault();
         requestAnimationFrame(() => {
           const caret = FOCUS_EMPTY_PREFIX.length;
@@ -171,8 +286,8 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
 
       const start = el.selectionStart ?? 0;
       const end = el.selectionEnd ?? 0;
-      const masked = formatMaskedPhone(digits);
-      const positions = nationalDigitPositions(masked, digits);
+      const masked = formatMaskedPhone(digitsRef.current);
+      const positions = nationalDigitPositions(masked, digitsRef.current);
 
       if (start !== end) {
         const toRemove = new Set<number>();
@@ -232,9 +347,34 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
       return;
     }
 
+    if (ev.key === "Home") {
+      ev.preventDefault();
+      const { min } = editableCaretBounds(digitsRef.current, focused, FOCUS_EMPTY_PREFIX);
+      ev.currentTarget.setSelectionRange(min, min);
+      return;
+    }
+
+    if (ev.key === "ArrowLeft" || ev.key === "ArrowUp") {
+      scheduleClampCaret(ev.currentTarget);
+      return;
+    }
+
     if (ACCEPT_KEYS.has(ev.key)) return;
 
     if (ev.ctrlKey || ev.metaKey || ev.altKey) return;
+
+    if (ev.key.length === 1 && /\d/.test(ev.key)) {
+      ev.preventDefault();
+      const inputEl = ev.currentTarget;
+      const digit = ev.key;
+      pendingKeyInsertRef.current = digit;
+      queueMicrotask(() => {
+        if (pendingKeyInsertRef.current === null) return;
+        insertDigitsAtCaret(inputEl, pendingKeyInsertRef.current);
+        pendingKeyInsertRef.current = null;
+      });
+      return;
+    }
 
     if (ev.key.length === 1 && !/\d/.test(ev.key)) {
       ev.preventDefault();
@@ -247,12 +387,24 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
 
     const src = event as unknown as { inputType?: string; data?: string | null };
     const type = src.inputType ?? "";
+    if (type === "insertFromPaste" || type === "insertFromDrop") return;
     if (!type.startsWith("insert")) return;
 
     const data = typeof src.data === "string" ? src.data : "";
-    if (data && /\D/u.test(data)) {
+    if (!data) return;
+
+    if (/\D/u.test(data)) {
       event.preventDefault();
+      return;
     }
+
+    event.preventDefault();
+    pendingKeyInsertRef.current = null;
+    insertDigitsAtCaret(event.currentTarget as HTMLInputElement, data);
+  };
+
+  const handleCaretGuard = (e: SyntheticEvent<HTMLInputElement>) => {
+    scheduleClampCaret(e.currentTarget);
   };
 
   const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
@@ -289,6 +441,8 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
       onKeyDown={handleKeyDown}
       onFocus={handleFocus}
       onBlur={handleBlur}
+      onClick={handleCaretGuard}
+      onSelect={handleCaretGuard}
       onBeforeInput={handleBeforeInput}
     />
   );

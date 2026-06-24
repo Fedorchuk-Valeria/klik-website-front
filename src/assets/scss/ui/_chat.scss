@@ -260,6 +260,7 @@
 
       .text {
         @include fonts(18px, 400, "Etude Noire");
+        white-space: pre-wrap;
       }
     }
 
@@ -267,7 +268,8 @@
       background: rgba(28, 26, 28, 0.04);
 
       .text {
-        @include fonts(18px, 500, "Etude Noire");
+        @include fonts(18px, 400, "Etude Noire");
+        white-space: pre-wrap;
       }
     }
 

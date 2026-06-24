@@ -228,7 +228,7 @@ const Test: FC<PropTypes> = ({
             </div>
           )}
 
-          {isTestLoading && <Loader isLocal />}
+          {isTestLoading && <Loader isLocal className="test__loader" />}
 
           {!isResultsVisible && (
             <Button
