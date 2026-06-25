@@ -644,7 +644,8 @@
 
         .lesson-page__lesson-content_list {
           margin-top: 30px;
-          max-height: 370px;
+          max-height: 425px;
+          gap: 20px;
 
           &:has(li + li + li + li),
           &:has(li + li + li + li + li) {
@@ -674,8 +675,8 @@
               min-width: 60px;
 
               .course-tutorial__list-item--status-line {
-                bottom: -65%;
-                @include icon(32px);
+                @include icon(48px);
+                bottom: -97%;
               }
 
               .course-tutorial__list-item--status-icon {
@@ -688,6 +689,15 @@
 
               .course-tutorial__list-item_content-title {
                 font-size: 16px;
+              }
+
+              .course-tutorial__list-item_content-duration {
+                font-size: 18px;
+                margin-top: 10px;
+
+                svg {
+                  @include icon(24px);
+                }
               }
             }
           }
@@ -819,6 +829,7 @@
         .lesson-page__lesson-content_list {
           margin-top: 20px;
           max-height: 310px;
+          gap: 10px;
 
           &:has(li + li + li + li),
           &:has(li + li + li + li + li) {
@@ -854,7 +865,12 @@
               }
 
               .course-tutorial__list-item_content-duration {
+                font-size: 12px;
                 margin-top: 4px;
+
+                svg {
+                  @include icon(16px);
+                }
               }
             }
           }
