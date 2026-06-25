@@ -223,7 +223,7 @@ const FormatsList = ({ items }: FormatsListProps) => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) {
-          collapseFormatsInstantly();
+          collapseFormatsInstantly(true);
         }
       },
       { threshold: 0.05 }

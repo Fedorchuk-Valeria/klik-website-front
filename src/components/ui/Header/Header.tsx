@@ -2,6 +2,7 @@ import LogoSvg from "@/src/assets/images/logo.svg";
 import { headers } from "next/headers";
 
 import HeaderMobileMenu from "@/src/components/HeaderMobileMenu/HeaderMobileMenu";
+import { HeaderMobileMenuProvider } from "@/src/components/HeaderMobileMenu/HeaderMobileMenuContext";
 import ButtonCabinet from "@/src/components/ui/ButtonCabinet/ButtonCabinet";
 import ButtonCall from "@/src/components/ui/ButtonCall/ButtonCall";
 import CitySwitcher from "@/src/components/ui/CitySwitcher/CitySwitcher";
@@ -49,9 +50,10 @@ export default async function Header() {
   return (
     <header className="header">
       <div className="header__container">
-        <div className="header__wrapper">
-          <div className="header__top header__row">
-            <div className="header__left">
+        <HeaderMobileMenuProvider>
+          <div className="header__wrapper">
+            <div className="header__top header__row">
+              <div className="header__left">
               <div className="header__brand">
                 <HeaderLogoLink className="header__logo">
                   <LogoSvg />
@@ -106,6 +108,7 @@ export default async function Header() {
             menuItems={menuItems}
           />
         </div>
+        </HeaderMobileMenuProvider>
       </div>
     </header>
   );
