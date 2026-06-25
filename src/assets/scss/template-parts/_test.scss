@@ -38,14 +38,13 @@
     .test__content-info {
       width: 100%;
       max-width: 537px;
+      margin-bottom: 20px;
 
       &:has(button + button) {
         display: flex;
         flex-direction: column;
         padding-top: 40px;
         height: 100%;
-        margin-left: 20px;
-        margin-bottom: 20px;
 
         .test__button--next {
           margin-top: auto;

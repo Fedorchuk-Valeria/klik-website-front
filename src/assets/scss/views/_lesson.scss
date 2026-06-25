@@ -644,7 +644,7 @@
 
         .lesson-page__lesson-content_list {
           margin-top: 30px;
-          max-height: 370px;
+          max-height: 425px;
           gap: 20px;
 
           &:has(li + li + li + li),
@@ -675,8 +675,8 @@
               min-width: 60px;
 
               .course-tutorial__list-item--status-line {
-                @include icon(32px);
-                bottom: -80%;
+                @include icon(48px);
+                bottom: -97%;
               }
 
               .course-tutorial__list-item--status-icon {
@@ -829,6 +829,7 @@
         .lesson-page__lesson-content_list {
           margin-top: 20px;
           max-height: 310px;
+          gap: 10px;
 
           &:has(li + li + li + li),
           &:has(li + li + li + li + li) {
