@@ -1,8 +1,11 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { usePathname } from "next/navigation";
+import { type MouseEvent } from "react";
 
 import MenuBg from "@/src/assets/images/mobile-menu-bg.svg";
+
+import { useHeaderMobileMenu } from "@/src/components/HeaderMobileMenu/HeaderMobileMenuContext";
 
 import Burger from "@/src/components/ui/Burger/Burger";
 import ButtonCabinet from "@/src/components/ui/ButtonCabinet/ButtonCabinet";
@@ -12,6 +15,7 @@ import HeaderMobileList from "@/src/components/ui/HeaderMoblieList/HeaderMobileL
 import Socials, { SocialItem } from "@/src/components/ui/Socials/Socials";
 
 import { City } from "@/src/lib/getCities";
+import { navigateToHomeAnchorFromMobileMenu } from "@/src/lib/scrollToHomeAnchor";
 import { phoneToLink } from "@/src/lib/utils/phoneLink";
 
 type MenuItem = {
@@ -34,11 +38,25 @@ export default function HeaderMobileMenu({
   socials = [],
   menuItems = [],
 }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const { isOpen, closeMenu, toggleMenu } = useHeaderMobileMenu()!;
+  const isHomePage = pathname === "/";
 
-  const handleClose = useCallback(() => {
-    setIsOpen(false);
-  }, []);
+  const handleMobileAnchorClick = (event: MouseEvent<HTMLDivElement>) => {
+    if (!isHomePage) return;
+
+    const link = (event.target as HTMLElement).closest("a");
+    if (!link) return;
+
+    const href = link.getAttribute("href");
+    if (!href?.startsWith("#")) return;
+
+    const id = decodeURIComponent(href.slice(1));
+    if (!id || !document.getElementById(id)) return;
+
+    event.preventDefault();
+    navigateToHomeAnchorFromMobileMenu(id, closeMenu);
+  };
 
   return (
     <>
@@ -48,10 +66,10 @@ export default function HeaderMobileMenu({
         </div>
       )}
 
-      <Burger isOpen={isOpen} onClick={() => setIsOpen((v) => !v)} />
+      <Burger isOpen={isOpen} onClick={toggleMenu} />
 
       {isOpen && (
-        <div className="header__mobile">
+        <div className="header__mobile" onClick={handleMobileAnchorClick}>
           <div className="header__mobile-top">
             <div className="header__mobile-cities">
               <CitySwitcher cities={cities} currentCity={currentCity} />
@@ -64,7 +82,10 @@ export default function HeaderMobileMenu({
 
           <div className="header__mobile-center">
             {menuItems.length > 0 && (
-              <HeaderMobileList menuItems={menuItems} onClose={handleClose} />
+              <HeaderMobileList
+                menuItems={menuItems}
+                onClose={isHomePage ? undefined : closeMenu}
+              />
             )}
           </div>
 
@@ -81,7 +102,7 @@ export default function HeaderMobileMenu({
               </div>
             )}
 
-            <ButtonCall onClose={handleClose} />
+            <ButtonCall onClose={isHomePage ? undefined : closeMenu} />
           </div>
         </div>
       )}
