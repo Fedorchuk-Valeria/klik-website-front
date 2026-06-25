@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useHeaderMobileMenu } from "@/src/components/HeaderMobileMenu/HeaderMobileMenuContext";
+
 type Props = {
   className?: string;
   children: React.ReactNode;
@@ -10,6 +12,7 @@ type Props = {
 
 export default function HeaderLogoLink({ className, children }: Props) {
   const pathname = usePathname();
+  const mobileMenu = useHeaderMobileMenu();
 
   return (
     <Link
@@ -17,6 +20,10 @@ export default function HeaderLogoLink({ className, children }: Props) {
       href="/"
       scroll
       onClick={(e) => {
+        if (mobileMenu?.isOpen) {
+          mobileMenu.closeMenu();
+        }
+
         if (pathname !== "/") return;
 
         e.preventDefault();

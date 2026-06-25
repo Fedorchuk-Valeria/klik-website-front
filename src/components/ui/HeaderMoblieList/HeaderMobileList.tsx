@@ -15,13 +15,11 @@ type Props = {
 };
 
 const HeaderMobileList = ({ menuItems, onClose }: Props) => {
-  const getAnchorId = getAnchorIdFromHref;
-
   return (
     <ul className="header__mobile-menu">
       {menuItems.map((item) => (
         <li key={item.url}>
-          <HomeAnchorLink anchor={getAnchorId(item.url)} onClick={onClose}>
+          <HomeAnchorLink anchor={getAnchorIdFromHref(item.url)} onClick={onClose}>
             {item.title}
           </HomeAnchorLink>
         </li>
