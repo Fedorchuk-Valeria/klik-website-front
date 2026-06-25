@@ -75,7 +75,9 @@ const ConfirmCodeContent = () => {
       if (searchParams.get(QUERY_PARAMS.IS_RESET_PASSWORD)) {
         router.push(PAGES.SET_NEW_PASSWORD);
       } else {
-        router.push(PAGES.HOME);
+        router.push(PAGES.LOGIN);
+
+        CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
       }
     }
   }, [isCodeCorrect, searchParams]);

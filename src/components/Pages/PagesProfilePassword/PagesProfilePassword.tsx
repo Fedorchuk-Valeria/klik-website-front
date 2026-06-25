@@ -95,7 +95,9 @@ const PagesProfilePassword = () => {
             className="page-profile__back"
             onClick={handleBack}
           />
+
           <h1>Изменить пароль</h1>
+
           <form className="page-profile__form password" onSubmit={form.handleSubmit}>
             <PasswordInput
               name="password"
@@ -138,6 +140,7 @@ const PagesProfilePassword = () => {
               >
                 Сохранить изменения
               </Button>
+
               <Button variant="outline-green-dark" onClick={handleBack}>
                 Отмена
               </Button>
