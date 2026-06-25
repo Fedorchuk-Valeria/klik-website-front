@@ -78,6 +78,12 @@ export const PUBLIC_OFFER_SOURCE_URL =
   "https://storage.yandexcloud.net/klikcloud/%D0%9F%D1%83%D0%B1%D0%BB%D0%B8%D1%87%D0%BD%D1%8B%D0%B8%CC%86%20%D0%B4%D0%BE%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%20%D1%84%D0%BE%D1%80%D0%BC%D0%B0_15.05.26_%D0%B23.docx.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJE7vSS1qMNjwKi6cAjzNHq%2F20260623%2Fru-central1%2Fs3%2Faws4_request&X-Amz-Date=20260623T112405Z&X-Amz-Expires=2592000&X-Amz-Signature=c0e4e9aac7b644663f423e6888536eccf0f49d158d47662e8a6e4f2c1624d352&X-Amz-SignedHeaders=host&response-content-disposition=attachment";
 
 export const PUBLIC_OFFER_URL = "/public-offer";
+
+export const PAYMENT_INFORMATION_SOURCE_URL =
+  "https://storage.yandexcloud.net/klikcloud/%D0%98%D0%BD%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%86%D0%B8%D1%8F%20%D0%BE%20%D1%81%D0%BF%D0%BE%D1%81%D0%BE%D0%B1%D0%B0%D1%85%20%D0%BE%D0%BF%D0%BB%D0%B0%D1%82%D1%8B%20%D0%BF%D1%80%D0%B8%20%D0%B8%D0%BD%D1%82%D0%B5%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D0%B8.docx.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJE7vSS1qMNjwKi6cAjzNHq%2F20260625%2Fru-central1%2Fs3%2Faws4_request&X-Amz-Date=20260625T122023Z&X-Amz-Expires=2592000&X-Amz-Signature=e8f68a4c30b0ad46c76f696f6b8537a996564e4637e642077e90b0a26f87613a&X-Amz-SignedHeaders=host&response-content-disposition=attachment";
+
+export const PAYMENT_INFORMATION_URL = "/payment-information";
+
 export const VALIDATION_CLASS = "validatio-error";
 
 export const PAYMENT_STATUS_SUCCESSFULL = "paid";
