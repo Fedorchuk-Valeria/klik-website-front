@@ -10,6 +10,7 @@ import FAQPage from "@/src/components/template-parts/FAQ";
 import Formats from "@/src/components/template-parts/Formats";
 import HowSignUp from "@/src/components/template-parts/HowSignUp";
 import Location from "@/src/components/template-parts/Location";
+import Prices from "@/src/components/template-parts/Prices";
 import Programs from "@/src/components/template-parts/Programs";
 import SelectTraining from "@/src/components/template-parts/SelectTraining";
 import SignUpFreeLesson from "@/src/components/template-parts/SignUpFreeLesson";
@@ -40,6 +41,7 @@ export default function Home({ page }: Props) {
   const aboutUs = page.content.about_us;
   const selectTraining = page.content.select_training;
   const location = page.content.location;
+  const prices = page.content.prices;
 
   return (
     <main className="main home-page">
@@ -88,6 +90,7 @@ export default function Home({ page }: Props) {
       {whyWeAre && <WhyWeAre {...whyWeAre} />}
       {signUpFreeLesson && <SignUpFreeLesson {...signUpFreeLesson} />}
       <Tutors {...tutors} />
+      {prices && <Prices {...prices} />}
       {faq && <FAQPage {...faq} />}
     </main>
   );
