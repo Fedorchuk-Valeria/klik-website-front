@@ -55,6 +55,8 @@
 
     @media screen and (max-width: $landscape-tablet-size) {
       .header__logout-button {
+        padding: 0;
+
         .header__logout-text {
           display: none;
         }
