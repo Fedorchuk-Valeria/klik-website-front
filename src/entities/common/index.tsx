@@ -33,8 +33,17 @@ export type UserProfile = {
   role: UserProfileRole;
   profile: UserProfileProfile;
   support_phone: string;
-  children: UserProfileChilds[];
   partners: Partner[];
+  metrics?: Metrics;
+  self_study?: SelfStudy;
+  children?: (Omit<UserProfileChilds, "profile"> & {
+    id: number;
+    role: UserProfileRole;
+    full_name: string;
+    phone: string;
+    email: string | null;
+  })[];
+  offline_groups?: [];
 };
 
 export type UserProfileRole = "parent" | "child" | "admin";
@@ -48,13 +57,12 @@ export type UserProfileProfile = {
 };
 
 export type UserProfileChilds = {
-  id: number;
-  full_name: string;
-  phone: string;
-  birth_date: string;
+  role: UserProfileRole;
+  profile: UserProfileProfile;
   metrics: Metrics;
   self_study: SelfStudy;
   offline_groups: [];
+  partners: Partner[];
 };
 
 export type Metrics = {
@@ -67,7 +75,16 @@ export type Metrics = {
 export type SelfStudy = {
   has_available_courses: boolean;
   available_courses_count: number;
-  courses: unknown[];
+  courses: Course[];
+};
+
+export type Course = {
+  id: number;
+  title: string;
+  purchased_at: string;
+  expires_at: string;
+  date_range: string;
+  is_active: boolean;
 };
 
 export type Meta = {

@@ -630,21 +630,26 @@
       aspect-ratio: 1;
       overflow: hidden;
       position: relative;
+      min-width: 80px;
 
       @media screen and (max-width: $desktop) {
         @include icon(70px);
+        min-width: 70px;
       }
 
       @media screen and (max-width: $landscape-tablet-size) {
         @include icon(60px);
+        min-width: 60px;
       }
 
       @media screen and (max-width: $tablet-size) {
         @include icon(70px);
+        min-width: 70px;
       }
 
       @media screen and (max-width: $mobile-size) {
         @include icon(50px);
+        min-width: 50px;
       }
     }
 

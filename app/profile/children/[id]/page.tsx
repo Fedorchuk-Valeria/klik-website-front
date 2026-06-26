@@ -3,13 +3,18 @@
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
 import avatar from "@/src/assets/images/view/profile/avatar.png";
 
+import FormatsCourseItem from "@/src/components/Pages/PagesProfile/FormatsCourseItem";
+import FormatsCoursesExtra from "@/src/components/Pages/PagesProfile/FormatsCoursesExtra";
 import PartnerAccordionItem from "@/src/components/Pages/PagesProfile/PartnerAccordionItem";
+import PartnersExtra from "@/src/components/Pages/PagesProfile/PartnersExtra";
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
+import Loader from "@/src/components/ui/Loader/Loader";
 import PhoneInput from "@/src/components/ui/PhoneInput";
 import Popover from "@/src/components/ui/Popover";
 import TextInput from "@/src/components/ui/TextInput";
@@ -18,61 +23,50 @@ import { getPlural } from "@/src/helper/getPlural";
 import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 
-const ChildrenDetailsPage = () => {
-  const [openPartnerIndex, setOpenPartnerIndex] = useState<number | null>(null);
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { getCurrentChildRequest } from "@/src/store/slices/profile";
 
-  const partners = useMemo(
+const ChildrenDetailsPage = () => {
+  const dispatch = useAppDispatch();
+  const { id } = useParams();
+  const { currentChild, isLoading } = useAppSelector((store) => store.profile);
+  const [openPartnerIndex, setOpenPartnerIndex] = useState<number | null>(null);
+  const [isOpenCourses, setOpenCourses] = useState(false);
+  const [isOpenPartners, setOpenPartners] = useState(false);
+
+  const togglePartners = () => {
+    setOpenPartners((prev) => !prev);
+  };
+
+  const toggleCourses = () => {
+    setOpenCourses((prev) => !prev);
+  };
+
+  const general = useMemo(
     () => [
       {
-        title: "Детский мир",
-        image: avatar as unknown as string,
-        description: (
-          <>
-            Детский мир предоставялет скидку 30% ученикам и их родителям на подготовку к школе.
-            Используйте промокод{" "}
-            <span className="children-details-page__partners_item-accent">klik-super</span> в
-            интернет-магазине.
-          </>
-        ),
+        icon: "clicoins",
+        title: "Кликоины",
+        value: currentChild?.metrics?.klikcoins || 0,
+        plural: ["кликоин", "кликоина", "кликоинов"],
+        info: "Кликоины - это бонусные баллы, которые ученик получает за каждое оффлайн-занятие. Накопленные кликоины можно обменять на призы и подарки в специальном «Кликмаркете». Маркет проводится два раза в год - следите за объявлениями!",
       },
       {
-        title: "Детский мир",
-        image: avatar as unknown as string,
-        description: (
-          <>
-            Детский мир предоставялет скидку 30% ученикам и их родителям на подготовку к школе.
-            Используйте промокод{" "}
-            <span className="children-details-page__partners_item-accent">klik-super</span> в
-            интернет-магазине.
-          </>
-        ),
+        icon: "money",
+        title: "Баланс",
+        value: currentChild?.metrics?.balance || 0,
+        plural: ["белорусский рубль", "белорусских рубля", "белорусских рублей"],
+        info: "Это ваш предоплаченный баланс. Вы вносите деньги за несколько занятий вперёд, и система автоматически списывает стоимость одного урока после его проведения. Так вы можете не думать о ежемесячной оплате - просто пополняйте счёт, и занятия будут оплачиваться сами.",
+      },
+      {
+        icon: "homework",
+        title: "Занятия",
+        value: currentChild?.metrics?.paid_lessons_count || 0,
+        plural: ["оплаченное занятие", "оплаченных занятия", "оплаченных занятий"],
       },
     ],
-    []
+    [currentChild?.metrics]
   );
-
-  const general = [
-    {
-      icon: "clicoins",
-      title: "Кликоины",
-      value: 100,
-      plural: ["кликоин", "кликоина", "кликоинов"],
-      info: "Кликоины - это бонусные баллы, которые ученик получает за каждое оффлайн-занятие. Накопленные кликоины можно обменять на призы и подарки в специальном «Кликмаркете». Маркет проводится два раза в год - следите за объявлениями!",
-    },
-    {
-      icon: "money",
-      title: "Баланс",
-      value: 100,
-      plural: ["белорусский рубль", "белорусских рубля", "белорусских рублей"],
-      info: "Это ваш предоплаченный баланс. Вы вносите деньги за несколько занятий вперёд, и система автоматически списывает стоимость одного урока после его проведения. Так вы можете не думать о ежемесячной оплате - просто пополняйте счёт, и занятия будут оплачиваться сами.",
-    },
-    {
-      icon: "homework",
-      title: "Занятия",
-      value: 4,
-      plural: ["оплаченное занятие", "оплаченных занятия", "оплаченных занятий"],
-    },
-  ];
 
   const programs = [
     {
@@ -139,9 +133,29 @@ const ChildrenDetailsPage = () => {
     },
   ];
 
+  const courses = useMemo(
+    () => currentChild?.self_study?.courses ?? [],
+    [currentChild?.self_study?.courses]
+  );
+  const initialCourses = courses.slice(0, 3);
+  const extraCourses = courses.slice(3);
+
+  const initialPartners = currentChild?.partners?.slice(0, 6) ?? [];
+  const extraPartners = currentChild?.partners?.slice(6) ?? [];
+
   const togglePartner = (index: number) => {
     setOpenPartnerIndex((prev) => (prev === index ? null : index));
   };
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getCurrentChildRequest(Number(id)));
+    }
+  }, [dispatch, id]);
+
+  if (isLoading || !currentChild) {
+    return <Loader />;
+  }
 
   return (
     <div className="children-details-page">
@@ -162,7 +176,7 @@ const ChildrenDetailsPage = () => {
               <TextInput
                 variant="outline"
                 label="ФИО"
-                value="Иванов Иван Иванович"
+                value={currentChild?.profile?.full_name}
                 className="login-page__form-input"
                 disabled={true}
               />
@@ -170,7 +184,7 @@ const ChildrenDetailsPage = () => {
               <PhoneInput
                 variant="outline"
                 label="Телефон"
-                value="+375441234567"
+                value={currentChild?.profile?.phone}
                 className="login-page__form-input"
                 disabled={true}
               />
@@ -213,9 +227,9 @@ const ChildrenDetailsPage = () => {
                   )}
                 </div>
 
-                <p className="children-details-page__general_value">{item.value}</p>
+                <p className="children-details-page__general_value">{item.value || 0}</p>
                 <span className="children-details-page__general_text">
-                  {getPlural(item.value, item.plural as [string, string, string])}
+                  {getPlural(Number(item.value || 0), item.plural as [string, string, string])}
                 </span>
               </div>
             ))}
@@ -229,161 +243,155 @@ const ChildrenDetailsPage = () => {
               <span>Партнёрские скидки для резидентов KLiK</span>
             </div>
 
-            <div className="children-details-page__partners_wrapper">
+            {/* in future add "accent" class for some elements in description */}
+            <div
+              className={classNames("children-details-page__partners_wrapper", {
+                "is-open": isOpenPartners,
+              })}
+            >
               <div className="children-details-page__partners_list">
-                {partners.map((item, index) => (
+                {initialPartners.map((item, index) => (
                   <PartnerAccordionItem
-                    key={index}
-                    item={item}
+                    key={item.id}
+                    item={{
+                      image: item.logo || (avatar as unknown as string),
+                      title: item.name || "",
+                      description: item.description || "",
+                    }}
                     isOpen={openPartnerIndex === index}
                     onToggle={() => togglePartner(index)}
                   />
                 ))}
+
+                {extraPartners.length > 0 && (
+                  <PartnersExtra
+                    partners={extraPartners}
+                    isOpen={isOpenPartners}
+                    startIndex={6}
+                    openPartnerIndex={openPartnerIndex}
+                    onTogglePartner={togglePartner}
+                    fallbackImage={avatar as unknown as string}
+                  />
+                )}
               </div>
 
-              <button className="children-details-page__partners_more">
-                <Icon name="arrow" />
-
-                <span>Показать еще</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="children-details-page__formats">
-            <div className="home-page__tag children-details-page__formats_tag">
-              Форматы обучения
-            </div>
-
-            <p className="children-details-page__formats_text">
-              Со всеми форматами обучения школы вы можете ознакомиться на нашем{" "}
-              <Link href={PAGES.HOME}>сайте.</Link>
-            </p>
-
-            <div className="children-details-page__formats_wrapper">
-              <div className="children-details-page__formats_item">
-                <p className="children-details-page__formats_item-title">
-                  Самостоятельное обучение
-                </p>
-
-                <p className="children-details-page__formats_item-text">
-                  Перейдите к обучению на платформе
-                </p>
-
-                <Link
-                  href={`${PAGES.COURSES}${QueryHelper.getQueryString({ [QUERY_PARAMS.SCOPE]: "my" })}`}
-                  className="children-details-page__formats_item-button"
+              {currentChild?.partners?.length > 6 && (
+                <button
+                  type="button"
+                  className="children-details-page__partners_more"
+                  onClick={togglePartners}
                 >
-                  <Button variant="main-green-dark" withArrow>
-                    Перейти к курсам
-                  </Button>
-                </Link>
-              </div>
-
-              <ul className="children-details-page__formats_list">
-                <li className="children-details-page__formats_list-item">
-                  <div className="children-details-page__formats_item-status">
-                    <Icon name="success-circle" />
-
-                    <span>Активный</span>
-                  </div>
-
-                  <div className="children-details-page__formats_item-content">
-                    <div className="children-details-page__formats_item-content-text">
-                      <p>Web-разработка: HTML, CSS, JavaScript</p>
-
-                      <span>Срок доступа к курсу: 20.01.2026 - 20.05.2026</span>
-                    </div>
-
-                    <Link
-                      className="children-details-page__formats_item-content-button"
-                      href={`${PAGES.COURSE.replace(":id", "22")}${QueryHelper.getQueryString({ [QUERY_PARAMS.IS_PARENT]: true })}`}
-                    >
-                      <Button variant="main-green-dark">
-                        <Icon name="arrow-long" />
-                      </Button>
-                    </Link>
-                  </div>
-                </li>
-
-                <li
-                  className={classNames(
-                    "children-details-page__formats_list-item",
-                    "children-details-page__formats_list-item--disabled"
-                  )}
-                >
-                  <div className="children-details-page__formats_item-status">
-                    <Icon name="success-circle" />
-
-                    <span>Активный</span>
-                  </div>
-
-                  <div className="children-details-page__formats_item-content">
-                    <div className="children-details-page__formats_item-content-text">
-                      <p>Web-разработка: HTML, CSS, JavaScript</p>
-
-                      <span>Срок доступа к курсу: 20.01.2026 - 20.05.2026</span>
-                    </div>
-
-                    <Link
-                      className="children-details-page__formats_item-content-button"
-                      href={PAGES.LESSON.replace(":id", "1").replace(":lessonId", "1")}
-                    >
-                      <Button variant="main-green-dark">
-                        <Icon name="arrow-long" />
-                      </Button>
-                    </Link>
-                  </div>
-                </li>
-
-                <button className="children-details-page__formats_item-more">
                   <Icon name="arrow" />
 
-                  <span>Показать еще</span>
+                  <span>{isOpenPartners ? "Скрыть" : "Показать еще"}</span>
                 </button>
-              </ul>
+              )}
             </div>
           </div>
 
-          <div className="children-details-page__offline">
-            <div className="children-details-page__offline_headline">
-              <p className="children-details-page__offline_headline-title">
-                Офлайн-занятия в группе
+          {currentChild?.self_study?.courses?.length > 0 && (
+            <div className="children-details-page__formats">
+              <div className="home-page__tag children-details-page__formats_tag">
+                Форматы обучения
+              </div>
+
+              <p className="children-details-page__formats_text">
+                Со всеми форматами обучения школы вы можете ознакомиться на нашем{" "}
+                <Link href={PAGES.HOME}>сайте.</Link>
               </p>
 
-              <div className="children-details-page__offline_headline-actions">
-                <Button variant="outline-orange">История платежей</Button>
-                <Button variant="main-green-dark" withArrow>
-                  Оплатить обучение
-                </Button>
+              <div className="children-details-page__formats_wrapper">
+                <div className="children-details-page__formats_item">
+                  <p className="children-details-page__formats_item-title">
+                    Самостоятельное обучение
+                  </p>
+
+                  <p className="children-details-page__formats_item-text">
+                    Перейдите к обучению на платформе
+                  </p>
+
+                  <Link
+                    href={`${PAGES.COURSES}${QueryHelper.getQueryString({ [QUERY_PARAMS.SCOPE]: "my" })}`}
+                    className="children-details-page__formats_item-button"
+                  >
+                    <Button variant="main-green-dark" withArrow>
+                      Перейти к курсам
+                    </Button>
+                  </Link>
+                </div>
+
+                <ul
+                  className={classNames("children-details-page__formats_list", {
+                    "is-open": isOpenCourses,
+                  })}
+                >
+                  {initialCourses.map((item) => (
+                    <FormatsCourseItem key={item.id} item={item} />
+                  ))}
+
+                  {extraCourses.length > 0 && (
+                    <FormatsCoursesExtra courses={extraCourses} isOpen={isOpenCourses} />
+                  )}
+
+                  {courses.length > 3 && (
+                    <button
+                      type="button"
+                      className="children-details-page__formats_item-more"
+                      onClick={toggleCourses}
+                    >
+                      <Icon name="arrow" />
+
+                      <span>{isOpenCourses ? "Скрыть" : "Показать еще"}</span>
+                    </button>
+                  )}
+                </ul>
               </div>
             </div>
+          )}
 
-            <div className="children-details-page__offline_list">
-              {programs.map((item, index) => (
-                <div key={index} className="children-details-page__offline_list-item">
-                  <p className="children-details-page__offline_list-item-title">{item.title}</p>
+          {/* TODO add groups */}
+          {currentChild?.offline_groups?.length > 0 && (
+            <div className="children-details-page__offline">
+              <div className="children-details-page__offline_headline">
+                <p className="children-details-page__offline_headline-title">
+                  Офлайн-занятия в группе
+                </p>
 
-                  <ul className="children-details-page__offline_list-item-info">
-                    {item.items.map((info, infoIndex) => (
-                      <li
-                        key={`${index}-${infoIndex}`}
-                        className="children-details-page__offline_list-item-info-item"
-                      >
-                        <span>{info.title}</span>
-                        {!!info.link ? (
-                          <a href={info.value} target="_blank" rel="noopener noreferrer">
-                            <p>{info.value}</p>
-                          </a>
-                        ) : (
-                          <p>{info.value}</p>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
+                <div className="children-details-page__offline_headline-actions">
+                  <Button variant="outline-orange">История платежей</Button>
+                  <Button variant="main-green-dark" withArrow>
+                    Оплатить обучение
+                  </Button>
                 </div>
-              ))}
+              </div>
+
+              <div className="children-details-page__offline_list">
+                {programs.map((item, index) => (
+                  <div key={index} className="children-details-page__offline_list-item">
+                    <p className="children-details-page__offline_list-item-title">{item.title}</p>
+
+                    <ul className="children-details-page__offline_list-item-info">
+                      {item.items.map((info, infoIndex) => (
+                        <li
+                          key={`${index}-${infoIndex}`}
+                          className="children-details-page__offline_list-item-info-item"
+                        >
+                          <span>{info.title}</span>
+                          {!!info.link ? (
+                            <a href={info.value} target="_blank" rel="noopener noreferrer">
+                              <p>{info.value}</p>
+                            </a>
+                          ) : (
+                            <p>{info.value}</p>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
