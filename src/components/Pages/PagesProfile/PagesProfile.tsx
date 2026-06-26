@@ -146,7 +146,7 @@ const PagesProfile = ({ settings }: PropTypes) => {
               <div className="page-profile__childrens-list">
                 {user_profile?.children?.map((child, i) => (
                   <div className="page-profile__children" key={i}>
-                    <div className="page-profile__children-name">{child.full_name}</div>
+                    <div className="page-profile__children-name">{child?.full_name}</div>
 
                     <div className="page-profile__children-tags">
                       <div className="page-profile__children-tag">
@@ -220,7 +220,7 @@ const PagesProfile = ({ settings }: PropTypes) => {
                       </div>
                     )}
 
-                    <Link href={PAGES.PROFILE_CHILDREN_DETAILS.replace(":id", String(child.id))}>
+                    <Link href={PAGES.PROFILE_CHILDREN_DETAILS.replace(":id", String(child?.id))}>
                       <Button
                         variant="main-light"
                         className="page-profile__children-more"

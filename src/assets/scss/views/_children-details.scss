@@ -141,12 +141,35 @@
       border-radius: 70px;
       background: var(--main-green-neon);
 
+      &.is-open {
+        .children-details-page__partners_more {
+          svg {
+            transform: rotate(180deg);
+          }
+        }
+      }
+
       .children-details-page__partners_list {
         display: grid;
         align-items: flex-start;
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
-        margin-bottom: 30px;
+
+        .children-details-page__partners_list-extra {
+          grid-column: 1 / -1;
+
+          .children-details-page__partners_list-extra-content {
+            overflow: hidden;
+            transition: height 0.35s ease;
+          }
+
+          .children-details-page__partners_list-extra-items {
+            display: grid;
+            align-items: flex-start;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+          }
+        }
 
         .children-details-page__partners_item {
           border-radius: 50px;
@@ -181,9 +204,14 @@
 
             .children-details-page__partners_item-image {
               @include icon(80px);
-              min-width: 80px;
-              aspect-ratio: 1 / 1;
-              border-radius: 100%;
+              aspect-ratio: 1;
+              position: relative;
+
+              img {
+                @include perfect-img;
+                @include icon(100%);
+                border-radius: 100%;
+              }
             }
 
             .children-details-page__partners_item-title {
@@ -217,7 +245,7 @@
             @include fonts(20px, 400, "Manrope");
             padding: 10px 40px 30px 120px;
 
-            .children-details-page__partners_item-accent {
+            .accent {
               color: var(--main-orange);
               font-weight: 700;
             }
@@ -231,10 +259,12 @@
         gap: 10px;
         cursor: pointer;
         margin-left: 30px;
+        margin-top: 30px;
 
         svg {
           @include icon(24px);
           fill: var(--main-green-dark);
+          transition: transform 0.35s ease;
         }
 
         span {
@@ -301,6 +331,30 @@
       .children-details-page__formats_list {
         @include flex-list(20px);
         width: 100%;
+
+        .children-details-page__formats_list-extra {
+          padding: 0;
+          background: none;
+          border-radius: 0;
+
+          .children-details-page__formats_list-extra-content {
+            overflow: hidden;
+            transition: height 0.35s ease;
+          }
+
+          .children-details-page__formats_list-extra-items {
+            @include flex-list(20px);
+            width: 100%;
+          }
+        }
+
+        &.is-open {
+          .children-details-page__formats_item-more {
+            svg {
+              transform: rotate(180deg);
+            }
+          }
+        }
 
         .children-details-page__formats_list-item {
           padding: 30px;
@@ -384,6 +438,7 @@
           svg {
             @include icon(24px);
             fill: var(--main-green-dark);
+            transition: transform 0.35s ease;
           }
 
           span {
@@ -573,7 +628,6 @@
 
         .children-details-page__partners_list {
           gap: 16px;
-          margin-bottom: 20px;
 
           .children-details-page__partners_item {
             padding: 10px 20px 10px 10px;
@@ -583,7 +637,6 @@
 
               .children-details-page__partners_item-image {
                 @include icon(70px);
-                min-width: 70px;
               }
 
               .children-details-page__partners_item-title {
@@ -609,6 +662,7 @@
 
         .children-details-page__partners_more {
           margin-left: 20px;
+          margin-top: 20px;
 
           svg {
             @include icon(20px);
@@ -843,7 +897,6 @@
 
         .children-details-page__partners_list {
           gap: 16px;
-          margin-bottom: 20px;
 
           .children-details-page__partners_item {
             padding: 8px 16px 8px 8px;
@@ -858,7 +911,6 @@
 
               .children-details-page__partners_item-image {
                 @include icon(60px);
-                min-width: 60px;
               }
 
               .children-details-page__partners_item-title {
@@ -883,6 +935,7 @@
 
         .children-details-page__partners_more {
           margin-left: 20px;
+          margin-top: 20px;
 
           svg {
             @include icon(20px);
@@ -1135,7 +1188,6 @@
 
         .children-details-page__partners_list {
           gap: 16px;
-          margin-bottom: 20px;
 
           .children-details-page__partners_item {
             padding: 5px 15px 5px 5px;
@@ -1150,7 +1202,6 @@
 
               .children-details-page__partners_item-image {
                 @include icon(60px);
-                min-width: 60px;
               }
 
               .children-details-page__partners_item-title {
@@ -1177,6 +1228,7 @@
         .children-details-page__partners_more {
           gap: 6px;
           margin-left: 20px;
+          margin-top: 20px;
 
           svg {
             @include icon(20px);
@@ -1452,13 +1504,11 @@
         .children-details-page__partners_list {
           grid-template-columns: 100%;
           gap: 10px;
-          margin-bottom: 20px;
 
           .children-details-page__partners_item {
             .children-details-page__partners_item-header {
               .children-details-page__partners_item-image {
                 @include icon(54px);
-                min-width: 54px;
               }
 
               .children-details-page__partners_item-title {
@@ -1484,7 +1534,7 @@
               @include fonts(20px, 400, "Manrope");
               padding: 10px 30px 30px 70px;
 
-              .children-details-page__partners_item-accent {
+              .accent {
                 color: var(--main-orange);
                 font-weight: 700;
               }
@@ -1494,6 +1544,7 @@
 
         .children-details-page__partners_more {
           margin-left: 20px;
+          margin-top: 20px;
           gap: 6px;
 
           svg {
@@ -1765,7 +1816,6 @@
 
         .children-details-page__partners_list {
           gap: 10px;
-          margin-bottom: 20px;
 
           .children-details-page__partners_item {
             border-radius: 40px;
@@ -1780,7 +1830,6 @@
 
               .children-details-page__partners_item-image {
                 @include icon(70px);
-                min-width: 70px;
               }
 
               .children-details-page__partners_item-title {
@@ -1810,6 +1859,7 @@
           gap: 10px;
           cursor: pointer;
           margin-left: 30px;
+          margin-top: 20px;
 
           svg {
             @include icon(24px);
@@ -2080,7 +2130,6 @@
 
         .children-details-page__partners_list {
           gap: 10px;
-          margin-bottom: 20px;
 
           .children-details-page__partners_item {
             border-radius: 30px;
@@ -2095,7 +2144,6 @@
 
               .children-details-page__partners_item-image {
                 @include icon(50px);
-                min-width: 50px;
               }
 
               .children-details-page__partners_item-title {
@@ -2122,6 +2170,7 @@
         .children-details-page__partners_more {
           gap: 6px;
           margin-left: 10px;
+          margin-top: 20px;
 
           svg {
             @include icon(16px);

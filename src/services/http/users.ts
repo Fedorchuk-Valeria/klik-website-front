@@ -35,3 +35,5 @@ export const logout = () => POST(`${baseUrl}/logout/`);
 export const me = () => GET(`${baseUrl}/me/`);
 
 export const createChild = (body: CreateChildRequest) => POST(`${baseUrl}/children/`, body);
+
+export const getChildProfileByParent = (childId: number) => GET(`${baseUrl}/children/${childId}/`);

@@ -42,11 +42,9 @@ const PartnerAccordionItem = ({ item, isOpen, onToggle }: PartnerAccordionItemPr
         aria-expanded={isOpen}
         onClick={onToggle}
       >
-        <Image
-          src={item.image}
-          alt={item.title}
-          className="children-details-page__partners_item-image"
-        />
+        <div className="children-details-page__partners_item-image">
+          <Image fill src={item.image} alt={item.title} />
+        </div>
 
         <p className="children-details-page__partners_item-title">{item.title}</p>
 
