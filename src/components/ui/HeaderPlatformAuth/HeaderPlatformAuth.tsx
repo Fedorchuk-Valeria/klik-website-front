@@ -24,7 +24,7 @@ const HeaderAuth = () => {
 
   const { isAuthenticated, isMounted } = useAuth();
 
-  const user = localStorage.getStorageItem<UserProfile>(USER);
+  const user = localStorage.getStorageItem<UserProfile["profile"]>(USER);
 
   const handleLogout = () => {
     dispatch(logoutRequest());
@@ -53,7 +53,7 @@ const HeaderAuth = () => {
       {!isProfilePage && (
         <Button className="header__user-button" onClick={handleProfile}>
           <Icon className="header__user-icon" name="user" />
-          {user?.full_name || user_profile?.full_name}
+          {user?.full_name || user_profile?.profile?.full_name}
         </Button>
       )}
 
