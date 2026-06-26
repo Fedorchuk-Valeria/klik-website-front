@@ -7,6 +7,7 @@ import {
   scrollToHomeAnchor,
   scrollToHomeAnchorWhenReady,
 } from "@/src/lib/scrollToHomeAnchor";
+import { scrollToTop } from "@/src/lib/scrollToTop";
 import { PENDING_HOME_ANCHOR_KEY } from "@/src/utils/constant";
 
 export default function AnchorScroll() {
@@ -33,7 +34,7 @@ export default function AnchorScroll() {
     if (!pending) return;
 
     sessionStorage.removeItem(PENDING_HOME_ANCHOR_KEY);
-    window.scrollTo(0, 0);
+    scrollToTop({ behavior: "auto" });
     scrollToHomeAnchorWhenReady(pending, { announce: true, behavior: "smooth" });
   }, [pathname]);
 
