@@ -1,3 +1,5 @@
+import { createSlice } from "@reduxjs/toolkit";
+
 import { UserProfile } from "@/src/entities/common";
 import {
   AuthChangePasswordRequest,
@@ -7,10 +9,11 @@ import {
   AuthResetPasswordRequest,
   AuthSignInRequest,
   AuthVerifyCodeRequest,
+  CreateChildRequest,
 } from "@/src/entities/common/auth";
+
 import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
-import { createSlice } from "@reduxjs/toolkit";
 
 type AuthState = {
   user_profile: UserProfile | null;
@@ -23,14 +26,17 @@ type AuthState = {
   isLogoutLoading: false;
   isResetPasswordSuccess: boolean;
   isPersonalAccountChanged: boolean;
+  isCreateChildLoading: boolean;
   isLoggedIn: boolean;
   isPasswordChanged: boolean;
+  isChildSuccessfullyCreated: boolean;
 };
 
 const initialState: AuthState = {
   user_profile: null,
   user: null,
   errors: null,
+  isCreateChildLoading: false,
   isRegisterSuccess: false,
   isCodeSent: false,
   isCodeCorrect: false,
@@ -40,6 +46,7 @@ const initialState: AuthState = {
   isPersonalAccountChanged: false,
   isLoggedIn: !!CookieHelper.getCookie(TOKEN_KEY) && !!CookieHelper.getCookie(REFRESH_TOKEN_KEY),
   isPasswordChanged: false,
+  isChildSuccessfullyCreated: false,
 };
 
 const authSlice = createSlice({
@@ -111,6 +118,27 @@ const authSlice = createSlice({
       state.isLoggedIn = false;
     },
 
+    profileRequest: (state) => {
+      state.isLoading = true;
+    },
+    profileSuccess: (state, action) => {
+      state.isLoading = false;
+      state.user_profile = action.payload;
+    },
+
+    createChildRequest: (state, action: { payload: CreateChildRequest }) => {
+      void action.payload;
+      state.isCreateChildLoading = true;
+    },
+    createChildSuccess: (state, action) => {
+      state.isCreateChildLoading = false;
+      state.user_profile = {
+        ...(state.user_profile as UserProfile),
+        children: [...(state?.user_profile?.children || []), action.payload],
+      };
+      state.isChildSuccessfullyCreated = true;
+    },
+
     setUser(state, action: { payload: unknown | null }) {
       state.user = action.payload;
       state.isLoading = false;
@@ -124,6 +152,7 @@ const authSlice = createSlice({
     setErrors(state, action: { payload: Record<string, string> | null }) {
       state.errors = action.payload;
       state.isLoading = false;
+      state.isCreateChildLoading = false;
     },
     setLoggedIn(state, action: { payload: boolean }) {
       state.isLoggedIn = action.payload;
@@ -145,13 +174,11 @@ const authSlice = createSlice({
     clearPersonalAccountChanged(state) {
       state.isPersonalAccountChanged = false;
     },
-    profileRequest: (state) => {
-      state.isLoading = true;
+    clearPasswordChanged(state) {
+      state.isPasswordChanged = false;
     },
-
-    profileSuccess: (state, action) => {
-      state.isLoading = false;
-      state.user_profile = action.payload;
+    clearChildSuccessfullyCreated(state) {
+      state.isChildSuccessfullyCreated = false;
     },
 
     changePasswordRequest(state, action: { payload: AuthChangePasswordRequest }) {
@@ -159,14 +186,9 @@ const authSlice = createSlice({
       state.isLoading = true;
       state.errors = null;
     },
-
     changePasswordSuccess(state) {
       state.isLoading = false;
       state.isPasswordChanged = true;
-    },
-
-    clearPasswordChanged(state) {
-      state.isPasswordChanged = false;
     },
   },
 });
@@ -192,16 +214,20 @@ export const {
   resetPasswordSuccess,
   resendCodeRequest,
 
+  createChildRequest,
+  createChildSuccess,
+
   clearPersonalAccountChanged,
   clearErrors,
   clearRegister,
   clearResetPassword,
+  clearPasswordChanged,
+  clearChildSuccessfullyCreated,
 
   profileRequest,
   profileSuccess,
 
   changePasswordRequest,
   changePasswordSuccess,
-  clearPasswordChanged,
 } = authSlice.actions;
 export default authSlice.reducer;

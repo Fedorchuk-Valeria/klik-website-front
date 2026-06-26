@@ -8,11 +8,15 @@ import {
   AuthResetPasswordRequest,
   AuthSignInRequest,
   AuthVerifyCodeRequest,
+  CreateChildRequest,
+  CreateChildResponse,
 } from "@/src/entities/common/auth";
 import { UsersApi } from "@/src/services/http";
 import {
   changePasswordRequest,
   changePasswordSuccess,
+  createChildRequest,
+  createChildSuccess,
   forgotPasswordRequest,
   forgotPasswordSuccess,
   loginRequest,
@@ -54,9 +58,9 @@ function* workerAuthLogin({ payload }: { payload: AuthSignInRequest }): unknown 
       });
     }
 
-    const profileResponse = yield call(UsersApi.me);
+    const profileResponse: { data: UserProfile } = yield call(UsersApi.me);
 
-    const user = profileResponse?.data;
+    const user = profileResponse?.data?.profile;
 
     localStorage.setStorageItem(USER, user);
 
@@ -214,7 +218,7 @@ function* workerProfile() {
   try {
     const response: { data: UserProfile } = yield call(UsersApi.me);
 
-    localStorage.setStorageItem(USER, response.data);
+    localStorage.setStorageItem(USER, response.data.profile);
 
     yield put(profileSuccess(response.data));
   } catch (error) {
@@ -246,6 +250,23 @@ function* watchChangePassword() {
   );
 }
 
+function* workerCreateChild({ payload }: { payload: CreateChildRequest }) {
+  try {
+    const response: { data: CreateChildResponse } = yield call(UsersApi.createChild, payload);
+
+    yield put(createChildSuccess(response.data.child));
+  } catch (error) {
+    yield put(setErrors(error as Record<string, string> | null));
+  }
+}
+
+function* watchCreateChild() {
+  yield takeLatest(
+    createChildRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerCreateChild
+  );
+}
+
 export const authWatchers = [
   fork(watchAuthLogin),
   fork(watchAuthRegister),
@@ -256,4 +277,5 @@ export const authWatchers = [
   fork(watchAuthLogout),
   fork(watchProfile),
   fork(watchChangePassword),
+  fork(watchCreateChild),
 ];

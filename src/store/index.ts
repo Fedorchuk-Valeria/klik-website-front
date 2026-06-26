@@ -8,6 +8,7 @@ import chatReducer from "./slices/chat";
 import coursesReducer from "./slices/corses";
 import lessonReducer from "./slices/lesson";
 import modalReducer from "./slices/modalSlice";
+import profileReducer from "./slices/profile";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -18,6 +19,7 @@ export const store = configureStore({
     courses: coursesReducer,
     lesson: lessonReducer,
     chat: chatReducer,
+    profile: profileReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware),
 });
