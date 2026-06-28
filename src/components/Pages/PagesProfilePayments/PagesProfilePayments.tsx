@@ -6,17 +6,22 @@ import {PAGES} from "@/src/utils/constant";
 import ButtonBack from "@/src/components/ui/ButtonBack/ButtonBack";
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
+import DateRangePicker from "@/src/components/ui/DateRangePicker";
+import {useState} from "react";
 
 const PagesProfilePayments = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [dateFrom, setDateFrom] = useState<Date | null>(null);
+  const [dateTo, setDateTo] = useState<Date | null>(null);
 
   const handleBack = () => {
     router.push(PAGES.PROFILE);
   };
 
   const handleFilter = () => {
-    router.push(PAGES.PROFILE);
+    console.log("from:", dateFrom);
+    console.log("to:", dateTo);
   };
 
   const payments = [
@@ -75,15 +80,37 @@ const PagesProfilePayments = () => {
           />
           <div className="page-profile__header">
             <h1>История платежей</h1>
-            <div className="page__profile__header-actions">
+            {payments.length > 0 && (
+            <div className="page-profile__header-actions">
+              {(dateFrom || dateTo) && (
+                <button
+                  className="page-profile__reset"
+                  onClick={() => {
+                    setDateFrom(null);
+                    setDateTo(null);
+                  }}
+                >
+                  Очистить
+                </button>
+              )}
+              <div className="page-profile__date">
+                <DateRangePicker
+                  valueFrom={dateFrom}
+                  valueTo={dateTo}
+                  onChange={({ from, to }) => {
+                    setDateFrom(from);
+                    setDateTo(to);
+                  }}
+                />
+              </div>
               <Button
-                className={"page__profile__header-btn"}
+                className={"page-profile__header-btn"}
                 variant="orange"
                 onClick={handleFilter}
               >
                 Отфильтровать
               </Button>
-            </div>
+            </div>)}
           </div>
           {payments.length === 0 ? (
             <div className="page-profile__table-wrapper empty">
@@ -98,18 +125,18 @@ const PagesProfilePayments = () => {
                   <th>ФИО ребёнка</th>
                   <th>Дата оплаты</th>
                   <th>Сумма к оплате</th>
-                  <th>Ссылка на чек</th>
+                  <th></th>
                 </tr>
                 </thead>
 
                 <tbody>
                 {payments.map((payment, key) => (
                   <tr key={key}>
-                    <td>{payment.programName}</td>
-                    <td>{payment.childName}</td>
-                    <td>{payment.paymentDate}</td>
-                    <td>{payment.amount}</td>
-                    <td>
+                    <td data-label="Название программы">{payment.programName}</td>
+                    <td data-label="ФИО ребёнка" className="hidden"><span>{payment.childName}</span></td>
+                    <td data-label="Дата оплаты">{payment.paymentDate}</td>
+                    <td className="without-border" data-label="Сумма к оплате"><span className="page-profile__currency">{payment.amount} <Icon className="page-profile__currency-icon" name="ruble" /></span></td>
+                    <td className="without-border">
                       <a
                         href={payment.receiptUrl}
                         target="_blank"
