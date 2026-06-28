@@ -1,5 +1,5 @@
 .test-card {
-  padding: 30px;
+  padding: 30px 50px;
   border-radius: 40px;
   background: var(--main-light);
   width: 100%;
@@ -96,6 +96,8 @@
   }
 
   @media screen and (max-width: $desktop) {
+    padding: 30px;
+
     .test-card__header {
       .test-card__result {
         gap: 8px;

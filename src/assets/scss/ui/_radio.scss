@@ -1,5 +1,7 @@
 .radio {
   @include icon(24px);
+  min-width: 24px;
+  min-height: 24px;
   appearance: none;
   border-radius: 100%;
   transition:

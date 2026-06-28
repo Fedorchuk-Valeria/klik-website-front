@@ -38,3 +38,17 @@ export const confirmCodeValidationSchema = Yup.object().shape({
     .required("Пожалуйста, заполните поле")
     .matches(/^\d{4}$/, "Пожалуйста, заполните поле"),
 });
+
+export const createChildValidationSchema = Yup.object().shape({
+  name: Yup.string().required("Пожалуйста, заполните поле"),
+  phone: Yup.string().required("Пожалуйста, заполните поле"),
+  password: Yup.string()
+    .min(8, "Пожалуйста, введите корректный пароль")
+    .max(64, "Пожалуйста, введите корректный пароль")
+    .matches(
+      PASSWORD_REGEX,
+      "Пароль должен содержать заглавную и строчную буквы, цифру и специальный символ"
+    )
+    .required("Пожалуйста, заполните поле"),
+  date: Yup.string().required("Пожалуйста, заполните поле"),
+});

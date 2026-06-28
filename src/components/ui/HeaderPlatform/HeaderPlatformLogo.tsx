@@ -1,14 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { PAGES } from "@/src/utils/constant";
 import LogoFillSvg from "@/src/assets/images/logo-fill.svg";
 import LogoSvg from "@/src/assets/images/logo.svg";
-
-type Props = {
-  LogoComponent: React.ElementType;
-};
+import { scrollToTop } from "@/src/lib/scrollToTop";
+import { PAGES } from "@/src/utils/constant";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function HeaderLogo({ variant }: { variant: "light" | "dark" }) {
   const pathname = usePathname();
@@ -24,10 +21,7 @@ export default function HeaderLogo({ variant }: { variant: "light" | "dark" }) {
     if (pathname === PAGES.COURSES) {
       e.preventDefault();
 
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+      scrollToTop({ behavior: "smooth" });
     }
   };
 

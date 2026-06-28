@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useHeaderMobileMenu } from "@/src/components/HeaderMobileMenu/HeaderMobileMenuContext";
+import { scrollToTop } from "@/src/lib/scrollToTop";
+
 type Props = {
   className?: string;
   children: React.ReactNode;
@@ -10,6 +13,7 @@ type Props = {
 
 export default function HeaderLogoLink({ className, children }: Props) {
   const pathname = usePathname();
+  const mobileMenu = useHeaderMobileMenu();
 
   return (
     <Link
@@ -17,6 +21,10 @@ export default function HeaderLogoLink({ className, children }: Props) {
       href="/"
       scroll
       onClick={(e) => {
+        if (mobileMenu?.isOpen) {
+          mobileMenu.closeMenu();
+        }
+
         if (pathname !== "/") return;
 
         e.preventDefault();
@@ -26,7 +34,7 @@ export default function HeaderLogoLink({ className, children }: Props) {
           window.history.replaceState(null, "", path + search);
         }
 
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        scrollToTop({ behavior: "smooth" });
       }}
     >
       {children}

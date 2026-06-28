@@ -109,6 +109,16 @@
     @include center-between;
     margin-top: 80px;
 
+    .courses-headline__select,
+    .courses-headline__select-categories {
+      border-radius: 27px;
+      transition: border-radius 0.3s ease-in-out;
+
+      .select__current {
+        border-radius: 27px;
+      }
+    }
+
     .courses-headline__select {
       min-width: 400px;
     }
@@ -175,13 +185,15 @@
 
       .courses-list__item-image {
         position: relative;
+        flex-shrink: 0;
         width: 100%;
         height: 321px;
         border-radius: 30px;
         overflow: hidden;
 
         img {
-          object-fit: cover;
+          @include perfect-img;
+          @include icon(100%);
         }
 
         .courses-list__item-purchased {
@@ -234,6 +246,7 @@
           @include text-line-clamp(2);
           @include fonts(24px, 500, "Etude Noire");
           color: var(--main-green-dark);
+          line-height: 115%;
         }
 
         .courses-list__item-description {
@@ -834,7 +847,7 @@
 
       .courses-list__item {
         border-radius: 40px;
-        max-height: 660px;
+        max-height: auto;
 
         .courses-list__item-image {
           height: 270px;

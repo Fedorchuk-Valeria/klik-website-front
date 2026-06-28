@@ -8,7 +8,7 @@ import LayoutPlatform from "@/src/components/Layouts/LayoutPlatform";
 import Breadcrumb from "@/src/components/ui/Breadcrumb/Breadcrumb";
 import Icon from "@/src/components/ui/Icon/Icon";
 
-const PUBLIC_CONTRACT_URL = "/files/public-contract.pdf";
+import { PUBLIC_OFFER_URL } from "@/src/utils/constant";
 
 const ContactsPage = () => {
   const info = [
@@ -138,12 +138,11 @@ const ContactsPage = () => {
 
             <div className="contacts-view__payment-button">
               <a
-                href={PUBLIC_CONTRACT_URL}
-                download="public-contract.pdf"
+                href={PUBLIC_OFFER_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="contacts-view__payment-button--download"
-                aria-label="Скачать публичный договор"
+                aria-label="Открыть публичный договор"
               >
                 <Icon name="pdf" />
               </a>

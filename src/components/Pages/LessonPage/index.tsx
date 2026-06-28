@@ -3,7 +3,7 @@
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FC, useCallback, useEffect, useMemo } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef } from "react";
 import { useDispatch } from "react-redux";
 
 import { getTime } from "@/src/components/Pages/CoursePage";
@@ -22,7 +22,7 @@ import {
   getLessonTestRequest,
   sendTestAnswersRequest,
 } from "@/src/store/slices/lesson";
-import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
+import { HEADER_ANCHOR_OFFSET_PX, PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 
 type PropTypes = {
@@ -34,6 +34,8 @@ type PropTypes = {
 const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const lessonInfoButtonsRef = useRef<HTMLDivElement>(null);
+  const shouldScrollToButtonsRef = useRef(false);
   const {
     isTestLoading,
     test,
@@ -52,6 +54,26 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
 
     return sortedLessons?.[currentIndex + 1];
   }, [data?.lessons, lessonId]);
+
+  const materials = useMemo(
+    () => [
+      {
+        text: "Материалы урока",
+        icon: "download",
+        url: data?.materials?.download_url,
+        isDisabled: !data?.materials?.has_file,
+        error: data?.materials?.empty_text,
+      },
+      {
+        text: "Домашнее задание",
+        icon: "homework",
+        url: data?.homework?.pdf_url,
+        isDisabled: !data?.homework?.has_file,
+        error: data?.homework?.empty_text,
+      },
+    ],
+    [data?.materials, data?.homework]
+  );
 
   const handleStartTestClick = useCallback(() => {
     if (id && lessonId) {
@@ -108,6 +130,8 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
           })),
         };
 
+        shouldScrollToButtonsRef.current = true;
+
         dispatch(
           sendTestAnswersRequest({
             coursePk: Number(id),
@@ -119,6 +143,27 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
     },
     [id, lessonId, dispatch]
   );
+
+  useEffect(() => {
+    if (!shouldScrollToButtonsRef.current) return;
+
+    const scrollToLessonInfoButtons = () => {
+      const element = lessonInfoButtonsRef.current;
+      if (!element) return;
+
+      const top = element.getBoundingClientRect().top + window.scrollY - HEADER_ANCHOR_OFFSET_PX;
+
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    };
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(scrollToLessonInfoButtons);
+    });
+
+    if (!isTestLoading) {
+      shouldScrollToButtonsRef.current = false;
+    }
+  }, [isTestLoading]);
 
   useEffect(() => {
     return () => {
@@ -204,23 +249,8 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
               </p>
             </div>
 
-            <div className="lesson-page__lesson-info_buttons">
-              {[
-                {
-                  text: "Материалы урока",
-                  icon: "download",
-                  url: data?.materials?.download_url,
-                  isDisabled: !data?.materials?.has_file,
-                  error: data?.materials?.empty_text,
-                },
-                {
-                  text: "Домашнее задание",
-                  icon: "homework",
-                  url: data?.homework?.pdf_url,
-                  isDisabled: !data?.homework?.has_file,
-                  error: data?.homework?.empty_text,
-                },
-              ].map((item) => (
+            <div ref={lessonInfoButtonsRef} className="lesson-page__lesson-info_buttons">
+              {materials.map((item) => (
                 <div key={item.text} className="lesson-page__lesson-info_buttons-item--container">
                   <div className="lesson-page__lesson-info_buttons-item">
                     <p>{item.text}</p>

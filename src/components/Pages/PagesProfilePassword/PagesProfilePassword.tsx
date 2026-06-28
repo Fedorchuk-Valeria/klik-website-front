@@ -140,6 +140,7 @@ const PagesProfilePassword = () => {
               >
                 Сохранить изменения
               </Button>
+
               <Button variant="outline-green-dark" onClick={handleBack}>
                 Отмена
               </Button>

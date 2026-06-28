@@ -6,8 +6,7 @@ import { useEffect, useRef } from "react";
 import Icon from "@/src/components/ui/Icon/Icon";
 import { City } from "@/src/lib/getCities";
 
-import { setClientCookie } from "@/src/utils/clientCookies";
-import { PLACE_STORAGE_KEY } from "@/src/utils/constant";
+import { setPlaceCookie } from "@/src/utils/clientCookies";
 
 type CitySwitcherProps = {
   cities: City[];
@@ -48,7 +47,7 @@ const CitySwitcher = ({ cities, currentCity, onClick, className }: CitySwitcherP
     if (onClick) {
       onClick(city);
     } else {
-      setClientCookie(PLACE_STORAGE_KEY, city.url);
+      setPlaceCookie(city.url);
       window.location.assign(city.url);
     }
 

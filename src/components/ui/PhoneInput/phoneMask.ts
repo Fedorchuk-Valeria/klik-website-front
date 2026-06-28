@@ -92,3 +92,80 @@ export function nationalDigitPositions(masked: string, nationalDigits: string): 
 export function isPhoneComplete(nationalDigits: string): boolean {
   return extractNationalDigits(nationalDigits).length === PHONE_NATIONAL_DIGIT_COUNT;
 }
+
+/** True when digits were inserted into the immutable +375 prefix (e.g. "+3754 (29) …"). */
+export function hasPrefixCorruption(raw: string): boolean {
+  const parenIdx = raw.indexOf("(");
+  if (parenIdx === -1) {
+    return raw.replace(/\D/g, "").length > 3;
+  }
+  return raw.slice(0, parenIdx).replace(/\D/g, "").length > 3;
+}
+
+export function editableCaretBounds(
+  nationalDigits: string,
+  focused: boolean,
+  focusEmptyPrefix: string
+): { min: number; max: number } {
+  const d = nationalDigits.replace(/\D/g, "");
+  if (d.length === 0) {
+    if (focused) {
+      const len = focusEmptyPrefix.length;
+      return { min: len, max: len };
+    }
+    return { min: 0, max: 0 };
+  }
+
+  const masked = formatMaskedPhone(d);
+  const positions = nationalDigitPositions(masked, d);
+  if (positions.length === 0) {
+    return { min: 0, max: masked.length };
+  }
+  return { min: positions[0], max: masked.length };
+}
+
+/** Maps caret position to national digit index for insertion (0 … PHONE_NATIONAL_DIGIT_COUNT). */
+export function digitInsertIndexFromCaret(
+  caret: number,
+  masked: string,
+  nationalDigits: string,
+  focusEmptyPrefixLen: number
+): number {
+  const d = nationalDigits.replace(/\D/g, "");
+  if (d.length === 0 && caret <= focusEmptyPrefixLen) {
+    return 0;
+  }
+
+  const positions = nationalDigitPositions(masked, d);
+  if (positions.length === 0) {
+    return 0;
+  }
+
+  for (let i = positions.length - 1; i >= 0; i--) {
+    if (caret > positions[i]) {
+      return Math.min(i + 1, PHONE_NATIONAL_DIGIT_COUNT);
+    }
+  }
+
+  return 0;
+}
+
+export function caretAfterDigitIndex(
+  masked: string,
+  nationalDigits: string,
+  digitIndex: number,
+  focusEmptyPrefixLen: number,
+  focused: boolean
+): number {
+  const d = nationalDigits.replace(/\D/g, "");
+  if (d.length === 0 && focused) {
+    return focusEmptyPrefixLen;
+  }
+
+  const positions = nationalDigitPositions(masked, d);
+  if (digitIndex >= 0 && digitIndex < positions.length) {
+    return positions[digitIndex] + 1;
+  }
+
+  return masked.length;
+}

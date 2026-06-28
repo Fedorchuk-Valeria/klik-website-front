@@ -1,3 +1,5 @@
+import { UserProfileRole } from ".";
+
 export type AuthSignInRequest = {
   phone: string;
   password: string;
@@ -36,4 +38,23 @@ export type AuthForgotPasswordRequest = {
 export type AuthChangePasswordRequest = {
   password: string;
   confirm_password: string;
-}
+};
+
+export type CreateChildRequest = {
+  full_name: string;
+  phone: string;
+  birth_date: string;
+  password: string;
+};
+
+export type CreateChildResponse = {
+  detail: string;
+  child: {
+    id: number;
+    role: UserProfileRole;
+    full_name: string;
+    phone: string;
+    birth_date: string;
+    marketing_consent: boolean;
+  };
+};

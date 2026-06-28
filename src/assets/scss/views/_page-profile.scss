@@ -69,12 +69,29 @@
     }
 
     @media screen and (max-width: $landscape-tablet-size) {
-      max-width: 500px;
+      max-width: 392px;
+
+      button {
+        padding: 16px 30px;
+        font-size: 16px;
+      }
     }
 
     @media screen and (max-width: $tablet-size) {
       max-width: 100%;
       flex-direction: row;
+
+      button {
+        padding: 20px 30px;
+        font-size: 18px;
+      }
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      button {
+        padding: 16px 30px;
+        font-size: 16px;
+      }
     }
 
     &.password {
@@ -337,14 +354,12 @@
     }
 
     &-icon {
-      width: 24px;
-      height: 24px;
+      @include icon(24px);
       color: var(--main-orange);
       flex-shrink: 0;
 
       @media screen and (max-width: $desktop) {
-        width: 20px;
-        height: 20px;
+        @include icon(20px);
       }
     }
   }
@@ -389,8 +404,7 @@
     &-inner {
       overflow: hidden;
 
-      transition:
-        max-height .4s ease;
+      transition: max-height 0.4s ease;
     }
 
     @media screen and (max-width: $desktop) {
@@ -505,7 +519,6 @@
         gap: 10px;
         grid-template-columns: repeat(1, 1fr);
       }
-
     }
     &-more {
       margin-top: 30px;
@@ -561,7 +574,7 @@
       width: 24px;
       height: 24px;
       fill: var(--main-green-dark);
-      transition: transform .3s ease;
+      transition: transform 0.3s ease;
 
       @media screen and (max-width: $desktop) {
         width: 20px;
@@ -571,19 +584,19 @@
   }
 
   &__partner {
-    border-radius: 100px;
-    border: 2px solid rgba(238, 108, 77, 0.40);
-    background: var(--secondary-white-80, rgba(255, 255, 255, 0.80));
+    border-radius: 50px;
+    border: 2px solid rgba(238, 108, 77, 0.4);
+    background: var(--secondary-white-80, rgba(255, 255, 255, 0.8));
     transition:
-      border-radius .35s ease,
-      background-color .35s ease,
-      border-color .35s ease;
+      border-radius 0.35s ease,
+      background-color 0.35s ease,
+      border-color 0.35s ease;
 
     &-item {
       opacity: 0;
       transform: translateY(10px);
 
-      animation: fadeIn .25s ease forwards;
+      animation: fadeIn 0.25s ease forwards;
     }
 
     &.is-open {
@@ -609,36 +622,39 @@
     }
 
     &-icon {
-      width: 80px;
-      height: 80px;
+      @include icon(80px);
       border-radius: 100%;
+      aspect-ratio: 1;
       overflow: hidden;
+      position: relative;
+      min-width: 80px;
 
       @media screen and (max-width: $desktop) {
-        width: 70px;
-        height: 70px;
+        @include icon(70px);
+        min-width: 70px;
       }
 
       @media screen and (max-width: $landscape-tablet-size) {
-        width: 60px;
-        height: 60px;
+        @include icon(60px);
+        min-width: 60px;
       }
 
       @media screen and (max-width: $tablet-size) {
-        width: 70px;
-        height: 70px;
+        @include icon(70px);
+        min-width: 70px;
       }
 
       @media screen and (max-width: $mobile-size) {
-        width: 50px;
-        height: 50px;
+        @include icon(50px);
+        min-width: 50px;
       }
+    }
 
-    }
     &-image {
-      width: 100%;
-      height: 100%;
+      @include perfect-img;
+      @include icon(100%);
     }
+
     &-title {
       @include fonts(24px, 500, "Etude Noire");
       color: var(--main-green-dark);
@@ -729,7 +745,7 @@
       padding-left: 130px;
       padding-right: 40px;
       max-height: 0;
-      transition: max-height .35s ease;
+      transition: max-height 0.35s ease;
 
       @media screen and (max-width: $desktop) {
         padding-left: 100px;
@@ -818,7 +834,6 @@
       }
 
       @media screen and (max-width: $mobile-size) {
-
         > button {
           font-size: 16px;
           padding: 16px 0;
@@ -1161,7 +1176,6 @@
       @media screen and (max-width: $mobile-size) {
         display: none;
       }
-
     }
 
     &-body {

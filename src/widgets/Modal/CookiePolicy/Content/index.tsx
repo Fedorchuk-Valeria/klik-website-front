@@ -4,8 +4,7 @@ import { FC } from "react";
 import cookiePolicyPdf from "@/src/assets/files/cookie-policy.pdf";
 import Button from "@/src/components/ui/Button/Button";
 
-import { setClientCookie } from "@/src/utils/clientCookies";
-import { COOKIE_CONSENT_STORAGE_KEY } from "@/src/utils/constant";
+import { setCookieConsentForEnvironment } from "@/src/utils/clientCookies";
 import { applyGtagConsentWhenAccepted } from "@/src/utils/gaConsent";
 
 type PropTypes = {
@@ -15,7 +14,7 @@ type PropTypes = {
 const CookiePolicyContent: FC<PropTypes> = ({ onClose }) => {
   const handleAccept = () => {
     if (typeof window !== "undefined") {
-      setClientCookie(COOKIE_CONSENT_STORAGE_KEY, "true");
+      setCookieConsentForEnvironment();
 
       applyGtagConsentWhenAccepted();
       onClose?.();

@@ -83,6 +83,7 @@
 
   .header__logo {
     max-width: 96px;
+    display: flex;
 
     svg {
       width: 96px;
@@ -169,6 +170,10 @@
     border: 0;
     position: relative;
     font-size: 20px;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--main-orange);
 
     &:active,
     &:hover {
@@ -177,17 +182,6 @@
       &:after {
         opacity: 0;
       }
-    }
-
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 5px;
-      left: 0;
-      width: 100%;
-      height: 1.5px;
-      background-color: var(--main-orange);
-      transition: 0.3s all;
     }
   }
 
@@ -301,6 +295,7 @@
     .header__wrapper {
       border-radius: 40px;
       padding: 30px;
+      gap: 19px;
     }
 
     .header__logo {
@@ -334,6 +329,14 @@
         }
       }
     }
+
+    .header__menu {
+      gap: 20px;
+    }
+
+    .header__left {
+      gap: 30px;
+    }
   }
 
   @media screen and (max-width: $landscape-tablet-size) {
@@ -359,6 +362,10 @@
 
     .header__menu {
       gap: 5px;
+    }
+
+    .header__left {
+      gap: 50px;
     }
 
     .city-switcher {
@@ -460,10 +467,22 @@
       }
     }
 
+    .header__brand {
+      gap: 10px;
+    }
+
     .header__wrapper {
       padding: 20px;
       gap: 16px;
       border-radius: 30px;
+    }
+
+    .header__left {
+      gap: 40px;
+    }
+
+    .header__menu {
+      gap: 9px;
     }
 
     .header__right:not(.last) {
@@ -480,6 +499,10 @@
           @include icon(18px);
         }
       }
+    }
+
+    .header__menu {
+      gap: 6px;
     }
 
     .header__menu li a {

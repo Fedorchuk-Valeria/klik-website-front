@@ -6,7 +6,7 @@
 
   .course-about__image {
     position: relative;
-    height: 673px;
+    min-height: 673px;
     max-width: 1062px;
     width: 100%;
     overflow: hidden;
@@ -112,6 +112,30 @@
         }
       }
     }
+
+    .course-about__info-parent {
+      display: flex;
+      gap: 13px;
+      margin-top: 46px;
+
+      .course-about__info-parent-badge {
+        @include fonts(14px, 500, "Manrope");
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 10px 20px;
+        border-radius: 100px;
+        background: var(--main-light);
+
+        span:first-child {
+          color: var(--main-orange);
+        }
+
+        span:last-child {
+          color: var(--main-green-dark);
+        }
+      }
+    }
   }
 
   @media screen and (max-width: $desktop) {
@@ -119,7 +143,7 @@
     margin-top: 30px;
 
     .course-about__image {
-      height: 552px;
+      min-height: 552px;
       max-width: 774px;
 
       .course-about__purchased {
@@ -184,11 +208,24 @@
     }
   }
 
+  @media screen and (max-width: $desktop-compact) {
+    .course-about__info {
+      .course-about__info-parent {
+        gap: 16px;
+        margin-top: 40px;
+
+        .course-about__info-parent-badge {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
   @media screen and (max-width: $landscape-tablet-size) {
     gap: 10px;
 
     .course-about__image {
-      height: 428px;
+      min-height: 428px;
       max-width: 514px;
 
       img {
@@ -260,6 +297,27 @@
           }
         }
       }
+
+      .course-about__info-parent {
+        gap: 10px;
+
+        .course-about__info-parent-badge {
+          padding: 8px 16px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    .course-about__info {
+      .course-about__info-parent {
+        gap: 16px;
+
+        .course-about__info-parent-badge {
+          font-size: 12px;
+          padding: 10px 20px;
+        }
+      }
     }
   }
 
@@ -271,7 +329,7 @@
 
     .course-about__image {
       position: relative;
-      height: 442px;
+      min-height: 442px;
       max-width: 100%;
       width: 100%;
 
@@ -364,6 +422,16 @@
           }
         }
       }
+
+      .course-about__info-parent {
+        gap: 13px;
+        margin-top: 30px;
+
+        .course-about__info-parent-badge {
+          font-size: 14px;
+          padding: 10px 20px;
+        }
+      }
     }
   }
 
@@ -371,7 +439,7 @@
     gap: 10px;
 
     .course-about__image {
-      height: 215px;
+      min-height: 215px;
       max-width: 100%;
       width: 100%;
 
@@ -465,6 +533,16 @@
           &:nth-child(5) {
             order: 4;
           }
+        }
+      }
+
+      .course-about__info-parent {
+        margin-top: 20px;
+        gap: 10px;
+
+        .course-about__info-parent-badge {
+          font-size: 10px;
+          padding: 6px 12px;
         }
       }
     }

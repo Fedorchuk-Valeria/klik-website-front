@@ -422,7 +422,8 @@ const PagesCourses = ({
                 </span>
 
                 <p className="courses-list__item-price">
-                  {item.price} <Icon name="ruble" className="courses-list__item-price-icon" />
+                  {item?.price?.toLocaleString("ru-RU")}{" "}
+                  <Icon name="ruble" className="courses-list__item-price-icon" />
                 </p>
 
                 <Link

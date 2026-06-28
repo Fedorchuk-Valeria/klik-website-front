@@ -25,6 +25,7 @@ type PropTypes = {
     test_result: LessonTestResult | null;
     status: "done" | "active" | "disabled";
   }[];
+  isParent?: boolean;
 };
 
 const TutorialList: FC<PropTypes> = ({
@@ -34,6 +35,7 @@ const TutorialList: FC<PropTypes> = ({
   isHideButton,
   courseId,
   currentLessonId,
+  isParent,
 }) => {
   return (
     <ul className={classNames("course-tutorial__list", className)}>
@@ -71,15 +73,14 @@ const TutorialList: FC<PropTypes> = ({
                 </p>
               </div>
 
-              {!isHideButton && (
+              {(isParent ? isDone && !isHideButton : !isHideButton) && (
                 <Link
                   href={
                     isDisabled || item.id === currentLessonId
                       ? "#"
-                      : PAGES.LESSON.replace(":id", courseId ?? "").replace(
-                          ":lessonId",
-                          item.id.toString()
-                        )
+                      : (isParent ? PAGES.TEST : PAGES.LESSON)
+                          .replace(":id", courseId ?? "")
+                          .replace(":lessonId", item.id.toString())
                   }
                   className={"course-tutorial__list-item_button"}
                 >

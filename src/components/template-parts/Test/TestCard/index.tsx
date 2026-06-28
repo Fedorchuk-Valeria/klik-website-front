@@ -71,8 +71,7 @@ const TestCard: FC<PropTypes> = ({
       <ul className="test-card__answers">
         {answers.map((answer) => {
           const isSelected = selectedAnswerIds.includes(answer.id);
-          const isAnswerCorrect =
-            answer?.is_selected && answer?.is_selected === answer?.is_correct_answer;
+          const isAnswerCorrect = answer?.is_correct_answer;
           const isAnswerIncorrect =
             answer?.is_selected && answer?.is_selected !== answer?.is_correct_answer;
 
@@ -90,14 +89,20 @@ const TestCard: FC<PropTypes> = ({
                     value={answer.id}
                     variant="test"
                     color={isTestPassed ? (isAnswerIncorrect ? "red" : "green") : "default"}
-                    checked={isSelected}
+                    checked={isSelected || (disabled && isAnswerCorrect)}
+                    disabled={disabled}
                     onChange={(checked) => onAnswerChange(answer.id, checked)}
                   />
                 ) : (
                   <Radio
-                    name={`test-question-${questionId}`}
+                    name={
+                      isTestPassed
+                        ? `test-question-${questionId}-${answer.id}`
+                        : `test-question-${questionId}`
+                    }
                     value={answer.id}
-                    checked={isSelected}
+                    checked={isSelected || (disabled && isAnswerCorrect)}
+                    disabled={disabled}
                     color={isTestPassed ? (isAnswerIncorrect ? "red" : "green") : "default"}
                     onChange={(checked) => onAnswerChange(answer.id, checked)}
                   />

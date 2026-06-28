@@ -79,6 +79,7 @@
       color: var(--secondary-burgundy-40);
       margin-left: 16px;
       margin-top: 20px;
+      max-width: 505px;
     }
 
     .login-page__form {
@@ -99,13 +100,13 @@
     }
 
     .login-page__form-input {
-      max-width: calc(100% - 23px);
+      // max-width: calc(100% - 23px);
     }
 
     .login-page__form-button {
       @include center;
       margin-top: 10px;
-      max-width: calc(100% - 23px);
+      // max-width: calc(100% - 23px);
     }
 
     .login-page__form-link {
@@ -117,6 +118,7 @@
       text-decoration-color: var(--main-orange);
       text-underline-offset: 5px;
       margin-left: 30px;
+      max-width: fit-content;
     }
   }
 

@@ -6,8 +6,9 @@ import {
   AuthResetPasswordRequest,
   AuthSignInRequest,
   AuthVerifyCodeRequest,
+  CreateChildRequest,
 } from "@/src/entities/common/auth";
-import {GET, POST} from "@/src/utils/http";
+import { GET, POST } from "@/src/utils/http";
 
 const baseUrl = "/users";
 
@@ -32,3 +33,7 @@ export const changePassword = (data: AuthChangePasswordRequest) =>
 export const logout = () => POST(`${baseUrl}/logout/`);
 
 export const me = () => GET(`${baseUrl}/me/`);
+
+export const createChild = (body: CreateChildRequest) => POST(`${baseUrl}/children/`, body);
+
+export const getChildProfileByParent = (childId: number) => GET(`${baseUrl}/children/${childId}/`);

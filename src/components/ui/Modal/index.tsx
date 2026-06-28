@@ -45,8 +45,17 @@ const Modal: FC<PropTypes> = ({
     (e: React.MouseEvent<HTMLDialogElement>) => {
       if (!isCloseBg) return;
 
-      // клик именно по backdrop
-      if (e.target === e.currentTarget) {
+      const dialog = ref.current;
+      if (!dialog) return;
+
+      const { left, right, top, bottom } = dialog.getBoundingClientRect();
+      const isBackdropClick =
+        e.clientX < left ||
+        e.clientX > right ||
+        e.clientY < top ||
+        e.clientY > bottom;
+
+      if (isBackdropClick) {
         handleClose();
       }
     },

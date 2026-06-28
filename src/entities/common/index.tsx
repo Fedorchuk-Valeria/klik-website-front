@@ -1,3 +1,5 @@
+import { Partner } from "@/src/store/slices/profile";
+
 export enum ModalType {
   NOTICE = "notice",
   COOKIE_POLICY = "cookie_policy",
@@ -7,6 +9,7 @@ export enum ModalType {
   PAYMENT_STATUS = "payment_status",
   CREATE_CHILDREN = "create_children",
   PAYMENT_CHILDREN = "payment_children",
+  ACCOUNT_DATA = "account_data",
 }
 
 export enum HttpStatus {
@@ -27,10 +30,61 @@ export enum HttpStatus {
 }
 
 export type UserProfile = {
+  role: UserProfileRole;
+  profile: UserProfileProfile;
+  support_phone: string;
+  partners: Partner[];
+  metrics?: Metrics;
+  self_study?: SelfStudy;
+  children?: (Omit<UserProfileChilds, "profile"> & {
+    id: number;
+    role: UserProfileRole;
+    full_name: string;
+    phone: string;
+    email: string | null;
+  })[];
+  offline_groups?: [];
+};
+
+export type UserProfileRole = "parent" | "child" | "admin";
+
+export type UserProfileProfile = {
   id: number;
-  role: string;
+  role: UserProfileRole;
   full_name: string;
   phone: string;
+  email: string | null;
+};
+
+export type UserProfileChilds = {
+  role: UserProfileRole;
+  profile: UserProfileProfile;
+  metrics: Metrics;
+  self_study: SelfStudy;
+  offline_groups: [];
+  partners: Partner[];
+};
+
+export type Metrics = {
+  klikcoins: number;
+  balance: string;
+  paid_lessons_count: number;
+  is_loaded: boolean;
+};
+
+export type SelfStudy = {
+  has_available_courses: boolean;
+  available_courses_count: number;
+  courses: Course[];
+};
+
+export type Course = {
+  id: number;
+  title: string;
+  purchased_at: string;
+  expires_at: string;
+  date_range: string;
+  is_active: boolean;
 };
 
 export type Meta = {

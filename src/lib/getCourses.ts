@@ -8,15 +8,13 @@ import {
   PAYMENT_STATUS_FAILED,
   PAYMENT_STATUS_SUCCESSFULL,
   QUERY_PARAMS,
-  TOKEN_KEY
+  TOKEN_KEY,
 } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 import { normalizeToken } from "@/src/utils/http";
 import { normalizeCoursesResponse } from "@/src/utils/normalizeCoursesPayload";
 
-export type CoursePaymentStatus =
-  | typeof PAYMENT_STATUS_SUCCESSFULL
-  | typeof PAYMENT_STATUS_FAILED;
+export type CoursePaymentStatus = typeof PAYMENT_STATUS_SUCCESSFULL | typeof PAYMENT_STATUS_FAILED;
 
 export type CoursePayment = {
   download_url: string;
@@ -119,6 +117,23 @@ export type LessonMaterial = {
 
 export type LessonFetchResult = {
   data: Lesson | null;
+  errors: Record<string, string> | null;
+  code?: number | null;
+};
+
+export type LessonTestFetchResult = {
+  data:
+    | (PassedTest & {
+        completed_lessons_count: number;
+        has_test: boolean;
+        is_test_passed: boolean;
+        test_result: {
+          correct_answers: number;
+          total_questions: number;
+          percent: number;
+        };
+      })
+    | null;
   errors: Record<string, string> | null;
   code?: number | null;
 };
@@ -293,6 +308,47 @@ export async function getLesson(
     }
 
     const payload = (await response.json()) as Lesson;
+
+    return { data: payload, errors: null };
+  } catch (error) {
+    return { data: null, errors: { detail: `Failed to fetch lesson: ${error}` } };
+  }
+}
+
+export async function getTest(
+  courseId: number | string,
+  lessonId: number | string
+): Promise<LessonTestFetchResult> {
+  const apiUrl = buildApiUrl(`/courses/${courseId}/lessons/${lessonId}/test/`);
+
+  if (!apiUrl) {
+    return { data: null, errors: { detail: "API URL is not configured" } };
+  }
+
+  const cookieStore = await cookies();
+  const token = cookieStore.get(TOKEN_KEY)?.value;
+  const cookieHeader = cookieStore
+    .getAll()
+    .map(({ name, value }) => `${name}=${value}`)
+    .join("; ");
+
+  try {
+    const response = await fetch(apiUrl, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...(cookieHeader ? { Cookie: cookieHeader } : {}),
+        ...(token ? { Authorization: normalizeToken(token) } : {}),
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      const errorBody = (await response.json().catch(() => null)) as Record<string, string> | null;
+      return { data: null, errors: errorBody, code: response.status };
+    }
+
+    const payload = (await response.json()) as LessonTestFetchResult["data"];
 
     return { data: payload, errors: null };
   } catch (error) {
