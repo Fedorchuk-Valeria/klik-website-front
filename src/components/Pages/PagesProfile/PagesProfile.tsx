@@ -68,8 +68,10 @@ const PagesProfile = ({ settings }: PropTypes) => {
   return (
     <div className="page-profile">
       <div className="platform-layout__container">
-        <div className="page-profile__content">
+        <div className="page-profile__header">
           <h1>Личный кабинет</h1>
+        </div>
+        <div className="page-profile__content">
           <div className="page-profile__wrapper">
             <Image src={avatar} alt="avatar" className="page-profile__avatar" />
 

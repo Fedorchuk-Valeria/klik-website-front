@@ -1,0 +1,195 @@
+.table {
+  padding: 50px;
+  border-radius: 20px;
+  background-color: var(--main-bg);
+  width: 100%;
+  border-spacing: 0;
+  color: var(--main-black);
+
+  @media screen and (max-width: $desktop) {
+    padding: 40px;
+  }
+
+  @media screen and (max-width: $desktop-compact) {
+    padding: 30px;
+  }
+
+  @media screen and (max-width: $desktop-compact) {
+    padding: 30px;
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    padding: 20px;
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    padding: 0;
+    background: transparent;
+  }
+
+  thead {
+    @media screen and (max-width: $tablet-size) {
+      display: none;
+    }
+  }
+
+  tbody {
+    @media screen and (max-width: $tablet-size) {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  th {
+    padding-bottom: 20px;
+    font-weight: 400;
+    opacity: 0.5;
+    text-align: left;
+    font-size: 18px;
+
+    @media screen and (max-width: $desktop) {
+      font-size: 16px;
+    }
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      font-size: 14px;
+    }
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      font-size: 16px;
+    }
+  }
+
+  td {
+    padding-top: 30px;
+    @include fonts(18px, 500, "Etude Noire");
+
+    @media screen and (max-width: $desktop) {
+      padding-top: 20px;
+      font-size: 16px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    &.hidden {
+      @media screen and (max-width: $desktop-compact) {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 200px;
+        padding-right: 20px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        max-width: 170px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        max-width: 100%;
+        padding-right: 0;
+      }
+
+      span {
+        @media screen and (max-width: $mobile-size) {
+          max-width: 160px;
+          white-space: wrap;
+          text-align: right;
+        }
+      }
+    }
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      padding-top: 16px;
+      font-size: 14px;
+    }
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      padding-top: 20px;
+      font-size: 16px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      font-size: 14px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      font-size: 12px;
+    }
+
+    &::before {
+      @media screen and (max-width: $tablet-size) {
+        content: attr(data-label);
+        flex-shrink: 0;
+        @include fonts(14px, 500, "Manrope");
+        color: var(--main-black);
+        opacity: 0.5;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        font-size: 12px;
+      }
+    }
+
+    a {
+      @media screen and (max-width: $tablet-size) {
+        width: 100%;
+      }
+    }
+  }
+
+  tr {
+
+    @media screen and (max-width: $tablet-size) {
+      display: block;
+      width: 100%;
+      padding: 20px;
+      border-radius: 20px;
+      background-color: var(--main-bg);
+    }
+
+    &:not(:last-child) {
+      td {
+        border-bottom: 1px solid var(--main-blue);
+        padding-bottom: 30px;
+
+        @media screen and (max-width: $desktop) {
+          padding-bottom: 20px;
+        }
+
+        @media screen and (max-width: $landscape-tablet-size) {
+          padding-bottom: 16px;
+        }
+
+        @media screen and (max-width: $small-landscape-tablet-size) {
+          padding-bottom: 20px;
+        }
+
+        @media screen and (max-width: $tablet-size) {
+          padding-bottom: 16px;
+          border: none;
+        }
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        margin-bottom: 10px;
+      }
+    }
+
+    td {
+      @media screen and (max-width: $tablet-size) {
+        border-bottom: 1px solid var(--main-blue) !important;
+        padding-bottom: 16px;
+      }
+
+      &.without-border {
+        @media screen and (max-width: $tablet-size) {
+          border: 0 !important;
+        }
+      }
+    }
+  }
+}
