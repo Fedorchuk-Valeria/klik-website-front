@@ -135,7 +135,9 @@ const PagesProfile = ({ settings }: PropTypes) => {
                 </div>
 
                 <div className="page-profile__childrens-actions">
-                  <Button variant="outline-green-dark">История платежей</Button>
+                  <Link href={PAGES.PROFILE_PAYMENTS}>
+                    <Button variant="outline-green-dark">История платежей</Button>
+                  </Link>
                   <Button variant="orange" onClick={handleCreateChildren}>
                     <Icon className="page-profile__children-icon" name="plus" />
                     Добавить ребёнка
