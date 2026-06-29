@@ -10,6 +10,7 @@ export type AuthRegisterRequest = {
   full_name: string;
   password: string;
   confirm_password: string;
+  branch_id?: string
 };
 
 export type AuthVerifyCodeRequest = {

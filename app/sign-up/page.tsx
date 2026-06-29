@@ -15,7 +15,8 @@ import TextInput from "@/src/components/ui/TextInput";
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { clearErrors, clearRegister, registerRequest } from "@/src/store/slices/auth";
-import { PAGES, PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
+import {BRANCH_CRM_ID, PAGES, PASSWORD_INPUT_STRIP_REGEX} from "@/src/utils/constant";
+import {CookieHelper} from "@/src/utils/helpers";
 
 const RegisterForm = () => {
   const dispatch = useAppDispatch();
@@ -27,6 +28,7 @@ const RegisterForm = () => {
       phone: "",
       password: "",
       confirmPassword: "",
+      branch_id: "",
     },
     validationSchema: registerValidationSchema,
     onSubmit: (values) => {
@@ -36,6 +38,7 @@ const RegisterForm = () => {
           full_name: values.name,
           password: values.password,
           confirm_password: values.confirmPassword,
+          branch_id: CookieHelper.getCookie(BRANCH_CRM_ID),
         })
       );
     },

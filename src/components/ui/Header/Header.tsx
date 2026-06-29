@@ -79,7 +79,7 @@ export default async function Header() {
               )}
 
               <div className="header__cabinet">
-                <ButtonCabinet />
+                <ButtonCabinet city={slug} />
               </div>
             </div>
           </div>

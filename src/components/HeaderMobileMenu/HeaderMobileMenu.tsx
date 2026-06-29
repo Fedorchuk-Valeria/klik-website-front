@@ -76,7 +76,7 @@ export default function HeaderMobileMenu({
             </div>
 
             <div className="header__mobile-cabinet">
-              <ButtonCabinet />
+              <ButtonCabinet city={currentCity.slug} />
             </div>
           </div>
 
