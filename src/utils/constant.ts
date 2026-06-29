@@ -11,7 +11,7 @@ export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const TOKEN_KEY = "token";
 export const REFRESH_TOKEN_KEY = "refresh_token";
 export const USER = "user_data";
-
+export const BRANCH_CRM_ID = 'branch_id';
 export const COURSES_PAGE_SIZE = 12;
 
 export const QUERY_PARAMS = {

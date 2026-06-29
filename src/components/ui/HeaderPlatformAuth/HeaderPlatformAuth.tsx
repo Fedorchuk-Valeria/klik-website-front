@@ -41,7 +41,7 @@ const HeaderAuth = () => {
   if (!isAuthenticated) {
     return (
       <div className="header__cabinet">
-        <ButtonCabinet />
+        <ButtonCabinet city="platform" />
       </div>
     );
   }
