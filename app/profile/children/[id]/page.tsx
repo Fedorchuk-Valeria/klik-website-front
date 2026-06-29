@@ -25,6 +25,7 @@ import { QueryHelper } from "@/src/utils/helpers";
 
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { getCurrentChildRequest } from "@/src/store/slices/profile";
+import {ProfileBLock} from "@/src/components/ui/ProfileBlock";
 
 const ChildrenDetailsPage = () => {
   const dispatch = useAppDispatch();
@@ -203,35 +204,7 @@ const ChildrenDetailsPage = () => {
 
           <div className="children-details-page__general">
             {general.map((item, generalIndex) => (
-              <div key={item.icon} className="children-details-page__general_item">
-                <div className="children-details-page__general_headline">
-                  <div className="children-details-page__general_headline-tag">
-                    <span>
-                      <Icon name={item.icon} />
-                    </span>
-                    <span>{item.title}</span>
-                  </div>
-
-                  {item.info && (
-                    <Popover
-                      id={`item-popover-${generalIndex}`}
-                      variant="hover"
-                      positionX="right"
-                      positionY="bottom-end"
-                      content={item.info}
-                      className="children-details-page__general_headline-info"
-                      popoverClassName="children-details-page__general_headline-info-popover"
-                    >
-                      <Icon name="info-circle-outline" />
-                    </Popover>
-                  )}
-                </div>
-
-                <p className="children-details-page__general_value">{item.value || 0}</p>
-                <span className="children-details-page__general_text">
-                  {getPlural(Number(item.value || 0), item.plural as [string, string, string])}
-                </span>
-              </div>
+              <ProfileBLock item={item} generalIndex={generalIndex} />
             ))}
           </div>
 
