@@ -17,31 +17,30 @@ type Props = {
 export default function ButtonCabinet({city}: Props) {
   const router = useRouter();
 
-  let branch = '5';
-
-  switch (city) {
-    case "minsk":
-      branch = '1';
-      break;
-    case "baranovichi":
-      branch = '2';
-      break;
-    case "borisov":
-      branch =  '3';
-      break;
-    case "novopolotsk":
-      branch = '4';
-      break;
-  }
-
-  CookieHelper.setCookie(BRANCH_CRM_ID, branch);
-
   const { isAuthenticated } = useAuth();
 
   const handleClick = () => {
     if (isAuthenticated) {
       router.push(PAGES.PROFILE);
     } else {
+      let branch = '5';
+
+      switch (city) {
+        case "minsk":
+          branch = '1';
+          break;
+        case "baranovichi":
+          branch = '2';
+          break;
+        case "borisov":
+          branch =  '3';
+          break;
+        case "novopolotsk":
+          branch = '4';
+          break;
+      }
+
+      CookieHelper.setCookie(BRANCH_CRM_ID, branch);
       router.push(PAGES.LOGIN);
     }
   };
