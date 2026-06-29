@@ -22,8 +22,64 @@
     }
   }
 
+  &__body {
+    display: flex;
+    gap: 30px;
+
+    @media screen and (max-width: $desktop) {
+      gap: 16px;
+    }
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      gap: 12px;
+    }
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      gap: 16px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      gap: 20px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .children-details-page {
+      min-width: 465px;
+
+      @media screen and (max-width: $desktop-compact) {
+        min-width: 370px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        min-width: 252px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        min-width: 273px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        min-width: 330px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        width: 100%;
+      }
+
+      .children-details-page__general {
+        margin-bottom: 0;
+        padding: 0;
+      }
+    }
+  }
+
   &__wrapper {
     display: flex;
+    flex: 1;
     gap: 40px;
     background-color: var(--secondary-white-80);
     border: 1px solid var(--border-color);
@@ -1440,6 +1496,721 @@
     &-icon {
       width: 14px;
       height: 14px;
+    }
+  }
+
+  &__formats {
+    margin-top: 180px;
+
+    @media screen and (max-width: $desktop) {
+      margin-top: 120px;
+    }
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      margin-top: 100px;
+    }
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      margin-top: 90px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      margin-top: 100px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      margin-top: 80px;
+    }
+
+    &-inner {
+      overflow: hidden;
+
+      transition: max-height 0.4s ease;
+    }
+
+    &-title {
+      @include fonts(40px, 500, "Etude Noire");
+      color: var(--main-green-dark);
+      margin-bottom: 20px;
+
+      @media screen and (max-width: $desktop) {
+        font-size: 30px;
+        margin-bottom: 16px;
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        font-size: 28px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        font-size: 24px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        font-size: 44px;
+        margin-bottom: 5px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        font-size: 30px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        font-size: 22px;
+        margin-bottom: 10px;
+      }
+    }
+
+    &-text {
+      margin-bottom: 100px;
+
+      @media screen and (max-width: $desktop) {
+        margin-bottom: 53px;
+        font-size: 14px;
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        max-width: 424px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        font-size: 12px;
+        max-width: 100%;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        font-size: 14px;
+        margin-bottom: 33px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        margin-bottom: 53px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        font-size: 12px;
+        margin-bottom: 32px;
+      }
+
+      a {
+        color: var(--main-green-dark);
+        transition: 0.3s all;
+        position: relative;
+
+        &:before {
+          content: "";
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          width: 100%;
+          height: 1px;
+          background-color: var(--main-orange);
+          transition: 0.3s all;
+          opacity: 1;
+        }
+
+        &:hover {
+          &:before {
+            opacity: 0;
+          }
+        }
+      }
+    }
+
+    &-wrapper {
+      display: flex;
+      gap: 50px;
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        flex-direction: column;
+      }
+    }
+
+    &-left {
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        max-width: 275px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        max-width: 100%;
+      }
+
+      &_text {
+        margin-bottom: 60px;
+        font-size: 20px;
+
+        @media screen and (max-width: $desktop) {
+          font-size: 18px;
+          margin-bottom: 30px;
+        }
+
+        @media screen and (max-width: $landscape-tablet-size) {
+          font-size: 14px;
+        }
+
+        @media screen and (max-width: $small-landscape-tablet-size) {
+          font-size: 16px;
+        }
+
+        @media screen and (max-width: $tablet-size) {
+          font-size: 18px;
+        }
+
+        @media screen and (max-width: $mobile-size) {
+          font-size: 16px;
+          margin-bottom: 20px;
+        }
+      }
+    }
+
+    &-right {
+      flex: 1;
+    }
+
+    &-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    &-more {
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+
+      &.is-open {
+        .page-profile__partners-ico {
+          transform: rotate(180deg);
+        }
+      }
+
+      @media screen and (max-width: $desktop) {
+        margin-top: 20px;
+        margin-left: 20px;
+      }
+
+      span {
+        color: var(--main-green-dark);
+        font-weight: 600;
+        position: relative;
+
+        @media screen and (max-width: $desktop) {
+          font-size: 14px;
+        }
+
+        @media screen and (max-width: $mobile-size) {
+          font-size: 12px;
+        }
+
+        &:before {
+          content: "";
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          width: 100%;
+          height: 1.5px;
+          background-color: var(--main-orange);
+          transition: 0.3s all;
+        }
+
+        &:hover {
+          &:before {
+            opacity: 0;
+          }
+        }
+      }
+    }
+    &-ico {
+      width: 24px;
+      height: 24px;
+      fill: var(--main-green-dark);
+      transition: transform 0.3s ease;
+
+      @media screen and (max-width: $desktop) {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    &-btn {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        max-width: 424px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        max-width: 100%;
+      }
+    }
+  }
+
+  &__format {
+    padding: 30px;
+    border-radius: 30px;
+    background: var(--main-blue);
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      padding: 20px;
+      border-radius: 24px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      padding: 30px;
+      border-radius: 30px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      padding: 10px 10px 20px 10px;
+      border-radius: 20px;
+      position: relative;
+    }
+
+    &.disabled {
+      opacity: 0.5;
+    }
+
+    &-wrapper {
+      display: flex;
+      gap: 24px;
+      justify-content: space-between;
+
+      @media screen and (max-width: $desktop-compact) {
+        align-items: end;
+      }
+    }
+
+    &-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--main-orange);
+      padding: 10px 20px 10px 10px;
+      border-radius: 100px;
+      background: var(--main-light);
+      margin-bottom: 17px;
+
+      @media screen and (max-width: $desktop-compact) {
+        padding: 8px 16px 8px 8px;
+        gap: 6px;
+        font-size: 12px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        padding: 10px 20px 10px 10px;
+        gap: 10px;
+        font-size: 14px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        padding: 6px 12px 6px 6px;
+        gap: 6px;
+        font-size: 12px;
+      }
+
+      &_icon {
+        width: 24px;
+        height: 24px;
+
+        @media screen and (max-width: $desktop-compact) {
+          width: 22px;
+          height: 22px;
+        }
+
+        @media screen and (max-width: $landscape-tablet-size) {
+          width: 20px;
+          height: 20px;
+        }
+
+        @media screen and (max-width: $tablet-size) {
+          width: 24px;
+          height: 24px;
+        }
+
+        @media screen and (max-width: $mobile-size) {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+
+    &-title {
+      @include fonts(24px, 500, "Etude Noire");
+      color: var(--main-green-dark);
+      margin-bottom: 10px;
+
+      @media screen and (max-width: $desktop) {
+        font-size: 22px;
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        font-size: 20px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        font-size: 18px;
+        margin-bottom: 0;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        font-size: 16px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        font-size: 18px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        font-size: 16px;
+      }
+    }
+
+    &-date {
+      color: var(--main-black);
+      font-size: 20px;
+      opacity: 0.5;
+
+      @media screen and (max-width: $desktop) {
+        font-size: 16px;
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        font-size: 14px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        font-size: 16px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        font-size: 12px;
+      }
+    }
+
+    &-btn {
+      width: 80px;
+      height: 80px;
+      background-color: var(--main-green-dark);
+      border-radius: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.3s all;
+
+      @media screen and (max-width: $desktop) {
+        width: 60px;
+        height: 60px;
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        width: 50px;
+        height: 50px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        width: 36px;
+        height: 36px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        width: 50px;
+        height: 50px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
+
+      &:hover {
+        background-color: var(--main-orange);
+      }
+
+      &_icon {
+        width: 48px;
+        height: 48px;
+        fill: var(--main-light);
+        transform: rotate(-30deg);
+
+        @media screen and (max-width: $desktop) {
+          width: 36px;
+          height: 36px;
+        }
+
+        @media screen and (max-width: $desktop-compact) {
+          width: 30px;
+          height: 30px;
+        }
+
+        @media screen and (max-width: $landscape-tablet-size) {
+          width: 22px;
+          height: 22px;
+        }
+
+        @media screen and (max-width: $tablet-size) {
+          width: 30px;
+          height: 30px;
+        }
+
+        @media screen and (max-width: $mobile-size) {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+  }
+
+  &__groups {
+    margin-top: 100px;
+
+    @media screen and (max-width: $desktop) {
+      margin-top: 80px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      margin-top: 50px;
+    }
+
+    &-title {
+      @include fonts(40px, 500, "Etude Noire");
+      color: var(--main-green-dark);
+      margin-bottom: 70px;
+
+      @media screen and (max-width: $desktop) {
+        font-size: 30px;
+        margin-bottom: 50px;
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        font-size: 28px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        font-size: 24px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        font-size: 34px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        font-size: 30px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        font-size: 22px;
+        margin-bottom: 20px;
+      }
+    }
+
+    &-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+
+      @media screen and (max-width: $desktop) {
+        gap: 16px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 20px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        gap: 16px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        gap: 10px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        gap: 10px;
+      }
+    }
+  }
+
+  &__group {
+    border-radius: 50px;
+    background: #F0F6E8;
+    padding: 50px;
+
+    @media screen and (max-width: $desktop) {
+      padding: 20px;
+      border-radius: 40px;
+    }
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      padding: 30px;
+    }
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      border-radius: 30px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      border-radius: 40px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      border-radius: 20px;
+      padding: 20px 10px 10px;
+    }
+
+    &-title {
+      @include fonts(30px, 700, "Etude Noire");
+      color: var(--main-green-dark);
+      margin-bottom: 30px;
+
+      @media screen and (max-width: $desktop) {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        font-size: 22px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        font-size: 18px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        margin-bottom: 16px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        font-size: 16px;
+        margin-bottom: 16px;
+      }
+    }
+
+    &-list {
+      border-radius: 20px;
+      padding: 30px;
+      background-color: var(--main-bg);
+
+      @media screen and (max-width: $desktop) {
+        padding: 20px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        border-radius: 10px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        border-radius: 20px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        border-radius: 10px;
+      }
+    }
+
+    &-name {
+      font-size: 18px;
+
+      @media screen and (max-width: $desktop) {
+        font-size: 16px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        font-size: 14px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        font-size: 12px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        font-size: 14px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        font-size: 12px;
+      }
+    }
+
+    &-value {
+      max-width: 420px;
+      text-align: right;
+      @include fonts(18px, 500, "Etude Noire");
+
+      @media screen and (max-width: $desktop) {
+        font-size: 16px;
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        max-width: 280px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        max-width: 100%;
+        font-size: 14px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        font-size: 12px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        font-size: 14px;
+        max-width: 328px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        font-size: 12px;
+        max-width: 200px;
+      }
+    }
+
+    &-item {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 24px;
+      padding-top: 24px;
+
+      @media screen and (max-width: $desktop) {
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        padding-top: 12px;
+        padding-bottom: 12px;
+      }
+
+      &:not(:last-of-type) {
+        border-bottom: 1px solid var(--main-blue);
+      }
+
+      &:first-of-type {
+        padding-top: 0;
+      }
+
+      &:last-of-type {
+        padding-bottom: 0;
+      }
     }
   }
 }
