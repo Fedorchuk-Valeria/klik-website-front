@@ -4,9 +4,28 @@
     margin-bottom: 50px;
     font-size: 24px;
     width: 100%;
+    font-weight: 500;
 
     @media screen and (max-width: $desktop) {
       margin-bottom: 30px;
+    }
+
+    @media screen and (max-width: $desktop) {
+      font-size: 26px;
+      margin-bottom: 40px;
+    }
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      font-size: 28px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      font-size: 24px;
     }
   }
 
@@ -45,18 +64,29 @@
       border-radius: 40px;
     }
 
+    @media screen and (max-width: $desktop-compact) {
+      padding: 40px;
+      width: 635px;
+    }
+
     @media screen and (max-width: $landscape-tablet-size) {
       padding: 40px;
       width: 580px;
     }
 
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      width: 726px;
+      padding: 50px;
+    }
+
     @media screen and (max-width: $tablet-size) {
       width: 720px;
+      padding: 40px;
     }
 
     @media screen and (max-width: $mobile-size) {
       width: 370px;
-      padding: 30px;
+      padding: 20px;
       border-radius: 30px;
     }
   }
@@ -80,12 +110,66 @@
     }
   }
 
+  &__create,
+  &__cancel {
+    @media screen and (max-width: $desktop-compact) {
+      width: 100%;
+      font-size: 16px;
+      padding: 16px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      font-size: 18px;
+      padding: 20px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      font-size: 16px;
+      padding: 16px;
+    }
+  }
+
   .page-profile__row-form {
     &.landscape {
       flex-direction: row;
 
       @media screen and (max-width: $mobile-size) {
         flex-direction: column;
+      }
+    }
+  }
+
+  .text-input {
+    &__control {
+      padding: 19px 30px 19px;
+      font-size: 16px;
+
+      @media screen and (max-width: $desktop-compact) {
+        font-size: 14px;
+        padding: 16px 30px 16px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        padding: 17px 30px 17px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        padding: 19px 30px 19px;
+        font-size: 16px;
+      }
+    }
+
+    &__label {
+      @media screen and (max-width: $desktop-compact) {
+        font-size: 14px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        font-size: 16px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        font-size: 14px;
       }
     }
   }

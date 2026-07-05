@@ -101,6 +101,12 @@ const WidgetModalCreateChildren: FC<PropTypes> = ({ className, isVisible }) => {
     }
   }, [childErrors, dispatch]);
 
+  useEffect(() => {
+    if (isVisible) {
+      form.resetForm();
+    }
+  }, [isVisible]);
+
   return (
     <Modal
       isClose
@@ -173,12 +179,12 @@ const WidgetModalCreateChildren: FC<PropTypes> = ({ className, isVisible }) => {
             />
           </div>
 
-          <div className="page-profile__row-form">
+          <div className="page-profile__row-form column">
             <Button
               withArrow
               type="submit"
               variant="main-green-dark"
-              className="page-profile__button"
+              className="modal-children__create"
               disabled={isCreateChildLoading}
             >
               Создать
@@ -186,6 +192,7 @@ const WidgetModalCreateChildren: FC<PropTypes> = ({ className, isVisible }) => {
 
             <Button
               variant="outline-green-dark"
+              className="modal-children__cancel"
               onClick={handleBack}
               disabled={isCreateChildLoading}
             >

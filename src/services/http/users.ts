@@ -37,3 +37,8 @@ export const me = () => GET(`${baseUrl}/me/`);
 export const createChild = (body: CreateChildRequest) => POST(`${baseUrl}/children/`, body);
 
 export const getChildProfileByParent = (childId: number) => GET(`${baseUrl}/children/${childId}/`);
+export const getPaymentHistory = (childId?: number) => {
+  const query = childId ? `?child_id=${childId}` : "";
+
+  return GET(`${baseUrl}/payment-history/${query}`);
+};

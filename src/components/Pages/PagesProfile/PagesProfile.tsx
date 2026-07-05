@@ -22,14 +22,15 @@ import { showModal } from "@/src/store/slices/modalSlice";
 
 import { ModalType } from "@/src/entities/common";
 import { getPlural } from "@/src/helper/getPlural";
-import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
+import {METRICS, PAGES, QUERY_PARAMS} from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 
 import { CitySettings } from "@/src/lib/getCitySettings";
 import { phoneToLink } from "@/src/lib/utils/phoneLink";
-import {ActiveFormats, FormatsPreview} from "@/src/components/ui/ActiveFormats";
-import {ActiveGroups, GroupPreview} from "@/src/components/ui/ActiveGroups";
+import {ActiveFormats} from "@/src/components/ui/ActiveFormats";
+import {ActiveGroups} from "@/src/components/ui/ActiveGroups";
 import {ProfileBLock} from "@/src/components/ui/ProfileBlock";
+import Popover from "@/src/components/ui/Popover";
 
 type PropTypes = {
   settings: CitySettings;
@@ -71,78 +72,9 @@ const PagesProfile = ({ settings }: PropTypes) => {
     return <Loader />;
   }
 
-  const formats: FormatsPreview[] = [
-    {
-      title: 'Web-разработка: HTML, CSS, JavaScript',
-      date: '20.01.2026 - 20.05.2026',
-      type: 'active',
-      url: '#'
-    },
-    {
-      title: 'Web-разработка: HTML, CSS, JavaScript',
-      date: '20.01.2026 - 20.05.2026',
-      type: 'disabled',
-      url: '#'
-    },
-    {
-      title: 'Web-разработка: HTML, CSS, JavaScript',
-      date: '20.01.2026 - 20.05.2026',
-      type: 'disabled',
-      url: '#'
-    },
-    {
-      title: 'Web-разработка: HTML, CSS, JavaScript',
-      date: '20.01.2026 - 20.05.2026',
-      type: 'disabled',
-      url: '#'
-    },
-    {
-      title: 'Web-разработка: HTML, CSS, JavaScript',
-      date: '20.01.2026 - 20.05.2026',
-      type: 'disabled',
-      url: '#'
-    },
-    {
-      title: 'Web-разработка: HTML, CSS, JavaScript',
-      date: '20.01.2026 - 20.05.2026',
-      type: 'disabled',
-      url: '#'
-    },
-    {
-      title: 'Web-разработка: HTML, CSS, JavaScript',
-      date: '20.01.2026 - 20.05.2026',
-      type: 'disabled',
-      url: '#'
-    },
-    {
-      title: 'Web-разработка: HTML, CSS, JavaScript',
-      date: '20.01.2026 - 20.05.2026',
-      type: 'disabled',
-      url: '#'
-    }
-  ];
-
-  const groups: GroupPreview[] = [
-    {
-      title: 'Программа «Креаторы»',
-      location: 'Арэна, г. Минск, Пр. Победителей 84, ТЦ Arena City, 2 этаж',
-      date: 'пн, 16:00',
-      theme: 'JavaScript: основы языка'
-    },
-    {
-      title: 'Программа «Креаторы»',
-      location: 'Арэна, г. Минск, Пр. Победителей 84, ТЦ Arena City, 2 этаж',
-      date: 'пн, 16:00',
-      theme: 'JavaScript: основы языка'
-    },
-  ];
-
   const clickoins = {
-    icon: "clicoins",
-    title: "Кликоины",
-    value: 0,
-    plural: ["кликоин", "кликоина", "кликоинов"],
-    info: "Кликоины - это бонусные баллы, которые ученик получает за каждое оффлайн-занятие. Накопленные кликоины можно обменять на призы и подарки в специальном «Кликмаркете». Маркет проводится два раза в год - следите за объявлениями!",
+    ...METRICS.klikcoins,
+    value: user_profile?.metrics?.klikcoins ?? 0,
   };
 
   return (
@@ -212,8 +144,11 @@ const PagesProfile = ({ settings }: PropTypes) => {
 
           {!isParent && (
             <>
-              <ActiveFormats data={formats} />
-              <ActiveGroups data={groups} />
+              {!!user_profile?.self_study?.has_available_courses && (<ActiveFormats data={user_profile?.self_study.courses} />)}
+              {user_profile?.offline_groups &&
+                user_profile.offline_groups.length > 0 && (
+                  <ActiveGroups data={user_profile.offline_groups} />
+                )}
             </>
           )}
 
@@ -228,9 +163,9 @@ const PagesProfile = ({ settings }: PropTypes) => {
 
                   <div className="page-profile__childrens-actions">
                     <Link href={PAGES.PROFILE_PAYMENTS}>
-                      <Button variant="outline-green-dark">История платежей</Button>
+                      <Button variant="outline-green-dark" className="page-profile__childrens-history">История платежей</Button>
                     </Link>
-                    <Button variant="orange" onClick={handleCreateChildren}>
+                    <Button className="page-profile__childrens-add" variant="orange" onClick={handleCreateChildren}>
                       <Icon className="page-profile__children-icon" name="plus" />
                       Добавить ребёнка
                     </Button>
@@ -246,27 +181,45 @@ const PagesProfile = ({ settings }: PropTypes) => {
 
                       <div className="page-profile__children-tags">
                         <div className="page-profile__children-tag">
-                          <Icon className="page-profile__children-icon" name="info-circle-outline" />
+                          <Popover
+                            id='tem-popover-clickoin'
+                            variant="hover"
+                            positionX="right"
+                            positionY="bottom-end"
+                            content={METRICS.klikcoins.info}
+                            className="children-details-page__general_headline-info"
+                            popoverClassName="children-details-page__general_headline-info-popover"
+                          >
+                            <Icon className="page-profile__children-icon" name="info-circle-outline" />
+                          </Popover>
                           {child?.metrics?.klikcoins || 0}{" "}
-                          {getPlural(child?.metrics?.klikcoins || 0, [
-                            "кликоин",
-                            "кликоина",
-                            "кликоинов",
-                          ])}
+                          {getPlural(
+                            child?.metrics?.klikcoins ?? 0,
+                            METRICS.klikcoins.plural as [string, string, string]
+                          )}
                         </div>
 
                         <div className="page-profile__children-tag">
-                          <Icon className="page-profile__children-icon" name="info-circle-outline" />
+                          <Popover
+                            id='tem-popover-clickoin'
+                            variant="hover"
+                            positionX="right"
+                            positionY="bottom-end"
+                            content={METRICS.balance.info}
+                            className="children-details-page__general_headline-info"
+                            popoverClassName="children-details-page__general_headline-info-popover"
+                          >
+                            <Icon className="page-profile__children-icon" name="info-circle-outline" />
+                          </Popover>
                           {child?.metrics?.balance} бел. руб.
                         </div>
 
                         <div className="page-profile__children-tag">
                           {child?.metrics?.paid_lessons_count || 0}{" "}
-                          {getPlural(child?.metrics?.paid_lessons_count || 0, [
-                            "оплаченное занятие",
-                            "оплаченных занятия",
-                            "оплаченных занятий",
-                          ])}
+                          {getPlural(
+                            child?.metrics?.paid_lessons_count ?? 0,
+                            METRICS.homework.plural as [string, string, string]
+                          )}
                         </div>
                       </div>
 
@@ -285,36 +238,38 @@ const PagesProfile = ({ settings }: PropTypes) => {
                         </div>
                       </div>
 
-                      {!!child?.offline_groups?.length && (
-                        <div className="page-profile__children-wrapper">
-                          <div className="page-profile__children-block">
-                            <div className="page-profile__children-title">
-                              <Icon className="page-profile__children-icon" name="people" />
-                              Оффлайн занятия в группе
-                            </div>
-
-                            <div className="page-profile__children-list">
-                              <div className="page-profile__children-item">
-                                <Icon className="page-profile__children-icon" name="disk" />
-                                Программа «Креаторы» :<span>@Klik-tg-chat</span>
-                              </div>
-
-                              <div className="page-profile__children-item">
-                                <Icon className="page-profile__children-icon" name="disk" />
-                                Программа «Лето» :<span>@Klik-tg-chat</span>
-                              </div>
-                            </div>
+                      <div className="page-profile__children-wrapper">
+                        <div className="page-profile__children-block">
+                          <div className="page-profile__children-title">
+                            <Icon className="page-profile__children-icon" name="people" />
+                            Оффлайн занятия в группе
                           </div>
 
-                          <Button
-                            variant="main-light-outline"
-                            className="page-profile__children-pay"
-                            onClick={handleCreatePayment}
-                          >
-                            Оплатить обучение
-                          </Button>
+                          <div className="page-profile__children-list">
+                            <div className="page-profile__children-item">
+                              <Icon className="page-profile__children-icon" name="disk" />
+                              Программа «Креаторы» :<span>@Klik-tg-chat</span>
+                            </div>
+
+                            <div className="page-profile__children-item">
+                              <Icon className="page-profile__children-icon" name="disk" />
+                              Программа «Лето» :<span>@Klik-tg-chat</span>
+                            </div>
+                          </div>
                         </div>
-                      )}
+
+                        <Button
+                          variant="main-light-outline"
+                          className="page-profile__children-pay"
+                          onClick={handleCreatePayment}
+                        >
+                          Оплатить обучение
+                        </Button>
+                      </div>
+
+                      {/*{!!child?.offline_groups?.length && (
+
+                      )}*/}
 
                       <Link href={PAGES.PROFILE_CHILDREN_DETAILS.replace(":id", String(child?.id))}>
                         <Button

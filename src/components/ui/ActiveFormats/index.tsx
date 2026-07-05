@@ -3,20 +3,15 @@ import { FC, useRef, useState } from "react";
 import Icon from "@/src/components/ui/Icon/Icon";
 
 import Link from "next/link";
-import {PAGES} from "@/src/utils/constant";
+import {PAGES, QUERY_PARAMS} from "@/src/utils/constant";
 import Button from "@/src/components/ui/Button/Button";
+import {Course} from "@/src/entities/common";
+import { QueryHelper } from "@/src/utils/helpers";
 
 const INITIAL_COUNT = 5;
 
-export type FormatsPreview = {
-  title: string;
-  date: string;
-  type: 'active' | 'disabled';
-  url: string;
-};
-
 type PropTypes = {
-  data: FormatsPreview[] | null;
+  data: Course[] | null;
 };
 
 export const ActiveFormats: FC<PropTypes> = ({ data }) => {
@@ -50,24 +45,27 @@ export const ActiveFormats: FC<PropTypes> = ({ data }) => {
         <div className="page-profile__formats-left">
           <div className="page-profile__formats-title">Самостоятельное обучение</div>
           <div className="page-profile__formats-left_text">Перейдите к обучению на платформе</div>
-          <Link href={PAGES.COURSES}>
+          <Link
+            href={`${PAGES.COURSES}${QueryHelper.getQueryString({ [QUERY_PARAMS.SCOPE]: "my" })}`}
+            className="page-profile__formats-left_link"
+          >
             <Button variant="main-green-dark" className="page-profile__formats-btn" withArrow={true}>Перейти к курсам</Button>
           </Link>
         </div>
         <div className="page-profile__formats-right">
           <div className="page-profile__formats-list">
             {visibleFormats?.map((item) => (
-              <div className={`page-profile__format ${item.type !== 'active' ? 'disabled' : ''}`}>
-                {item.type === 'active' && (<div className="page-profile__format-tag">
+              <div className={`page-profile__format ${!item.is_active ? 'disabled' : ''}`}>
+                {item.is_active && (<div className="page-profile__format-tag">
                   <Icon name="success-circle" className="page-profile__format-tag_icon"/>
                   Активный
                 </div>)}
                 <div className="page-profile__format-wrapper">
                   <div className="page-profile__format-left">
                     <div className="page-profile__format-title">{item.title}</div>
-                    <div className="page-profile__format-date">Срок доступа к курсу: {item.date}</div>
+                    <div className="page-profile__format-date">Срок доступа к курсу: {item.date_range}</div>
                   </div>
-                  {item.type === 'active' && (<Link className="page-profile__format-btn" href={item.url}>
+                  {item.is_active && (<Link className="page-profile__format-btn" href={PAGES.COURSE.replace(":id", String(item.id))}>
                     <Icon className="page-profile__format-btn_icon" name="arrow-long" />
                   </Link>)}
                 </div>

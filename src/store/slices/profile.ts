@@ -1,6 +1,34 @@
 import { UserProfileChilds } from "@/src/entities/common";
 import { createSlice } from "@reduxjs/toolkit";
 
+export interface PaymentHistory {
+  id: number;
+  external_id: string;
+
+  child_full_name: string;
+
+  course_id: number;
+  course_title: string;
+  program_title: string;
+
+  amount: number;
+  currency: string;
+
+  status: string;
+  source: string;
+
+  created_at: string;
+  paid_at: string;
+  payment_date: string;
+
+  receipt_download_url: string;
+  contract_download_url: string | null;
+}
+
+export interface PaymentHistoryResponse {
+  results: PaymentHistory[];
+}
+
 export type Partner = {
   id: number;
   name: string;
@@ -13,6 +41,7 @@ type ProfileState = {
   partners: Partner[] | null;
   currentChild: UserProfileChilds | null;
   errors: Record<string, string> | null;
+  paymentHistory: PaymentHistory[] | null;
 };
 
 const initialState: ProfileState = {
@@ -20,6 +49,7 @@ const initialState: ProfileState = {
   partners: null,
   errors: null,
   currentChild: null,
+  paymentHistory: null,
 };
 
 const profileSlice = createSlice({
@@ -61,6 +91,23 @@ const profileSlice = createSlice({
       state.partners = null;
       state.errors = null;
     },
+    getPaymentHistoryRequest(state) {
+      state.isLoading = true;
+      state.errors = null;
+    },
+
+    getPaymentHistorySuccess(state, action: { payload: PaymentHistory[] }) {
+      state.paymentHistory = action.payload;
+      state.isLoading = false;
+    },
+
+    getPaymentHistoryFailure(
+      state,
+      action: { payload: Record<string, string> | null }
+    ) {
+      state.errors = action.payload;
+      state.isLoading = false;
+    },
   },
 });
 
@@ -73,5 +120,8 @@ export const {
   getCurrentChildFailure,
   clearPartners,
   clearCurrentChild,
+  getPaymentHistoryRequest,
+  getPaymentHistorySuccess,
+  getPaymentHistoryFailure
 } = profileSlice.actions;
 export default profileSlice.reducer;

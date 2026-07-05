@@ -43,7 +43,7 @@ export type UserProfile = {
     phone: string;
     email: string | null;
   })[];
-  offline_groups?: [];
+  offline_groups: Group[];
 };
 
 export type UserProfileRole = "parent" | "child" | "admin";
@@ -92,4 +92,18 @@ export type Meta = {
   page_size: number;
   total_count: number;
   total_pages: number;
+};
+
+export type Group = {
+  title: string;
+  telegram_chat_url: string;
+  location: string;
+  manager_url: string;
+  subscription: string;
+  subscription_price: string;
+  discount_percent: string;
+  lessons_count: string;
+  crm_group_id: string;
+  day_and_time: string;
+  next_lesson_topic: string;
 };

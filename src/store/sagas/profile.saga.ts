@@ -8,9 +8,10 @@ import {
   getCurrentChildSuccess,
   getPartnersFailure,
   getPartnersRequest,
-  getPartnersSuccess,
-  Partner,
+  getPartnersSuccess, getPaymentHistoryFailure, getPaymentHistoryRequest, getPaymentHistorySuccess,
+  Partner, PaymentHistoryResponse,
 } from "@/src/store/slices/profile";
+import {PayloadAction} from "@reduxjs/toolkit";
 
 function* workerGetPartners() {
   try {
@@ -47,5 +48,24 @@ function* watchGetCurrentChild() {
     workerGetCurrentChild
   );
 }
+function* workerGetPaymentHistory(action: PayloadAction<{ childId?: number }>) {
+  try {
+    const response: { data: PaymentHistoryResponse } = yield call(
+      UsersApi.getPaymentHistory,
+      action.payload?.childId
+    );
 
-export const profileWatchers = [fork(watchGetPartners), fork(watchGetCurrentChild)];
+    yield put(getPaymentHistorySuccess(response.data.results));
+  } catch (error) {
+    yield put(getPaymentHistoryFailure(error as Record<string, string> | null));
+  }
+}
+
+function* watchGetPaymentHistory() {
+  yield takeLatest(
+    getPaymentHistoryRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerGetPaymentHistory
+  );
+}
+
+export const profileWatchers = [fork(watchGetPartners), fork(watchGetCurrentChild), fork(watchGetPaymentHistory)];

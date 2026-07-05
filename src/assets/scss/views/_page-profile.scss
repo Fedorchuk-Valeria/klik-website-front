@@ -97,7 +97,7 @@
       padding: 20px;
     }
 
-    @media screen and (max-width: $tablet-size) {
+    @media screen and (max-width: $mobile-size) {
       flex-direction: column;
     }
   }
@@ -108,6 +108,35 @@
     flex-direction: column;
     gap: 20px;
     width: 100%;
+
+    .text-input {
+
+      &__control {
+        padding: 19px 30px;
+
+        @media screen and (max-width: $desktop) {
+          font-size: 16px;
+          padding: 22px 30px;
+        }
+
+        @media screen and (max-width: $desktop-compact) {
+          padding: 16px 30px;
+        }
+
+        @media screen and (max-width: $landscape-tablet-size) {
+          font-size: 14px;
+        }
+
+        @media screen and (max-width: $tablet-size) {
+          font-size: 16px;
+          padding: 21px 30px;
+        }
+
+        @media screen and (max-width: $mobile-size) {
+          padding: 17px 30px;
+        }
+      }
+    }
 
     &-label {
       display: flex;
@@ -135,7 +164,6 @@
 
     @media screen and (max-width: $tablet-size) {
       max-width: 100%;
-      flex-direction: row;
 
       button {
         padding: 20px 30px;
@@ -181,6 +209,10 @@
     @include icon(150px);
     aspect-ratio: 1/1;
     border-radius: 100%;
+
+    @media screen and (max-width: $desktop-compact) {
+      @include icon(130px);
+    }
 
     @media screen and (max-width: $landscape-tablet-size) {
       @include icon(120px);
@@ -309,6 +341,13 @@
         width: 100%;
       }
 
+      &.column {
+        @media screen and (max-width: $desktop-compact) {
+          flex-direction: column;
+          gap: 10px;
+        }
+      }
+
       .button {
         display: flex;
         flex: 1;
@@ -374,10 +413,15 @@
 
     @media screen and (max-width: $desktop) {
       font-size: 14px;
+      margin-top: 40px;
+    }
+
+    @media screen and (max-width: $desktop-compact) {
+      margin-top: 30px;
+      font-size: 12px;
     }
 
     @media screen and (max-width: $landscape-tablet-size) {
-      font-size: 12px;
       margin-top: 30px;
     }
 
@@ -388,7 +432,6 @@
 
     @media screen and (max-width: $mobile-size) {
       font-size: 12px;
-      margin-top: 20px;
       display: flex;
       gap: 6px;
       border-radius: 14px;
@@ -489,7 +532,7 @@
         margin-bottom: 50px;
       }
 
-      @media screen and (max-width: $tablet-size) {
+      @media screen and (max-width: $small-landscape-tablet-size) {
         margin-bottom: 30px;
         flex-direction: column;
         gap: 5px;
@@ -551,10 +594,24 @@
         padding: 40px;
         border-radius: 50px;
       }
-      @media screen and (max-width: $landscape-tablet-size) {
-        padding: 20px;
+
+      @media screen and (max-width: $desktop-compact) {
+        padding: 30px;
         border-radius: 40px;
       }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        padding: 20px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        border-radius: 30px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        border-radius: 40px;
+      }
+
       @media screen and (max-width: $mobile-size) {
         padding: 10px;
         border-radius: 20px;
@@ -571,7 +628,7 @@
         gap: 16px;
       }
 
-      @media screen and (max-width: $tablet-size) {
+      @media screen and (max-width: $small-landscape-tablet-size) {
         gap: 10px;
         grid-template-columns: repeat(1, 1fr);
       }
@@ -653,6 +710,8 @@
       transform: translateY(10px);
 
       animation: fadeIn 0.25s ease forwards;
+
+      overflow: hidden;
     }
 
     &.is-open {
@@ -675,6 +734,20 @@
         padding-right: 80px;
         gap: 20px;
       }
+
+      @media screen and (max-width: $desktop-compact) {
+        padding: 8px 80px 8px 8px;
+        gap: 16px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        padding: 5px 80px 5px 5px;
+        gap: 16px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        padding-right: 60px;
+      }
     }
 
     &-icon {
@@ -690,7 +763,7 @@
         min-width: 70px;
       }
 
-      @media screen and (max-width: $landscape-tablet-size) {
+      @media screen and (max-width: $desktop-compact) {
         @include icon(60px);
         min-width: 60px;
       }
@@ -714,9 +787,19 @@
     &-title {
       @include fonts(24px, 500, "Etude Noire");
       color: var(--main-green-dark);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      text-align: left;
 
       @media screen and (max-width: $desktop) {
         font-size: 22px;
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        font-size: 18px;
       }
 
       @media screen and (max-width: $landscape-tablet-size) {
@@ -751,9 +834,23 @@
         right: 20px;
       }
 
+      @media screen and (max-width: $desktop-compact) {
+        right: 10px;
+        top: 14px;
+      }
+
       @media screen and (max-width: $landscape-tablet-size) {
         width: 40px;
         height: 40px;
+        right: 15px;
+        top: 15px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        width: 36px;
+        height: 36px;
+        right: 17px;
+        top: 17px;
       }
 
       @media screen and (max-width: $tablet-size) {
@@ -764,7 +861,8 @@
       @media screen and (max-width: $mobile-size) {
         width: 40px;
         height: 40px;
-        top: 15px;
+        top: 10px;
+        right: 10px;
       }
 
       &:hover {
@@ -850,15 +948,27 @@
     &-header {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       margin-bottom: 50px;
 
-      @media screen and (max-width: $desktop) {
+      @media screen and (max-width: $landscape-tablet-size) {
         flex-direction: column;
         gap: 30px;
+        align-items: baseline;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        width: 100%;
       }
 
       @media screen and (max-width: $mobile-size) {
         margin-bottom: 20px;
+      }
+
+      a {
+        @media screen and (max-width: $small-landscape-tablet-size) {
+          flex: 1;
+        }
       }
     }
 
@@ -870,6 +980,96 @@
 
     &-text {
       font-size: 20px;
+
+      @media screen and (max-width: $desktop) {
+        font-size: 18px;
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        font-size: 16px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        font-size: 14px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        font-size: 16px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        font-size: 20px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        font-size: 16px;
+      }
+    }
+
+    &-history {
+      padding: 18px 50px;
+
+      .button__text {
+        @media screen and (max-width: $small-landscape-tablet-size) {
+          justify-content: center;
+        }
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        padding: 13px 80px;
+        font-size: 16px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        padding: 14px 30px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        width: 100%;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        padding: 18px 30px;
+        font-size: 18px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        padding: 16px 30px;
+        font-size: 16px;
+      }
+    }
+
+    &-add {
+      padding: 18px 30px;
+
+      .button__text {
+        @media screen and (max-width: $small-landscape-tablet-size) {
+          justify-content: center;
+        }
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        padding: 13px 80px;
+        font-size: 16px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        padding: 14px 30px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        flex: 1;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        padding: 18px 30px;
+        font-size: 18px;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        padding: 16px 30px;
+        font-size: 16px;
+      }
     }
 
     &-actions {
@@ -877,16 +1077,9 @@
       flex-wrap: wrap;
       gap: 10px;
 
-      @media screen and (max-width: $tablet-size) {
+      @media screen and (max-width: $small-landscape-tablet-size) {
         width: 100%;
-
-        > button {
-          flex: 1;
-
-          .button__text {
-            justify-content: center;
-          }
-        }
+        gap: 16px;
       }
 
       @media screen and (max-width: $mobile-size) {
@@ -896,8 +1089,9 @@
         }
       }
 
-      @media screen and (max-width: $tablet-size) {
+      @media screen and (max-width: $mobile-size) {
         flex-direction: column;
+        gap: 10px;
       }
     }
 
@@ -918,7 +1112,12 @@
         grid-template-columns: repeat(1, 1fr);
       }
 
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
       @media screen and (max-width: $tablet-size) {
+        grid-template-columns: repeat(1, 1fr);
         gap: 20px;
       }
 
@@ -931,27 +1130,35 @@
   }
 
   &__children {
-    padding: 50px 28px 50px 50px;
+    padding: 50px;
     border-radius: 20px;
     background: var(--secondary-light-10);
     color: var(--main-light);
 
     @media screen and (max-width: $desktop) {
       margin-bottom: 0;
-      padding: 40px 35px 40px 40px;
+      padding: 40px;
+    }
+
+    @media screen and (max-width: $desktop-compact) {
+      padding: 30px 50px 30px 30px;
     }
 
     @media screen and (max-width: $landscape-tablet-size) {
-      padding: 35px;
-      border-radius: 30px;
-    }
-
-    @media screen and (max-width: $tablet-size) {
       padding: 30px;
     }
 
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      padding: 20px 40px 20px 20px;
+    }
+
     @media screen and (max-width: $tablet-size) {
-      padding: 20px;
+      padding: 30px 50px 30px 30px;
+      border-radius: 30px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      padding: 20px 40px 20px 20px;
       border-radius: 10px;
     }
 
@@ -1116,6 +1323,7 @@
 
     &-more {
       width: 100%;
+      padding: 20px;
 
       .button__text {
         justify-content: center;
@@ -1270,6 +1478,7 @@
       @media screen and (max-width: $landscape-tablet-size) {
         font-size: 16px;
       }
+
       @media screen and (max-width: $tablet-size) {
         width: calc(100% - 40px);
 
@@ -1305,6 +1514,10 @@
       align-items: center;
       gap: 40px;
 
+      @media screen and (max-width: $desktop) {
+        gap: 30px;
+      }
+
       @media screen and (max-width: $small-landscape-tablet-size) {
         gap: 16px;
         width: 100%;
@@ -1317,18 +1530,35 @@
     }
 
     &-btn {
-      padding: 16px 30px;
+      padding: 15px 30px;
+      font-size: 16px;
+
+      @media screen and (max-width: $desktop) {
+        padding: 14px 30px;
+        font-size: 14px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        padding: 11px 20px;
+        font-size: 12px;
+      }
 
       @media screen and (max-width: $small-landscape-tablet-size) {
         flex: 1;
+        padding: 17px 30px;
 
         .button__text {
           justify-content: center;
         }
       }
 
+      @media screen and (max-width: $tablet-size) {
+        padding: 16px 30px;
+      }
+
       @media screen and (max-width: $mobile-size) {
         width: 100%;
+        padding: 17px 30px;
       }
     }
   }
@@ -1547,7 +1777,7 @@
       }
 
       @media screen and (max-width: $small-landscape-tablet-size) {
-        font-size: 44px;
+        font-size: 34px;
         margin-bottom: 5px;
       }
 
@@ -1636,12 +1866,17 @@
         max-width: 100%;
       }
 
+      &_link {
+        padding-right: 23px;
+        display: block;
+      }
+
       &_text {
         margin-bottom: 60px;
         font-size: 20px;
 
         @media screen and (max-width: $desktop) {
-          font-size: 18px;
+          font-size: 16px;
           margin-bottom: 30px;
         }
 
@@ -1739,11 +1974,16 @@
       justify-content: center;
       width: 100%;
 
+      @media screen and (max-width: $desktop-compact) {
+        padding: 16px 0;
+        font-size: 16px;
+      }
+
       @media screen and (max-width: $small-landscape-tablet-size) {
         max-width: 424px;
       }
 
-      @media screen and (max-width: $small-landscape-tablet-size) {
+      @media screen and (max-width: $tablet-size) {
         max-width: 100%;
       }
     }
