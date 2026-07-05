@@ -27,3 +27,11 @@
   border-radius: 10px;
   z-index: 11;
 }
+
+.popover--absolute {
+  position: absolute;
+}
+
+.popover--fixed {
+  position: fixed;
+}

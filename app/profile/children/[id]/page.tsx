@@ -20,7 +20,7 @@ import Popover from "@/src/components/ui/Popover";
 import TextInput from "@/src/components/ui/TextInput";
 
 import { getPlural } from "@/src/helper/getPlural";
-import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
+import {METRICS, PAGES, QUERY_PARAMS} from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
@@ -46,24 +46,16 @@ const ChildrenDetailsPage = () => {
   const general = useMemo(
     () => [
       {
-        icon: "clicoins",
-        title: "Кликоины",
-        value: currentChild?.metrics?.klikcoins || 0,
-        plural: ["кликоин", "кликоина", "кликоинов"],
-        info: "Кликоины - это бонусные баллы, которые ученик получает за каждое оффлайн-занятие. Накопленные кликоины можно обменять на призы и подарки в специальном «Кликмаркете». Маркет проводится два раза в год - следите за объявлениями!",
+        ...METRICS.klikcoins,
+        value: currentChild?.metrics?.klikcoins ?? 0,
       },
       {
-        icon: "money",
-        title: "Баланс",
-        value: currentChild?.metrics?.balance || 0,
-        plural: ["белорусский рубль", "белорусских рубля", "белорусских рублей"],
-        info: "Это ваш предоплаченный баланс. Вы вносите деньги за несколько занятий вперёд, и система автоматически списывает стоимость одного урока после его проведения. Так вы можете не думать о ежемесячной оплате - просто пополняйте счёт, и занятия будут оплачиваться сами.",
+        ...METRICS.balance,
+        value: currentChild?.metrics?.balance ?? 0,
       },
       {
-        icon: "homework",
-        title: "Занятия",
-        value: currentChild?.metrics?.paid_lessons_count || 0,
-        plural: ["оплаченное занятие", "оплаченных занятия", "оплаченных занятий"],
+        ...METRICS.homework,
+        value: currentChild?.metrics?.paid_lessons_count ?? 0,
       },
     ],
     [currentChild?.metrics]

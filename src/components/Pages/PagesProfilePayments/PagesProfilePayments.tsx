@@ -1,17 +1,20 @@
 "use client";
 
 import {useRouter} from "next/navigation";
-import {useAppDispatch} from "@/src/store/hooks";
+import {useAppDispatch, useAppSelector} from "@/src/store/hooks";
 import {PAGES} from "@/src/utils/constant";
 import ButtonBack from "@/src/components/ui/ButtonBack/ButtonBack";
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import DateRangePicker from "@/src/components/ui/DateRangePicker";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import Loader from "@/src/components/ui/Loader/Loader";
+import {getPaymentHistoryRequest} from "@/src/store/slices/profile";
 
 const PagesProfilePayments = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { paymentHistory, isLoading } = useAppSelector((store) => store.profile);
   const [dateFrom, setDateFrom] = useState<Date | null>(null);
   const [dateTo, setDateTo] = useState<Date | null>(null);
 
@@ -24,50 +27,13 @@ const PagesProfilePayments = () => {
     console.log("to:", dateTo);
   };
 
-  const payments = [
-    {
-      programName: "Программа «Лето»",
-      childName: "Фамилия Имя Отчество Ребёнка",
-      paymentDate: "20.05.2026",
-      amount: "220",
-      receiptUrl: "#",
-    },
-    {
-      programName: "Программа «Креаторы»",
-      childName: "Фамилия Имя Отчество Ребёнка",
-      paymentDate: "20.05.2026",
-      amount: "220",
-      receiptUrl: "#",
-    },
-    {
-      programName: "Программа «Кодеры»",
-      childName: "Фамилия Имя Отчество Ребёнка",
-      paymentDate: "20.05.2026",
-      amount: "220",
-      receiptUrl: "#",
-    },
-    {
-      programName: "Программа «Кликеры»",
-      childName: "Фамилия Имя Отчество Ребёнка",
-      paymentDate: "20.05.2026",
-      amount: "220",
-      receiptUrl: "#",
-    },
-    {
-      programName: "Программа «Лето»",
-      childName: "Фамилия Имя Отчество Ребёнка",
-      paymentDate: "20.05.2026",
-      amount: "220",
-      receiptUrl: "#",
-    },
-    {
-      programName: "Программа «Кликеры»",
-      childName: "Фамилия Имя Отчество Ребёнка",
-      paymentDate: "20.05.2026",
-      amount: "220",
-      receiptUrl: "#",
-    }
-  ];
+  useEffect(() => {
+    dispatch(getPaymentHistoryRequest());
+  }, [dispatch]);
+
+  if (isLoading || !paymentHistory) {
+    return <Loader />;
+  }
 
   return (
     <div className="page-profile">
@@ -80,7 +46,7 @@ const PagesProfilePayments = () => {
           />
           <div className="page-profile__header">
             <h1>История платежей</h1>
-            {payments.length > 0 && (
+            {paymentHistory.length > 0 && (
             <div className="page-profile__header-actions">
               {(dateFrom || dateTo) && (
                 <button
@@ -112,7 +78,7 @@ const PagesProfilePayments = () => {
               </Button>
             </div>)}
           </div>
-          {payments.length === 0 ? (
+          {paymentHistory.length === 0 ? (
             <div className="page-profile__table-wrapper empty">
               Платежей пока нет
             </div>
@@ -130,15 +96,15 @@ const PagesProfilePayments = () => {
                 </thead>
 
                 <tbody>
-                {payments.map((payment, key) => (
+                {paymentHistory.map((payment, key) => (
                   <tr key={key}>
-                    <td data-label="Название программы">{payment.programName}</td>
-                    <td data-label="ФИО ребёнка" className="hidden"><span>{payment.childName}</span></td>
-                    <td data-label="Дата оплаты">{payment.paymentDate}</td>
+                    <td data-label="Название программы">{payment.course_title}</td>
+                    <td data-label="ФИО ребёнка" className="hidden"><span>{payment.child_full_name}</span></td>
+                    <td data-label="Дата оплаты">{new Date(payment.paid_at).toLocaleDateString("ru-RU")}</td>
                     <td className="without-border" data-label="Сумма к оплате"><span className="page-profile__currency">{payment.amount} <Icon className="page-profile__currency-icon" name="ruble" /></span></td>
                     <td className="without-border">
                       <a
-                        href={payment.receiptUrl}
+                        href={payment.receipt_download_url}
                         target="_blank"
                         rel="noopener noreferrer"
                       >

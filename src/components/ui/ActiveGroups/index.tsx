@@ -1,14 +1,8 @@
 import { FC } from "react";
-
-export type GroupPreview = {
-  title: string;
-  location: string;
-  date: string;
-  theme: string;
-};
+import {Group} from "@/src/entities/common";
 
 type PropTypes = {
-  data: GroupPreview[] | null;
+  data: Group[] | null;
 };
 
 export const ActiveGroups: FC<PropTypes> = ({ data }) => {
@@ -27,11 +21,11 @@ export const ActiveGroups: FC<PropTypes> = ({ data }) => {
               </div>
               <div className="page-profile__group-item">
                 <div className="page-profile__group-name">День и время занятия</div>
-                <div className="page-profile__group-value">{item.date}</div>
+                <div className="page-profile__group-value">{item.day_and_time}</div>
               </div>
               <div className="page-profile__group-item">
                 <div className="page-profile__group-name">Тема следующего занятия</div>
-                <div className="page-profile__group-value">{item.theme}</div>
+                <div className="page-profile__group-value">{item.next_lesson_topic}</div>
               </div>
             </div>
           </div>

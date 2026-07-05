@@ -135,7 +135,7 @@
 
 
   &__input {
-    padding: 7px 20px;
+    padding: 5px 20px;
     border-radius: 20px;
     border: 1.5px solid rgba(28, 26, 28, 0.20);
     display: flex;
@@ -143,21 +143,29 @@
     gap: 10px;
 
     @media screen and (max-width: $desktop) {
-      padding: 8px 16px;
+      padding: 3px 16px;
       border-radius: 16px;
     }
 
+    @media screen and (max-width: $landscape-tablet-size) {
+      padding: 1px 12px;
+      border-radius: 12px;
+    }
+
     @media screen and (max-width: $small-landscape-tablet-size) {
-      min-width: 244px;
+      padding: 4px 17px;
+      border-radius: 12px;
+      width: 245px;
     }
 
     @media screen and (max-width: $tablet-size) {
-      min-width: 176px;
+      width: 176px;
     }
 
     @media screen and (max-width: $mobile-size) {
-      min-width: 0;
-      padding: 10px;
+      width: auto;
+      padding: 5px 10px;
+      border-radius: 16px;
     }
 
     &.active {
@@ -197,6 +205,10 @@
       &.arrow {
         margin-left: 12px;
 
+        @media screen and (max-width: $desktop) {
+          margin-left: 0;
+        }
+
         @media screen and (max-width: $small-landscape-tablet-size) {
           margin-left: auto;
         }
@@ -235,19 +247,22 @@
       color: var(--main-green-dark);
 
       @media screen and (max-width: $desktop) {
-        @include fonts(12px, 500, "Manrope");
+        font-size: 12px;
+        width: 84px;
       }
 
       @media screen and (max-width: $landscape-tablet-size) {
-        @include fonts(10px, 500, "Manrope");
+        font-size: 10px;
+        width: 68px;
       }
 
       @media screen and (max-width: $small-landscape-tablet-size) {
-        @include fonts(14px, 500, "Manrope");
+        font-size: 14px;
+        width: 100%;
       }
 
       @media screen and (max-width: $tablet-size) {
-        @include fonts(12px, 500, "Manrope");
+        font-size: 12px;
       }
 
       &::-webkit-input-placeholder {
