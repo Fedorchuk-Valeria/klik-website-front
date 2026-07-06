@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { Meta } from "@/src/entities/common";
 import { Course } from "@/src/lib/getCourses";
-import {PurchasePayload} from "@/src/services/http/courses";
+import {PurchaseOfflinePayload, PurchasePayload} from "@/src/services/http/courses";
 import { COURSES_PAGE_SIZE } from "@/src/utils/constant";
 
 type GetCoursesRequestPayload = {
@@ -110,6 +110,21 @@ const coursesSlice = createSlice({
       state.currentCourse = null;
       state.meta = initialState.meta;
     },
+
+    purchaseOfflinePreviewRequest(state, action: { payload: PurchaseOfflinePayload }) {
+      void action.payload;
+      state.isLoading = true;
+      state.errors = null;
+    },
+
+    purchaseOfflinePreviewSuccess(state) {
+      state.isLoading = false;
+    },
+
+    purchaseOfflinePreviewFailure(state, action: { payload: Record<string, string> | null }) {
+      state.errors = action.payload;
+      state.isLoading = false;
+    },
   },
 });
 
@@ -125,5 +140,8 @@ export const {
   purchaseSuccess,
   purchaseFailure,
   clearCourses,
+  purchaseOfflinePreviewRequest,
+  purchaseOfflinePreviewFailure,
+  purchaseOfflinePreviewSuccess
 } = coursesSlice.actions;
 export default coursesSlice.reducer;

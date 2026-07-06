@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { FC } from "react";
+import {FC, useEffect} from "react";
 
 import Modal from "@/src/components/ui/Modal";
 
@@ -7,14 +7,33 @@ import { useAppDispatch } from "@/src/store/hooks";
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import {hideModal} from "@/src/store/slices/modalSlice";
+import {purchaseOfflinePreviewRequest} from "@/src/store/slices/corses";
 
 type PropTypes = {
   isVisible: boolean;
   className?: string;
+  childId: number;
 };
 
-const WidgetModalPaymentChildren: FC<PropTypes> = ({className, isVisible}) => {
+const WidgetModalPaymentChildren: FC<PropTypes> = ({className, isVisible, childId}) => {
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    dispatch(
+      purchaseOfflinePreviewRequest({
+        child_id: childId
+      })
+    );
+
+    /*dispatch(
+      purchaseRequest({
+        course_id: id,
+        return_url: returnUrl,
+      })
+    );*/
+  }, [isVisible]);
 
   const handlePayment = () => {
     /*dispatch(

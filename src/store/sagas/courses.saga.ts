@@ -1,6 +1,6 @@
 import { call, fork, put, takeLatest } from "redux-saga/effects";
 
-import { CoursesApi } from "@/src/services/http";
+import { CoursesApi, UsersApi } from "@/src/services/http";
 import { Course } from "@/src/lib/getCourses";
 import { COURSES_PAGE_SIZE, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
@@ -11,13 +11,20 @@ import {
   getCurrentCourseFailure,
   getCurrentCourseRequest,
   getCurrentCourseSuccess,
-  purchaseFailure,
+  purchaseFailure, purchaseOfflinePreviewFailure, purchaseOfflinePreviewRequest, purchaseOfflinePreviewSuccess,
   purchaseRequest,
   purchaseSuccess,
 } from "@/src/store/slices/corses";
 import { normalizeCoursesPayload } from "@/src/utils/normalizeCoursesPayload";
 import {PurchasePayload} from "@/src/services/http/courses";
 import { normalizeCoursesResponse } from "@/src/utils/normalizeCoursesPayload";
+
+export interface PurchaseOfflinePayload {
+  child_id: number;
+  offline_group_id?: number;
+  branch_id?: number;
+  program_title?: string;
+}
 
 function* workerGetCourses(action: { payload: { query: string; append?: boolean } }): unknown {
   try {
@@ -86,8 +93,32 @@ function* watchMockPurchase() {
   );
 }
 
+function* workerPurchaseOfflinePreview(action: { payload: PurchaseOfflinePayload }): unknown {
+  try {
+    const response = yield call(UsersApi.purchaseOfflinePreview, action.payload);
+
+    console.log(response);
+
+    yield put(purchaseOfflinePreviewSuccess());
+
+    /*if (response?.data?.form_url) {
+      window.location.href = response.data.form_url;
+    }*/
+  } catch (error) {
+    yield put(purchaseOfflinePreviewFailure(error as Record<string, string> | null));
+  }
+}
+
+function* watchPurchaseOfflinePreview() {
+  yield takeLatest(
+    purchaseOfflinePreviewRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerPurchaseOfflinePreview
+  );
+}
+
 export const coursesWatchers = [
   fork(watchGetCourses),
   fork(watchMockPurchase),
   fork(watchGetCurrentCourse),
+  fork(watchPurchaseOfflinePreview),
 ];

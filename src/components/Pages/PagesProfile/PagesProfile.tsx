@@ -54,11 +54,13 @@ const PagesProfile = ({ settings }: PropTypes) => {
     );
   };
 
-  const handleCreatePayment = () => {
+  const handleCreatePayment = (childId: number) => {
     dispatch(
       showModal({
         modalType: ModalType.PAYMENT_CHILDREN,
-        modalProps: {},
+        modalProps: {
+          childId: childId,
+        },
       })
     );
   };
@@ -287,7 +289,7 @@ const PagesProfile = ({ settings }: PropTypes) => {
                         <Button
                           variant="main-light-outline"
                           className="page-profile__children-pay"
-                          onClick={handleCreatePayment}
+                          onClick={() => handleCreatePayment(child.id)}
                         >
                           Оплатить обучение
                         </Button>
