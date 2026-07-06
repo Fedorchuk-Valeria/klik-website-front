@@ -8,7 +8,7 @@ export interface PurchasePayload {
   return_url: string;
 }
 
-export const getCoursfs = (query = "") => GET(baseUrl + query);
+export const getCourses = (query = "") => GET(baseUrl + query);
 
 export const getCurrentCourse = (coursePk: number | string) => GET(`${baseUrl}${coursePk}/`);
 
