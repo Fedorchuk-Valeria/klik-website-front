@@ -11,7 +11,7 @@ export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const TOKEN_KEY = "token";
 export const REFRESH_TOKEN_KEY = "refresh_token";
 export const USER = "user_data";
-export const BRANCH_CRM_ID = 'branch_id';
+export const BRANCH_CRM_ID = "branch_id";
 export const COURSES_PAGE_SIZE = 12;
 
 export const QUERY_PARAMS = {
@@ -99,18 +99,18 @@ export const METRICS = {
   klikcoins: {
     icon: "clicoins",
     title: "Кликоины",
-    plural: ["кликоин", "кликоина", "кликоинов"],
+    plural: ["кликоин", "кликоина", "кликоинов"] as string[],
     info: `Кликоины — это бонусные баллы, которые ученик получает за каждое оффлайн-занятие. Накопленные кликоины можно обменять на призы и подарки в специальном «Кликмаркете». Маркет проводится два раза в год — следите за объявлениями!`,
   },
   balance: {
     icon: "money",
     title: "Баланс",
-    plural: ["белорусский рубль", "белорусских рубля", "белорусских рублей"],
+    plural: ["белорусский рубль", "белорусских рубля", "белорусских рублей"] as string[],
     info: "Это ваш предоплаченный баланс. Вы вносите деньги за несколько занятий вперёд, и система автоматически списывает стоимость одного урока после его проведения. Так вы можете не думать о ежемесячной оплате - просто пополняйте счёт, и занятия будут оплачиваться сами.",
   },
   homework: {
     icon: "homework",
     title: "Занятия",
-    plural: ["оплаченное занятие", "оплаченных занятия", "оплаченных занятий"],
-  }
+    plural: ["оплаченное занятие", "оплаченных занятия", "оплаченных занятий"] as string[],
+  },
 } as const;

@@ -110,7 +110,6 @@
     width: 100%;
 
     .text-input {
-
       &__control {
         padding: 19px 30px;
 
@@ -1318,6 +1317,11 @@
         @media screen and (max-width: $mobile-size) {
           font-size: 12px;
         }
+
+        a {
+          color: inherit;
+          font-size: inherit;
+        }
       }
     }
 
@@ -1600,7 +1604,7 @@
     &-wrapper {
       padding: 30px;
       border-radius: 50px;
-      background: #F0F6E8;
+      background: #f0f6e8;
 
       @media screen and (max-width: $desktop) {
         padding: 20px;
@@ -1857,7 +1861,6 @@
     }
 
     &-left {
-
       @media screen and (max-width: $landscape-tablet-size) {
         max-width: 275px;
       }
@@ -2282,7 +2285,7 @@
 
   &__group {
     border-radius: 50px;
-    background: #F0F6E8;
+    background: #f0f6e8;
     padding: 50px;
 
     @media screen and (max-width: $desktop) {

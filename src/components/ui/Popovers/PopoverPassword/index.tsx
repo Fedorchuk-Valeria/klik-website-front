@@ -1,13 +1,12 @@
-import Popover from "@/src/components/ui/Popover";
 import Icon from "@/src/components/ui/Icon/Icon";
+import Popover from "@/src/components/ui/Popover";
 
 export default function PopoverPassword({}) {
   return (
     <Popover
-      id="password-popover"
       variant="click"
       positionX="right"
-      positionY="bottom-end"
+      positionY="bottom"
       popoverClassName="password-popover-list"
       content={
         <ul>

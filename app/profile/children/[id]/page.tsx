@@ -16,16 +16,14 @@ import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import Loader from "@/src/components/ui/Loader/Loader";
 import PhoneInput from "@/src/components/ui/PhoneInput";
-import Popover from "@/src/components/ui/Popover";
 import TextInput from "@/src/components/ui/TextInput";
 
-import { getPlural } from "@/src/helper/getPlural";
-import {METRICS, PAGES, QUERY_PARAMS} from "@/src/utils/constant";
+import { METRICS, PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 
+import { ProfileBLock } from "@/src/components/ui/ProfileBlock";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { getCurrentChildRequest } from "@/src/store/slices/profile";
-import {ProfileBLock} from "@/src/components/ui/ProfileBlock";
 
 const ChildrenDetailsPage = () => {
   const dispatch = useAppDispatch();
@@ -196,7 +194,7 @@ const ChildrenDetailsPage = () => {
 
           <div className="children-details-page__general">
             {general.map((item, generalIndex) => (
-              <ProfileBLock item={item} generalIndex={generalIndex} />
+              <ProfileBLock key={generalIndex} item={item} generalIndex={generalIndex} />
             ))}
           </div>
 
