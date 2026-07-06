@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 import classNames from "classnames";
 import {
   FC,
@@ -26,14 +27,14 @@ type Props = {
 type Pos = { x: number; y: number };
 
 const Popover: FC<Props> = ({
-    children,
-    content,
-    className,
-    popoverClassName,
-    variant = "hover",
-    positionX = "middle",
-    positionY = "bottom",
-  }) => {
+  children,
+  content,
+  className,
+  popoverClassName,
+  variant = "hover",
+  positionX = "middle",
+  positionY = "bottom",
+}) => {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const triggerRef = useRef<HTMLDivElement | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
@@ -61,6 +62,8 @@ const Popover: FC<Props> = ({
   };
 
   const getPortalTarget = () => {
+    if (typeof document === "undefined") return null;
+
     return wrapperRef.current?.closest("dialog") ?? document.body;
   };
 
@@ -131,7 +134,7 @@ const Popover: FC<Props> = ({
     setOpen((v) => !v);
   };
 
-  const portalTarget = getPortalTarget();
+  const portalTarget = open ? getPortalTarget() : null;
 
   return (
     <div ref={wrapperRef} className={classNames("popover", className)}>
@@ -146,6 +149,7 @@ const Popover: FC<Props> = ({
       </div>
 
       {open &&
+        portalTarget &&
         createPortal(
           <div
             className={classNames(

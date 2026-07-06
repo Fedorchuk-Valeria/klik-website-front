@@ -9,11 +9,15 @@ import EyeSvg from "@/src/assets/images/view/profile/eyes.svg";
 import Line1Svg from "@/src/assets/images/view/profile/line1.svg";
 import Line2Svg from "@/src/assets/images/view/profile/line2.svg";
 
+import { ActiveFormats } from "@/src/components/ui/ActiveFormats";
+import { ActiveGroups } from "@/src/components/ui/ActiveGroups";
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import Loader from "@/src/components/ui/Loader/Loader";
 import { Partners } from "@/src/components/ui/Partners";
 import PhoneInput from "@/src/components/ui/PhoneInput";
+import Popover from "@/src/components/ui/Popover";
+import { ProfileBLock } from "@/src/components/ui/ProfileBlock";
 import TextInput from "@/src/components/ui/TextInput";
 
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
@@ -22,15 +26,10 @@ import { showModal } from "@/src/store/slices/modalSlice";
 
 import { ModalType } from "@/src/entities/common";
 import { getPlural } from "@/src/helper/getPlural";
-import {METRICS, PAGES, QUERY_PARAMS} from "@/src/utils/constant";
-import { QueryHelper } from "@/src/utils/helpers";
-
 import { CitySettings } from "@/src/lib/getCitySettings";
 import { phoneToLink } from "@/src/lib/utils/phoneLink";
-import {ActiveFormats} from "@/src/components/ui/ActiveFormats";
-import {ActiveGroups} from "@/src/components/ui/ActiveGroups";
-import {ProfileBLock} from "@/src/components/ui/ProfileBlock";
-import Popover from "@/src/components/ui/Popover";
+import { METRICS, PAGES, QUERY_PARAMS } from "@/src/utils/constant";
+import { QueryHelper } from "@/src/utils/helpers";
 
 type PropTypes = {
   settings: CitySettings;
@@ -43,8 +42,8 @@ const PagesProfile = ({ settings }: PropTypes) => {
   const role = user_profile?.role;
   const phone = settings?.phone ?? "";
 
-  const isParent = role === 'parent';
-  const title = isParent ? 'Личный кабинет' : 'Личный кабинет ученика';
+  const isParent = role === "parent";
+  const title = isParent ? "Личный кабинет" : "Личный кабинет ученика";
 
   const handleCreateChildren = () => {
     dispatch(
@@ -96,16 +95,19 @@ const PagesProfile = ({ settings }: PropTypes) => {
                   className="login-page__form-input"
                   disabled={true}
                 />
-                {isParent && (<PhoneInput
-                  variant="outline"
-                  label="Телефон"
-                  value={user_profile?.profile?.phone}
-                  className="login-page__form-input"
-                  disabled={true}
-                />)}
+                {isParent && (
+                  <PhoneInput
+                    variant="outline"
+                    label="Телефон"
+                    value={user_profile?.profile?.phone}
+                    className="login-page__form-input"
+                    disabled={true}
+                  />
+                )}
               </div>
             </div>
-            {!isParent && (<ProfileBLock item={clickoins} generalIndex={0} />)}
+
+            {!isParent && <ProfileBLock item={clickoins} generalIndex={0} />}
           </div>
 
           {isParent && (
@@ -121,34 +123,37 @@ const PagesProfile = ({ settings }: PropTypes) => {
               >
                 Мои курсы
                 <span>
-                <Icon className="page-profile__link-icon" name="arrow" />
-              </span>
+                  <Icon className="page-profile__link-icon" name="arrow" />
+                </span>
               </Link>
 
               <Link className="page-profile__link" href={PAGES.PROFILE_PASSWORD}>
                 Управление паролем
                 <span>
-                <Icon className="page-profile__link-icon" name="arrow" />
-              </span>
+                  <Icon className="page-profile__link-icon" name="arrow" />
+                </span>
               </Link>
             </div>
           )}
 
-          {isParent && (<div className="page-profile__info">
-            <Icon className="page-profile__info-icon" name="info-circle-outline" />
-            По всем вопросам вы можете связаться с нами по номеру телефона{" "}
-            <a href={phoneToLink(phone)}>{phone}</a>
-          </div>)}
+          {isParent && (
+            <div className="page-profile__info">
+              <Icon className="page-profile__info-icon" name="info-circle-outline" />
+              По всем вопросам вы можете связаться с нами по номеру телефона{" "}
+              <a href={phoneToLink(phone)}>{phone}</a>
+            </div>
+          )}
 
           <Partners data={user_profile?.partners} />
 
           {!isParent && (
             <>
-              {!!user_profile?.self_study?.has_available_courses && (<ActiveFormats data={user_profile?.self_study.courses} />)}
-              {user_profile?.offline_groups &&
-                user_profile.offline_groups.length > 0 && (
-                  <ActiveGroups data={user_profile.offline_groups} />
-                )}
+              {!!user_profile?.self_study?.has_available_courses && (
+                <ActiveFormats data={user_profile?.self_study.courses} />
+              )}
+              {user_profile?.offline_groups && user_profile.offline_groups.length > 0 && (
+                <ActiveGroups data={user_profile.offline_groups} />
+              )}
             </>
           )}
 
@@ -158,14 +163,25 @@ const PagesProfile = ({ settings }: PropTypes) => {
                 <div className="page-profile__childrens-header">
                   <div className="page-profile__childrens-left">
                     <div className="page-profile__childrens-title">Профили детей</div>
-                    <div className="page-profile__childrens-text">Управление учебными профилями</div>
+                    <div className="page-profile__childrens-text">
+                      Управление учебными профилями
+                    </div>
                   </div>
 
                   <div className="page-profile__childrens-actions">
                     <Link href={PAGES.PROFILE_PAYMENTS}>
-                      <Button variant="outline-green-dark" className="page-profile__childrens-history">История платежей</Button>
+                      <Button
+                        variant="outline-green-dark"
+                        className="page-profile__childrens-history"
+                      >
+                        История платежей
+                      </Button>
                     </Link>
-                    <Button className="page-profile__childrens-add" variant="orange" onClick={handleCreateChildren}>
+                    <Button
+                      className="page-profile__childrens-add"
+                      variant="orange"
+                      onClick={handleCreateChildren}
+                    >
                       <Icon className="page-profile__children-icon" name="plus" />
                       Добавить ребёнка
                     </Button>
@@ -182,15 +198,17 @@ const PagesProfile = ({ settings }: PropTypes) => {
                       <div className="page-profile__children-tags">
                         <div className="page-profile__children-tag">
                           <Popover
-                            id='tem-popover-clickoin'
                             variant="hover"
                             positionX="right"
-                            positionY="bottom-end"
+                            positionY="bottom"
                             content={METRICS.klikcoins.info}
                             className="children-details-page__general_headline-info"
                             popoverClassName="children-details-page__general_headline-info-popover"
                           >
-                            <Icon className="page-profile__children-icon" name="info-circle-outline" />
+                            <Icon
+                              className="page-profile__children-icon"
+                              name="info-circle-outline"
+                            />
                           </Popover>
                           {child?.metrics?.klikcoins || 0}{" "}
                           {getPlural(
@@ -201,15 +219,17 @@ const PagesProfile = ({ settings }: PropTypes) => {
 
                         <div className="page-profile__children-tag">
                           <Popover
-                            id='tem-popover-clickoin'
                             variant="hover"
                             positionX="right"
-                            positionY="bottom-end"
+                            positionY="bottom"
                             content={METRICS.balance.info}
                             className="children-details-page__general_headline-info"
                             popoverClassName="children-details-page__general_headline-info-popover"
                           >
-                            <Icon className="page-profile__children-icon" name="info-circle-outline" />
+                            <Icon
+                              className="page-profile__children-icon"
+                              name="info-circle-outline"
+                            />
                           </Popover>
                           {child?.metrics?.balance} бел. руб.
                         </div>
@@ -248,12 +268,18 @@ const PagesProfile = ({ settings }: PropTypes) => {
                           <div className="page-profile__children-list">
                             <div className="page-profile__children-item">
                               <Icon className="page-profile__children-icon" name="disk" />
-                              Программа «Креаторы» :<span>@Klik-tg-chat</span>
+                              Программа «Креаторы» :
+                              <span>
+                                <a href="https://t.me/Klik-tg-chat">@Klik-tg-chat</a>
+                              </span>
                             </div>
 
                             <div className="page-profile__children-item">
                               <Icon className="page-profile__children-icon" name="disk" />
-                              Программа «Лето» :<span>@Klik-tg-chat</span>
+                              Программа «Лето» :
+                              <span>
+                                <a href="https://t.me/Klik-tg-chat">@Klik-tg-chat</a>
+                              </span>
                             </div>
                           </div>
                         </div>
