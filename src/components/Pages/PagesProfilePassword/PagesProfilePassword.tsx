@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormik } from "formik";
-import { useRouter } from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import { ChangeEvent, useEffect } from "react";
 
 import { setNewPasswordValidationSchema } from "@/src/components/Login/validationSchema";
@@ -12,7 +12,7 @@ import PopoverPassword from "@/src/components/ui/Popovers/PopoverPassword";
 
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import { changePasswordRequest, clearPasswordChanged } from "@/src/store/slices/auth";
+import {changePasswordChildRequest, changePasswordRequest, clearPasswordChanged} from "@/src/store/slices/auth";
 import { showModal } from "@/src/store/slices/modalSlice";
 
 import { ModalType } from "@/src/entities/common";
@@ -23,6 +23,8 @@ const PagesProfilePassword = () => {
   const dispatch = useAppDispatch();
   const { isLoading, errors, isPasswordChanged } = useAppSelector((state: RootStore) => state.auth);
 
+  const { id } = useParams<{ id: string }>();
+
   const form = useFormik({
     initialValues: {
       password: "",
@@ -30,12 +32,22 @@ const PagesProfilePassword = () => {
     },
     validationSchema: setNewPasswordValidationSchema,
     onSubmit: (values) => {
-      dispatch(
-        changePasswordRequest({
-          password: values.password,
-          confirm_password: values.confirmPassword,
-        })
-      );
+      const payload = {
+        password: values.password,
+        confirm_password: values.confirmPassword,
+        id: id,
+      };
+
+      if (id) {
+        dispatch(
+          changePasswordChildRequest(payload)
+        );
+      } else {
+        dispatch(
+          changePasswordRequest(payload)
+        );
+      }
+
     },
     validateOnChange: false,
     validateOnBlur: false,
@@ -78,12 +90,16 @@ const PagesProfilePassword = () => {
 
       dispatch(clearPasswordChanged());
 
-      router.push(PAGES.PROFILE);
+      handleBack();
     }
   }, [isPasswordChanged, dispatch, router]);
 
   const handleBack = () => {
-    router.push(PAGES.PROFILE);
+    if (id) {
+      router.push(PAGES.PROFILE_CHILDREN_DETAILS.replace(":id", String(id)));
+    } else {
+      router.push(PAGES.PROFILE);
+    }
   };
 
   return (
@@ -91,12 +107,12 @@ const PagesProfilePassword = () => {
       <div className="platform-layout__container">
         <div className="page-profile__content">
           <ButtonBack
-            label="Вернуться в личный профиль"
+            label={id ? "Вернуться к профилю ребенка" : "Вернуться в личный профиль"}
             className="page-profile__back"
             onClick={handleBack}
           />
           <div className="page-profile__header">
-            <h1>Изменить пароль</h1>
+            <h1>{id ? "Изменить пароль ребенка" : "Изменить пароль"}</h1>
           </div>
           <form className="page-profile__form password" onSubmit={form.handleSubmit}>
             <PasswordInput

@@ -56,3 +56,6 @@ export const getPaymentHistory = (query?: QueryParams) => {
     `${baseUrl}/payment-history${params.toString() ? `?${params}` : ""}`
   );
 };
+
+export const changeChildPassword = (childId: string | undefined, data: AuthChangePasswordRequest) =>
+  POST(`${baseUrl}/children/${childId}/change-password/`, data);
