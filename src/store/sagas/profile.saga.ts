@@ -8,10 +8,12 @@ import {
   getCurrentChildSuccess,
   getPartnersFailure,
   getPartnersRequest,
-  getPartnersSuccess, getPaymentHistoryFailure, getPaymentHistoryRequest, getPaymentHistorySuccess,
+  getPartnersSuccess, getPaymentHistoryCalendarFailure, getPaymentHistoryCalendarRequest,
+  getPaymentHistoryCalendarSuccess, getPaymentHistoryFailure, getPaymentHistoryRequest, getPaymentHistorySuccess,
   Partner, PaymentHistoryResponse,
 } from "@/src/store/slices/profile";
 import {PayloadAction} from "@reduxjs/toolkit";
+import {QueryParams} from "@/src/services/http/users";
 
 function* workerGetPartners() {
   try {
@@ -48,13 +50,13 @@ function* watchGetCurrentChild() {
     workerGetCurrentChild
   );
 }
-function* workerGetPaymentHistory(action: PayloadAction<{ childId?: number }>) {
+function* workerGetPaymentHistory(
+  action: PayloadAction<QueryParams | undefined>
+) {
   try {
     const response: { data: PaymentHistoryResponse } = yield call(
-      UsersApi.getPaymentHistory,
-      action.payload?.childId
+      () => UsersApi.getPaymentHistory(action.payload)
     );
-
     yield put(getPaymentHistorySuccess(response.data.results));
   } catch (error) {
     yield put(getPaymentHistoryFailure(error as Record<string, string> | null));
@@ -68,4 +70,35 @@ function* watchGetPaymentHistory() {
   );
 }
 
-export const profileWatchers = [fork(watchGetPartners), fork(watchGetCurrentChild), fork(watchGetPaymentHistory)];
+function* workerGetPaymentHistoryCalendar(
+  action: PayloadAction<QueryParams | undefined>
+) {
+  try {
+    const response: { data: PaymentHistoryResponse } = yield call(
+      () => UsersApi.getPaymentHistory(action.payload)
+    );
+
+    console.log('response', response);
+
+    const dates = Array.from(
+      new Set(
+        response.data.results.map((p) =>
+          new Date(p.paid_at).toISOString().slice(0, 10)
+        )
+      )
+    );
+
+    yield put(getPaymentHistoryCalendarSuccess(dates));
+  } catch (error) {
+    yield put(getPaymentHistoryCalendarFailure(error as Record<string, string> | null));
+  }
+}
+
+function* watchGetPaymentHistoryCalendar() {
+  yield takeLatest(
+    getPaymentHistoryCalendarRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerGetPaymentHistoryCalendar
+  );
+}
+
+export const profileWatchers = [fork(watchGetPartners), fork(watchGetCurrentChild), fork(watchGetPaymentHistory), fork(watchGetPaymentHistoryCalendar)];

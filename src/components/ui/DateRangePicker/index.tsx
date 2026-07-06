@@ -1,7 +1,8 @@
-import { FC, memo, useEffect, useRef, useState } from "react";
+import {FC, memo, useEffect, useMemo, useRef, useState} from "react";
 import Calendar from "react-calendar";
 import classNames from "classnames";
 import Icon from "@/src/components/ui/Icon/Icon";
+import {useAppSelector} from "@/src/store/hooks";
 
 type PropsDateRangeInput = {
   label: string;
@@ -51,6 +52,20 @@ const DateRangePicker: FC<DateRangePickerProps> = ({ className, onChange, valueT
   const [activeInput, setActiveInput] = useState<"from" | "to" | null>(null);
 
   const ref = useRef<HTMLDivElement>(null);
+
+  const { availableDates } = useAppSelector((s) => s.profile);
+
+  const availableSet = useMemo(() => {
+    return new Set(availableDates);
+  }, [availableDates]);
+
+  const formatKey = (date: Date) => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+
+    return `${y}-${m}-${d}`;
+  };
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -116,6 +131,8 @@ const DateRangePicker: FC<DateRangePickerProps> = ({ className, onChange, valueT
           <Calendar
             value={activeInput === "from" ? valueFrom : valueTo}
             onClickDay={handleSelect}
+            minDate={activeInput === "to" ? valueFrom ?? undefined : undefined}
+            maxDate={activeInput === "from" ? valueTo ?? undefined : undefined}
             tileClassName={({ date, view }) => {
               if (view !== "month") return null;
 
@@ -139,11 +156,13 @@ const DateRangePicker: FC<DateRangePickerProps> = ({ className, onChange, valueT
                 return "to";
               }
 
-              if (current < today) {
-                return "past";
+              const key = formatKey(date);
+
+              if (availableSet.has(key)) {
+                return "has-payment";
               }
 
-              return null;
+                return "past";
             }}
             formatMonthYear={(locale, date) => {
               const month = date
