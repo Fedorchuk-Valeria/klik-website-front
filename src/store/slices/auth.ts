@@ -191,6 +191,15 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.isPasswordChanged = true;
     },
+    changePasswordChildRequest(state, action: { payload: AuthChangePasswordRequest }) {
+      void action.payload;
+      state.isLoading = true;
+      state.errors = null;
+    },
+    changePasswordChildSuccess(state) {
+      state.isLoading = false;
+      state.isPasswordChanged = true;
+    },
   },
 });
 
@@ -230,5 +239,8 @@ export const {
 
   changePasswordRequest,
   changePasswordSuccess,
+
+  changePasswordChildRequest,
+  changePasswordChildSuccess
 } = authSlice.actions;
 export default authSlice.reducer;

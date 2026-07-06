@@ -49,6 +49,7 @@ export const PAGES = {
   TEST: "/courses/:id/test/:lessonId/:userId",
 
   PROFILE_CHILDREN_DETAILS: "/profile/children/:id",
+  PROFILE_CHILDREN_PASSWORD: "/profile/children/:id/password",
 
   CONTACTS_PAGE: "/contacts",
 };
