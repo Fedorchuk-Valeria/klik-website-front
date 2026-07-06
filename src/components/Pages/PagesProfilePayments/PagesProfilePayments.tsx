@@ -9,12 +9,12 @@ import Icon from "@/src/components/ui/Icon/Icon";
 import DateRangePicker from "@/src/components/ui/DateRangePicker";
 import {useEffect, useState} from "react";
 import Loader from "@/src/components/ui/Loader/Loader";
-import {getPaymentHistoryRequest} from "@/src/store/slices/profile";
+import {getPaymentHistoryCalendarRequest, getPaymentHistoryRequest} from "@/src/store/slices/profile";
 
 const PagesProfilePayments = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { paymentHistory, isLoading } = useAppSelector((store) => store.profile);
+  const { paymentHistory, availableDates, isLoading } = useAppSelector((store) => store.profile);
   const [dateFrom, setDateFrom] = useState<Date | null>(null);
   const [dateTo, setDateTo] = useState<Date | null>(null);
 
@@ -37,7 +37,17 @@ const PagesProfilePayments = () => {
 
   useEffect(() => {
     dispatch(getPaymentHistoryRequest());
+    dispatch(getPaymentHistoryCalendarRequest());
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(
+      getPaymentHistoryCalendarRequest({
+        date_from: formatDate(dateFrom),
+        date_to: formatDate(dateTo),
+      })
+    );
+  }, [dateFrom, dateTo]);
 
   if (isLoading || !paymentHistory) {
     return <Loader />;
