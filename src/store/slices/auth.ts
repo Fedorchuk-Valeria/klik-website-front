@@ -12,8 +12,9 @@ import {
   CreateChildRequest,
 } from "@/src/entities/common/auth";
 
-import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/src/utils/constant";
+import { REFRESH_TOKEN_KEY, TOKEN_KEY, USER } from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
+import { getStorageItem } from "@/src/utils/helpers/localStorage";
 
 type AuthState = {
   user_profile: UserProfile | null;
@@ -33,7 +34,7 @@ type AuthState = {
 };
 
 const initialState: AuthState = {
-  user_profile: null,
+  user_profile: getStorageItem<UserProfile>(USER),
   user: null,
   errors: null,
   isCreateChildLoading: false,

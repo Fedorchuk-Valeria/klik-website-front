@@ -236,8 +236,13 @@ export async function getCourses(query = ""): Promise<CoursesFetchResult> {
   }
 }
 
-export async function getCurrentCourse(courseId: number | string): Promise<CourseFetchResult> {
-  const apiUrl = buildApiUrl(`/courses/${courseId}/`);
+export async function getCurrentCourse(
+  courseId: number | string,
+  childId?: string
+): Promise<CourseFetchResult> {
+  const apiUrl = buildApiUrl(
+    `/courses/${courseId}/${childId ? `?${QUERY_PARAMS.CHILD_ID}=${childId}` : ""}`
+  );
 
   if (!apiUrl) {
     return { data: null, errors: { detail: "API URL is not configured" } };
@@ -309,17 +314,22 @@ export async function getLesson(
 
     const payload = (await response.json()) as Lesson;
 
-    return { data: payload, errors: null };
+    return { data: payload, errors: null, code: response.status };
   } catch (error) {
-    return { data: null, errors: { detail: `Failed to fetch lesson: ${error}` } };
+    return { data: null, errors: { detail: `Failed to fetch lesson: ${error}` }, code: null };
   }
 }
 
 export async function getTest(
   courseId: number | string,
-  lessonId: number | string
+  lessonId: number | string,
+  userId?: number | string
 ): Promise<LessonTestFetchResult> {
-  const apiUrl = buildApiUrl(`/courses/${courseId}/lessons/${lessonId}/test/`);
+  console.log("getTest", courseId, lessonId, userId);
+
+  const apiUrl = buildApiUrl(
+    `/courses/${courseId}/lessons/${lessonId}/test/?${QUERY_PARAMS.CHILD_ID}=${userId}`
+  );
 
   if (!apiUrl) {
     return { data: null, errors: { detail: "API URL is not configured" } };

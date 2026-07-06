@@ -23,14 +23,17 @@ export default async function LessonDetailPage({ params }: PageProps) {
   console.log("LessonDetailPage", lesson, errors, code);
 
   if (code === HttpStatus.Unauthorized) {
+    console.log("LessonDetailPage 1", lesson, errors, code);
     return redirect(PAGES.LOGIN);
   }
 
   if (code === HttpStatus.Forbidden) {
+    console.log("LessonDetailPage 2", lesson, errors, code);
     return redirect(PAGES.COURSE.replace(":id", id));
   }
 
   if (code === HttpStatus.NotFound) {
+    console.log("LessonDetailPage 3", lesson, errors, code);
     return notFound();
   }
 

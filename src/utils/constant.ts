@@ -25,6 +25,7 @@ export const QUERY_PARAMS = {
   SCOPE: "scope",
   CATEGORIES: "categories",
 
+  CHILD_ID: "child_id",
   IS_PARENT: "is_parent",
 };
 
@@ -45,7 +46,7 @@ export const PAGES = {
   COURSES: "/courses",
   COURSE: "/courses/:id",
   LESSON: "/courses/:id/lesson/:lessonId",
-  TEST: "/courses/:id/test/:lessonId",
+  TEST: "/courses/:id/test/:lessonId/:userId",
 
   PROFILE_CHILDREN_DETAILS: "/profile/children/:id",
 

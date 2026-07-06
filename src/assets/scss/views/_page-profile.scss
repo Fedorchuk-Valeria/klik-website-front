@@ -24,6 +24,7 @@
 
   &__body {
     display: flex;
+    align-items: stretch;
     gap: 30px;
 
     @media screen and (max-width: $desktop) {

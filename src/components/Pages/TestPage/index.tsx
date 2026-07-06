@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FC, useEffect, useState } from "react";
 
 import { LessonTestFetchResult } from "@/src/lib/getCourses";
@@ -8,11 +9,16 @@ import { TestAnswers } from "@/src/components/template-parts/Test";
 import TestCard from "@/src/components/template-parts/Test/TestCard";
 import Icon from "@/src/components/ui/Icon/Icon";
 
+import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
+import { QueryHelper } from "@/src/utils/helpers";
+
 type PropTypes = {
+  id: string;
+  userId: string;
   data: LessonTestFetchResult["data"] | null;
 };
 
-const TestPageComponent: FC<PropTypes> = ({ data }) => {
+const TestPageComponent: FC<PropTypes> = ({ data, id, userId }) => {
   const [answers, setAnswers] = useState<TestAnswers>({});
 
   useEffect(() => {
@@ -40,10 +46,16 @@ const TestPageComponent: FC<PropTypes> = ({ data }) => {
   return (
     <div className="test-page">
       <div className="platform-layout__container">
-        <div className="test-page__back">
+        <Link
+          href={
+            PAGES.COURSE.replace(":id", id) +
+            QueryHelper.getQueryString({ [QUERY_PARAMS.CHILD_ID]: userId })
+          }
+          className="test-page__back"
+        >
           <Icon name="arrow" />
           <span>Вернуться к просмотру курсов</span>
-        </div>
+        </Link>
 
         <div className="test test--started">
           <div className="test__content">

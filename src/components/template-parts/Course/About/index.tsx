@@ -20,7 +20,7 @@ type PropTypes = {
   description: string;
   categories: CourseCategory[];
   onPayment: () => void;
-  isParent?: boolean;
+  isChild?: boolean;
 };
 
 const CourseAbout: FC<PropTypes> = ({
@@ -32,7 +32,7 @@ const CourseAbout: FC<PropTypes> = ({
   isPayment = false,
   imageUrl = "https://placehold.net/default.png",
   onPayment,
-  isParent = false,
+  isChild = false,
 }) => {
   const router = useRouter();
   const { isAuthenticated, isMounted } = useAuth();
@@ -90,7 +90,7 @@ const CourseAbout: FC<PropTypes> = ({
           <Icon name="ruble" />
         </p>
 
-        {!isParent && (
+        {!isChild && (
           <Button
             className="course-about__info-button"
             variant="main-green-dark"
@@ -112,7 +112,7 @@ const CourseAbout: FC<PropTypes> = ({
           </ul>
         )}
 
-        {isParent && (
+        {isChild && (
           <div className="course-about__info-parent">
             <p className="course-about__info-parent-badge">
               <span>Куплен:</span>
