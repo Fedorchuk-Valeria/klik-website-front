@@ -12,6 +12,7 @@ import {
   Partner, PaymentHistoryResponse,
 } from "@/src/store/slices/profile";
 import {PayloadAction} from "@reduxjs/toolkit";
+import {QueryParams} from "@/src/services/http/users";
 
 function* workerGetPartners() {
   try {
@@ -48,13 +49,13 @@ function* watchGetCurrentChild() {
     workerGetCurrentChild
   );
 }
-function* workerGetPaymentHistory(action: PayloadAction<{ childId?: number }>) {
+function* workerGetPaymentHistory(
+  action: PayloadAction<QueryParams | undefined>
+) {
   try {
     const response: { data: PaymentHistoryResponse } = yield call(
-      UsersApi.getPaymentHistory,
-      action.payload?.childId
+      () => UsersApi.getPaymentHistory(action.payload)
     );
-
     yield put(getPaymentHistorySuccess(response.data.results));
   } catch (error) {
     yield put(getPaymentHistoryFailure(error as Record<string, string> | null));

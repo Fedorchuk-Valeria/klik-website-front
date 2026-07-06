@@ -12,6 +12,12 @@ import { GET, POST } from "@/src/utils/http";
 
 const baseUrl = "/users";
 
+export type QueryParams = Record<
+  string,
+  string | number | boolean | null | undefined
+>;
+
+
 export const signIn = (data: AuthSignInRequest) => POST(`${baseUrl}/login/`, data);
 
 export const register = (data: AuthRegisterRequest) => POST(`${baseUrl}/register/`, data);
@@ -37,8 +43,16 @@ export const me = () => GET(`${baseUrl}/me/`);
 export const createChild = (body: CreateChildRequest) => POST(`${baseUrl}/children/`, body);
 
 export const getChildProfileByParent = (childId: number) => GET(`${baseUrl}/children/${childId}/`);
-export const getPaymentHistory = (childId?: number) => {
-  const query = childId ? `?child_id=${childId}` : "";
+export const getPaymentHistory = (query?: QueryParams) => {
+  const params = new URLSearchParams();
 
-  return GET(`${baseUrl}/payment-history/${query}`);
+  Object.entries(query ?? {}).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      params.append(key, String(value));
+    }
+  });
+
+  return GET(
+    `${baseUrl}/payment-history${params.toString() ? `?${params}` : ""}`
+  );
 };

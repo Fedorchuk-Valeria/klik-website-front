@@ -1,5 +1,5 @@
 import { UserProfileChilds } from "@/src/entities/common";
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 export interface PaymentHistory {
   id: number;
@@ -35,6 +35,8 @@ export type Partner = {
   description: string;
   logo: string;
 };
+
+type PaymentHistoryQuery = Record<string, unknown>;
 
 type ProfileState = {
   isLoading: boolean;
@@ -91,7 +93,7 @@ const profileSlice = createSlice({
       state.partners = null;
       state.errors = null;
     },
-    getPaymentHistoryRequest(state) {
+    getPaymentHistoryRequest(state, action: PayloadAction<PaymentHistoryQuery | undefined>) {
       state.isLoading = true;
       state.errors = null;
     },

@@ -23,9 +23,17 @@ const PagesProfilePayments = () => {
   };
 
   const handleFilter = () => {
-    console.log("from:", dateFrom);
-    console.log("to:", dateTo);
+    dispatch( getPaymentHistoryRequest({ date_from: formatDate(dateFrom), date_to: formatDate(dateTo), }) );
   };
+
+  const handleReset = () => {
+    setDateFrom(null);
+    setDateTo(null);
+
+    dispatch(getPaymentHistoryRequest());
+  };
+
+  const formatDate = (date: Date | null) => date?.toISOString().slice(0, 10);
 
   useEffect(() => {
     dispatch(getPaymentHistoryRequest());
@@ -51,10 +59,7 @@ const PagesProfilePayments = () => {
               {(dateFrom || dateTo) && (
                 <button
                   className="page-profile__reset"
-                  onClick={() => {
-                    setDateFrom(null);
-                    setDateTo(null);
-                  }}
+                  onClick={handleReset}
                 >
                   Очистить
                 </button>
