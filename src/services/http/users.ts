@@ -42,3 +42,6 @@ export const getPaymentHistory = (childId?: number) => {
 
   return GET(`${baseUrl}/payment-history/${query}`);
 };
+
+export const changeChildPassword = (childId: string | undefined, data: AuthChangePasswordRequest) =>
+  POST(`${baseUrl}/children/${childId}/change-password/`, data);

@@ -13,6 +13,8 @@ import {
 } from "@/src/entities/common/auth";
 import { UsersApi } from "@/src/services/http";
 import {
+  changePasswordChildRequest,
+  changePasswordChildSuccess,
   changePasswordRequest,
   changePasswordSuccess,
   createChildRequest,
@@ -267,6 +269,23 @@ function* watchCreateChild() {
   );
 }
 
+function* workerChangeChildPassword({ payload }: { payload: AuthChangePasswordRequest }) {
+  try {
+    yield call(() => UsersApi.changeChildPassword(payload.id, payload));
+
+    yield put(changePasswordChildSuccess());
+  } catch (error) {
+    yield put(setErrors(error as Record<string, string> | null));
+  }
+}
+
+function* watchChangePasswordChild() {
+  yield takeLatest(
+    changePasswordChildRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerChangeChildPassword
+  );
+}
+
 export const authWatchers = [
   fork(watchAuthLogin),
   fork(watchAuthRegister),
@@ -278,4 +297,5 @@ export const authWatchers = [
   fork(watchProfile),
   fork(watchChangePassword),
   fork(watchCreateChild),
+  fork(watchChangePasswordChild)
 ];

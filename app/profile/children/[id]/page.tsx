@@ -186,7 +186,7 @@ const ChildrenDetailsPage = () => {
 
           <Link
             className={classNames("page-profile__link", "children-details-page__link")}
-            href={PAGES.PROFILE_PASSWORD}
+            href={PAGES.PROFILE_CHILDREN_PASSWORD.replace(":id", String(id))}
           >
             Управление паролем ребенка
             <span>

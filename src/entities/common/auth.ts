@@ -37,6 +37,7 @@ export type AuthForgotPasswordRequest = {
 };
 
 export type AuthChangePasswordRequest = {
+  id?: string;
   password: string;
   confirm_password: string;
 };
