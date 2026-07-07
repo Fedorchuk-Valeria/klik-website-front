@@ -25,5 +25,5 @@ jobs:
             git pull --ff-only
             export $(cat .env.prod | xargs)
             docker compose -p klick-front-prod --env-file=.env.prod down --remove-orphans
-            docker compose -p klick-front-prod --env-file=.env.prod build --no-cache
+            docker compose -p klick-front-prod --env-file=.env.prod build
             docker compose -p klick-front-prod --env-file=.env.prod up -d
