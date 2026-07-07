@@ -44,6 +44,14 @@ export type Course = {
   title: string;
   updated_at: string;
   payment: CoursePayment | null;
+  purchase: Purchase | null;
+};
+
+export type Purchase = {
+  purchased_at: string;
+  expires_at: string;
+  date_range: string;
+  is_active: boolean;
 };
 
 export type LessonTestResult = {

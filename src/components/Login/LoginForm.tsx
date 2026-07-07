@@ -15,6 +15,7 @@ import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { clearErrors, loginRequest } from "@/src/store/slices/auth";
 import { PAGES } from "@/src/utils/constant";
+import { AuthRedirectHelper } from "@/src/utils/helpers";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -58,9 +59,11 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      router.push(PAGES.COURSES);
+      const returnTo = AuthRedirectHelper.consumeAuthReturnTo();
+
+      router.push(returnTo ?? PAGES.COURSES);
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, router]);
 
   useEffect(() => {
     return () => {
