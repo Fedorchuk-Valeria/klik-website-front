@@ -92,9 +92,9 @@ const authSlice = createSlice({
       state.errors = null;
     },
 
-    loginSuccess(state, action: { payload: unknown }) {
+    loginSuccess(state, action: { payload: UserProfile }) {
       state.isLoading = false;
-      state.user = action.payload;
+      state.user_profile = action.payload;
       state.isLoggedIn = true;
     },
     registerSuccess(state) {
@@ -241,6 +241,6 @@ export const {
   changePasswordSuccess,
 
   changePasswordChildRequest,
-  changePasswordChildSuccess
+  changePasswordChildSuccess,
 } = authSlice.actions;
 export default authSlice.reducer;

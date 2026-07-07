@@ -4,6 +4,8 @@ export const PENDING_HOME_ANCHOR_KEY = "klick_pending_home_anchor";
 /** Fired after scrolling to a home section (+ detail: { id: string }). */
 export const SET_ACTIVE_ANCHOR_EVENT = "klick:set-active-anchor";
 
+export const AUTH_RETURN_TO_KEY = "return_to";
+
 export const PLACE_STORAGE_KEY = "place";
 export const COOKIE_CONSENT_STORAGE_KEY = "cookie_policy_accepted";
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
