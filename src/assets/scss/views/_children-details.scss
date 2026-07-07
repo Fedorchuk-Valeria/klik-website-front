@@ -229,6 +229,8 @@
 
             .children-details-page__partners_item-title {
               @include fonts(24px, 500, "Etude Noire");
+              @include text-line-clamp(2);
+              line-height: 1.1;
               color: var(--main-green-dark);
             }
 
