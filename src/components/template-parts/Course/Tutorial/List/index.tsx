@@ -82,7 +82,7 @@ const TutorialList: FC<PropTypes> = ({
                   href={
                     isDisabled || item.id === currentLessonId
                       ? "#"
-                      : (isParent ? PAGES.TEST : PAGES.LESSON)
+                      : (isParent && childId ? PAGES.TEST : PAGES.LESSON)
                           .replace(":id", courseId ?? "")
                           .replace(":lessonId", item.id.toString())
                           .replace(":userId", childId)

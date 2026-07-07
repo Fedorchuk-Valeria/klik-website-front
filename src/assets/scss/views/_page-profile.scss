@@ -786,12 +786,9 @@
 
     &-title {
       @include fonts(24px, 500, "Etude Noire");
+      @include text-line-clamp(2);
+      line-height: 1.1;
       color: var(--main-green-dark);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
       text-align: left;
 
       @media screen and (max-width: $desktop) {
