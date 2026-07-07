@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import avatar from "@/src/assets/images/view/profile/avatar.png";
 import EyeSvg from "@/src/assets/images/view/profile/eyes.svg";
@@ -37,6 +37,7 @@ type PropTypes = {
 
 const PagesProfile = ({ settings }: PropTypes) => {
   const dispatch = useAppDispatch();
+  const [isMounted, setIsMounted] = useState(false);
 
   const { user_profile, isLoading } = useAppSelector((state) => state.auth);
   const role = user_profile?.role;
@@ -64,10 +65,16 @@ const PagesProfile = ({ settings }: PropTypes) => {
   };
 
   useEffect(() => {
+    queueMicrotask(() => {
+      setIsMounted(true);
+    });
+  }, []);
+
+  useEffect(() => {
     dispatch(profileRequest());
   }, [dispatch]);
 
-  if (isLoading || !user_profile) {
+  if (!isMounted || isLoading || !user_profile) {
     return <Loader />;
   }
 

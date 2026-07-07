@@ -289,7 +289,7 @@ const ChildrenDetailsPage = () => {
                   })}
                 >
                   {initialCourses.map((item) => (
-                    <FormatsCourseItem key={item.id} item={item} />
+                    <FormatsCourseItem key={item.id} item={item} childId={id?.toString()} />
                   ))}
 
                   {extraCourses.length > 0 && (

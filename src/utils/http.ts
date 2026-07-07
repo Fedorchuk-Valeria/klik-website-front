@@ -84,6 +84,8 @@ http.interceptors.response.use(
               isRefreshFinished = true;
 
               if (err.response?.status === HttpStatus.Unauthorized) {
+                console.log("redirect to home", err.response?.status);
+
                 window.location.href = PAGES.HOME;
               } else {
                 throw err;
@@ -98,11 +100,13 @@ http.interceptors.response.use(
         });
       }
       if (error.response?.status === HttpStatus.Unauthorized) {
+        console.log("redirect to home", HttpStatus.Unauthorized);
         window.location.href = PAGES.HOME;
 
         return Promise.reject();
       }
     } else if (error.response?.status === HttpStatus.Forbidden) {
+      console.log("redirect to home", HttpStatus.Forbidden);
       window.location.href = PAGES.HOME;
     } else if (error.response?.status === HttpStatus.NotFound) {
       window.location.replace(PAGES.NOT_FOUND);

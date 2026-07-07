@@ -11,13 +11,14 @@ import { QueryHelper } from "@/src/utils/helpers";
 type PageProps = {
   params: Promise<{
     id: string;
+    userId: string;
     lessonId: string;
   }>;
 };
 
 export default async function TestPage({ params }: PageProps) {
-  const { id, lessonId } = await params;
-  const { data, errors, code } = await getTest(id, lessonId);
+  const { id, lessonId, userId } = await params;
+  const { data, errors, code } = await getTest(id, lessonId, userId);
 
   console.log("LessonDetailPage", data, errors, code);
 
@@ -34,7 +35,7 @@ export default async function TestPage({ params }: PageProps) {
 
   return (
     <LayoutPlatform headerVariant="light" showAuthControls={true}>
-      <TestPageComponent data={data} />
+      <TestPageComponent data={data} userId={userId} id={id} />
     </LayoutPlatform>
   );
 }

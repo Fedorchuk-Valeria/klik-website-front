@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 
 import CourseAbout from "@/src/components/template-parts/Course/About";
 import CourseTutorial from "@/src/components/template-parts/Course/Tutorial";
@@ -11,7 +11,7 @@ import { ModalType } from "@/src/entities/common";
 import { getPlural } from "@/src/helper/getPlural";
 import { CitySettings } from "@/src/lib/getCitySettings";
 import { Course } from "@/src/lib/getCourses";
-import { useAppDispatch } from "@/src/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { showModal } from "@/src/store/slices/modalSlice";
 import { PAGES } from "@/src/utils/constant";
 
@@ -19,11 +19,20 @@ type PropTypes = {
   data: Course;
   errors: Record<string, string> | null;
   settings: CitySettings;
-  isParent?: boolean;
 };
 
-const CoursePage: FC<PropTypes> = ({ data, errors, settings, isParent = false }) => {
+const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
   const dispatch = useAppDispatch();
+  const { user_profile } = useAppSelector((state) => state.auth);
+  const [isMounted, setIsMounted] = useState(false);
+  const isParent = isMounted && user_profile?.role === "parent";
+  const isChild = isMounted && user_profile?.role === "child";
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      setIsMounted(true);
+    });
+  }, []);
 
   if (errors) {
     console.error(errors);
@@ -96,7 +105,7 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings, isParent = false })
           imageUrl={data.image}
           isPayment={data.is_purchased}
           onPayment={handlePayment}
-          isParent={isParent}
+          isChild={isChild}
         />
 
         <div className="course-page__content-timing">
