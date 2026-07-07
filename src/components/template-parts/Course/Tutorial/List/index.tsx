@@ -77,7 +77,7 @@ const TutorialList: FC<PropTypes> = ({
                 </p>
               </div>
 
-              {(isParent ? isDone && !isHideButton : !isHideButton) && (
+              {(isParent && childId ? isDone && !isHideButton : !isHideButton) && (
                 <Link
                   href={
                     isDisabled || item.id === currentLessonId
