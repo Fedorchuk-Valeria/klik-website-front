@@ -45,6 +45,11 @@ const PagesProfile = ({ settings }: PropTypes) => {
   const isParent = role === "parent";
   const title = isParent ? "Личный кабинет" : "Личный кабинет ученика";
 
+  const clickoins = {
+    ...METRICS.klikcoins,
+    value: user_profile?.metrics?.klikcoins ?? 0,
+  };
+
   const handleCreateChildren = () => {
     dispatch(
       showModal({
@@ -69,14 +74,29 @@ const PagesProfile = ({ settings }: PropTypes) => {
     dispatch(profileRequest());
   }, [dispatch]);
 
+  useEffect(() => {
+    const payment = user_profile?.offline_training_payment_notification;
+
+    console.log('payment=', payment);
+
+    if (!payment || !payment.show) {
+      return;
+    }
+
+    dispatch(
+      showModal({
+        modalType: ModalType.PAYMENT_STATUS,
+        modalProps: {
+          payment: payment,
+          settings,
+        },
+      })
+    );
+  }, [dispatch, settings, user_profile?.offline_training_payment_notification]);
+
   if (isLoading || !user_profile) {
     return <Loader />;
   }
-
-  const clickoins = {
-    ...METRICS.klikcoins,
-    value: user_profile?.metrics?.klikcoins ?? 0,
-  };
 
   return (
     <div className="page-profile">

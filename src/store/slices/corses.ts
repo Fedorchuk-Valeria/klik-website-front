@@ -2,8 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { Meta } from "@/src/entities/common";
 import { Course } from "@/src/lib/getCourses";
-import {PurchaseOfflinePayload, PurchasePayload} from "@/src/services/http/courses";
+import {PurchasePayload} from "@/src/services/http/courses";
 import { COURSES_PAGE_SIZE } from "@/src/utils/constant";
+import {PurchaseOfflinePayload, PurchaseOfflinePreviewPayload} from "@/src/store/sagas/courses.saga";
 
 type GetCoursesRequestPayload = {
   query: string;
@@ -21,11 +22,22 @@ type InitCoursesFromSSRPayload = {
   meta: Meta;
 };
 
+export type OfflinePaymentPreview = {
+  child_id: number;
+  child_full_name: string;
+  amount: number;
+  currency: string;
+  is_payable: boolean;
+  message: string;
+  program: Record<string, unknown>;
+};
+
 type CoursesState = {
   isLoading: boolean;
   data: Course[];
   currentCourse: Course | null;
   errors: Record<string, string> | null;
+  offlinePayment: OfflinePaymentPreview | null;
   meta: Meta;
 };
 
@@ -34,6 +46,7 @@ const initialState: CoursesState = {
   data: [],
   errors: null,
   currentCourse: null,
+  offlinePayment: null,
   meta: {
     page: 1,
     page_size: COURSES_PAGE_SIZE,
@@ -111,17 +124,33 @@ const coursesSlice = createSlice({
       state.meta = initialState.meta;
     },
 
-    purchaseOfflinePreviewRequest(state, action: { payload: PurchaseOfflinePayload }) {
+    purchaseOfflinePreviewRequest(state, action: { payload: PurchaseOfflinePreviewPayload }) {
       void action.payload;
       state.isLoading = true;
       state.errors = null;
     },
 
-    purchaseOfflinePreviewSuccess(state) {
+    purchaseOfflinePreviewSuccess(state, action: { payload: any }) {
+      state.offlinePayment = action.payload;
       state.isLoading = false;
     },
 
     purchaseOfflinePreviewFailure(state, action: { payload: Record<string, string> | null }) {
+      state.errors = action.payload;
+      state.isLoading = false;
+    },
+
+    purchaseOfflineRequest(state, action: { payload: PurchaseOfflinePayload }) {
+      void action.payload;
+      state.isLoading = true;
+      state.errors = null;
+    },
+
+    purchaseOfflineSuccess(state) {
+      state.isLoading = false;
+    },
+
+    purchaseOfflineFailure(state, action: { payload: Record<string, string> | null }) {
       state.errors = action.payload;
       state.isLoading = false;
     },
@@ -142,6 +171,9 @@ export const {
   clearCourses,
   purchaseOfflinePreviewRequest,
   purchaseOfflinePreviewFailure,
-  purchaseOfflinePreviewSuccess
+  purchaseOfflinePreviewSuccess,
+  purchaseOfflineRequest,
+  purchaseOfflineSuccess,
+  purchaseOfflineFailure
 } = coursesSlice.actions;
 export default coursesSlice.reducer;

@@ -11,16 +11,23 @@ import {
   getCurrentCourseFailure,
   getCurrentCourseRequest,
   getCurrentCourseSuccess,
-  purchaseFailure, purchaseOfflinePreviewFailure, purchaseOfflinePreviewRequest, purchaseOfflinePreviewSuccess,
+  purchaseFailure,
+  purchaseOfflineFailure, purchaseOfflinePreviewFailure, purchaseOfflinePreviewRequest, purchaseOfflinePreviewSuccess,
+  purchaseOfflineRequest, purchaseOfflineSuccess,
   purchaseRequest,
   purchaseSuccess,
 } from "@/src/store/slices/corses";
-import { normalizeCoursesPayload } from "@/src/utils/normalizeCoursesPayload";
 import {PurchasePayload} from "@/src/services/http/courses";
 import { normalizeCoursesResponse } from "@/src/utils/normalizeCoursesPayload";
 
 export interface PurchaseOfflinePayload {
-  child_id: number;
+  child_id?: number;
+  offline_group_id?: number;
+  return_url: string;
+}
+
+export interface PurchaseOfflinePreviewPayload {
+  child_id?: number;
   offline_group_id?: number;
   branch_id?: number;
   program_title?: string;
@@ -93,17 +100,12 @@ function* watchMockPurchase() {
   );
 }
 
-function* workerPurchaseOfflinePreview(action: { payload: PurchaseOfflinePayload }): unknown {
+function* workerPurchaseOfflinePreview(action: { payload: PurchaseOfflinePreviewPayload }): unknown {
   try {
     const response = yield call(UsersApi.purchaseOfflinePreview, action.payload);
 
-    console.log(response);
+    yield put(purchaseOfflinePreviewSuccess(response?.data));
 
-    yield put(purchaseOfflinePreviewSuccess());
-
-    /*if (response?.data?.form_url) {
-      window.location.href = response.data.form_url;
-    }*/
   } catch (error) {
     yield put(purchaseOfflinePreviewFailure(error as Record<string, string> | null));
   }
@@ -116,9 +118,31 @@ function* watchPurchaseOfflinePreview() {
   );
 }
 
+function* workerPurchaseOffline(action: { payload: PurchaseOfflinePayload }): unknown {
+  try {
+    const response = yield call(UsersApi.purchaseOffline, action.payload);
+
+    yield put(purchaseOfflineSuccess());
+
+    if (response?.data?.form_url) {
+      window.location.href = response.data.form_url;
+    }
+  } catch (error) {
+    yield put(purchaseOfflineFailure(error as Record<string, string> | null));
+  }
+}
+
+function* watchPurchaseOffline() {
+  yield takeLatest(
+    purchaseOfflineRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerPurchaseOffline
+  );
+}
+
 export const coursesWatchers = [
   fork(watchGetCourses),
   fork(watchMockPurchase),
   fork(watchGetCurrentCourse),
   fork(watchPurchaseOfflinePreview),
+  fork(watchPurchaseOffline),
 ];
