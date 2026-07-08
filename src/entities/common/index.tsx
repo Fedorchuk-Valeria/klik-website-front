@@ -44,6 +44,17 @@ export type UserProfile = {
     email: string | null;
   })[];
   offline_groups: Group[];
+  offline_training_payment_notification: {
+    amount: string | null,
+    currency: string,
+    message: string,
+    paid_at: string,
+    payment_id: string | null,
+    program_title: string | null,
+    show: boolean,
+    status: string | null,
+    title: string | null,
+  }
 };
 
 export type UserProfileRole = "parent" | "child" | "admin";

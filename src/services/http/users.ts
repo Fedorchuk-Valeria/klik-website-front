@@ -9,6 +9,7 @@ import {
   CreateChildRequest,
 } from "@/src/entities/common/auth";
 import { GET, POST } from "@/src/utils/http";
+import {PurchaseOfflinePayload, PurchaseOfflinePreviewPayload} from "@/src/store/sagas/courses.saga";
 
 const baseUrl = "/users";
 
@@ -59,3 +60,11 @@ export const getPaymentHistory = (query?: QueryParams) => {
 
 export const changeChildPassword = (childId: string | undefined, data: AuthChangePasswordRequest) =>
   POST(`${baseUrl}/children/${childId}/change-password/`, data);
+
+export const purchaseOfflinePreview = (data: PurchaseOfflinePreviewPayload) =>
+  GET(`${baseUrl}/offline-training-payments/preview/`, {
+    params: data,
+  });
+
+export const purchaseOffline = (data: PurchaseOfflinePayload) =>
+  POST(`${baseUrl}/offline-training-payments/bepaid/`, data);
