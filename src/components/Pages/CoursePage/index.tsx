@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { FC, useEffect, useMemo } from "react";
 
 import CourseAbout from "@/src/components/template-parts/Course/About";
@@ -11,19 +12,27 @@ import { ModalType } from "@/src/entities/common";
 import { getPlural } from "@/src/helper/getPlural";
 import { CitySettings } from "@/src/lib/getCitySettings";
 import { Course } from "@/src/lib/getCourses";
-import { useAppDispatch } from "@/src/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { showModal } from "@/src/store/slices/modalSlice";
-import { PAGES } from "@/src/utils/constant";
+import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
+import { useAuth } from "@/src/utils/useAuth";
 
 type PropTypes = {
   data: Course;
   errors: Record<string, string> | null;
   settings: CitySettings;
-  isParent?: boolean;
 };
 
-const CoursePage: FC<PropTypes> = ({ data, errors, settings, isParent = false }) => {
+const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
   const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
+  const { user_profile } = useAppSelector((state) => state.auth);
+  const { isMounted, isAuthenticated } = useAuth();
+  const isParent = isMounted && isAuthenticated && user_profile?.role === "parent";
+  const isChild = isMounted && isAuthenticated && user_profile?.role === "child";
+  const isParentLookAtChild = !!isParent && !!searchParams.get(QUERY_PARAMS.CHILD_ID);
+
+  console.log(data);
 
   if (errors) {
     console.error(errors);
@@ -82,6 +91,7 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings, isParent = false })
         <BackButton label="К списку курсов" url={PAGES.COURSES} />
 
         <CourseAbout
+          purchase={data.purchase}
           categories={data.categories}
           infoList={[
             "Видео-уроки в HD качестве",
@@ -96,7 +106,8 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings, isParent = false })
           imageUrl={data.image}
           isPayment={data.is_purchased}
           onPayment={handlePayment}
-          isParent={isParent}
+          isChild={isChild}
+          isParentLookAtChild={isParentLookAtChild}
         />
 
         <div className="course-page__content-timing">

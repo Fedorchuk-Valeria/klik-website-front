@@ -1,14 +1,15 @@
+import classNames from "classnames";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FC, memo } from "react";
 
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 
 import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
-import { QueryHelper } from "@/src/utils/helpers";
+import { AuthRedirectHelper, DateHelper, QueryHelper } from "@/src/utils/helpers";
 
-import { CourseCategory } from "@/src/lib/getCourses";
+import { CourseCategory, Purchase } from "@/src/lib/getCourses";
 import { useAuth } from "@/src/utils/useAuth";
 
 type PropTypes = {
@@ -20,7 +21,9 @@ type PropTypes = {
   description: string;
   categories: CourseCategory[];
   onPayment: () => void;
-  isParent?: boolean;
+  isChild?: boolean;
+  isParentLookAtChild?: boolean;
+  purchase?: Purchase | null;
 };
 
 const CourseAbout: FC<PropTypes> = ({
@@ -32,15 +35,23 @@ const CourseAbout: FC<PropTypes> = ({
   isPayment = false,
   imageUrl = "https://placehold.net/default.png",
   onPayment,
-  isParent = false,
+  isChild = false,
+  isParentLookAtChild = false,
+  purchase = null,
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { isAuthenticated, isMounted } = useAuth();
 
   const handleClick = () => {
     if (!isMounted) return;
 
     if (!isAuthenticated) {
+      const query = searchParams.toString();
+      const returnTo = `${pathname}${query ? `?${query}` : ""}`;
+
+      AuthRedirectHelper.saveAuthReturnTo(returnTo);
       router.push(PAGES.LOGIN);
       return;
     }
@@ -81,7 +92,11 @@ const CourseAbout: FC<PropTypes> = ({
         </div>
       </div>
 
-      <div className="course-about__info">
+      <div
+        className={classNames("course-about__info", {
+          "course-about__info--child": isChild,
+        })}
+      >
         <p className="course-about__info-title">{title}</p>
         <p className="course-about__info-description">{description}</p>
 
@@ -90,7 +105,7 @@ const CourseAbout: FC<PropTypes> = ({
           <Icon name="ruble" />
         </p>
 
-        {!isParent && (
+        {!isChild && !isParentLookAtChild && (
           <Button
             className="course-about__info-button"
             variant="main-green-dark"
@@ -112,16 +127,16 @@ const CourseAbout: FC<PropTypes> = ({
           </ul>
         )}
 
-        {isParent && (
+        {isParentLookAtChild && purchase && (
           <div className="course-about__info-parent">
             <p className="course-about__info-parent-badge">
               <span>Куплен:</span>
-              <span>26.05.2026</span>
+              <span>{DateHelper.toFormat(new Date(purchase.purchased_at), "dd.MM.yyyy")}</span>
             </p>
 
             <p className="course-about__info-parent-badge">
               <span>Истекает:</span>
-              <span>26.08.2026</span>
+              <span>{DateHelper.toFormat(new Date(purchase.expires_at), "dd.MM.yyyy")}</span>
             </p>
           </div>
         )}

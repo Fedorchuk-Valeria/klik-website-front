@@ -15,7 +15,12 @@ const PasswordInput: FC<PropTypes> = ({ className, ...props }) => {
       className={classNames("password-input", className)}
       type={isShowPassword ? "text" : "password"}
       addonAfter={
-        <span className="password-input__icon" onClick={() => setShowPassword(!isShowPassword)}>
+        <span
+          className={classNames("password-input__icon", {
+            "password-input__icon--disabled": props?.disabled,
+          })}
+          onClick={() => setShowPassword(!isShowPassword)}
+        >
           <Icon name={isShowPassword ? "eye" : "eye-closed"} />
         </span>
       }

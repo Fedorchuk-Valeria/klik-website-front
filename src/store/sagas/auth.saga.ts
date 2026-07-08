@@ -66,7 +66,7 @@ function* workerAuthLogin({ payload }: { payload: AuthSignInRequest }): unknown 
 
     localStorage.setStorageItem(USER, user);
 
-    yield put(loginSuccess(response?.data?.user ?? null));
+    yield put(loginSuccess(profileResponse?.data ?? null));
   } catch (error) {
     yield put(setErrors(error as Record<string, string> | null));
   }
@@ -297,5 +297,5 @@ export const authWatchers = [
   fork(watchProfile),
   fork(watchChangePassword),
   fork(watchCreateChild),
-  fork(watchChangePasswordChild)
+  fork(watchChangePasswordChild),
 ];

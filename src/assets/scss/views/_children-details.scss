@@ -68,8 +68,21 @@
     background: var(--main-green-neon);
     border-radius: 70px;
     padding: 30px;
+    height: 100%;
+
+    .children-details-page {
+      width: 100%;
+      height: 100%;
+
+      .children-details-page__general {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+    }
 
     .children-details-page__general_item {
+      height: 100%;
       padding: 30px;
       width: 100%;
       background: var(--secondary-green-neon-50);
@@ -216,6 +229,8 @@
 
             .children-details-page__partners_item-title {
               @include fonts(24px, 500, "Etude Noire");
+              @include text-line-clamp(2);
+              line-height: 1.1;
               color: var(--main-green-dark);
             }
 

@@ -18,8 +18,8 @@ type PageProps = {
 export default async function CourseDetailPage({ params, searchParams }: PageProps) {
   const { id } = await params;
   const query = await searchParams;
-  const isParent = query[QUERY_PARAMS.IS_PARENT] === "true";
-  const { data: course, errors } = await getCurrentCourse(id);
+  const childId = query[QUERY_PARAMS.CHILD_ID] as string;
+  const { data: course, errors } = await getCurrentCourse(id, childId);
   const settings = getCitySettings("minsk");
 
   console.log("CourseDetailPage", course, errors);
@@ -30,7 +30,7 @@ export default async function CourseDetailPage({ params, searchParams }: PagePro
 
   return (
     <LayoutPlatform headerVariant="light" showAuthControls={true}>
-      <CoursePage data={course} errors={errors ?? null} settings={settings} isParent={isParent} />
+      <CoursePage data={course} errors={errors ?? null} settings={settings} />
     </LayoutPlatform>
   );
 }

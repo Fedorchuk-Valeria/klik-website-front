@@ -5,13 +5,14 @@ import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 
 import { Course } from "@/src/entities/common";
-import { PAGES } from "@/src/utils/constant";
+import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 
 type FormatsCourseItemProps = {
   item: Course;
+  childId?: string;
 };
 
-const FormatsCourseItem = ({ item }: FormatsCourseItemProps) => (
+const FormatsCourseItem = ({ item, childId }: FormatsCourseItemProps) => (
   <li
     className={classNames("children-details-page__formats_list-item", {
       "children-details-page__formats_list-item--disabled": !item.is_active,
@@ -35,7 +36,7 @@ const FormatsCourseItem = ({ item }: FormatsCourseItemProps) => (
       {item.is_active && (
         <Link
           className="children-details-page__formats_item-content-button"
-          href={PAGES.COURSE.replace(":id", item.id.toString())}
+          href={`${PAGES.COURSE.replace(":id", item.id.toString())}?${QUERY_PARAMS.CHILD_ID}=${childId}`}
         >
           <Button variant="main-green-dark">
             <Icon name="arrow-long" />

@@ -2,6 +2,7 @@
 
 import classNames from "classnames";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { FC } from "react";
 
 import Icon from "@/src/components/ui/Icon/Icon";
@@ -10,7 +11,7 @@ import CompleteLessonSVG from "@/src/assets/images/view/courses/complete-lesson.
 import StepLineSVG from "@/src/assets/images/view/courses/step-line.svg";
 
 import { LessonTestResult } from "@/src/lib/getCourses";
-import { PAGES } from "@/src/utils/constant";
+import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 
 type PropTypes = {
   className?: string;
@@ -37,6 +38,9 @@ const TutorialList: FC<PropTypes> = ({
   currentLessonId,
   isParent,
 }) => {
+  const searchParams = useSearchParams();
+  const childId = searchParams.get(QUERY_PARAMS.CHILD_ID) ?? "";
+
   return (
     <ul className={classNames("course-tutorial__list", className)}>
       {list.map((item, index) => {
@@ -73,14 +77,15 @@ const TutorialList: FC<PropTypes> = ({
                 </p>
               </div>
 
-              {(isParent ? isDone && !isHideButton : !isHideButton) && (
+              {(isParent && childId ? isDone && !isHideButton : !isHideButton) && (
                 <Link
                   href={
                     isDisabled || item.id === currentLessonId
                       ? "#"
-                      : (isParent ? PAGES.TEST : PAGES.LESSON)
+                      : (isParent && childId ? PAGES.TEST : PAGES.LESSON)
                           .replace(":id", courseId ?? "")
                           .replace(":lessonId", item.id.toString())
+                          .replace(":userId", childId)
                   }
                   className={"course-tutorial__list-item_button"}
                 >

@@ -12,8 +12,9 @@ import {
   CreateChildRequest,
 } from "@/src/entities/common/auth";
 
-import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/src/utils/constant";
+import { REFRESH_TOKEN_KEY, TOKEN_KEY, USER } from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
+import { getStorageItem } from "@/src/utils/helpers/localStorage";
 
 type AuthState = {
   user_profile: UserProfile | null;
@@ -33,7 +34,7 @@ type AuthState = {
 };
 
 const initialState: AuthState = {
-  user_profile: null,
+  user_profile: getStorageItem<UserProfile>(USER),
   user: null,
   errors: null,
   isCreateChildLoading: false,
@@ -91,9 +92,9 @@ const authSlice = createSlice({
       state.errors = null;
     },
 
-    loginSuccess(state, action: { payload: unknown }) {
+    loginSuccess(state, action: { payload: UserProfile }) {
       state.isLoading = false;
-      state.user = action.payload;
+      state.user_profile = action.payload;
       state.isLoggedIn = true;
     },
     registerSuccess(state) {
@@ -240,6 +241,6 @@ export const {
   changePasswordSuccess,
 
   changePasswordChildRequest,
-  changePasswordChildSuccess
+  changePasswordChildSuccess,
 } = authSlice.actions;
 export default authSlice.reducer;

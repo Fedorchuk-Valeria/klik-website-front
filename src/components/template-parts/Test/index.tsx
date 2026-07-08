@@ -235,7 +235,10 @@ const Test: FC<PropTypes> = ({
               className="test__button test__button--next"
               variant="main-green-dark"
               onClick={handleClick}
-              disabled={isTestLoading}
+              disabled={
+                isTestLoading ||
+                (isStarted && Object.keys(answers || {})?.length !== questions?.length)
+              }
               withArrow
             >
               {result ? "Следующий урок" : isStarted ? "Завершить тест" : "Начать тест"}

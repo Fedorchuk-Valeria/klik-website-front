@@ -66,6 +66,10 @@
     max-width: 650px;
     overflow: auto;
 
+    &.course-about__info--child {
+      display: none;
+    }
+
     .course-about__info-title {
       @include fonts(50px, 500, "Etude Noire");
       color: var(--main-green-dark);

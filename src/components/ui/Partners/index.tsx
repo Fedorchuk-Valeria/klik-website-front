@@ -32,6 +32,8 @@ export const Partners: FC<PropTypes> = ({ data }) => {
     }
   };
 
+  if (!visiblePartners) return null;
+
   return (
     <div className="page-profile__partners" ref={sectionRef}>
       <div className="page-profile__tag">Партнёры</div>
