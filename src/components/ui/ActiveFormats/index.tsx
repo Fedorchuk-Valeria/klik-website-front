@@ -41,7 +41,7 @@ export const ActiveFormats: FC<PropTypes> = ({ data }) => {
 
       <div className="page-profile__formats-text">
         Со всеми форматами обучения школы вы можете ознакомиться на нашем{" "}
-        <Link href={PAGES.COURSES}>сайте</Link>.
+        <Link href={PAGES.HOME}>сайте</Link>.
       </div>
 
       <div className="page-profile__formats-wrapper">
