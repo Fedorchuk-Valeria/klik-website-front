@@ -113,8 +113,8 @@ const PagesProfilePayments = () => {
                 <tbody>
                 {paymentHistory.map((payment, key) => (
                   <tr key={key}>
-                    <td data-label="Название программы">{payment.course_title}</td>
-                    <td data-label="ФИО ребёнка" className="hidden"><span>{payment.child_full_name}</span></td>
+                    <td data-label="Название программы"><span>{payment.course_title}</span></td>
+                    <td data-label="ФИО ребёнка"><span>{payment.child_full_name}</span></td>
                     <td data-label="Дата оплаты">{new Date(payment.paid_at).toLocaleDateString("ru-RU")}</td>
                     <td className="without-border" data-label="Сумма к оплате"><span className="page-profile__currency">{payment.amount} <Icon className="page-profile__currency-icon" name="ruble" /></span></td>
                     <td className="without-border">

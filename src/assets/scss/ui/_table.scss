@@ -5,6 +5,7 @@
   width: 100%;
   border-spacing: 0;
   color: var(--main-black);
+  table-layout: fixed;
 
   @media screen and (max-width: $desktop) {
     padding: 40px;
@@ -47,6 +48,133 @@
     text-align: left;
     font-size: 18px;
 
+    &:nth-child(1) {
+      width: 331px;
+      padding-right: 60px;
+
+      @media screen and (max-width: $desktop) {
+        width: 275px;
+        padding-right: 34px;
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        width: 309px;
+        padding-right: 34px;
+        padding-left: 34px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        width: 231px;
+        padding-right: 20px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        width: 255px;
+        padding-right: 15px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        width: auto;
+        padding-right: 0;
+      }
+    }
+
+    &:nth-child(2) {
+      width: 486px;
+      padding-right: 60px;
+      padding-left: 60px;
+
+      @media screen and (max-width: $desktop) {
+        width: 394px;
+        padding-right: 34px;
+        padding-left: 34px;
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        width: 269px;
+        padding-right: 34px;
+        padding-left: 34px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        width: 216px;
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        width: 196px;
+        padding-right: 15px;
+        padding-left: 15px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        width: auto;
+        padding-right: 0;
+        padding-left: 0;
+      }
+    }
+
+    &:nth-child(3) {
+      width: 252px;
+      padding-right: 60px;
+      padding-left: 60px;
+
+      @media screen and (max-width: $desktop) {
+        width: 185px;
+        padding-right: 34px;
+        padding-left: 34px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        width: 142px;
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        width: 147px;
+        padding-right: 15px;
+        padding-left: 15px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        width: auto;
+        padding-right: 0;
+        padding-left: 0;
+      }
+    }
+
+    &:nth-child(4) {
+      width: 255px;
+      padding-left: 60px;
+      padding-right: 60px;
+
+      @media screen and (max-width: $desktop) {
+        width: 168px;
+        padding-right: 34px;
+        padding-left: 34px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        width: 145px;
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        width: 150px;
+        padding-right: 15px;
+        padding-left: 15px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        width: auto;
+        padding-right: 0;
+        padding-left: 0;
+      }
+    }
+
     @media screen and (max-width: $desktop) {
       font-size: 16px;
     }
@@ -63,6 +191,9 @@
   td {
     padding-top: 30px;
     @include fonts(18px, 500, "Etude Noire");
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     @media screen and (max-width: $desktop) {
       padding-top: 20px;
@@ -75,7 +206,135 @@
       width: 100%;
     }
 
-    &.hidden {
+    &:nth-child(1) {
+      width: 331px;
+      padding-right: 60px;
+
+      @media screen and (max-width: $desktop) {
+        width: 275px;
+        padding-right: 34px;
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        width: 309px;
+        padding-right: 34px;
+        padding-left: 34px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        width: 231px;
+        padding-right: 20px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        width: 255px;
+        padding-right: 15px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        width: auto;
+        padding-right: 0;
+        padding-left: 0;
+      }
+    }
+
+    &:nth-child(2) {
+      width: 486px;
+      padding-right: 60px;
+      padding-left: 60px;
+
+      @media screen and (max-width: $desktop) {
+        width: 394px;
+        padding-right: 34px;
+        padding-left: 34px;
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        width: 269px;
+        padding-right: 34px;
+        padding-left: 34px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        width: 216px;
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        width: 196px;
+        padding-right: 15px;
+        padding-left: 15px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        width: auto;
+        padding-right: 0;
+        padding-left: 0;
+      }
+    }
+
+    &:nth-child(3) {
+      width: 252px;
+      padding-right: 60px;
+      padding-left: 60px;
+
+      @media screen and (max-width: $desktop) {
+        width: 185px;
+        padding-right: 34px;
+        padding-left: 34px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        width: 142px;
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        width: 147px;
+        padding-right: 15px;
+        padding-left: 15px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        width: auto;
+        padding-right: 0;
+        padding-left: 0;
+      }
+    }
+
+    &:nth-child(4) {
+      width: 255px;
+      padding-left: 60px;
+      padding-right: 60px;
+
+      @media screen and (max-width: $desktop) {
+        width: 168px;
+        padding-right: 34px;
+        padding-left: 34px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        width: 145px;
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        width: 150px;
+        padding-right: 15px;
+        padding-left: 15px;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        width: auto;
+        padding-right: 0;
+        padding-left: 0;
+      }
+    }
+
+    /*&.hidden {
       @media screen and (max-width: $desktop-compact) {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -92,13 +351,13 @@
         max-width: 100%;
         padding-right: 0;
       }
+    }*/
 
-      span {
-        @media screen and (max-width: $mobile-size) {
-          max-width: 160px;
-          white-space: wrap;
-          text-align: right;
-        }
+    span {
+      @media screen and (max-width: $mobile-size) {
+        max-width: 160px;
+        white-space: wrap;
+        text-align: right;
       }
     }
 
