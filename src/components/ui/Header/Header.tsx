@@ -14,6 +14,7 @@ import { getCities } from "@/src/lib/getCities";
 import { getCitySettings } from "@/src/lib/getCitySettings";
 import { phoneToLink } from "@/src/lib/utils/phoneLink";
 import { PAGE_ANCHORS } from "@/src/utils/constant";
+import HeaderScroll from "@/src/components/ui/HeaderScroll";
 
 export default async function Header() {
   const cities = await getCities();
@@ -49,65 +50,65 @@ export default async function Header() {
 
   return (
     <header className="header">
+      <HeaderScroll />
+
       <div className="header__container">
         <HeaderMobileMenuProvider>
           <div className="header__wrapper">
-            <div className="header__top header__row">
-              <div className="header__left">
-              <div className="header__brand">
-                <HeaderLogoLink className="header__logo">
-                  <LogoSvg />
-                </HeaderLogoLink>
+            <div className="header__brand">
+              <HeaderLogoLink className="header__logo">
+                <LogoSvg />
+              </HeaderLogoLink>
 
-                <div className="header__logo-text">
-                  Дополнительное
-                  <br />
-                  IT-образование для детей
-                </div>
-              </div>
-
-              <div className="header__city">
-                <CitySwitcher cities={cities} currentCity={currentCity} />
+              <div className="header__logo-text">
+                Дополнительное
+                <br />
+                IT-образование для детей
               </div>
             </div>
 
-            <div className="header__right">
-              {settings?.socials && (
-                <div className="header__socials">
-                  <Socials socials={settings.socials} />
-                </div>
-              )}
-
-              <div className="header__cabinet">
-                <ButtonCabinet city={slug} />
-              </div>
+            <div className="header__city">
+              <CitySwitcher
+                cities={cities}
+                currentCity={currentCity}
+              />
             </div>
-          </div>
 
-          <div className="header__bottom header__row">
-            <div className="header__left">
+            {settings?.socials && (
+              <div className="header__socials">
+                <Socials socials={settings.socials} />
+              </div>
+            )}
+
+            <div className="header__cabinet">
+              <ButtonCabinet city={slug} />
+            </div>
+
+            <nav className="header__menu">
               <HeaderMenu menuItems={menuItems} />
-            </div>
+            </nav>
 
-            <div className="header__right last">
-              {settings?.phone && (
-                <a className="header__phone" href={phoneToLink(settings.phone)}>
-                  {settings.phone}
-                </a>
-              )}
+            {settings?.phone && (
+              <a
+                className="header__phone"
+                href={phoneToLink(settings.phone)}
+              >
+                {settings.phone}
+              </a>
+            )}
 
+            <div className="header__call">
               <ButtonCall />
             </div>
-          </div>
 
-          <HeaderMobileMenu
-            phone={settings.phone}
-            currentCity={currentCity}
-            cities={cities}
-            socials={settings.socials ?? []}
-            menuItems={menuItems}
-          />
-        </div>
+            <HeaderMobileMenu
+              phone={settings.phone}
+              currentCity={currentCity}
+              cities={cities}
+              socials={settings.socials ?? []}
+              menuItems={menuItems}
+            />
+          </div>
         </HeaderMobileMenuProvider>
       </div>
     </header>
