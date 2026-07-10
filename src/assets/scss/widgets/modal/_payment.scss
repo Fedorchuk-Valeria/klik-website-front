@@ -54,11 +54,14 @@
     max-height: 37px;
 
     @media screen and (max-width: $mobile-size) {
-      max-width: 240px;
+      max-width: 200px;
+      font-size: 14px;
+      -webkit-line-clamp: none;
+      max-height: none;
     }
 
     @media screen and (max-width: 360px) {
-      max-width: 230px;
+      max-width: 190px;
     }
   }
 
@@ -73,6 +76,10 @@
     white-space: nowrap;
     flex-shrink: 0;
     line-height: 80%;
+
+    @media screen and (max-width: $mobile-size) {
+      font-size: 14px;
+    }
 
     &.dotted {
       display: flex;

@@ -79,23 +79,24 @@ const WidgetModalPaymentChildren: FC<PropTypes> = ({className, isVisible, childI
             {offlinePayment?.is_payable ? <>{offlinePayment?.amount} <Icon className="modal-payment__currency" name="ruble" /></> :  offlinePayment?.message}
           </div>
         </div>
-
-        {offlinePayment?.is_payable && (
+        <div className="modal-payment-children__footer">
+          {offlinePayment?.is_payable && (
+            <Button
+              variant="main-green-dark"
+              className="modal-payment__btn"
+              onClick={() => handlePayment()}
+            >
+              Оплатить
+            </Button>)
+          }
           <Button
-            variant="main-green-dark"
-            className="modal-payment__btn"
-            onClick={() => handlePayment()}
+            variant="outline-green-dark"
+            className="modal-payment__btn last"
+            onClick={() => handleClose()}
           >
-            Оплатить
-          </Button>)
-        }
-        <Button
-          variant="outline-green-dark"
-          className="modal-payment__btn last"
-          onClick={() => handleClose()}
-        >
-          Отмена
-        </Button>
+            Отмена
+          </Button>
+        </div>
       </div>
     </Modal>
   );
