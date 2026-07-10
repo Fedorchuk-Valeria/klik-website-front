@@ -22,9 +22,60 @@
       }
     }
 
+    &__wrapper {
+      display: flex;
+    }
+
+    &__row {
+      width: 100%;
+    }
+
+    .header__logout-button {
+      padding: 16px 30px;
+      font-size: 16px;
+
+      svg {
+        @include icon(20px);
+      }
+    }
+
+    @media screen and (max-width: $desktop) {
+      .header__logout-button {
+        padding: 15px 30px;
+        font-size: 14px;
+
+        svg {
+          @include icon(20px);
+        }
+      }
+    }
+
+    @media screen and (max-width: $desktop-compact) {
+      .header__logout-button {
+        padding: 12px 30px;
+        font-size: 12px;
+
+        svg {
+          @include icon(18px);
+        }
+      }
+    }
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      .header__logout-button {
+        padding: 0;
+
+        .header__logout-text {
+          display: none;
+        }
+      }
+    }
+
     @media screen and (max-width: $tablet-size) {
       .header__logout-button {
         @include icon(44px);
+        aspect-ratio: 1;
+        padding: 0;
 
         .header__logout-icon {
           @include icon(22px);
@@ -52,20 +103,20 @@
   }
 
   &__container {
-    max-width: 1740px;
+    max-width: 1800px;
     margin: 0 auto;
-    padding: 0 10px;
+    padding: 0 40px;
 
     @media screen and (max-width: $desktop) {
-      max-width: 1340px;
+      max-width: 1400px;
+    }
+
+    @media screen and (max-width: $desktop-compact) {
+      max-width: 1260px;
     }
 
     @media screen and (max-width: $landscape-tablet-size) {
-      max-width: 964px;
-    }
-
-    @media screen and (max-width: $tablet-size) {
-      max-width: 740px;
+      max-width: 100%;
     }
 
     @media screen and (max-width: $mobile-size) {
