@@ -24,10 +24,12 @@ import { QueryHelper } from "@/src/utils/helpers";
 import { ProfileBLock } from "@/src/components/ui/ProfileBlock";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { getCurrentChildRequest } from "@/src/store/slices/profile";
+import {showModal} from "@/src/store/slices/modalSlice";
+import {ModalType} from "@/src/entities/common";
 
 const ChildrenDetailsPage = () => {
   const dispatch = useAppDispatch();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const { currentChild, isLoading } = useAppSelector((store) => store.profile);
   const [openPartnerIndex, setOpenPartnerIndex] = useState<number | null>(null);
   const [isOpenCourses, setOpenCourses] = useState(false);
@@ -136,6 +138,17 @@ const ChildrenDetailsPage = () => {
 
   const togglePartner = (index: number) => {
     setOpenPartnerIndex((prev) => (prev === index ? null : index));
+  };
+
+  const handleCreatePayment = (childId: number) => {
+    dispatch(
+      showModal({
+        modalType: ModalType.PAYMENT_CHILDREN,
+        modalProps: {
+          childId: childId,
+        },
+      })
+    );
   };
 
   useEffect(() => {
@@ -322,7 +335,7 @@ const ChildrenDetailsPage = () => {
 
                 <div className="children-details-page__offline_headline-actions">
                   <Button variant="outline-orange">История платежей</Button>
-                  <Button variant="main-green-dark" withArrow>
+                  <Button variant="main-green-dark" withArrow onClick={() => handleCreatePayment(Number(id))}>
                     Оплатить обучение
                   </Button>
                 </div>

@@ -1,0 +1,15 @@
+.modal-payment-children {
+
+  &__footer {
+    margin-top: 50px;
+  }
+
+  dialog {
+    width: 100%;
+    max-width: 680px;
+
+    @media screen and (max-width: $mobile-size) {
+      max-width: calc(100% - 20px);
+    }
+  }
+}
