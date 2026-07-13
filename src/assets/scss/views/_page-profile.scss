@@ -1,6 +1,19 @@
 .page-profile {
   margin-bottom: 100px;
 
+  &.child {
+    .page-profile__wrapper {
+      @media screen and (max-width: $tablet-size) {
+        flex-direction: column;
+      }
+    }
+    .page-profile__body {
+      @media screen and (max-width: $tablet-size) {
+        align-items: flex-start;
+      }
+    }
+  }
+
   h1 {
     @include fonts(24px, 500, "Etude Noire");
     color: var(--main-orange);
@@ -11,6 +24,10 @@
 
     @media screen and (max-width: $landscape-tablet-size) {
       font-size: 16px;
+    }
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      font-size: 22px;
     }
 
     @media screen and (max-width: $tablet-size) {
@@ -45,11 +62,15 @@
 
     @media screen and (max-width: $mobile-size) {
       flex-direction: column;
-      gap: 30px;
+      gap: 20px;
     }
 
     .children-details-page {
       min-width: 465px;
+
+      @media screen and (max-width: $desktop) {
+        min-width: 416px;
+      }
 
       @media screen and (max-width: $desktop-compact) {
         min-width: 370px;
@@ -100,6 +121,7 @@
 
     @media screen and (max-width: $mobile-size) {
       flex-direction: column;
+      width: 100%;
     }
   }
 
@@ -495,14 +517,25 @@
     color: var(--main-orange);
     margin-bottom: 60px;
 
+    @media screen and (max-width: $desktop-compact) {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
     @media screen and (max-width: $landscape-tablet-size) {
       font-size: 12px;
-      margin-bottom: 30px;
+      margin-bottom: 16px;
+    }
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      padding: 10px 30px 10px 14px;
+      margin-bottom: 12px;
+      gap: 20px;
     }
 
     @media screen and (max-width: $tablet-size) {
       font-size: 16px;
-      margin-bottom: 20px;
+      gap: 30px;
     }
 
     @media screen and (max-width: $mobile-size) {
@@ -573,8 +606,16 @@
         font-size: 50px;
       }
 
+      @media screen and (max-width: $desktop-compact) {
+        font-size: 42px;
+      }
+
       @media screen and (max-width: $landscape-tablet-size) {
         font-size: 40px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        font-size: 44px;
       }
 
       @media screen and (max-width: $tablet-size) {
@@ -789,6 +830,11 @@
         min-width: 60px;
       }
 
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        @include icon(54px);
+        min-width: 54px;
+      }
+
       @media screen and (max-width: $tablet-size) {
         @include icon(70px);
         min-width: 70px;
@@ -868,7 +914,7 @@
         width: 36px;
         height: 36px;
         right: 17px;
-        top: 17px;
+        top: 14px;
       }
 
       @media screen and (max-width: $tablet-size) {
@@ -1954,6 +2000,10 @@
       @media screen and (max-width: $small-landscape-tablet-size) {
         flex-direction: column;
       }
+
+      @media screen and (max-width: $mobile-size) {
+        gap: 30px;
+      }
     }
 
     &-left {
@@ -1968,6 +2018,14 @@
       &_link {
         padding-right: 23px;
         display: block;
+
+        @media screen and (max-width: $landscape-tablet-size) {
+          padding-right: 0;
+        }
+
+        @media screen and (max-width: $mobile-size) {
+          padding-right: 23px;
+        }
       }
 
       &_text {
@@ -2079,12 +2137,49 @@
       }
 
       @media screen and (max-width: $small-landscape-tablet-size) {
-        max-width: 424px;
+        max-width: 447px;
       }
 
       @media screen and (max-width: $tablet-size) {
+        padding: 20px 0;
         max-width: 100%;
+        font-size: 18px;
       }
+
+      @media screen and (max-width: $mobile-size) {
+        padding: 16px 0;
+        font-size: 16px;
+      }
+
+      .button__arrow {
+
+        @media screen and (max-width: $desktop-compact) {
+          @include icon(36px);
+        }
+
+        @media screen and (max-width: $tablet-size) {
+          @include icon(45px);
+        }
+
+        @media screen and (max-width: $mobile-size) {
+          @include icon(36px);
+        }
+
+        svg {
+          @media screen and (max-width: $desktop-compact) {
+            @include icon(22px);
+          }
+
+          @media screen and (max-width: $tablet-size) {
+            @include icon(37px);
+          }
+
+          @media screen and (max-width: $mobile-size) {
+            @include icon(22px);
+          }
+        }
+      }
+
     }
   }
 
@@ -2205,7 +2300,7 @@
         font-size: 18px;
       }
 
-      @media screen and (max-width: $tablet-size) {
+      @media screen and (max-width: $mobile-size) {
         font-size: 16px;
       }
     }
@@ -2241,6 +2336,7 @@
       align-items: center;
       justify-content: center;
       transition: 0.3s all;
+      flex-shrink: 0;
 
       @media screen and (max-width: $desktop) {
         width: 60px;
@@ -2395,10 +2491,12 @@
 
     @media screen and (max-width: $small-landscape-tablet-size) {
       border-radius: 30px;
+      padding: 30px 20px 20px;
     }
 
     @media screen and (max-width: $tablet-size) {
       border-radius: 40px;
+      padding: 40px 30px 30px;
     }
 
     @media screen and (max-width: $mobile-size) {
@@ -2426,6 +2524,7 @@
 
       @media screen and (max-width: $small-landscape-tablet-size) {
         margin-bottom: 16px;
+        padding-left: 10px;
       }
 
       @media screen and (max-width: $tablet-size) {
