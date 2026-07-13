@@ -43,8 +43,6 @@ const PagesProfile = ({ settings }: PropTypes) => {
   const role = user_profile?.role;
   const phone = settings?.phone ?? "";
 
-  console.log('user_profile=', user_profile);
-
   const isParent = role === "parent";
   const isAdmin = role === 'admin';
   const title = isParent || isAdmin ? "Личный кабинет" : "Личный кабинет ученика";
