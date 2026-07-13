@@ -330,6 +330,10 @@
       align-items: center;
       gap: 44px;
 
+      @media screen and (max-width: $desktop-compact) {
+        gap: 16px;
+      }
+
       @media screen and (max-width: $landscape-tablet-size) {
         gap: 12px;
         flex-direction: column;
@@ -364,13 +368,13 @@
           height: 45px;
         }
 
-        @media screen and (max-width: $landscape-tablet-size) {
+        @media screen and (max-width: $desktop-compact) {
           width: 36px;
           height: 36px;
           right: 5px;
         }
 
-        @media screen and (max-width: $tablet-size) {
+        @media screen and (max-width: $small-landscape-tablet-size) {
           width: 45px;
           height: 45px;
         }
@@ -386,8 +390,16 @@
             @include icon(27px);
           }
 
+          @media screen and (max-width: $desktop-compact) {
+            @include icon(22px);
+          }
+
           @media screen and (max-width: $landscape-tablet-size) {
             @include icon(22px);
+          }
+
+          @media screen and (max-width: $small-landscape-tablet-size) {
+            @include icon(27px);
           }
 
           @media screen and (max-width: $tablet-size) {
