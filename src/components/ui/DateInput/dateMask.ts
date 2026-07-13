@@ -69,9 +69,9 @@ export function isValidDigitsPrefix(nums: string, maxYear: number): boolean {
 /** Trims trailing digits until the string is an allowed prefix / full date */
 export function sanitizeDigits(rawDigits: string, maxYear: number): string {
   let digits = rawDigits.replace(/\D/g, "").slice(0, 8);
-  /*while (digits.length > 0 && !isValidDigitsPrefix(digits, maxYear)) {
+  while (digits.length > 0 && !isValidDigitsPrefix(digits, maxYear)) {
     digits = digits.slice(0, -1);
-  }*/
+  }
   return digits;
 }
 
