@@ -58,7 +58,7 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(function DateInpu
     sanitizeDigits(
       String(defaultValue ?? "")
         .replace(/\D/g, "")
-        .slice(0, 9),
+        .slice(0, 8),
       maxYear
     )
   );
@@ -66,7 +66,7 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(function DateInpu
   const digitsFromControl = sanitizeDigits(
     String(valueProp ?? "")
       .replace(/\D/g, "")
-      .slice(0, 9),
+      .slice(0, 8),
     maxYear
   );
 
@@ -88,14 +88,14 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(function DateInpu
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const stripped = sanitizeDigits(e.target.value.replace(/\D/g, "").slice(0, 9), maxYear);
+    const stripped = sanitizeDigits(e.target.value.replace(/\D/g, "").slice(0, 8), maxYear);
     emitMasked(stripped, e.currentTarget);
   };
 
   const handleCompositionEnd = (e: CompositionEvent<HTMLInputElement>) => {
     onCompositionEndProp?.(e);
     if (e.defaultPrevented) return;
-    const stripped = sanitizeDigits(e.currentTarget.value.replace(/\D/g, "").slice(0, 9), maxYear);
+    const stripped = sanitizeDigits(e.currentTarget.value.replace(/\D/g, "").slice(0, 8), maxYear);
     emitMasked(stripped, e.currentTarget);
   };
 
