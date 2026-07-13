@@ -44,7 +44,8 @@ const PagesProfile = ({ settings }: PropTypes) => {
   const phone = settings?.phone ?? "";
 
   const isParent = role === "parent";
-  const title = isParent ? "Личный кабинет" : "Личный кабинет ученика";
+  const isAdmin = role === 'admin';
+  const title = isParent || isAdmin ? "Личный кабинет" : "Личный кабинет ученика";
 
   const clickoins = {
     ...METRICS.klikcoins,
@@ -84,8 +85,6 @@ const PagesProfile = ({ settings }: PropTypes) => {
   useEffect(() => {
     const payment = user_profile?.offline_training_payment_notification;
 
-    console.log('payment=', payment);
-
     if (!payment || !payment.show) {
       return;
     }
@@ -106,7 +105,7 @@ const PagesProfile = ({ settings }: PropTypes) => {
   }
 
   return (
-    <div className="page-profile">
+    <div className={`page-profile ${isParent ? 'parent' : 'child'}`}>
       <div className="platform-layout__container">
         <div className="page-profile__header">
           <h1>{title}</h1>
@@ -124,7 +123,7 @@ const PagesProfile = ({ settings }: PropTypes) => {
                   className="login-page__form-input"
                   disabled={true}
                 />
-                {isParent && (
+                {isParent || isAdmin && (
                   <PhoneInput
                     variant="outline"
                     label="Телефон"
@@ -136,10 +135,10 @@ const PagesProfile = ({ settings }: PropTypes) => {
               </div>
             </div>
 
-            {!isParent && <ProfileBLock item={clickoins} generalIndex={0} />}
+            {!isParent && !isAdmin && <ProfileBLock item={clickoins} generalIndex={0} />}
           </div>
 
-          {isParent && (
+          {isParent && !isAdmin && (
             <div className="page-profile__list">
               <Link
                 className="page-profile__link"
@@ -165,7 +164,7 @@ const PagesProfile = ({ settings }: PropTypes) => {
             </div>
           )}
 
-          {isParent && (
+          {isParent && !isAdmin && (
             <div className="page-profile__info">
               <Icon className="page-profile__info-icon" name="info-circle-outline" />
               По всем вопросам вы можете связаться с нами по номеру телефона{" "}
@@ -175,7 +174,7 @@ const PagesProfile = ({ settings }: PropTypes) => {
 
           <Partners data={user_profile?.partners} />
 
-          {!isParent && (
+          {!isParent && !isAdmin && (
             <>
               {!!user_profile?.self_study?.has_available_courses && (
                 <ActiveFormats data={user_profile?.self_study.courses} />
@@ -186,7 +185,7 @@ const PagesProfile = ({ settings }: PropTypes) => {
             </>
           )}
 
-          {isParent && (
+          {isParent && !isAdmin && (
             <div className="page-profile__childrens">
               {!!user_profile?.children?.length && (
                 <div className="page-profile__childrens-header">
@@ -321,10 +320,6 @@ const PagesProfile = ({ settings }: PropTypes) => {
                           Оплатить обучение
                         </Button>
                       </div>
-
-                      {/*{!!child?.offline_groups?.length && (
-
-                      )}*/}
 
                       <Link href={PAGES.PROFILE_CHILDREN_DETAILS.replace(":id", String(child?.id))}>
                         <Button
