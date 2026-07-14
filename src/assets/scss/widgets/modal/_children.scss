@@ -134,8 +134,11 @@
   }
 
   .page-profile__row-form {
+    gap: 40px;
+
     &.landscape {
       flex-direction: row;
+      gap: 20px;
 
       @media screen and (max-width: $mobile-size) {
         flex-direction: column;
@@ -145,7 +148,7 @@
 
   .text-input {
     &__control {
-      padding: 19px 30px 19px;
+      padding: 21px 30px 21px;
       font-size: 16px;
 
       @media screen and (max-width: $desktop-compact) {
