@@ -7,23 +7,39 @@ import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import { useAppDispatch } from "@/src/store/hooks";
 import { hideModal } from "@/src/store/slices/modalSlice";
+import {PAGES} from "@/src/utils/constant";
+import {useRouter} from "next/navigation";
 
 type PropTypes = {
-  // name: string;
-  // childs: string[];
+  name?: string;
+  children?: [
+    {
+      id: number,
+      full_name: string,
+    }
+  ];
   className?: string;
   isVisible: boolean;
   autoCloseDelayMs?: number;
 };
 
 const WidgetModalAccountData: FC<PropTypes> = ({
-  // name,
-  // childs,
+  name,
+  children,
   className,
   isVisible,
   autoCloseDelayMs,
 }) => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const handleProfile = () => {
+    router.push(PAGES.PROFILE);
+  };
+
+  const handleClose = () => {
+    dispatch(hideModal());
+  };
 
   useEffect(() => {
     if (!isVisible || autoCloseDelayMs == null || autoCloseDelayMs <= 0) return;
@@ -42,17 +58,17 @@ const WidgetModalAccountData: FC<PropTypes> = ({
       isVisible={isVisible}
       className={classNames("modal-account-data", className)}
     >
-      <p className={"modal-account-data__title"}>Привет, Имя Фамилия</p>
+      <p className={"modal-account-data__title"}>Привет, {name}</p>
 
       <span className="modal-account-data__description">
         К вашему родительскому профилю привязаны следующие аккаунты:
       </span>
 
       <ul className="modal-account-data__list">
-        {[...new Array(3)].map((_, index) => (
+        {children?.map((item, index) => (
           <li key={index}>
             <Icon name="disk" />
-            <p>{`Фамилия Имя Отчество Ребёнка 0${index + 1}`}</p>
+            <p>{item.full_name}</p>
           </li>
         ))}
       </ul>
@@ -63,8 +79,8 @@ const WidgetModalAccountData: FC<PropTypes> = ({
       </span>
 
       <div className="modal-account-data__actions">
-        <Button variant="main-green-dark">Перейти к профилям детей</Button>
-        <Button className="modal-account-data__actions-button">Позже</Button>
+        <Button variant="main-green-dark" onClick={() => handleProfile()}>Перейти к профилям детей</Button>
+        <Button className="modal-account-data__actions-button" onClick={() => handleClose()}>Позже</Button>
       </div>
     </Modal>
   );
