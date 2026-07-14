@@ -2171,7 +2171,7 @@
           }
 
           @media screen and (max-width: $tablet-size) {
-            @include icon(37px);
+            @include icon(27px);
           }
 
           @media screen and (max-width: $mobile-size) {
@@ -2348,7 +2348,7 @@
         height: 50px;
       }
 
-      @media screen and (max-width: $landscape-tablet-size) {
+      @media screen and (max-width: $small-landscape-tablet-size) {
         width: 36px;
         height: 36px;
       }
@@ -2386,7 +2386,7 @@
           height: 30px;
         }
 
-        @media screen and (max-width: $landscape-tablet-size) {
+        @media screen and (max-width: $small-landscape-tablet-size) {
           width: 22px;
           height: 22px;
         }
@@ -2478,25 +2478,25 @@
   &__group {
     border-radius: 50px;
     background: #f0f6e8;
-    padding: 50px;
+    padding: 50px 30px 30px;
 
     @media screen and (max-width: $desktop) {
-      padding: 20px;
+      padding: 40px 20px 20px;
       border-radius: 40px;
     }
 
-    @media screen and (max-width: $landscape-tablet-size) {
-      padding: 30px;
+    @media screen and (max-width: $desktop-compact) {
+      padding: 30px 20px 20px;
+      border-radius: 40px;
     }
 
     @media screen and (max-width: $small-landscape-tablet-size) {
       border-radius: 30px;
-      padding: 30px 20px 20px;
     }
 
     @media screen and (max-width: $tablet-size) {
       border-radius: 40px;
-      padding: 40px 30px 30px;
+      padding: 30px;
     }
 
     @media screen and (max-width: $mobile-size) {
@@ -2508,6 +2508,7 @@
       @include fonts(30px, 700, "Etude Noire");
       color: var(--main-green-dark);
       margin-bottom: 30px;
+      padding-left: 20px;
 
       @media screen and (max-width: $desktop) {
         font-size: 24px;
@@ -2516,6 +2517,7 @@
 
       @media screen and (max-width: $desktop-compact) {
         font-size: 22px;
+        padding-left: 10px;
       }
 
       @media screen and (max-width: $landscape-tablet-size) {
@@ -2524,7 +2526,6 @@
 
       @media screen and (max-width: $small-landscape-tablet-size) {
         margin-bottom: 16px;
-        padding-left: 10px;
       }
 
       @media screen and (max-width: $tablet-size) {
@@ -2535,6 +2536,7 @@
       @media screen and (max-width: $mobile-size) {
         font-size: 16px;
         margin-bottom: 16px;
+        padding-left: 20px;
       }
     }
 
