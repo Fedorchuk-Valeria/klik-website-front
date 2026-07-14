@@ -16,11 +16,13 @@ import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { clearErrors, loginRequest } from "@/src/store/slices/auth";
 import { PAGES } from "@/src/utils/constant";
 import { AuthRedirectHelper } from "@/src/utils/helpers";
+import {showModal} from "@/src/store/slices/modalSlice";
+import {ModalType} from "@/src/entities/common";
 
 const LoginForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isLoading, errors, isLoggedIn } = useAppSelector((state: RootStore) => state.auth);
+  const { isLoading, errors, isLoggedIn, user_profile } = useAppSelector((state: RootStore) => state.auth);
   const form = useFormik({
     initialValues: {
       phone: "",
@@ -56,6 +58,26 @@ const LoginForm = () => {
       form.setFieldError("password", errors.password || errors.non_field_errors);
     }
   }, [errors]);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      return;
+    }
+
+    const notification = user_profile?.account_data_notification;
+
+    if (notification?.show && user_profile?.profile?.full_name) {
+      dispatch(
+        showModal({
+          modalType: ModalType.ACCOUNT_DATA,
+          modalProps: {
+            name: user_profile?.profile?.full_name,
+            children: user_profile?.children,
+          },
+        })
+      );
+    }
+  }, [dispatch, isLoggedIn, user_profile]);
 
   useEffect(() => {
     if (isLoggedIn) {

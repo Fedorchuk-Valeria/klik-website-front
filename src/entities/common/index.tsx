@@ -54,7 +54,15 @@ export type UserProfile = {
     show: boolean,
     status: string | null,
     title: string | null,
-  }
+  },
+  account_data_notification: {
+    show: boolean,
+    parent_full_name: string,
+    children : [
+      id: number,
+      full_name: string,
+    ],
+  },
 };
 
 export type UserProfileRole = "parent" | "child" | "admin";
