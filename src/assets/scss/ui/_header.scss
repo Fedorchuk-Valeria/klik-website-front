@@ -84,6 +84,7 @@
   .header__logo {
     max-width: 96px;
     display: flex;
+    height: 40px;
 
     svg {
       width: 96px;
@@ -93,6 +94,7 @@
   .header__logo-text {
     max-width: 174px;
     font-size: 12px;
+    color: var(--main-light);
   }
 
   .city-switcher {
@@ -133,6 +135,7 @@
     align-items: center;
     gap: 20px;
     border-radius: 100px;
+    width: fit-content;
 
     li {
       a {
@@ -170,6 +173,10 @@
     border: 0;
     position: relative;
     font-size: 20px;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--main-orange);
 
     &:active,
     &:hover {
@@ -221,6 +228,11 @@
     max-width: 186px;
   }
 
+    a {
+      display: block;
+    }
+  }
+
   .socials {
     justify-content: center;
     gap: 14px;
@@ -244,6 +256,13 @@
   @media screen and (max-width: $desktop) {
     .header__wrapper {
       padding: 30px 50px;
+    }
+
+    .header__call-btn {
+      font-size: 12px;
+      padding: 12px 28px;
+      min-width: 174px;
+      max-width: 174px;
     }
 
     .header__cabinet-button {
@@ -288,13 +307,6 @@
 
     .header__phone {
       font-size: 14px;
-    }
-
-    .header__call {
-      padding: 12px 30px;
-      font-size: 12px;
-      max-width: 174px;
-      min-width: 174px;
     }
   }
 
@@ -343,6 +355,28 @@
 
     .header__left {
       gap: 30px;
+    }
+
+    .header__cabinet-button {
+      @include icon(42px);
+      @include center;
+      font-size: 0;
+      border-radius: 100%;
+      padding: 0;
+      max-width: 42px;
+      min-width: 42px;
+
+      .header__cabinet-icon {
+        @include icon(18px);
+      }
+
+      .button__text {
+        gap: 0;
+
+        span {
+          display: none;
+        }
+      }
     }
   }
 
@@ -397,6 +431,16 @@
       padding: 20px 30px;
       gap: 16px;
       border-radius: 30px;
+      grid-template-columns:
+        auto
+        auto
+        1fr
+        auto
+        30px;
+
+      grid-template-areas:
+    "brand city socials socials cabinet"
+    "menu  menu  phone   call    call";
     }
 
     .header__right:not(.last) {
@@ -436,29 +480,7 @@
       }
     }
 
-    .header__cabinet-button {
-      @include icon(30px);
-      @include center;
-      font-size: 0;
-      border-radius: 100%;
-      padding: 0;
-      max-width: 30px;
-      min-width: 30px;
-
-      .header__cabinet-icon {
-        @include icon(15px);
-      }
-
-      .button__text {
-        gap: 0;
-
-        span {
-          display: none;
-        }
-      }
-    }
-
-    .header__call {
+    .header__call-btn {
       padding: 12px 30px;
       font-size: 12px;
       max-width: 127px;
@@ -474,10 +496,18 @@
       }
     }
 
+    .header__brand {
+      gap: 10px;
+    }
+
     .header__wrapper {
       padding: 20px;
       gap: 16px;
       border-radius: 30px;
+    }
+
+    .header__left {
+      gap: 40px;
     }
 
     .header__menu {
@@ -498,6 +528,10 @@
           @include icon(18px);
         }
       }
+    }
+
+    .header__menu {
+      gap: 6px;
     }
 
     .header__menu li a {
@@ -543,7 +577,7 @@
       }
     }
 
-    .header__call {
+    .header__call-btn {
       padding: 10px 30px;
       font-size: 12px;
       max-width: 127px;
@@ -633,7 +667,21 @@
       font-size: 18px;
     }
 
-    .header__call {
+    .header__wrapper {
+      grid-template-columns: auto auto;
+      grid-template-areas:
+      "brand phone"
+      "mobile mobile";
+
+      padding: 24px 30px 24px 30px;
+      row-gap: 0;
+    }
+
+    .header__phone {
+      margin-right: 64px;
+    }
+
+    .header__call-btn {
       padding: 20px;
       font-size: 18px;
       max-width: 100%;
@@ -645,6 +693,10 @@
 
   @media screen and (max-width: $mobile-size) {
     .header__phone {
+      display: none;
+    }
+
+    .header__logo-text {
       display: none;
     }
 
@@ -664,7 +716,7 @@
     }
 
     .header__wrapper {
-      padding: 10px;
+      padding: 12px 10px;
       min-height: auto;
       border-radius: 16px;
     }
@@ -708,8 +760,14 @@
       max-width: 150px;
     }
 
-    .header__logo-text {
-      display: none;
+    /*.header__logo-text {
+      display: block;
+      font-size: 12px;
+      white-space: nowrap;
+    }*/
+
+    .header__mobile-top {
+      margin-top: 30px;
     }
 
     &:has(.burger.active) .header__left {
@@ -767,6 +825,8 @@
       position: relative;
       overflow-y: auto;
       overflow-x: hidden;
+      grid-area: mobile;
+      width: 100%;
     }
 
     @media screen and (max-width: $mobile-size) {
@@ -783,10 +843,19 @@
         .city-switcher__current-btn {
           @include icon(50px);
           margin-left: auto;
+
+          @media screen and (max-width: $mobile-size) {
+            @include icon(40px);
+          }
         }
 
         .city-switcher__current-icon {
           @include icon(33px);
+
+          @media screen and (max-width: $mobile-size) {
+            @include icon(27px);
+          }
+
         }
 
         .city-switcher__icon {
@@ -804,8 +873,17 @@
       }
     }
 
+    .header__call-btn {
+      margin-bottom: 0;
+    }
+
     .socials {
       justify-content: center;
+      margin-bottom: 50px;
+
+      @media screen and (max-width: $mobile-size) {
+        margin-bottom: 30px;
+      }
 
       &__link {
         width: 50px;
@@ -858,6 +936,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin-top: 54px;
     }
 
     &-cabinet {
@@ -936,13 +1015,17 @@
       align-items: center;
       gap: 30px;
 
+      @media screen and (max-width: $mobile-size) {
+        gap: 20px;
+      }
+
       li {
         a {
           @include fonts(50px, 500);
           color: var(--main-light);
 
           @media screen and (max-width: $mobile-size) {
-            @include fonts(28px, 500);
+            @include fonts(26px, 500);
           }
         }
       }
@@ -960,10 +1043,10 @@
       @media screen and (max-width: $mobile-size) {
         display: inline-block;
         text-align: center;
-        margin-bottom: 25px;
+        margin-bottom: 20px;
         position: relative;
         color: var(--main-light);
-        font-size: 18px;
+        font-size: 16px;
 
         &:before {
           content: "";

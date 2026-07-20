@@ -19,7 +19,7 @@ export default async function HeaderPlatform({
           <div className="header__top header__row">
             <div className="header__left">
               <div className="header__brand">
-                <HeaderPlatformLogo variant={variant} />
+                <HeaderPlatformLogo />
 
                 <div className="header__logo-text">
                   Дополнительное
