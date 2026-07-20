@@ -5,11 +5,7 @@
     padding-top: 135px;
 
     @media screen and (max-width: $landscape-tablet-size) {
-      padding-top: 95px;
-    }
-
-    @media screen and (max-width: $tablet-size) {
-      padding-top: 105px;
+      padding-top: 140px;
     }
   }
 
@@ -24,6 +20,15 @@
 
     &__wrapper {
       display: flex;
+      background-color: var(--main-blue);
+
+      .header__logo-text {
+        color: var(--main-black);
+      }
+
+      .header__user-button {
+        color: var(--main-green-dark);
+      }
     }
 
     &__row {
