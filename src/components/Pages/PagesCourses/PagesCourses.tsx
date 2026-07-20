@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import image from "@/src/assets/images/view/courses/girl.png";
+import image from "@/src/assets/images/view/courses/boy.png";
 
 import { Meta } from "@/src/entities/common";
 import { Course } from "@/src/lib/getCourses";
@@ -289,29 +289,29 @@ const PagesCourses = ({
             <div className="page-courses__header-content">
               <div className="page-courses__header-content-left">
                 <h1 className="page-courses__header-title">
-                  KLiK — дополнительное IT-образование для детей 6-16 лет
+                  Самостоятельное обучение на платформе
+                  <br />с ИИ помощником
                 </h1>
-
                 <p className="page-courses__header-text">
-                  {`Система, созданная белорусскими IT-специалистами,\nгде учат понимать, создавать и превращать идеи в проекты`}
+                  {`Онлайн-платформа, где ребёнок развивается в своём темпе с ИИ-помощником, а родитель спокоен за его занятость.`}
                 </p>
 
                 <ul className="page-courses__header-content-list">
                   {[
                     {
-                      icon: "book",
-                      title: "62",
-                      text: "обучающих блока",
+                      icon: "clock",
+                      title: "24/7",
+                      text: "с ИИ-помощником",
                     },
                     {
-                      icon: "people",
-                      title: "12",
-                      text: "человек в группе",
+                      icon: "player",
+                      title: "1 час",
+                      text: "видеоурока с пользой",
                     },
                     {
-                      icon: "code",
-                      title: "80%",
-                      text: "практики",
+                      icon: "document",
+                      title: "6+",
+                      text: "направлений",
                     },
                   ].map((item) => (
                     <li className="page-courses__header-content-item" key={item.icon}>
@@ -331,7 +331,7 @@ const PagesCourses = ({
                   className="page-courses__header-button-link"
                   href={`#${PAGE_ANCHORS.COURSES}`}
                 >
-                  <Button className="page-courses__header-button" variant="main-light" withArrow>
+                  <Button className="page-courses__header-button" variant="orange" withArrow>
                     Записаться на курс
                   </Button>
                 </Link>
@@ -388,59 +388,55 @@ const PagesCourses = ({
 
         <div className="courses-list">
           {courses.map((item) => (
-            <div
+            <Link
               key={item.id}
+              href={PAGES.COURSE.replace(":id", item.id.toString())}
+              onClick={() => dispatch(clearCourses())}
               className={classNames("courses-list__item", {
                 "courses-list__item--purchased": item.is_purchased,
               })}
             >
-              <div className="courses-list__item-image">
-                <Image src={item.image} alt={item.title} fill />
+                <div className="courses-list__item-image">
+                  <Image src={item.image} alt={item.title} fill />
 
-                {item.is_purchased && (
-                  <span className="courses-list__item-purchased">
-                    <Icon name="success-circle" /> Куплен
+                  {item.is_purchased && (
+                    <span className="courses-list__item-purchased">
+                      <Icon name="success-circle" /> Куплен
+                    </span>
+                  )}
+
+                  {item.categories && (
+                    <div className="courses-list__item-categories">
+                      {item.categories.map((category) => (
+                        <span key={category.id} className="courses-list__item-category">
+                          {category.name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div className="courses-list__item-content">
+                  <p className="courses-list__item-title">{item.title}</p>
+                  <p className="courses-list__item-description">{item.description}</p>
+
+                  <span className="courses-list__item-duration">
+                    <Icon name="clock" /> {item.duration_months}{" "}
+                    {getPlural(item.duration_months, ["месяц", "месяца", "месяцев"])}
                   </span>
-                )}
 
-                {item.categories && (
-                  <div className="courses-list__item-categories">
-                    {item.categories.map((category) => (
-                      <span key={category.id} className="courses-list__item-category">
-                        {category.name}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
+                  <p className="courses-list__item-price">
+                    {item?.price?.toLocaleString("ru-RU")}{" "}
+                    <Icon name="ruble" className="courses-list__item-price-icon" />
+                  </p>
 
-              <div className="courses-list__item-content">
-                <p className="courses-list__item-title">{item.title}</p>
-                <p className="courses-list__item-description">{item.description}</p>
-
-                <span className="courses-list__item-duration">
-                  <Icon name="clock" /> {item.duration_months}{" "}
-                  {getPlural(item.duration_months, ["месяц", "месяца", "месяцев"])}
-                </span>
-
-                <p className="courses-list__item-price">
-                  {item?.price?.toLocaleString("ru-RU")}{" "}
-                  <Icon name="ruble" className="courses-list__item-price-icon" />
-                </p>
-
-                <Link
-                  href={PAGES.COURSE.replace(":id", item.id.toString())}
-                  onClick={() => dispatch(clearCourses())}
-                >
                   <Button
                     className="courses-list__item-button"
                     variant={item.is_purchased ? "main-green-dark" : "outline-green-dark"}
                   >
                     {item.is_purchased ? "Открыть" : "Подробнее"}
                   </Button>
-                </Link>
-              </div>
-            </div>
+                </div>
+            </Link>
           ))}
         </div>
 
