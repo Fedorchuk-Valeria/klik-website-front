@@ -35,14 +35,16 @@
   }
 
   &__wrapper {
-    padding: 30px 90px;
-    background-color: var(--main-green-dark);
-    color: var(--main-light);
-    border-radius: 70px;
     display: flex;
     flex-direction: column;
     gap: 20px;
     transition: 0.3s all;
+    align-items: center;
+
+    padding: 30px 90px;
+    border-radius: 70px;
+
+    background: var(--main-green-dark);
 
     &.light {
       background-color: var(--main-bg);
@@ -57,9 +59,45 @@
     }
   }
 
+  &__brand {
+    grid-area: brand;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__city {
+    grid-area: city;
+    width: fit-content ;
+  }
+
+  &__socials {
+    grid-area: socials;
+    justify-self: end;
+  }
+
+  &__cabinet {
+    grid-area: cabinet;
+  }
+
+  &__menu {
+    grid-area: menu;
+  }
+
+  &__phone {
+    grid-area: phone;
+    justify-self: end;
+  }
+
+  &__call {
+    grid-area: call;
+  }
+
   .header__row {
     display: flex;
     align-items: center;
+    width: 100%;
   }
 
   .header__left {
@@ -172,7 +210,7 @@
     border-radius: 0;
     border: 0;
     position: relative;
-    font-size: 20px;
+    font-size: 16px;
     text-decoration: underline;
     text-underline-offset: 5px;
     text-decoration-thickness: 1px;
@@ -185,17 +223,6 @@
       &:after {
         opacity: 0;
       }
-    }
-
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 5px;
-      left: 0;
-      width: 100%;
-      height: 1.5px;
-      background-color: var(--main-orange);
-      transition: 0.3s all;
     }
   }
 
@@ -221,12 +248,18 @@
   }
 
   .header__call {
-    @include center;
-    @include fonts(14px, 400, "Manrope");
-    padding: 14px 28px;
-    min-width: 186px;
-    max-width: 186px;
-  }
+
+    &-icon {
+      display: none;
+    }
+
+    &-btn {
+      @include center;
+      @include fonts(14px, 400, "Manrope");
+      padding: 14px 28px;
+      min-width: 186px;
+      max-width: 186px;
+    }
 
     a {
       display: block;
@@ -357,6 +390,10 @@
       gap: 30px;
     }
 
+    .header__user-button {
+      font-size: 14px;
+    }
+
     .header__cabinet-button {
       @include icon(42px);
       @include center;
@@ -465,7 +502,7 @@
     }
 
     .header__user-button {
-      font-size: 16px;
+      font-size: 12px;
     }
 
     .header__logout-button {
@@ -537,10 +574,6 @@
     .header__menu li a {
       padding: 10px 12px;
       font-size: 12px;
-    }
-
-    .header__user-button {
-      font-size: 16px;
     }
 
     .header__logout-button {
@@ -663,17 +696,13 @@
   }
 
   @media screen and (max-width: $tablet-size) {
-    .header__user-button {
-      font-size: 18px;
-    }
-
     .header__wrapper {
       grid-template-columns: auto auto;
       grid-template-areas:
       "brand phone"
       "mobile mobile";
 
-      padding: 24px 30px 24px 30px;
+      padding: 20px 30px 20px 30px;
       row-gap: 0;
     }
 
@@ -1058,6 +1087,67 @@
           background-color: var(--main-orange);
           transition: 0.3s all;
         }
+      }
+    }
+  }
+
+  &--scrolled {
+    .header__wrapper {
+
+      grid-template-columns: auto auto 1fr auto auto auto;
+
+      grid-template-areas:
+      "brand city menu phone call cabinet";
+
+      grid-template-rows: auto;
+
+      gap: 28px;
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        grid-template-columns: auto auto 1fr auto 30px 30px;
+        grid-template-areas: "brand city menu phone call cabinet";
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        grid-template-columns: auto auto auto;
+        grid-template-areas: "brand menu phone";
+      }
+
+      .header__cabinet-button {
+        @include icon(30px);
+        min-width: 30px;
+      }
+
+      .header__call-icon {
+        display: block;
+        @include icon(15px);
+        fill: var(--main-green-dark);
+      }
+
+      .header__call-btn {
+        @media screen and (max-width: $landscape-tablet-size) {
+          font-size: 0;
+          padding: 0;
+          @include icon(30px);
+          min-width: 30px;
+        }
+
+        .button__text {
+          @media screen and (max-width: $landscape-tablet-size) {
+            gap: 0;
+          }
+        }
+      }
+    }
+
+    .header__logo-text,
+    .header__socials {
+      display: none;
+    }
+
+    .header__logo-text {
+      @media screen and (max-width: $tablet-size) {
+        display: block;
       }
     }
   }

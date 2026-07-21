@@ -20,6 +20,18 @@
 
     &__wrapper {
       display: flex;
+
+      &.dark {
+        background-color: var(--main-blue);
+
+        .header__logo-text {
+          color: var(--main-black);
+        }
+
+        .header__user-button {
+          color: var(--main-green-dark);
+        }
+      }
     }
 
     &__row {

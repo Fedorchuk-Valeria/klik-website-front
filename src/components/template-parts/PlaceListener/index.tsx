@@ -22,8 +22,8 @@ const PlaceListener = () => {
     const place = getClientCookie(PLACE_STORAGE_KEY);
 
     if (cookiePolicy && !active) {
-      if (!place || (!!place && new URL(place)?.origin !== window?.location?.origin))
-        dispatch(showModal({ modalType: ModalType.PLACE_SELECT }));
+      /*if (!place || (!!place && new URL(place)?.origin !== window?.location?.origin))
+        dispatch(showModal({ modalType: ModalType.PLACE_SELECT }));*/
     }
   }, [dispatch, active, router]);
 
