@@ -1,0 +1,76 @@
+name: Deploy Front (stage)
+
+on:
+  push:
+    branches:
+      - stage
+
+concurrency:
+  group: deploy-front-stage
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_KEY }}
+          command_timeout: 30m
+          script: |
+            set -eu
+
+            DEV_FRONTEND_PATH="/home/ontid/Klick2026Edtech-front"
+            STAGE_FRONTEND_PATH="${DEV_FRONTEND_PATH}-stage"
+
+            if [ ! -e "$STAGE_FRONTEND_PATH/.git" ]; then
+              cd "$DEV_FRONTEND_PATH"
+              git fetch origin stage
+              git worktree add -B stage "$STAGE_FRONTEND_PATH" origin/stage
+            fi
+
+            cd "$STAGE_FRONTEND_PATH"
+            git fetch origin stage
+            git checkout -B stage origin/stage
+
+            if [ ! -f .env.stage ]; then
+              cp "$DEV_FRONTEND_PATH/.env.prod" .env.stage
+            fi
+
+            set_env() {
+              key="$1"
+              value="$2"
+              if grep -q "^${key}=" .env.stage; then
+                sed -i "s|^${key}=.*|${key}=${value}|" .env.stage
+              else
+                printf '%s=%s\n' "$key" "$value" >>.env.stage
+              fi
+            }
+
+            set_env ENV_NAME stage
+            set_env REACT_PORT 3060
+            set_env NEXT_PUBLIC_API_URL https://stage.it-klik.by/api/
+            set_env NEXT_PUBLIC_APP_ROOT_DOMAIN stage.it-klik.by
+            set_env NEXT_PUBLIC_APP_ROOT_CITY minsk
+            set_env NEXT_PUBLIC_APP_MODE staging
+            set_env APP_ROOT_DOMAIN stage.it-klik.by
+            set_env APP_ROOT_CITY minsk
+            set_env APP_MODE staging
+
+            docker network inspect klick-network-stage >/dev/null 2>&1 \
+              || docker network create klick-network-stage >/dev/null
+
+            docker compose -p klick-front-stage --env-file=.env.stage config --quiet
+            docker compose -p klick-front-stage --env-file=.env.stage build
+            if ! docker compose -p klick-front-stage --env-file=.env.stage up -d --wait --wait-timeout 180 --remove-orphans; then
+              docker compose -p klick-front-stage --env-file=.env.stage ps
+              docker compose -p klick-front-stage --env-file=.env.stage logs --tail=120 react-app
+              exit 1
+            fi
