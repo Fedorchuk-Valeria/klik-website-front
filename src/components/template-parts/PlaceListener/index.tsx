@@ -20,7 +20,9 @@ const PlaceListener = () => {
     const cookiePolicy = hasCookieConsentForEnvironment();
     const place = getPlaceCookie();
 
-    if (cookiePolicy && !active) {
+    const isLocalhost = window.location.hostname === "localhost";
+
+    if (cookiePolicy && !active && !isLocalhost) {
       if (!place || new URL(place).origin !== window.location.origin) {
         dispatch(showModal({ modalType: ModalType.PLACE_SELECT }));
       }
