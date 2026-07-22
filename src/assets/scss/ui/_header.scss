@@ -349,6 +349,10 @@
     .header__phone {
       font-size: 14px;
     }
+
+    .header__user-button {
+      font-size: 14px;
+    }
   }
 
   @media screen and (max-width: $desktop-compact) {
@@ -513,6 +517,19 @@
       font-size: 12px;
     }
 
+    .header__cabinet-button {
+      @include icon(30px);
+      min-width: 0;
+
+      padding: 0;
+
+      .button__text {
+        gap: 0;
+        font-size: 0;
+        justify-content: center;
+      }
+    }
+
     .header__logout-button {
       @include icon(30px);
       @include center;
@@ -528,7 +545,6 @@
     .header__call-btn {
       padding: 12px 30px;
       font-size: 12px;
-      max-width: 127px;
       min-width: 127px;
       height: 40px;
     }
@@ -584,6 +600,10 @@
       font-size: 12px;
     }
 
+    .header__user-button {
+      font-size: 12px;
+    }
+
     .header__logout-button {
       @include icon(36px);
       @include center;
@@ -621,7 +641,6 @@
     .header__call-btn {
       padding: 10px 30px;
       font-size: 12px;
-      max-width: 127px;
       min-width: 127px;
       height: 36px;
     }
@@ -1109,7 +1128,7 @@
 
       grid-template-rows: auto;
 
-      gap: 28px;
+      gap: 20px;
 
       @media screen and (max-width: $landscape-tablet-size) {
         grid-template-columns: auto auto 1fr auto 30px 30px;
@@ -1122,14 +1141,51 @@
       }
 
       .header__cabinet-button {
-        @include icon(30px);
-        min-width: 30px;
+        @media screen and (max-width: $desktop-compact) {
+          @include icon(42px);
+          @include center;
+          font-size: 0;
+          border-radius: 100%;
+          padding: 0;
+          max-width: 42px;
+          min-width: 42px;
+
+          .header__cabinet-icon {
+            @include icon(18px);
+          }
+
+          .button__text {
+            gap: 0;
+
+            span {
+              display: none;
+            }
+          }
+        }
+
+        @media screen and (max-width: $landscape-tablet-size) {
+          @include icon(30px);
+          min-width: 30px;
+        }
+
+        @media screen and (max-width: $landscape-tablet-size) {
+          @include icon(36px);
+          min-width: 36px;
+        }
       }
 
       .header__call-icon {
-        display: block;
-        @include icon(15px);
-        fill: var(--main-green-dark);
+        display: none;
+
+        @media screen and (max-width: $landscape-tablet-size) {
+          display: block;
+          @include icon(15px);
+          fill: var(--main-green-dark);
+        }
+
+        @media screen and (max-width: $small-landscape-tablet-size) {
+          @include icon(18px);
+        }
       }
 
       .header__call-btn {
@@ -1138,6 +1194,11 @@
           padding: 0;
           @include icon(30px);
           min-width: 30px;
+        }
+
+        @media screen and (max-width: $small-landscape-tablet-size) {
+          @include icon(36px);
+          min-width: 36px;
         }
 
         .button__text {

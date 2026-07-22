@@ -21,6 +21,19 @@
     &__wrapper {
       display: flex;
       background-color: var(--main-blue);
+      padding: 25px 90px;
+
+      @media screen and (max-width: $desktop) {
+        padding: 24px 50px !important;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        padding: 20px 30px !important;
+      }
+
+      @media screen and (max-width: $mobile-size) {
+        padding: 10px !important;
+      }
 
       .header__logo-text {
         color: var(--main-black);
@@ -46,18 +59,7 @@
 
     @media screen and (max-width: $desktop) {
       .header__logout-button {
-        padding: 15px 30px;
-        font-size: 14px;
-
-        svg {
-          @include icon(20px);
-        }
-      }
-    }
-
-    @media screen and (max-width: $desktop-compact) {
-      .header__logout-button {
-        padding: 12px 30px;
+        padding: 10px 30px;
         font-size: 12px;
 
         svg {
@@ -69,9 +71,10 @@
     @media screen and (max-width: $landscape-tablet-size) {
       .header__logout-button {
         padding: 0;
+        font-size: 0;
 
-        .header__logout-text {
-          display: none;
+        svg {
+          @include icon(15px);
         }
       }
     }
@@ -95,10 +98,6 @@
         .header__logout-icon {
           @include icon(20px);
         }
-      }
-
-      .header__wrapper {
-        padding: 10px 20px;
       }
 
       .header__top {
