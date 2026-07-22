@@ -81,7 +81,7 @@ export default async function Header() {
             )}
 
             <div className="header__cabinet">
-              <ButtonCabinet city={slug} />
+              <ButtonCabinet />
             </div>
 
             <nav className="header__menu">
