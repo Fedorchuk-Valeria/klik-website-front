@@ -62,12 +62,7 @@ export function getClientCookie(name: string): string | undefined {
 export function deleteClientCookie(name: string, domain?: string): void {
   if (typeof document === "undefined") return;
 
-  const segments = [
-    `${encodeURIComponent(name)}=`,
-    "Path=/",
-    "Max-Age=0",
-    "SameSite=Lax",
-  ];
+  const segments = [`${encodeURIComponent(name)}=`, "Path=/", "Max-Age=0", "SameSite=Lax"];
 
   const resolvedDomain = domain ?? getClientCookieDomain();
   if (resolvedDomain) {
