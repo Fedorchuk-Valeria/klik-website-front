@@ -1,6 +1,6 @@
 .back-button {
   @include fonts(14px, 400, "Manrope");
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 15px;
   color: var(--main-black);
