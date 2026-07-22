@@ -565,6 +565,13 @@
       padding: 20px;
       gap: 16px;
       border-radius: 30px;
+
+      grid-template-columns:
+        auto
+        auto
+        1fr
+        auto
+        36px;
     }
 
     .header__left {
@@ -1168,7 +1175,7 @@
           min-width: 30px;
         }
 
-        @media screen and (max-width: $landscape-tablet-size) {
+        @media screen and (max-width: $small-landscape-tablet-size) {
           @include icon(36px);
           min-width: 36px;
         }
