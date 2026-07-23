@@ -531,7 +531,6 @@
 
     .header__brand {
       gap: 10px;
-      z-index: 1;
     }
 
     .header__wrapper {
@@ -710,7 +709,7 @@
       "mobile mobile";
 
       padding: 20px 30px 20px 30px;
-      gap: 0;
+      row-gap: 0;
     }
 
     &.header--menu-open {
@@ -721,7 +720,6 @@
 
     .header__phone {
       margin-right: 64px;
-      z-index: 1;
     }
 
     .header__call-btn {
@@ -1061,7 +1059,6 @@
 
     &-cities {
       min-width: 330px;
-      margin-left: 1px;
 
       @media screen and (max-width: 942px) {
         min-width: 0;
@@ -1071,7 +1068,6 @@
 
       @media screen and (max-width: $mobile-size) {
         max-width: 100%;
-        max-width: calc(100% - 2px);
       }
     }
 
@@ -1153,7 +1149,6 @@
       @media screen and (max-width: $tablet-size) {
         grid-template-columns: auto auto;
         grid-template-areas: "brand phone""mobile mobile";
-        gap: 0;
       }
 
       .header__cabinet-button {
