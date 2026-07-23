@@ -750,6 +750,7 @@
 
     .header__phone {
       margin-right: 64px;
+      z-index: 1;
     }
 
     .header__call-btn {
@@ -1093,6 +1094,7 @@
 
       @media screen and (max-width: $mobile-size) {
         max-width: 100%;
+        max-width: calc(100% - 2px);
       }
     }
 
