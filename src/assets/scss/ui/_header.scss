@@ -531,6 +531,7 @@
 
     .header__brand {
       gap: 10px;
+      z-index: 1;
     }
 
     .header__wrapper {
@@ -1060,6 +1061,7 @@
 
     &-cities {
       min-width: 330px;
+      margin-left: 1px;
 
       @media screen and (max-width: 942px) {
         min-width: 0;
