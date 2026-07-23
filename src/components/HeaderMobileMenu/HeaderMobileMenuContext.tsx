@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 type HeaderMobileMenuContextValue = {
   isOpen: boolean;
@@ -26,6 +26,18 @@ export function HeaderMobileMenuProvider({ children }: { children: React.ReactNo
   const toggleMenu = useCallback(() => {
     setIsOpen((value) => !value);
   }, []);
+
+  useEffect(() => {
+    const header = document.querySelector(".header");
+
+    if (!header) return;
+
+    header.classList.toggle("header--menu-open", isOpen);
+
+    return () => {
+      header.classList.remove("header--menu-open");
+    };
+  }, [isOpen]);
 
   return (
     <HeaderMobileMenuContext.Provider value={{ isOpen, closeMenu, toggleMenu }}>
