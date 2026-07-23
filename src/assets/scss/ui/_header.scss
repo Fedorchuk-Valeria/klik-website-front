@@ -704,6 +704,7 @@
   }
 
   @media screen and (max-width: $tablet-size) {
+
     .header__wrapper {
       grid-template-columns: auto auto;
       grid-template-areas:
@@ -712,6 +713,12 @@
 
       padding: 20px 30px 20px 30px;
       row-gap: 0;
+    }
+
+    &.header--menu-open {
+      .header__wrapper {
+        row-gap: 20px;
+      }
     }
 
     .header__phone {
@@ -737,6 +744,13 @@
       display: none;
     }
 
+    &.header--menu-open {
+      .header__logo-text {
+        display: block;
+        font-size: 14px;
+      }
+    }
+
     .header__call {
       padding: 16px;
       font-size: 16px;
@@ -756,6 +770,7 @@
       padding: 12px 10px;
       min-height: auto;
       border-radius: 16px;
+      row-gap: 0;
     }
 
     .header__top {
@@ -794,17 +809,11 @@
     .header__brand {
       flex-direction: column;
       align-items: flex-start;
-      max-width: 150px;
+      max-width: 174px;
     }
 
-    /*.header__logo-text {
-      display: block;
-      font-size: 12px;
-      white-space: nowrap;
-    }*/
-
     .header__mobile-top {
-      margin-top: 30px;
+      margin-top: 0;
     }
 
     &:has(.burger.active) .header__left {
@@ -918,8 +927,26 @@
       justify-content: center;
       margin-bottom: 50px;
 
+      @media screen and (max-width: $tablet-size) {
+        gap: 20px;
+      }
+
       @media screen and (max-width: $mobile-size) {
         margin-bottom: 30px;
+      }
+
+      .socials__item {
+        a {
+          @media screen and (max-width: $tablet-size) {
+            @include icon(50px);
+          }
+
+          svg {
+            @media screen and (max-width: $tablet-size) {
+              @include icon(24px);
+            }
+          }
+        }
       }
 
       &__link {
@@ -1117,8 +1144,8 @@
       }
 
       @media screen and (max-width: $tablet-size) {
-        grid-template-columns: auto auto auto;
-        grid-template-areas: "brand menu phone";
+        grid-template-columns: auto auto;
+        grid-template-areas: "brand phone""mobile mobile";
       }
 
       .header__cabinet-button {
@@ -1152,6 +1179,54 @@
         @media screen and (max-width: $small-landscape-tablet-size) {
           @include icon(36px);
           min-width: 36px;
+        }
+      }
+
+      .header__mobile  {
+
+        .header__call-btn {
+          @media screen and (max-width: $tablet-size) {
+            padding: 20px;
+            font-size: 18px;
+            max-width: 100%;
+            min-width: 100%;
+            height: 65px;
+          }
+
+          .button__text {
+            gap: 0;
+          }
+
+          .header__call-icon {
+            @media screen and (max-width: $tablet-size) {
+              display: none;
+            }
+          }
+        }
+
+        .header__cabinet-button {
+          @media screen and (max-width: $tablet-size) {
+            height: auto;
+            font-size: 18px;
+            border-radius: 100px;
+            padding: 18px 40px 17px 40px;
+            max-width: none;
+            width: 100%;
+          }
+
+          .header__cabinet-icon {
+            @media screen and (max-width: $tablet-size) {
+              @include icon(24px);
+            }
+          }
+
+          .button__text {
+            gap: 5px;
+
+            span {
+              display: block;
+            }
+          }
         }
       }
 
