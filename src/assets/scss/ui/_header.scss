@@ -712,7 +712,7 @@
       "mobile mobile";
 
       padding: 20px 30px 20px 30px;
-      row-gap: 0;
+      gap: 0;
     }
 
     &.header--menu-open {
@@ -1146,6 +1146,7 @@
       @media screen and (max-width: $tablet-size) {
         grid-template-columns: auto auto;
         grid-template-areas: "brand phone""mobile mobile";
+        gap: 0;
       }
 
       .header__cabinet-button {
