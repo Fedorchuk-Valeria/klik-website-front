@@ -7,7 +7,7 @@ export default function SiteLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const isProduction = process.env.APP_MODE === "production";
+  const isProduction = process.env.APP_MODE === "prod";
 
   return (
     <>
