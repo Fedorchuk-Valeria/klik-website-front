@@ -68,6 +68,12 @@
     }
   }
 
+  @media screen and (max-width: $desktop-compact) {
+    .course-page__content {
+      max-width: 1180px;
+    }
+  }
+
   @media screen and (max-width: $landscape-tablet-size) {
     .course-page__content {
       max-width: 944px;
@@ -98,6 +104,12 @@
           }
         }
       }
+    }
+  }
+
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    .course-page__content {
+      max-width: 880px;
     }
   }
 

@@ -13,8 +13,8 @@ import TextInput from "@/src/components/ui/TextInput";
 
 import { ModalType } from "@/src/entities/common";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import { clearChildSuccessfullyCreated, createChildRequest } from "@/src/store/slices/auth";
-import { hideModal, showModal } from "@/src/store/slices/modalSlice";
+import { clearChildVerificationPending, createChildRequest } from "@/src/store/slices/auth";
+import { showModal, hideModal } from "@/src/store/slices/modalSlice";
 import { PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
 
 type PropTypes = {
@@ -25,24 +25,25 @@ type PropTypes = {
 const WidgetModalCreateChildren: FC<PropTypes> = ({ className, isVisible }) => {
   const dispatch = useAppDispatch();
   const {
-    isChildSuccessfullyCreated,
     isCreateChildLoading,
+    isChildVerificationPending,
+    childVerificationSessionToken,
     errors: childErrors,
   } = useAppSelector((state) => state.auth);
 
   const form = useFormik({
     initialValues: {
       name: "",
+      date: "",
+      email: "",
       phone: "",
       password: "",
-      date: "",
     },
     validationSchema: createChildValidationSchema,
     onSubmit: (values) => {
-      console.log("values=", values);
-
       dispatch(
         createChildRequest({
+          email: values.email,
           phone: values.phone,
           full_name: values.name,
           birth_date: values.date,
@@ -71,35 +72,29 @@ const WidgetModalCreateChildren: FC<PropTypes> = ({ className, isVisible }) => {
     void form.setFieldValue(name, filtered);
   };
 
-  const handleBack = () => {
-    dispatch(hideModal());
-  };
-
-  useEffect(() => {
-    if (isChildSuccessfullyCreated) {
-      dispatch(clearChildSuccessfullyCreated());
-      dispatch(
-        showModal({
-          modalType: ModalType.SUCCESSFULLY,
-          modalProps: {
-            autoCloseDelayMs: 3000,
-            type: "success",
-            icon: "success-circle",
-            text: "Профиль ребёнка успешно создан",
-          },
-        })
-      );
-    }
-  }, [isChildSuccessfullyCreated, dispatch]);
-
   useEffect(() => {
     if (childErrors) {
       form.setFieldError("phone", childErrors.phone);
+      form.setFieldError("email", childErrors.email);
       form.setFieldError("name", childErrors.full_name);
       form.setFieldError("date", childErrors.birth_date);
       form.setFieldError("password", childErrors.password);
     }
-  }, [childErrors, dispatch]);
+  }, [childErrors]);
+
+  useEffect(() => {
+    if (isChildVerificationPending && childVerificationSessionToken) {
+      dispatch(clearChildVerificationPending());
+      dispatch(
+        showModal({
+          modalType: ModalType.CONFIRM_CHILDREN_EMAIL,
+          modalProps: {
+            sessionToken: childVerificationSessionToken,
+          },
+        })
+      );
+    }
+  }, [isChildVerificationPending, childVerificationSessionToken, dispatch]);
 
   useEffect(() => {
     if (isVisible) {
@@ -132,6 +127,21 @@ const WidgetModalCreateChildren: FC<PropTypes> = ({ className, isVisible }) => {
             onBlur={() => handleBlur("name")}
             maxLength={100}
             disabled={isCreateChildLoading}
+          />
+
+          <TextInput
+            name="email"
+            variant="outline"
+            label="Email"
+            value={form.values.email}
+            error={form.errors.email}
+            placeholder="example@mail.com"
+            onChange={handleChange}
+            required={true}
+            onBlur={() => handleBlur("email")}
+            maxLength={100}
+            disabled={isCreateChildLoading}
+            className="login-page__form-input"
           />
 
           <PhoneInput
@@ -193,7 +203,7 @@ const WidgetModalCreateChildren: FC<PropTypes> = ({ className, isVisible }) => {
             <Button
               variant="outline-green-dark"
               className="modal-children__cancel"
-              onClick={handleBack}
+              onClick={() => dispatch(hideModal())}
               disabled={isCreateChildLoading}
             >
               Отмена

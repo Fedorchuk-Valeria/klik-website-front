@@ -28,6 +28,8 @@ type AuthState = {
   isResetPasswordSuccess: boolean;
   isPersonalAccountChanged: boolean;
   isCreateChildLoading: boolean;
+  isChildVerificationPending: boolean;
+  childVerificationSessionToken: string | null;
   isLoggedIn: boolean;
   isPasswordChanged: boolean;
   isChildSuccessfullyCreated: boolean;
@@ -38,6 +40,8 @@ const initialState: AuthState = {
   user: null,
   errors: null,
   isCreateChildLoading: false,
+  isChildVerificationPending: false,
+  childVerificationSessionToken: null,
   isRegisterSuccess: false,
   isCodeSent: false,
   isCodeCorrect: false,
@@ -130,14 +134,40 @@ const authSlice = createSlice({
     createChildRequest: (state, action: { payload: CreateChildRequest }) => {
       void action.payload;
       state.isCreateChildLoading = true;
+      state.errors = null;
+    },
+    createChildVerificationPending: (state, action: { payload: string }) => {
+      state.isCreateChildLoading = false;
+      state.isChildVerificationPending = true;
+      state.childVerificationSessionToken = action.payload;
+      state.errors = null;
     },
     createChildSuccess: (state, action) => {
       state.isCreateChildLoading = false;
+      state.isChildVerificationPending = false;
+      state.childVerificationSessionToken = null;
       state.user_profile = {
         ...(state.user_profile as UserProfile),
         children: [...(state?.user_profile?.children || []), action.payload],
       };
       state.isChildSuccessfullyCreated = true;
+    },
+    verifyChildCodeRequest: (state, action: { payload: AuthVerifyCodeRequest }) => {
+      void action.payload;
+      state.isCreateChildLoading = true;
+      state.errors = null;
+    },
+    resendChildCodeRequest: (state, action: { payload: AuthResendCodeRequest }) => {
+      void action.payload;
+      state.isCreateChildLoading = true;
+      state.errors = null;
+    },
+    resendChildCodeSuccess: (state) => {
+      state.isCreateChildLoading = false;
+    },
+    clearChildVerificationPending: (state) => {
+      state.isChildVerificationPending = false;
+      state.childVerificationSessionToken = null;
     },
 
     setUser(state, action: { payload: unknown | null }) {
@@ -225,7 +255,12 @@ export const {
   resendCodeRequest,
 
   createChildRequest,
+  createChildVerificationPending,
   createChildSuccess,
+  verifyChildCodeRequest,
+  resendChildCodeRequest,
+  resendChildCodeSuccess,
+  clearChildVerificationPending,
 
   clearPersonalAccountChanged,
   clearErrors,

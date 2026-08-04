@@ -8,6 +8,7 @@ export const validationSchema = Yup.object().shape({
 
 export const registerValidationSchema = Yup.object().shape({
   phone: Yup.string().required("Пожалуйста, заполните поле"),
+  email: Yup.string().email("Введите корректный email").required("Пожалуйста, заполните поле"),
   password: Yup.string()
     .min(8, "Пожалуйста, введите корректный пароль")
     .max(64, "Пожалуйста, введите корректный пароль")
@@ -42,6 +43,7 @@ export const confirmCodeValidationSchema = Yup.object().shape({
 export const createChildValidationSchema = Yup.object().shape({
   name: Yup.string().required("Пожалуйста, заполните поле"),
   phone: Yup.string().required("Пожалуйста, заполните поле"),
+  email: Yup.string().email("Введите корректный email").required("Пожалуйста, заполните поле"),
   password: Yup.string()
     .min(8, "Пожалуйста, введите корректный пароль")
     .max(64, "Пожалуйста, введите корректный пароль")
