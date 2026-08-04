@@ -44,7 +44,7 @@ const PagesProfile = ({ settings }: PropTypes) => {
   const phone = settings?.phone ?? "";
 
   const isParent = role === "parent";
-  const isAdmin = role === 'admin';
+  const isAdmin = role === "admin";
   const title = isParent || isAdmin ? "Личный кабинет" : "Личный кабинет ученика";
 
   const clickoins = {
@@ -105,7 +105,7 @@ const PagesProfile = ({ settings }: PropTypes) => {
   }
 
   return (
-    <div className={`page-profile ${isParent ? 'parent' : 'child'}`}>
+    <div className={`page-profile ${isParent ? "parent" : "child"}`}>
       <div className="platform-layout__container">
         <div className="page-profile__header">
           <h1>{title}</h1>
@@ -123,15 +123,17 @@ const PagesProfile = ({ settings }: PropTypes) => {
                   className="login-page__form-input"
                   disabled={true}
                 />
-                {isParent || isAdmin && (
-                  <PhoneInput
-                    variant="outline"
-                    label="Телефон"
-                    value={user_profile?.profile?.phone}
-                    className="login-page__form-input"
-                    disabled={true}
-                  />
-                )}
+
+                {isParent ||
+                  (isAdmin && (
+                    <PhoneInput
+                      variant="outline"
+                      label="Телефон"
+                      value={user_profile?.profile?.phone}
+                      className="login-page__form-input"
+                      disabled={true}
+                    />
+                  ))}
               </div>
             </div>
 
@@ -191,6 +193,7 @@ const PagesProfile = ({ settings }: PropTypes) => {
                 <div className="page-profile__childrens-header">
                   <div className="page-profile__childrens-left">
                     <div className="page-profile__childrens-title">Профили детей</div>
+
                     <div className="page-profile__childrens-text">
                       Управление учебными профилями
                     </div>
@@ -205,6 +208,7 @@ const PagesProfile = ({ settings }: PropTypes) => {
                         История платежей
                       </Button>
                     </Link>
+
                     <Button
                       className="page-profile__childrens-add"
                       variant="orange"

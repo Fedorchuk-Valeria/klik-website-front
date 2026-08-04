@@ -7,16 +7,16 @@ import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import { useAppDispatch } from "@/src/store/hooks";
 import { hideModal } from "@/src/store/slices/modalSlice";
-import {PAGES} from "@/src/utils/constant";
-import {useRouter} from "next/navigation";
+import { PAGES } from "@/src/utils/constant";
+import { useRouter } from "next/navigation";
 
 type PropTypes = {
   name?: string;
   children?: [
     {
-      id: number,
-      full_name: string,
-    }
+      id: number;
+      full_name: string;
+    },
   ];
   className?: string;
   isVisible: boolean;
@@ -58,7 +58,7 @@ const WidgetModalAccountData: FC<PropTypes> = ({
       isVisible={isVisible}
       className={classNames("modal-account-data", className)}
     >
-      <p className={"modal-account-data__title"}>Привет, {name}</p>
+      <p className={"modal-account-data__title"}>Привет, {name}!</p>
 
       <span className="modal-account-data__description">
         К вашему родительскому профилю привязаны следующие аккаунты:
@@ -79,8 +79,12 @@ const WidgetModalAccountData: FC<PropTypes> = ({
       </span>
 
       <div className="modal-account-data__actions">
-        <Button variant="main-green-dark" onClick={() => handleProfile()}>Перейти к профилям детей</Button>
-        <Button className="modal-account-data__actions-button" onClick={() => handleClose()}>Позже</Button>
+        <Button variant="main-green-dark" onClick={() => handleProfile()}>
+          Перейти к профилям детей
+        </Button>
+        <Button className="modal-account-data__actions-button" onClick={() => handleClose()}>
+          Позже
+        </Button>
       </div>
     </Modal>
   );

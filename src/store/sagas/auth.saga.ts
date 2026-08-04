@@ -5,6 +5,7 @@ import {
   AuthChangePasswordRequest,
   AuthForgotPasswordRequest,
   AuthRegisterRequest,
+  AuthResendCodeRequest,
   AuthResetPasswordRequest,
   AuthSignInRequest,
   AuthVerifyCodeRequest,
@@ -19,6 +20,7 @@ import {
   changePasswordSuccess,
   createChildRequest,
   createChildSuccess,
+  createChildVerificationPending,
   forgotPasswordRequest,
   forgotPasswordSuccess,
   loginRequest,
@@ -29,10 +31,13 @@ import {
   profileSuccess,
   registerRequest,
   registerSuccess,
+  resendChildCodeRequest,
+  resendChildCodeSuccess,
   resendCodeRequest,
   resetPasswordRequest,
   resetPasswordSuccess,
   setErrors,
+  verifyChildCodeRequest,
   verifyCodeRequest,
   verifyCodeSuccess,
 } from "@/src/store/slices/auth";
@@ -254,9 +259,18 @@ function* watchChangePassword() {
 
 function* workerCreateChild({ payload }: { payload: CreateChildRequest }) {
   try {
-    const response: { data: CreateChildResponse } = yield call(UsersApi.createChild, payload);
+    const response: {
+      data: CreateChildResponse & { session_token?: string };
+    } = yield call(UsersApi.createChild, payload);
 
-    yield put(createChildSuccess(response.data.child));
+    if (response.data.session_token) {
+      yield put(createChildVerificationPending(response.data.session_token));
+      return;
+    }
+
+    if (response.data.child) {
+      yield put(createChildSuccess(response.data.child));
+    }
   } catch (error) {
     yield put(setErrors(error as Record<string, string> | null));
   }
@@ -266,6 +280,40 @@ function* watchCreateChild() {
   yield takeLatest(
     createChildRequest.type as unknown as Parameters<typeof takeLatest>[0],
     workerCreateChild
+  );
+}
+
+function* workerVerifyChildCode({ payload }: { payload: AuthVerifyCodeRequest }) {
+  try {
+    const response: { data: CreateChildResponse } = yield call(UsersApi.verifyCode, payload);
+
+    yield put(createChildSuccess(response.data.child));
+  } catch (error) {
+    yield put(setErrors(error as Record<string, string> | null));
+  }
+}
+
+function* watchVerifyChildCode() {
+  yield takeLatest(
+    verifyChildCodeRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerVerifyChildCode
+  );
+}
+
+function* workerResendChildCode({ payload }: { payload: AuthResendCodeRequest }) {
+  try {
+    yield call(UsersApi.resendVerification, payload);
+
+    yield put(resendChildCodeSuccess());
+  } catch (error) {
+    yield put(setErrors(error as Record<string, string> | null));
+  }
+}
+
+function* watchResendChildCode() {
+  yield takeLatest(
+    resendChildCodeRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerResendChildCode
   );
 }
 
@@ -297,5 +345,7 @@ export const authWatchers = [
   fork(watchProfile),
   fork(watchChangePassword),
   fork(watchCreateChild),
+  fork(watchVerifyChildCode),
+  fork(watchResendChildCode),
   fork(watchChangePasswordChild),
 ];

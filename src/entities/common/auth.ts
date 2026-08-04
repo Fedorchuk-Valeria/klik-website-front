@@ -7,10 +7,11 @@ export type AuthSignInRequest = {
 
 export type AuthRegisterRequest = {
   phone: string;
+  email: string;
   full_name: string;
   password: string;
   confirm_password: string;
-  branch_id?: string
+  branch_id?: string;
 };
 
 export type AuthVerifyCodeRequest = {
@@ -43,10 +44,16 @@ export type AuthChangePasswordRequest = {
 };
 
 export type CreateChildRequest = {
+  email: string;
   full_name: string;
   phone: string;
   birth_date: string;
   password: string;
+};
+
+export type CreateChildPendingResponse = {
+  detail: string;
+  session_token: string;
 };
 
 export type CreateChildResponse = {

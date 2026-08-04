@@ -15,8 +15,8 @@ import TextInput from "@/src/components/ui/TextInput";
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { clearErrors, clearRegister, registerRequest } from "@/src/store/slices/auth";
-import {BRANCH_CRM_ID, PAGES, PASSWORD_INPUT_STRIP_REGEX} from "@/src/utils/constant";
-import {CookieHelper} from "@/src/utils/helpers";
+import { BRANCH_CRM_ID, PAGES, PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
+import { CookieHelper } from "@/src/utils/helpers";
 
 const RegisterForm = () => {
   const dispatch = useAppDispatch();
@@ -26,6 +26,7 @@ const RegisterForm = () => {
     initialValues: {
       name: "",
       phone: "",
+      email: "",
       password: "",
       confirmPassword: "",
       branch_id: "",
@@ -35,6 +36,7 @@ const RegisterForm = () => {
       dispatch(
         registerRequest({
           phone: values.phone,
+          email: values.email,
           full_name: values.name,
           password: values.password,
           confirm_password: values.confirmPassword,
@@ -78,6 +80,7 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (errors) {
+      form.setFieldError("email", errors.email);
       form.setFieldError("phone", errors.phone);
       form.setFieldError("name", errors.full_name);
       form.setFieldError("password", errors.password);
@@ -116,6 +119,19 @@ const RegisterForm = () => {
           placeholder="+375 (29) 123-45-67"
           className="login-page__form-input"
           disabled={isLoading}
+        />
+
+        <TextInput
+          name="email"
+          label="Email"
+          variant="outline"
+          onChange={handleChange}
+          value={form.values.email}
+          error={form.errors.email}
+          placeholder="example@mail.com"
+          onBlur={() => handleBlur("email")}
+          disabled={isLoading}
+          maxLength={100}
         />
 
         <TextInput

@@ -13,6 +13,7 @@ import { Course } from "@/src/lib/getCourses";
 
 import WidgetModalAccountData from "@/src/widgets/Modal/AccountData";
 import WidgetModalCookiePolicy from "@/src/widgets/Modal/CookiePolicy";
+import WidgetModalConfirmChildrenEmail from "@/src/widgets/Modal/ConfirmChildrenEmail";
 import WidgetModalCreateChildren from "@/src/widgets/Modal/CreateChildren";
 import WidgetModalNotice from "@/src/widgets/Modal/Notice";
 import WidgetModalPayment from "@/src/widgets/Modal/Payment";
@@ -55,6 +56,14 @@ const WidgetModal = () => {
         return <WidgetModalPaymentStatus isVisible={active} {...modalProps} />;
       case ModalType.CREATE_CHILDREN:
         return <WidgetModalCreateChildren isVisible={active} {...modalProps} />;
+      case ModalType.CONFIRM_CHILDREN_EMAIL:
+        return (
+          <WidgetModalConfirmChildrenEmail
+            isVisible={active}
+            sessionToken={(modalProps as { sessionToken: string }).sessionToken}
+            {...modalProps}
+          />
+        );
       case ModalType.PAYMENT_CHILDREN:
         return <WidgetModalPaymentChildren isVisible={active} {...modalProps} />;
       case ModalType.ACCOUNT_DATA:

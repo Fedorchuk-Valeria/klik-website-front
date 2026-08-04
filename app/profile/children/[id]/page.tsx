@@ -22,10 +22,10 @@ import { METRICS, PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 
 import { ProfileBLock } from "@/src/components/ui/ProfileBlock";
+import { ModalType } from "@/src/entities/common";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { showModal } from "@/src/store/slices/modalSlice";
 import { getCurrentChildRequest } from "@/src/store/slices/profile";
-import {showModal} from "@/src/store/slices/modalSlice";
-import {ModalType} from "@/src/entities/common";
 
 const ChildrenDetailsPage = () => {
   const dispatch = useAppDispatch();
@@ -334,8 +334,15 @@ const ChildrenDetailsPage = () => {
                 </p>
 
                 <div className="children-details-page__offline_headline-actions">
-                  <Button variant="outline-orange">История платежей</Button>
-                  <Button variant="main-green-dark" withArrow onClick={() => handleCreatePayment(Number(id))}>
+                  <Link href={PAGES.PROFILE_PAYMENTS}>
+                    <Button variant="outline-orange">История платежей</Button>
+                  </Link>
+
+                  <Button
+                    variant="main-green-dark"
+                    withArrow
+                    onClick={() => handleCreatePayment(Number(id))}
+                  >
                     Оплатить обучение
                   </Button>
                 </div>
