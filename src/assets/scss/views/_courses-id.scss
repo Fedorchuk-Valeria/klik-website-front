@@ -47,7 +47,7 @@
     margin-top: 40px;
 
     .course-page__content {
-      max-width: 1320px;
+      max-width: 1340px;
 
       .course-page__content-timing {
         margin-top: 40px;
@@ -71,12 +71,22 @@
   @media screen and (max-width: $desktop-compact) {
     .course-page__content {
       max-width: 1180px;
+
+      .course-page__content-timing {
+        .course-page__content-timing_item {
+          .course-page__content-timing_item-icon {
+            svg {
+              @include icon(34px);
+            }
+          }
+        }
+      }
     }
   }
 
   @media screen and (max-width: $landscape-tablet-size) {
     .course-page__content {
-      max-width: 944px;
+      max-width: 964px;
 
       .course-page__content-timing {
         margin-top: 30px;
@@ -109,7 +119,7 @@
 
   @media screen and (max-width: $small-landscape-tablet-size) {
     .course-page__content {
-      max-width: 880px;
+      max-width: 900px;
     }
   }
 
@@ -151,6 +161,7 @@
 
     .course-page__content {
       max-width: 100%;
+      padding: 0 20px;
 
       .course-page__content-timing {
         margin-top: 30px;

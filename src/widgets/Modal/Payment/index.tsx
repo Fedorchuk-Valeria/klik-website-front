@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { FC, useState } from "react";
+import { FC, MouseEvent, useState } from "react";
 
 import Modal from "@/src/components/ui/Modal";
 
@@ -27,6 +27,12 @@ const WidgetModalPayment: FC<PropTypes> = ({ course, className, isVisible }) => 
 
   const [agree, setAgree] = useState(false);
   const [error, setError] = useState("");
+
+  const handleOpenPublicOffer = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    window.open(`${origin}${PUBLIC_OFFER_URL}`, "_blank", "noopener,noreferrer");
+  };
 
   const handlePayment = (id: number) => {
     if (!agree) {
@@ -87,7 +93,12 @@ const WidgetModalPayment: FC<PropTypes> = ({ course, className, isVisible }) => 
 
           <span>
             Я ознакомлен с{" "}
-            <a href={PUBLIC_OFFER_URL} target="_blank">
+            <a
+              href={`${origin}${PUBLIC_OFFER_URL}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleOpenPublicOffer}
+            >
               Договором услуг
             </a>
           </span>

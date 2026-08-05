@@ -215,6 +215,10 @@
   @media screen and (max-width: $desktop-compact) {
     margin-top: 40px;
 
+    .course-about__image {
+      max-width: 634px;
+    }
+
     .course-about__info {
       .course-about__info-parent {
         gap: 16px;
@@ -316,6 +320,16 @@
   }
 
   @media screen and (max-width: $small-landscape-tablet-size) {
+    gap: 16px;
+
+    .course-about__image {
+      max-width: 432px;
+    }
+
+    .course-about__info {
+      max-width: 432px;
+    }
+
     .course-about__info {
       .course-about__info-parent {
         gap: 16px;

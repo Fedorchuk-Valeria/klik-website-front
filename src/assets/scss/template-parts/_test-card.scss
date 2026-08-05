@@ -127,6 +127,16 @@
     }
   }
 
+  @media screen and (max-width: $desktop-compact) {
+    .test-card__title {
+      margin-top: 20px;
+    }
+
+    .test-card__answers {
+      gap: 12px;
+    }
+  }
+
   @media screen and (max-width: $landscape-tablet-size) {
     padding: 20px;
     border-radius: 20px;
@@ -164,6 +174,12 @@
           font-size: 16px;
         }
       }
+    }
+  }
+
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    .test-card__title {
+      margin-top: 16px;
     }
   }
 
