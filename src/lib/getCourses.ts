@@ -14,6 +14,21 @@ import { QueryHelper } from "@/src/utils/helpers";
 import { normalizeToken } from "@/src/utils/http";
 import { normalizeCoursesResponse } from "@/src/utils/normalizeCoursesPayload";
 
+function serializeFetchError(error: unknown): string {
+  if (!(error instanceof Error)) {
+    return String(error);
+  }
+
+  const cause =
+    error.cause instanceof Error
+      ? error.cause.message
+      : error.cause != null
+        ? String(error.cause)
+        : "";
+
+  return cause ? `${error.message} (cause: ${cause})` : error.message;
+}
+
 export type CoursePaymentStatus = typeof PAYMENT_STATUS_SUCCESSFULL | typeof PAYMENT_STATUS_FAILED;
 
 export type CoursePayment = {
@@ -190,13 +205,25 @@ export type PassedTest = {
 };
 
 export async function getCourses(query = ""): Promise<CoursesFetchResult> {
+  const configuredBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? "";
   const apiUrl = buildApiUrl(`/courses/${query}`);
 
+  console.log("[getCourses] start", {
+    configuredBaseUrl: configuredBaseUrl || "(not set)",
+    apiUrl: apiUrl || "(empty)",
+    query,
+    nodeEnv: process.env.NODE_ENV,
+  });
+
   if (!apiUrl) {
+    console.error("[getCourses] API URL is not configured");
     return {
       data: [],
       meta: { page: 1, page_size: COURSES_PAGE_SIZE, total_count: 0, total_pages: 0 },
-      errors: { detail: "API URL is not configured" },
+      errors: {
+        detail: "API URL is not configured",
+        configuredBaseUrl,
+      },
     };
   }
 
@@ -218,8 +245,15 @@ export async function getCourses(query = ""): Promise<CoursesFetchResult> {
       cache: "no-store",
     });
 
+    console.log("[getCourses] response", {
+      apiUrl,
+      status: response.status,
+      ok: response.ok,
+    });
+
     if (!response.ok) {
       const errorBody = (await response.json().catch(() => null)) as Record<string, string> | null;
+      console.error("[getCourses] HTTP error", { apiUrl, status: response.status, errorBody });
       return {
         data: [],
         meta: { page: 1, page_size: COURSES_PAGE_SIZE, total_count: 0, total_pages: 0 },
@@ -234,12 +268,31 @@ export async function getCourses(query = ""): Promise<CoursesFetchResult> {
       page_size: Number(queryParams[QUERY_PARAMS.PAGE_SIZE]) || COURSES_PAGE_SIZE,
     });
 
+    console.log("[getCourses] success", {
+      apiUrl,
+      count: data.length,
+      total_count: meta.total_count,
+    });
+
     return { data, meta, errors: null };
   } catch (error) {
+    const detail = serializeFetchError(error);
+
+    console.error("[getCourses] fetch failed", {
+      apiUrl,
+      configuredBaseUrl,
+      detail,
+      error,
+    });
+
     return {
       data: [],
       meta: { page: 1, page_size: COURSES_PAGE_SIZE, total_count: 0, total_pages: 0 },
-      errors: { detail: `Failed to fetch courses: ${error}` },
+      errors: {
+        detail: `Failed to fetch courses: ${detail}`,
+        apiUrl,
+        configuredBaseUrl,
+      },
     };
   }
 }
@@ -248,12 +301,30 @@ export async function getCurrentCourse(
   courseId: number | string,
   childId?: string
 ): Promise<CourseFetchResult> {
+  const configuredBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? "";
   const apiUrl = buildApiUrl(
     `/courses/${courseId}/${childId ? `?${QUERY_PARAMS.CHILD_ID}=${childId}` : ""}`
   );
 
+  console.log("[getCurrentCourse] start", {
+    configuredBaseUrl: configuredBaseUrl || "(not set)",
+    apiUrl: apiUrl || "(empty)",
+    courseId,
+    childId: childId ?? null,
+    nodeEnv: process.env.NODE_ENV,
+  });
+
   if (!apiUrl) {
-    return { data: null, errors: { detail: "API URL is not configured" } };
+    console.error("[getCurrentCourse] API URL is not configured");
+    return {
+      data: null,
+      errors: {
+        detail: "API URL is not configured",
+        configuredBaseUrl,
+        courseId: String(courseId),
+        childId: childId ?? "",
+      },
+    };
   }
 
   const cookieStore = await cookies();
@@ -274,16 +345,58 @@ export async function getCurrentCourse(
       cache: "no-store",
     });
 
+    console.log("[getCurrentCourse] response", {
+      apiUrl,
+      courseId,
+      childId: childId ?? null,
+      status: response.status,
+      ok: response.ok,
+    });
+
     if (!response.ok) {
       const errorBody = (await response.json().catch(() => null)) as Record<string, string> | null;
+      console.error("[getCurrentCourse] HTTP error", {
+        apiUrl,
+        courseId,
+        childId: childId ?? null,
+        status: response.status,
+        errorBody,
+      });
       return { data: null, errors: errorBody };
     }
 
     const payload = (await response.json()) as Course;
 
+    console.log("[getCurrentCourse] success", {
+      apiUrl,
+      courseId,
+      childId: childId ?? null,
+      title: payload.title,
+    });
+
     return { data: payload, errors: null };
   } catch (error) {
-    return { data: null, errors: { detail: `Failed to fetch course: ${error}` } };
+    const detail = serializeFetchError(error);
+
+    console.error("[getCurrentCourse] fetch failed", {
+      apiUrl,
+      configuredBaseUrl,
+      courseId,
+      childId: childId ?? null,
+      detail,
+      error,
+    });
+
+    return {
+      data: null,
+      errors: {
+        detail: `Failed to fetch course: ${detail}`,
+        apiUrl,
+        configuredBaseUrl,
+        courseId: String(courseId),
+        childId: childId ?? "",
+      },
+    };
   }
 }
 

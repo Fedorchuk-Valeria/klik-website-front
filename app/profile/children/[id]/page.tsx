@@ -30,7 +30,7 @@ import { getCurrentChildRequest } from "@/src/store/slices/profile";
 const ChildrenDetailsPage = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
-  const { currentChild, isLoading } = useAppSelector((store) => store.profile);
+  const { currentChild, isLoading, errors } = useAppSelector((store) => store.profile);
   const [openPartnerIndex, setOpenPartnerIndex] = useState<number | null>(null);
   const [isOpenCourses, setOpenCourses] = useState(false);
   const [isOpenPartners, setOpenPartners] = useState(false);
@@ -156,6 +156,8 @@ const ChildrenDetailsPage = () => {
       dispatch(getCurrentChildRequest(Number(id)));
     }
   }, [dispatch, id]);
+
+  console.log("ChildrenDetailsPage", { id, currentChild, isLoading, errors });
 
   if (isLoading || !currentChild) {
     return <Loader />;

@@ -79,6 +79,12 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
     );
   }, [dispatch, settings, data?.payment]);
 
+  console.log("CoursePage", {
+    courseId: data.id,
+    childId: searchParams.get(QUERY_PARAMS.CHILD_ID),
+    errors,
+  });
+
   return (
     <div className="course-page">
       <div className="course-page__content">

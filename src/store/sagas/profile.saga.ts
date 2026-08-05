@@ -2,6 +2,8 @@ import { call, fork, put, takeLatest } from "redux-saga/effects";
 
 import { UserProfileChilds } from "@/src/entities/common";
 import { ProfileApi, UsersApi } from "@/src/services/http";
+import { API_URL } from "@/src/utils/constant";
+import { buildApiUrl } from "@/src/utils/buildApiUrl";
 import {
   getCurrentChildFailure,
   getCurrentChildRequest,
@@ -33,13 +35,37 @@ function* watchGetPartners() {
 }
 
 function* workerGetCurrentChild(action: { payload: number }) {
+  const childId = action.payload;
+  const configuredBaseUrl = API_URL ?? "";
+  const apiUrl = buildApiUrl(`/users/children/${childId}/`);
+
+  console.log("[getCurrentChild] start", {
+    childId,
+    configuredBaseUrl: configuredBaseUrl || "(not set)",
+    apiUrl: apiUrl || "(empty)",
+  });
+
   try {
     const response: { data: UserProfileChilds } = yield call(
       UsersApi.getChildProfileByParent,
-      action.payload
+      childId
     );
+
+    console.log("[getCurrentChild] success", {
+      childId,
+      apiUrl,
+      full_name: response.data?.profile?.full_name,
+    });
+
     yield put(getCurrentChildSuccess(response.data));
   } catch (error) {
+    console.error("[getCurrentChild] failed", {
+      childId,
+      apiUrl,
+      configuredBaseUrl: configuredBaseUrl || "(not set)",
+      error,
+    });
+
     yield put(getCurrentChildFailure(error as Record<string, string> | null));
   }
 }
