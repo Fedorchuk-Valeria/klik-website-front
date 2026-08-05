@@ -281,6 +281,8 @@ const PagesCourses = ({
     };
   }, [hasMore, loadMore, courses.length]);
 
+  console.log("PagesCourses", courses, meta, isLoading, initialErrors);
+
   return (
     <div className="page-courses">
       <div className="header__container">
@@ -396,46 +398,46 @@ const PagesCourses = ({
                 "courses-list__item--purchased": item.is_purchased,
               })}
             >
-                <div className="courses-list__item-image">
-                  <Image src={item.image} alt={item.title} fill />
+              <div className="courses-list__item-image">
+                <Image src={item.image} alt={item.title} fill />
 
-                  {item.is_purchased && (
-                    <span className="courses-list__item-purchased">
-                      <Icon name="success-circle" /> Куплен
-                    </span>
-                  )}
-
-                  {item.categories && (
-                    <div className="courses-list__item-categories">
-                      {item.categories.map((category) => (
-                        <span key={category.id} className="courses-list__item-category">
-                          {category.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <div className="courses-list__item-content">
-                  <p className="courses-list__item-title">{item.title}</p>
-                  <p className="courses-list__item-description">{item.description}</p>
-
-                  <span className="courses-list__item-duration">
-                    <Icon name="clock" /> {item.duration_months}{" "}
-                    {getPlural(item.duration_months, ["месяц", "месяца", "месяцев"])}
+                {item.is_purchased && (
+                  <span className="courses-list__item-purchased">
+                    <Icon name="success-circle" /> Куплен
                   </span>
+                )}
 
-                  <p className="courses-list__item-price">
-                    {item?.price?.toLocaleString("ru-RU")}{" "}
-                    <Icon name="ruble" className="courses-list__item-price-icon" />
-                  </p>
+                {item.categories && (
+                  <div className="courses-list__item-categories">
+                    {item.categories.map((category) => (
+                      <span key={category.id} className="courses-list__item-category">
+                        {category.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="courses-list__item-content">
+                <p className="courses-list__item-title">{item.title}</p>
+                <p className="courses-list__item-description">{item.description}</p>
 
-                  <Button
-                    className="courses-list__item-button"
-                    variant={item.is_purchased ? "main-green-dark" : "outline-green-dark"}
-                  >
-                    {item.is_purchased ? "Открыть" : "Подробнее"}
-                  </Button>
-                </div>
+                <span className="courses-list__item-duration">
+                  <Icon name="clock" /> {item.duration_months}{" "}
+                  {getPlural(item.duration_months, ["месяц", "месяца", "месяцев"])}
+                </span>
+
+                <p className="courses-list__item-price">
+                  {item?.price?.toLocaleString("ru-RU")}{" "}
+                  <Icon name="ruble" className="courses-list__item-price-icon" />
+                </p>
+
+                <Button
+                  className="courses-list__item-button"
+                  variant={item.is_purchased ? "main-green-dark" : "outline-green-dark"}
+                >
+                  {item.is_purchased ? "Открыть" : "Подробнее"}
+                </Button>
+              </div>
             </Link>
           ))}
         </div>

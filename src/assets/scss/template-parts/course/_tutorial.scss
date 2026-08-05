@@ -64,9 +64,12 @@
     }
   }
 
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    max-width: 100%;
+  }
+
   @media screen and (max-width: $tablet-size) {
     margin-top: 100px;
-    max-width: 100%;
 
     .course-tutorial__content {
       margin-top: 50px;

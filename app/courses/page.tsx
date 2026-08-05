@@ -5,7 +5,12 @@ import PagesCourses from "@/src/components/Pages/PagesCourses/PagesCourses";
 
 import { getCourses } from "@/src/lib/getCourses";
 
-import { COURSES_PAGE_SIZE, QUERY_PARAMS, REFRESH_TOKEN_KEY, TOKEN_KEY } from "@/src/utils/constant";
+import {
+  COURSES_PAGE_SIZE,
+  QUERY_PARAMS,
+  REFRESH_TOKEN_KEY,
+  TOKEN_KEY,
+} from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 
 export const dynamic = "force-dynamic";
@@ -21,6 +26,8 @@ export default async function CoursesPage() {
       [QUERY_PARAMS.PAGE_SIZE]: COURSES_PAGE_SIZE,
     })
   );
+
+  console.log("CoursesPage", data, meta, errors);
 
   return (
     <LayoutPlatform headerVariant="dark" showAuthControls={true}>

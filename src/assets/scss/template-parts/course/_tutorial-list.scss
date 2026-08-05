@@ -132,18 +132,18 @@
         width: fit-content;
 
         button {
-          @include fonts(14px, 500, "Manrope");
+          @include fonts(12px, 500, "Manrope");
           display: flex;
           align-items: center;
           gap: 10px;
-          padding: 10px 20px;
+          padding: 8px 16px;
           background: var(--main-bg);
           border-radius: 100px;
           cursor: pointer;
           color: var(--main-black);
 
           svg {
-            @include icon(24px);
+            @include icon(20px);
             color: var(--main-green-dark);
           }
 
@@ -152,6 +152,16 @@
               opacity: 0.8;
             }
           }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $desktop-compact) {
+    .course-tutorial__list-item {
+      .course-tutorial__list-item--status {
+        svg {
+          @include icon(34px);
         }
       }
     }
@@ -218,6 +228,16 @@
               @include icon(20px);
             }
           }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    .course-tutorial__list-item {
+      .course-tutorial__list-item--status {
+        svg {
+          @include icon(30px);
         }
       }
     }
