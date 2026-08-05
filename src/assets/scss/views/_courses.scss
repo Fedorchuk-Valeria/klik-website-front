@@ -117,7 +117,6 @@
     @include center-between;
     margin-top: 80px;
 
-    .courses-headline__select,
     .courses-headline__select-categories {
       border-radius: 27px;
       transition: border-radius 0.3s ease-in-out;
@@ -127,8 +126,18 @@
       }
     }
 
-    .courses-headline__select {
-      min-width: 400px;
+    .courses-headline__buttons {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+
+      .courses-headline__button {
+        padding: 12px 50px;
+      }
+
+      .courses-headline__button--non-active {
+        color: var(--main-black);
+      }
     }
 
     .courses-headline__filters {
@@ -448,7 +457,6 @@
             margin-top: 24px;
 
             .page-courses__header-content-item {
-
               .page-courses__header-icon {
                 @include icon(70px);
 
@@ -500,6 +508,11 @@
       gap: 50px;
       align-items: flex-start;
       flex-direction: column;
+
+      .courses-headline__buttons {
+        gap: 16px;
+        font-size: 16px;
+      }
     }
 
     .courses-list {
@@ -656,8 +669,12 @@
       margin-top: 30px;
       gap: 30px;
 
-      .courses-headline__select {
-        min-width: 315px;
+      .courses-headline__buttons {
+        gap: 10px;
+
+        .courses-headline__button {
+          padding: 8px 24px;
+        }
       }
 
       .courses-headline__filters {
@@ -744,7 +761,6 @@
 
   @media screen and (max-width: $small-landscape-tablet-size) {
     .page-courses__header {
-
       .page-courses__header-content {
         flex-direction: column;
         gap: 40px;
@@ -793,7 +809,6 @@
           .page-courses__header-button {
             max-width: 100%;
           }
-
         }
 
         .page-courses__header-image {
@@ -821,8 +836,12 @@
       margin-top: 30px;
       gap: 30px;
 
-      .courses-headline__select {
-        min-width: 315px;
+      .courses-headline__buttons {
+        gap: 12px;
+
+        .courses-headline__button {
+          padding: 12px 20px;
+        }
       }
 
       .courses-headline__filters {
@@ -982,8 +1001,15 @@
     }
 
     .courses-headline {
-      .courses-headline__select {
-        min-width: 100%;
+      .courses-headline__buttons {
+        width: 100%;
+        gap: 16px;
+
+        .courses-headline__button {
+          @include center;
+          font-size: 18px;
+          width: 100%;
+        }
       }
 
       .courses-headline__filters {
@@ -1174,6 +1200,15 @@
 
     .courses-headline {
       gap: 20px;
+
+      .courses-headline__buttons {
+        gap: 10px;
+
+        .courses-headline__button {
+          padding: 10px 20px;
+          font-size: 16px;
+        }
+      }
 
       .courses-headline__filters {
         width: 100%;

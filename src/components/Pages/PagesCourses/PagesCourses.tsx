@@ -161,7 +161,7 @@ const PagesCourses = ({
     });
   };
 
-  const handleSelectFilter = (option: { id: string; name: string }) => {
+  const handleSelectFilter = (option: { id: string; name: string }) => () => {
     setSelectedFilter(option);
     setSelectedCategory([]);
   };
@@ -294,6 +294,7 @@ const PagesCourses = ({
                   Самостоятельное обучение на платформе
                   <br />с ИИ помощником
                 </h1>
+
                 <p className="page-courses__header-text">
                   {`Онлайн-платформа, где ребёнок развивается в своём темпе с ИИ-помощником, а родитель спокоен за его занятость.`}
                 </p>
@@ -353,13 +354,20 @@ const PagesCourses = ({
         <p className="courses__text">Выберите курс для начала обучения</p>
 
         <div className="courses-headline">
-          <Select
-            icon="document"
-            options={options}
-            onChange={handleSelectFilter}
-            selectedOption={selectedFilter}
-            className="courses-headline__select"
-          />
+          <div className="courses-headline__buttons">
+            {options.map((item) => (
+              <Button
+                key={item.id}
+                variant={selectedFilter.id === item.id ? "orange" : "outline-orange"}
+                className={classNames("courses-headline__button", {
+                  "courses-headline__button--non-active": selectedFilter.id !== item.id,
+                })}
+                onClick={handleSelectFilter(item)}
+              >
+                {item.name}
+              </Button>
+            ))}
+          </div>
 
           <div className="courses-headline__filters">
             {allCategories.map((item) => (
