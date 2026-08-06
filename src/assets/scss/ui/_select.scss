@@ -56,7 +56,7 @@
     span {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 16px;
 
       .select__icon {
         @include icon(24px);
@@ -121,6 +121,122 @@
 
     &--active {
       background: var(--secondary-green-neon-50);
+    }
+  }
+
+  &.select--absolute {
+    min-height: 54px;
+
+    &.select--open {
+      overflow: visible;
+      border: none;
+
+      .select__current {
+        position: relative;
+        z-index: 12;
+        top: 3px;
+        left: 3px;
+        width: calc(100% - 6px);
+        background: var(--main-bg);
+        border: none;
+        border-radius: 27px 27px 0 0;
+
+        .select__current-text {
+          padding-bottom: 3px;
+        }
+      }
+
+      .select__dropdown-wrap {
+        border: 2px solid var(--main-orange);
+        border-radius: 27px;
+        background: var(--main-bg);
+        padding-top: 50px;
+      }
+    }
+
+    .select__dropdown-wrap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 11;
+    }
+
+    &.select--green.select--open .select__dropdown-wrap {
+      border-color: var(--main-green-dark);
+    }
+  }
+
+  @media screen and (max-width: $desktop-compact) {
+    &.select--absolute {
+      min-height: 48px;
+
+      .select__current {
+        .select__current-text {
+          font-size: 16px;
+          gap: 12px;
+        }
+
+        .select__icon {
+          @include icon(20px);
+          min-width: 20px;
+          max-height: 20px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    &.select--absolute {
+      min-height: 42px;
+
+      .select__current {
+        .select__current-text {
+          gap: 8px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    &.select--absolute {
+      min-height: 48px;
+
+      .select__current {
+        .select__current-text {
+          gap: 10px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    &.select--absolute {
+      min-height: 54px;
+
+      .select__current {
+        .select__current-text {
+          font-size: 18px;
+        }
+
+        .select__icon {
+          @include icon(24px);
+          min-width: 24px;
+          max-height: 24px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    &.select--absolute {
+      min-height: 50px;
+
+      .select__current {
+        .select__current-text {
+          font-size: 16px;
+        }
+      }
     }
   }
 }
