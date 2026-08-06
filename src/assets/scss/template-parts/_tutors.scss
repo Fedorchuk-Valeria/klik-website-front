@@ -104,6 +104,8 @@
 
         .home-page__tutors-detail__name {
           @include fonts(50px, 500);
+          @include text-line-clamp(3);
+          line-height: 1.2;
           color: var(--main-orange);
           margin: 0;
           white-space: pre-wrap;
@@ -124,6 +126,8 @@
 
         .home-page__tutors-detail__position {
           @include fonts(20px);
+          @include text-line-clamp(3);
+          line-height: 1.25;
           white-space: pre-wrap;
           margin-bottom: 6px;
         }

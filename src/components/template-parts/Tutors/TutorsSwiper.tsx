@@ -6,7 +6,7 @@ import type { Swiper as SwiperType } from "swiper";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import { TUTOR_IMAGES } from "./tutorImages";
+import { resolveTutorImage } from "./tutorImages";
 import type { TutorItem } from "./types";
 
 const TUTOR_IMG_W_COMPACT = 360;
@@ -46,7 +46,7 @@ const TutorsSwiper: FC<TutorsSwiperProps> = ({
   const swiperSlides = useMemo(
     () =>
       slidesForSwiper.map(({ item, key }) => {
-        const img = item ? TUTOR_IMAGES[item.id] : undefined;
+        const img = item ? resolveTutorImage(item) : undefined;
         if (!item || !img) return null;
 
         return (

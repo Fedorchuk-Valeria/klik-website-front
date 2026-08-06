@@ -13,7 +13,7 @@ import {
   useState,
 } from "react";
 
-import { TUTOR_IMAGES } from "./tutorImages";
+import { resolveTutorImage } from "./tutorImages";
 import type { TutorsSliderSlide } from "./tutorSlideMetrics";
 import {
   DESKTOP_ACTIVE_SLOT,
@@ -318,7 +318,7 @@ const TutorsSlider: FC<TutorsSliderProps> = ({
         }}
       >
         {slides.map(({ item, key }, slot) => {
-          const img = item ? TUTOR_IMAGES[item.id] : undefined;
+          const img = item ? resolveTutorImage(item) : undefined;
           if (!item || !img) return null;
 
           const isOutgoing = isOutgoingActive(slot);

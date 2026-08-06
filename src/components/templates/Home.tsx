@@ -21,6 +21,7 @@ import WhyWeAre from "@/src/components/template-parts/WhyWeAre";
 import { Page } from "@/src/lib/content/types";
 import { getHomeLocations } from "@/src/lib/getLocations";
 import { getHomePrices } from "@/src/lib/getPrices";
+import { getHomeTutors } from "@/src/lib/getTutors";
 
 type Props = {
   page: Page;
@@ -37,7 +38,7 @@ export default async function Home({ page }: Props) {
   const programs = page.content.programs;
   const whatWeLearn = page.content.what_we_learn;
   const whyWeAre = page.content.why_we_are;
-  const tutors = page.content.our_tutors;
+  const tutors = await getHomeTutors(page.content.our_tutors);
   const howSignUp = page.content.how_sign_up;
   const signUpFreeLesson = page.content.sign_up_free_lesson;
   const aboutUs = page.content.about_us;
@@ -91,7 +92,7 @@ export default async function Home({ page }: Props) {
       {location && <Location {...location} />}
       {whyWeAre && <WhyWeAre {...whyWeAre} />}
       {signUpFreeLesson && <SignUpFreeLesson {...signUpFreeLesson} />}
-      <Tutors {...tutors} />
+      {tutors && <Tutors {...tutors} />}
       {prices && <Prices {...prices} />}
       {faq && <FAQPage {...faq} />}
     </main>

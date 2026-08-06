@@ -41,6 +41,27 @@ export type UsersLocationsResponse = {
   results: UsersLocationResult[];
 };
 
+export type UsersMentorSpecialization = {
+  id: number;
+  name: string;
+};
+
+export type UsersMentorResult = {
+  id: number;
+  full_name: string;
+  position: string;
+  description: string;
+  city: string;
+  city_name: string;
+  photo: string;
+  sort_order: number;
+  specializations: UsersMentorSpecialization[];
+};
+
+export type UsersMentorsResponse = {
+  results: UsersMentorResult[];
+};
+
 export const signIn = (data: AuthSignInRequest) => POST(`${baseUrl}/login/`, data);
 
 export const register = (data: AuthRegisterRequest) => POST(`${baseUrl}/register/`, data);

@@ -5,4 +5,5 @@ export type TutorItem = {
   text: string;
   location: string;
   tags: string[];
+  photo?: string;
 };
