@@ -208,13 +208,6 @@ export async function getCourses(query = ""): Promise<CoursesFetchResult> {
   const configuredBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? "";
   const apiUrl = buildApiUrl(`/courses/${query}`);
 
-  console.log("[getCourses] start", {
-    configuredBaseUrl: configuredBaseUrl || "(not set)",
-    apiUrl: apiUrl || "(empty)",
-    query,
-    nodeEnv: process.env.NODE_ENV,
-  });
-
   if (!apiUrl) {
     console.error("[getCourses] API URL is not configured");
     return {
@@ -245,12 +238,6 @@ export async function getCourses(query = ""): Promise<CoursesFetchResult> {
       cache: "no-store",
     });
 
-    console.log("[getCourses] response", {
-      apiUrl,
-      status: response.status,
-      ok: response.ok,
-    });
-
     if (!response.ok) {
       const errorBody = (await response.json().catch(() => null)) as Record<string, string> | null;
       console.error("[getCourses] HTTP error", { apiUrl, status: response.status, errorBody });
@@ -266,12 +253,6 @@ export async function getCourses(query = ""): Promise<CoursesFetchResult> {
     const { data, meta } = normalizeCoursesResponse<Course>(payload, {
       page: Number(queryParams[QUERY_PARAMS.PAGE]) || 1,
       page_size: Number(queryParams[QUERY_PARAMS.PAGE_SIZE]) || COURSES_PAGE_SIZE,
-    });
-
-    console.log("[getCourses] success", {
-      apiUrl,
-      count: data.length,
-      total_count: meta.total_count,
     });
 
     return { data, meta, errors: null };
@@ -306,14 +287,6 @@ export async function getCurrentCourse(
     `/courses/${courseId}/${childId ? `?${QUERY_PARAMS.CHILD_ID}=${childId}` : ""}`
   );
 
-  console.log("[getCurrentCourse] start", {
-    configuredBaseUrl: configuredBaseUrl || "(not set)",
-    apiUrl: apiUrl || "(empty)",
-    courseId,
-    childId: childId ?? null,
-    nodeEnv: process.env.NODE_ENV,
-  });
-
   if (!apiUrl) {
     console.error("[getCurrentCourse] API URL is not configured");
     return {
@@ -345,14 +318,6 @@ export async function getCurrentCourse(
       cache: "no-store",
     });
 
-    console.log("[getCurrentCourse] response", {
-      apiUrl,
-      courseId,
-      childId: childId ?? null,
-      status: response.status,
-      ok: response.ok,
-    });
-
     if (!response.ok) {
       const errorBody = (await response.json().catch(() => null)) as Record<string, string> | null;
       console.error("[getCurrentCourse] HTTP error", {
@@ -366,13 +331,6 @@ export async function getCurrentCourse(
     }
 
     const payload = (await response.json()) as Course;
-
-    console.log("[getCurrentCourse] success", {
-      apiUrl,
-      courseId,
-      childId: childId ?? null,
-      title: payload.title,
-    });
 
     return { data: payload, errors: null };
   } catch (error) {

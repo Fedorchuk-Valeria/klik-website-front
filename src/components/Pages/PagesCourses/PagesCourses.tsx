@@ -9,9 +9,7 @@ import image from "@/src/assets/images/view/courses/boy.png";
 
 import { Meta } from "@/src/entities/common";
 import { Course } from "@/src/lib/getCourses";
-import { buildApiUrl } from "@/src/utils/buildApiUrl";
 import {
-  API_URL,
   COURSES_PAGE_SIZE,
   PAGE_ANCHORS,
   PAGES,
@@ -122,16 +120,6 @@ const PagesCourses = ({
   const fetchCourses = useCallback(
     (page: number, append = false) => {
       const query = buildCoursesQuery(page, selectedFilter.id, selectedCategory);
-      const endpoint = `/courses/${query}`;
-      const fullUrl = buildApiUrl(endpoint);
-
-      console.log("[CoursesPage] fetch courses", {
-        apiBase: API_URL ?? "(not set)",
-        endpoint,
-        fullUrl: fullUrl || "(empty)",
-        page,
-        append,
-      });
 
       dispatch(
         getCoursesRequest({
@@ -142,22 +130,6 @@ const PagesCourses = ({
     },
     [dispatch, selectedCategory, selectedFilter.id]
   );
-
-  useEffect(() => {
-    const initialQuery = QueryHelper.getQueryString({
-      [QUERY_PARAMS.PAGE]: 1,
-      [QUERY_PARAMS.PAGE_SIZE]: COURSES_PAGE_SIZE,
-    });
-    const endpoint = `/courses/${initialQuery}`;
-    const fullUrl = buildApiUrl(endpoint);
-
-    console.log("[CoursesPage] initial SSR data source", {
-      apiBase: API_URL ?? "(not set)",
-      endpoint,
-      fullUrl: fullUrl || "(empty)",
-      note: "first load is fetched on the server; client refetches on filter/pagination change",
-    });
-  }, []);
 
   const loadMore = useCallback(() => {
     if (isLoading || !hasMore) return;
@@ -310,8 +282,6 @@ const PagesCourses = ({
       observer.disconnect();
     };
   }, [hasMore, loadMore, courses.length]);
-
-  console.log("PagesCourses", courses, meta, isLoading, initialErrors);
 
   return (
     <div className="page-courses">

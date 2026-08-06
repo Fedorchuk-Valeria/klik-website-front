@@ -6,7 +6,7 @@ import ProgramView from "@/src/components/templates/Program";
 
 import { Page } from "./content/types";
 
-const map: Record<string, ({ page }: { page: Page }) => JSX.Element> = {
+const map: Record<string, ({ page }: { page: Page }) => JSX.Element | Promise<JSX.Element>> = {
   page: DefaultPage,
   home: Home,
   program: ProgramView,

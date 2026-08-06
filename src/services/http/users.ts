@@ -18,6 +18,28 @@ export type QueryParams = Record<
   string | number | boolean | null | undefined
 >;
 
+export type UsersPricesResponse = {
+  title: string;
+  price: string;
+  items: string[];
+};
+
+export type UsersLocationResult = {
+  id: number;
+  name: string;
+  address: string;
+  metro_station: string;
+  photo: string;
+  map_url: string;
+};
+
+export type UsersLocationsResponse = {
+  city: string;
+  city_name: string;
+  city_map_url: string;
+  online_registration_url: string;
+  results: UsersLocationResult[];
+};
 
 export const signIn = (data: AuthSignInRequest) => POST(`${baseUrl}/login/`, data);
 

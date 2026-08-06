@@ -11,8 +11,9 @@ export type LocationItemData = {
   title: string;
   location: string;
   metro: string;
-  coords: readonly [number, number];
-  icon: React.ReactNode;
+  coords?: readonly [number, number];
+  map_url?: string;
+  icon?: React.ReactNode;
   iconPlacement?: "top" | "bottom" | "middle";
 };
 
@@ -58,7 +59,16 @@ const LocationCardContent: FC<{
 
       <button
         type="button"
-        onClick={() => onShowOnMap(item.coords)}
+        onClick={() => {
+          if (item.coords) {
+            onShowOnMap(item.coords);
+            return;
+          }
+
+          if (item.map_url) {
+            window.open(item.map_url, "_blank", "noopener,noreferrer");
+          }
+        }}
         className="home-page__location-body-item-info--button"
       >
         Показать на карте

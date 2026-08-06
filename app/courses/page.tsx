@@ -5,9 +5,7 @@ import PagesCourses from "@/src/components/Pages/PagesCourses/PagesCourses";
 
 import { getCourses } from "@/src/lib/getCourses";
 
-import { buildApiUrl } from "@/src/utils/buildApiUrl";
 import {
-  API_URL,
   COURSES_PAGE_SIZE,
   QUERY_PARAMS,
   REFRESH_TOKEN_KEY,
@@ -25,14 +23,6 @@ export default async function CoursesPage() {
   const query = QueryHelper.getQueryString({
     [QUERY_PARAMS.PAGE]: 1,
     [QUERY_PARAMS.PAGE_SIZE]: COURSES_PAGE_SIZE,
-  });
-  const endpoint = `/courses/${query}`;
-  const fullUrl = buildApiUrl(endpoint);
-
-  console.log("[CoursesPage] server API request", {
-    apiBase: API_URL ?? "(not set)",
-    endpoint,
-    fullUrl: fullUrl || "(empty)",
   });
 
   const { data, meta, errors } = await getCourses(query);
