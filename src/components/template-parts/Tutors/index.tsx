@@ -7,7 +7,7 @@ import type { Swiper as SwiperType } from "swiper";
 import TutorsDetail from "./TutorsDetail";
 import TutorsSlider, { type TutorsSliderTransition } from "./TutorsSlider";
 import TutorsSwiper from "./TutorsSwiper";
-import { TUTOR_IMAGES } from "./tutorImages";
+import { hasTutorImage } from "./tutorImages";
 import type { TutorsSliderSlide } from "./tutorSlideMetrics";
 import {
   getMaxTutorsTailInView,
@@ -79,10 +79,7 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
   const [isTutorsPagination, setIsTutorsPagination] = useState(false);
   const [maxTutorsTailInView, setMaxTutorsTailInView] = useState(MAX_TUTORS_TAIL_IN_VIEW);
 
-  const slidesWithImages = useMemo(
-    () => items.filter((item) => TUTOR_IMAGES[item.id] != null),
-    [items]
-  );
+  const slidesWithImages = useMemo(() => items.filter((item) => hasTutorImage(item)), [items]);
   const tutorCount = useMemo(() => slidesWithImages.length, [slidesWithImages]);
 
   const orderedIndices = useMemo(
