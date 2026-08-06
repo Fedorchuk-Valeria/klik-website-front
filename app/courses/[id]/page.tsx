@@ -4,7 +4,8 @@ import LayoutPlatform from "@/src/components/Layouts/LayoutPlatform";
 import CoursePage from "@/src/components/Pages/CoursePage";
 import { getCitySettings } from "@/src/lib/getCitySettings";
 import { getCurrentCourse } from "@/src/lib/getCourses";
-import { QUERY_PARAMS } from "@/src/utils/constant";
+import { buildApiUrl } from "@/src/utils/buildApiUrl";
+import { API_URL, QUERY_PARAMS } from "@/src/utils/constant";
 
 export const dynamic = "force-dynamic";
 
@@ -19,10 +20,19 @@ export default async function CourseDetailPage({ params, searchParams }: PagePro
   const { id } = await params;
   const query = await searchParams;
   const childId = query[QUERY_PARAMS.CHILD_ID] as string;
+  const endpoint = `/courses/${id}/${childId ? `?${QUERY_PARAMS.CHILD_ID}=${childId}` : ""}`;
+  const fullUrl = buildApiUrl(endpoint);
+
+  console.log("[CoursePage] server API request", {
+    apiBase: API_URL ?? "(not set)",
+    endpoint,
+    fullUrl: fullUrl || "(empty)",
+    courseId: id,
+    childId: childId ?? null,
+  });
+
   const { data: course, errors } = await getCurrentCourse(id, childId);
   const settings = getCitySettings("minsk");
-
-  console.log("CourseDetailPage", course, errors);
 
   if (!course) {
     notFound();

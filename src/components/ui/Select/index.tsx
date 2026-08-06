@@ -11,6 +11,7 @@ type BasePropTypes = {
   icon?: string;
   className?: string;
   color?: "green" | "orange";
+  isAbsolute?: boolean;
 };
 
 type SingleSelectPropTypes = BasePropTypes & {
@@ -46,6 +47,7 @@ const SelectView: FC<SelectViewPropTypes> = ({
   icon,
   className,
   color = "orange",
+  isAbsolute = false,
   displayText,
   dropdownOptions,
   isOptionActive,
@@ -106,6 +108,7 @@ const SelectView: FC<SelectViewPropTypes> = ({
       className={classNames("select", className, {
         "select--open": hasOpenFrame,
         "select--closing": isClosing,
+        "select--absolute": isAbsolute,
         "select--green": color === "green",
         "select--orange": color === "orange",
       })}
@@ -130,7 +133,7 @@ const SelectView: FC<SelectViewPropTypes> = ({
         className={classNames("select__dropdown-wrap", {
           "select__dropdown-wrap--open": isOpen,
         })}
-        aria-hidden={!isOpen}
+        aria-hidden={!hasOpenFrame}
       >
         <div className="select__dropdown-inner">
           <ul key={dropdownKey} className="select__dropdown">

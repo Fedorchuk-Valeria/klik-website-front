@@ -2,7 +2,8 @@ import { call, fork, put, takeLatest } from "redux-saga/effects";
 
 import { CoursesApi, UsersApi } from "@/src/services/http";
 import { Course } from "@/src/lib/getCourses";
-import { COURSES_PAGE_SIZE, QUERY_PARAMS } from "@/src/utils/constant";
+import { buildApiUrl } from "@/src/utils/buildApiUrl";
+import { API_URL, COURSES_PAGE_SIZE, QUERY_PARAMS } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 import {
   getCoursesFailure,
@@ -35,6 +36,16 @@ export interface PurchaseOfflinePreviewPayload {
 
 function* workerGetCourses(action: { payload: { query: string; append?: boolean } }): unknown {
   try {
+    const endpoint = `/courses/${action.payload.query}`;
+    const fullUrl = buildApiUrl(endpoint);
+
+    console.log("[CoursesPage] client API request", {
+      apiBase: API_URL ?? "(not set)",
+      endpoint,
+      fullUrl: fullUrl || "(empty)",
+      append: action.payload.append ?? false,
+    });
+
     const response = yield call(CoursesApi.getCourses, action.payload.query);
     const queryParams = QueryHelper.getFromQueryString(action.payload.query);
     const { data, meta } = normalizeCoursesResponse<Course>(response?.data, {
@@ -63,6 +74,16 @@ function* watchGetCourses() {
 
 function* workerGetCurrentCourse(action: { payload: number | string }): unknown {
   try {
+    const endpoint = `/courses/${action.payload}/`;
+    const fullUrl = buildApiUrl(endpoint);
+
+    console.log("[CoursePage] client API request", {
+      apiBase: API_URL ?? "(not set)",
+      endpoint,
+      fullUrl: fullUrl || "(empty)",
+      courseId: action.payload,
+    });
+
     const response = yield call(CoursesApi.getCurrentCourse, action.payload);
     yield put(getCurrentCourseSuccess(response?.data));
   } catch (error) {

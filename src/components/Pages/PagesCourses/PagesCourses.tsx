@@ -9,7 +9,9 @@ import image from "@/src/assets/images/view/courses/boy.png";
 
 import { Meta } from "@/src/entities/common";
 import { Course } from "@/src/lib/getCourses";
+import { buildApiUrl } from "@/src/utils/buildApiUrl";
 import {
+  API_URL,
   COURSES_PAGE_SIZE,
   PAGE_ANCHORS,
   PAGES,
@@ -119,15 +121,43 @@ const PagesCourses = ({
 
   const fetchCourses = useCallback(
     (page: number, append = false) => {
+      const query = buildCoursesQuery(page, selectedFilter.id, selectedCategory);
+      const endpoint = `/courses/${query}`;
+      const fullUrl = buildApiUrl(endpoint);
+
+      console.log("[CoursesPage] fetch courses", {
+        apiBase: API_URL ?? "(not set)",
+        endpoint,
+        fullUrl: fullUrl || "(empty)",
+        page,
+        append,
+      });
+
       dispatch(
         getCoursesRequest({
-          query: buildCoursesQuery(page, selectedFilter.id, selectedCategory),
+          query,
           append,
         })
       );
     },
     [dispatch, selectedCategory, selectedFilter.id]
   );
+
+  useEffect(() => {
+    const initialQuery = QueryHelper.getQueryString({
+      [QUERY_PARAMS.PAGE]: 1,
+      [QUERY_PARAMS.PAGE_SIZE]: COURSES_PAGE_SIZE,
+    });
+    const endpoint = `/courses/${initialQuery}`;
+    const fullUrl = buildApiUrl(endpoint);
+
+    console.log("[CoursesPage] initial SSR data source", {
+      apiBase: API_URL ?? "(not set)",
+      endpoint,
+      fullUrl: fullUrl || "(empty)",
+      note: "first load is fetched on the server; client refetches on filter/pagination change",
+    });
+  }, []);
 
   const loadMore = useCallback(() => {
     if (isLoading || !hasMore) return;
@@ -369,31 +399,17 @@ const PagesCourses = ({
             ))}
           </div>
 
-          <div className="courses-headline__filters">
-            {allCategories.map((item) => (
-              <Button
-                key={item.id}
-                variant="outline-green-dark"
-                className={classNames("courses-headline__filter", {
-                  "courses-headline__filter--active": selectedCategory.includes(item.slug),
-                })}
-                onClick={handleSelectCategory(item.slug)}
-              >
-                {item.name}
-              </Button>
-            ))}
-
-            <Select
-              multiple
-              color="green"
-              icon="document"
-              options={categoryOptions}
-              allOptionName="Все направления"
-              onChange={handleSelectCategories}
-              selectedOptions={selectedCategoryOptions}
-              className="courses-headline__select-categories"
-            />
-          </div>
+          <Select
+            multiple
+            isAbsolute
+            color="green"
+            icon="document"
+            options={categoryOptions}
+            allOptionName="Все категории"
+            onChange={handleSelectCategories}
+            selectedOptions={selectedCategoryOptions}
+            className="courses-headline__select-categories"
+          />
         </div>
 
         <div className="courses-list">
