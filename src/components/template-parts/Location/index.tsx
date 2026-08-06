@@ -5,156 +5,26 @@ import type { Swiper as SwiperType } from "swiper";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
+import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 
-import LocationEmotion from "@/src/assets/images/templates/homepage/locations/emotion.svg";
-import LocationFoot from "@/src/assets/images/templates/homepage/locations/foot.svg";
-import LocationHockey from "@/src/assets/images/templates/homepage/locations/hockey.svg";
-import LocationMir from "@/src/assets/images/templates/homepage/locations/mir.svg";
-import LocationScience from "@/src/assets/images/templates/homepage/locations/science.svg";
-import LocationStar from "@/src/assets/images/templates/homepage/locations/star.svg";
-import LocationStone from "@/src/assets/images/templates/homepage/locations/stone.svg";
-import LocationSunrise from "@/src/assets/images/templates/homepage/locations/sunrise.svg";
-import LocationWind from "@/src/assets/images/templates/homepage/locations/wind.svg";
-
-import { UsersLocationResult } from "@/src/services/http/users";
 import { getCitySlugFromHost, type ItKlikCitySlug } from "@/src/utils/cityFromHost";
 import { CITY_DISPLAY_NAME, MAP_API_KEY } from "@/src/utils/constant";
 import { loadYandexMaps } from "@/src/utils/loadYandexMaps";
 
 import LocationCardContent, { LocationItemData } from "./Card";
+import { parseCoordsFromMapUrl, parseYandexMapUrl } from "./parseMapUrl";
+import type { LocationProps, YMapInstance } from "./types";
 import { YANDEX_MAP_PIN_ICON } from "./yandexPinIcon";
 
 import "swiper/css";
 import "swiper/css/pagination";
 
-type Props = {
-  tag?: string;
-  title?: string;
-  city?: string;
-  city_name?: string;
-  city_map_url?: string;
-  online_registration_url?: string;
-  results?: UsersLocationResult[];
-};
+export const LOCATION_AUTOPLAY_DELAY_MS = 5_000;
+export const LOCATION_IDLE_RESUME_MS = 10_000;
+export const LOCATION_MAP_MAX_ZOOM = 16;
 
-function parseCoordsFromMapUrl(url: string): readonly [number, number] | undefined {
-  const googleMatch = url.match(/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);
-  if (googleMatch) {
-    return [Number(googleMatch[1]), Number(googleMatch[2])];
-  }
-
-  const yandexMatch = url.match(/[?&]ll=(-?\d+(?:\.\d+)?)%2C(-?\d+(?:\.\d+)?)/);
-  if (yandexMatch) {
-    return [Number(yandexMatch[2]), Number(yandexMatch[1])];
-  }
-
-  return undefined;
-}
-
-type YMapInstance = {
-  destroy: () => void;
-  setCenter: (center: number[], zoom?: number, options?: { duration?: number }) => void;
-  getZoom: () => number;
-  setZoom: (zoom: number, options?: { duration?: number }) => void;
-  container?: {
-    fitToViewport?: () => void;
-  };
-  geoObjects: {
-    add: (object: unknown) => void;
-    getBounds: () => number[][] | null;
-  };
-};
-
-const LOCATION_BY_CITY = {
-  minsk: [
-    {
-      image: "",
-      title: "Арэна",
-      location: "Пр. Победителей 84, ТЦ Arena City, 2 этаж",
-      metro: "Фрунзенская",
-      coords: [53.937997, 27.487524],
-      icon: <LocationHockey />,
-      iconPlacement: "top",
-    },
-    {
-      image: "",
-      title: "Мip",
-      location: "ул. Аэродромная, 125, 4 этаж",
-      metro: "Аэродромная",
-      coords: [53.873341, 27.55857],
-      icon: <LocationMir />,
-    },
-    {
-      image: "",
-      title: "Натхненне",
-      location: "ул. Максима Богдановича, 132, 2 этаж",
-      metro: "Академия наук",
-      coords: [53.937833, 27.584361],
-      icon: <LocationEmotion />,
-    },
-    {
-      image: "",
-      title: "Камянiца",
-      location: "ул. Неманская, 24, 2 этаж",
-      metro: "Каменная горка",
-      coords: [53.911301, 27.431036],
-      icon: <LocationStone />,
-    },
-    {
-      image: "",
-      title: "Навуковая",
-      location: "ул. Петра Мстиславца, д.1",
-      metro: "Восток",
-      coords: [53.928535, 27.654304],
-      icon: <LocationScience />,
-    },
-  ],
-  borisov: [
-    {
-      image: "",
-      title: "Спатканне",
-      location: "ул. Строителей 26, ТЦ Клад Наполеона, 328 каб.",
-      metro: "",
-      coords: [54.208212, 28.490276],
-      icon: <LocationFoot />,
-    },
-  ],
-  baranovichi: [
-    {
-      image: "",
-      title: "Паветра",
-      location: "ул. Марфицкого и Журавлевича, 1А, 3-й этаж",
-      metro: "",
-      coords: [53.107054, 26.000308],
-      icon: <LocationWind />,
-    },
-    {
-      image: "",
-      title: "Усход",
-      location: "ул. Тельмана, 64, ТЦ Радужный, 2-й этаж",
-      metro: "",
-      coords: [53.131866, 26.056075],
-      icon: <LocationSunrise />,
-    },
-  ],
-  novopolotsk: [
-    {
-      image: "",
-      title: "Iскра",
-      location: 'ул. Нефтяников, 6, ТЦ "Зодиак"',
-      metro: "",
-      coords: [55.513135, 28.682429],
-      icon: <LocationStar />,
-    },
-  ],
-} as const satisfies Record<string, LocationItemData[]>;
-
-const LOCATION_AUTOPLAY_DELAY_MS = 5_000;
-const LOCATION_IDLE_RESUME_MS = 10_000;
-const LOCATION_MAP_MAX_ZOOM = 16;
-
-const Location: FC<Props> = ({
+const Location: FC<LocationProps> = ({
   tag,
   title,
   city,
@@ -178,26 +48,12 @@ const Location: FC<Props> = ({
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<YMapInstance | null>(null);
 
-  const getIconForLocation = useCallback((locationTitle: string, slug: ItKlikCitySlug) => {
-    const cityLocations = LOCATION_BY_CITY[slug] ?? [];
-    const match = cityLocations.find((item) => item.title === locationTitle);
-
-    return {
-      icon: match?.icon ?? cityLocations[0]?.icon,
-      iconPlacement: match && "iconPlacement" in match ? match.iconPlacement : undefined,
-    };
-  }, []);
-
   const apiLocations = useMemo<LocationItemData[] | null>(() => {
     if (!results?.length) {
       return null;
     }
 
-    const slug = (city as ItKlikCitySlug | undefined) ?? citySlug;
-
     return results.map((item) => {
-      const { icon, iconPlacement } = getIconForLocation(item.name, slug);
-
       return {
         image: item.photo,
         title: item.name,
@@ -205,15 +61,13 @@ const Location: FC<Props> = ({
         metro: item.metro_station,
         coords: parseCoordsFromMapUrl(item.map_url),
         map_url: item.map_url,
-        icon,
-        iconPlacement,
       };
     });
-  }, [results, city, citySlug, getIconForLocation]);
+  }, [results, city, citySlug]);
 
-  const locations = apiLocations ?? LOCATION_BY_CITY[citySlug];
+  const locations = apiLocations;
   const cityDisplayName = city_name ?? CITY_DISPLAY_NAME[citySlug];
-  const locationSlideCount = locations.length;
+  const locationSlideCount = locations?.length ?? 0;
 
   const clearLocationAutoplayTimer = useCallback(() => {
     if (autoplayTimerRef.current) {
@@ -454,7 +308,7 @@ const Location: FC<Props> = ({
     if (!apiKey) return;
 
     let cancelled = false;
-    const items = apiLocations ?? LOCATION_BY_CITY[citySlug];
+    const items = apiLocations;
 
     const run = async () => {
       try {
@@ -470,20 +324,26 @@ const Location: FC<Props> = ({
       ymaps.ready(() => {
         if (cancelled || !mapContainerRef.current) return;
 
-        const itemsWithCoords = items.filter(
+        const itemsWithCoords = items?.filter(
           (item): item is LocationItemData & { coords: readonly [number, number] } =>
             item.coords !== undefined
         );
 
-        if (!itemsWithCoords.length) {
+        if (!itemsWithCoords?.length) {
           return;
         }
+
+        const cityMapView = city_map_url
+          ? parseYandexMapUrl(city_map_url, LOCATION_MAP_MAX_ZOOM)
+          : null;
 
         const map: YMapInstance = new ymaps.Map(
           mapContainerRef.current,
           {
-            center: [itemsWithCoords[0].coords[0], itemsWithCoords[0].coords[1]],
-            zoom: 11,
+            center: cityMapView
+              ? [cityMapView.center[0], cityMapView.center[1]]
+              : [itemsWithCoords[0].coords[0], itemsWithCoords[0].coords[1]],
+            zoom: cityMapView?.zoom ?? 11,
             controls: ["zoomControl"],
           },
           {
@@ -512,7 +372,7 @@ const Location: FC<Props> = ({
         });
 
         const bounds = map.geoObjects.getBounds();
-        if (bounds) {
+        if (bounds && !cityMapView) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const fit = (map as any).setBounds(bounds, {
             checkZoomRange: true,
@@ -535,7 +395,7 @@ const Location: FC<Props> = ({
       mapInstanceRef.current?.destroy();
       mapInstanceRef.current = null;
     };
-  }, [citySlug, apiLocations]);
+  }, [citySlug, apiLocations, city_map_url]);
 
   return (
     <section id="location" className="home-page__block home-page__location">
@@ -543,7 +403,16 @@ const Location: FC<Props> = ({
         <div className="home-page__location-wrapper">
           <div className="home-page__location-top">
             <div className="home-page__tag">{tag}</div>
-            <h2 className="home-page__h2 home-page__location-title">{title}</h2>
+
+            <div className="home-page__location-top-content">
+              <h2 className="home-page__h2 home-page__location-title">{title}</h2>
+
+              {online_registration_url ? (
+                <a href={online_registration_url} target="_blank" rel="noopener noreferrer">
+                  <Button variant="orange">Онлайн-запись</Button>
+                </a>
+              ) : null}
+            </div>
           </div>
 
           <div className="home-page__location-body">
@@ -583,8 +452,8 @@ const Location: FC<Props> = ({
                       bulletActiveClass: "home-page__location-pagination-bullet--active",
                     }}
                   >
-                    {locations.map((item, index) => (
-                      <SwiperSlide key={`${item.title}-${index}`}>
+                    {locations?.map((item, index) => (
+                      <SwiperSlide key={`${item?.title}-${index}`}>
                         <div className="home-page__location-body-item">
                           <LocationCardContent item={item} onShowOnMap={focusOnCoords} />
                         </div>
@@ -594,7 +463,7 @@ const Location: FC<Props> = ({
                 </div>
               ) : (
                 <ul className="home-page__location-body-list">
-                  {locations.map((item, index) => (
+                  {locations?.map((item, index) => (
                     <li key={`${item.title}-${index}`} className="home-page__location-body-item">
                       <LocationCardContent item={item} onShowOnMap={focusOnCoords} />
                     </li>
