@@ -5,6 +5,7 @@ import type { Swiper as SwiperType } from "swiper";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
+import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 
 import { getCitySlugFromHost, type ItKlikCitySlug } from "@/src/utils/cityFromHost";
@@ -402,7 +403,16 @@ const Location: FC<LocationProps> = ({
         <div className="home-page__location-wrapper">
           <div className="home-page__location-top">
             <div className="home-page__tag">{tag}</div>
-            <h2 className="home-page__h2 home-page__location-title">{title}</h2>
+
+            <div className="home-page__location-top-content">
+              <h2 className="home-page__h2 home-page__location-title">{title}</h2>
+
+              {online_registration_url ? (
+                <a href={online_registration_url} target="_blank" rel="noopener noreferrer">
+                  <Button variant="orange">Онлайн-запись</Button>
+                </a>
+              ) : null}
+            </div>
           </div>
 
           <div className="home-page__location-body">
