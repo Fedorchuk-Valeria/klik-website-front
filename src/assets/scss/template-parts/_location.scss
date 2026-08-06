@@ -152,6 +152,8 @@
 
       .home-page__location-body-item-info--title {
         @include fonts(24px, 500);
+        @include text-line-clamp(2);
+        line-height: 110%;
         color: var(--main-green-dark);
         margin-bottom: 20px;
       }
@@ -173,6 +175,7 @@
 
         span {
           @include fonts(16px, 500, "Manrope");
+          @include text-line-clamp(2);
           line-height: 120%;
           color: var(--main-black);
         }
@@ -195,6 +198,7 @@
 
         span {
           @include fonts(16px, 500, "Manrope");
+          @include text-line-clamp(1);
           color: var(--main-black);
         }
       }

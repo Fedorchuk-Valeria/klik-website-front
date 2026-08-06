@@ -1,3 +1,5 @@
+import type { UsersLocationResult } from "@/src/services/http/users";
+
 export type PageType = "home" | "page" | "program";
 
 export type PageSeo = {
@@ -103,6 +105,11 @@ export type HomePageContent = {
   location?: {
     tag?: string;
     title?: string;
+    city?: string;
+    city_name?: string;
+    city_map_url?: string;
+    online_registration_url?: string;
+    results?: UsersLocationResult[];
   };
   select_training?: {
     tag?: string;

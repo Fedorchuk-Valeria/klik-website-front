@@ -14,8 +14,7 @@ import { CitySettings } from "@/src/lib/getCitySettings";
 import { Course } from "@/src/lib/getCourses";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { showModal } from "@/src/store/slices/modalSlice";
-import { buildApiUrl } from "@/src/utils/buildApiUrl";
-import { API_URL, PAGES, QUERY_PARAMS } from "@/src/utils/constant";
+import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { useAuth } from "@/src/utils/useAuth";
 
 type PropTypes = {
@@ -32,21 +31,6 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
   const isParent = isMounted && isAuthenticated && user_profile?.role === "parent";
   const isChild = isMounted && isAuthenticated && user_profile?.role === "child";
   const isParentLookAtChild = !!isParent && !!searchParams.get(QUERY_PARAMS.CHILD_ID);
-  const childId = searchParams.get(QUERY_PARAMS.CHILD_ID);
-
-  useEffect(() => {
-    const endpoint = `/courses/${data.id}/${childId ? `?${QUERY_PARAMS.CHILD_ID}=${childId}` : ""}`;
-    const fullUrl = buildApiUrl(endpoint);
-
-    console.log("[CoursePage] course data source", {
-      apiBase: API_URL ?? "(not set)",
-      endpoint,
-      fullUrl: fullUrl || "(empty)",
-      courseId: data.id,
-      childId: childId ?? null,
-      note: "course is fetched on the server during page render",
-    });
-  }, [childId, data.id]);
 
   const timing = useMemo(
     () => [
@@ -94,12 +78,6 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
       })
     );
   }, [dispatch, settings, data?.payment]);
-
-  console.log("CoursePage", {
-    courseId: data.id,
-    childId: searchParams.get(QUERY_PARAMS.CHILD_ID),
-    errors,
-  });
 
   return (
     <div className="course-page">

@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, startTransition, useCallback, useEffect, useRef, useState } from "react";
+import { FC, startTransition, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,6 +17,7 @@ import LocationStone from "@/src/assets/images/templates/homepage/locations/ston
 import LocationSunrise from "@/src/assets/images/templates/homepage/locations/sunrise.svg";
 import LocationWind from "@/src/assets/images/templates/homepage/locations/wind.svg";
 
+import { UsersLocationResult } from "@/src/services/http/users";
 import { getCitySlugFromHost, type ItKlikCitySlug } from "@/src/utils/cityFromHost";
 import { CITY_DISPLAY_NAME, MAP_API_KEY } from "@/src/utils/constant";
 import { loadYandexMaps } from "@/src/utils/loadYandexMaps";
@@ -30,7 +31,26 @@ import "swiper/css/pagination";
 type Props = {
   tag?: string;
   title?: string;
+  city?: string;
+  city_name?: string;
+  city_map_url?: string;
+  online_registration_url?: string;
+  results?: UsersLocationResult[];
 };
+
+function parseCoordsFromMapUrl(url: string): readonly [number, number] | undefined {
+  const googleMatch = url.match(/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);
+  if (googleMatch) {
+    return [Number(googleMatch[1]), Number(googleMatch[2])];
+  }
+
+  const yandexMatch = url.match(/[?&]ll=(-?\d+(?:\.\d+)?)%2C(-?\d+(?:\.\d+)?)/);
+  if (yandexMatch) {
+    return [Number(yandexMatch[2]), Number(yandexMatch[1])];
+  }
+
+  return undefined;
+}
 
 type YMapInstance = {
   destroy: () => void;
@@ -134,7 +154,15 @@ const LOCATION_AUTOPLAY_DELAY_MS = 5_000;
 const LOCATION_IDLE_RESUME_MS = 10_000;
 const LOCATION_MAP_MAX_ZOOM = 16;
 
-const Location: FC<Props> = ({ tag, title }) => {
+const Location: FC<Props> = ({
+  tag,
+  title,
+  city,
+  city_name,
+  city_map_url,
+  online_registration_url,
+  results,
+}) => {
   const [isLocationSlider, setIsLocationSlider] = useState(false);
   const [citySlug, setCitySlug] = useState<ItKlikCitySlug>("minsk");
   const locationPaginationElRef = useRef<HTMLDivElement>(null);
@@ -150,7 +178,41 @@ const Location: FC<Props> = ({ tag, title }) => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<YMapInstance | null>(null);
 
-  const locations = LOCATION_BY_CITY[citySlug];
+  const getIconForLocation = useCallback((locationTitle: string, slug: ItKlikCitySlug) => {
+    const cityLocations = LOCATION_BY_CITY[slug] ?? [];
+    const match = cityLocations.find((item) => item.title === locationTitle);
+
+    return {
+      icon: match?.icon ?? cityLocations[0]?.icon,
+      iconPlacement: match && "iconPlacement" in match ? match.iconPlacement : undefined,
+    };
+  }, []);
+
+  const apiLocations = useMemo<LocationItemData[] | null>(() => {
+    if (!results?.length) {
+      return null;
+    }
+
+    const slug = (city as ItKlikCitySlug | undefined) ?? citySlug;
+
+    return results.map((item) => {
+      const { icon, iconPlacement } = getIconForLocation(item.name, slug);
+
+      return {
+        image: item.photo,
+        title: item.name,
+        location: item.address,
+        metro: item.metro_station,
+        coords: parseCoordsFromMapUrl(item.map_url),
+        map_url: item.map_url,
+        icon,
+        iconPlacement,
+      };
+    });
+  }, [results, city, citySlug, getIconForLocation]);
+
+  const locations = apiLocations ?? LOCATION_BY_CITY[citySlug];
+  const cityDisplayName = city_name ?? CITY_DISPLAY_NAME[citySlug];
   const locationSlideCount = locations.length;
 
   const clearLocationAutoplayTimer = useCallback(() => {
@@ -236,11 +298,18 @@ const Location: FC<Props> = ({ tag, title }) => {
   };
 
   useEffect(() => {
+    if (city) {
+      startTransition(() => {
+        setCitySlug(city as ItKlikCitySlug);
+      });
+      return;
+    }
+
     const slug = getCitySlugFromHost(window.location.hostname);
     startTransition(() => {
       setCitySlug(slug);
     });
-  }, []);
+  }, [city]);
 
   useEffect(() => {
     slideCountRef.current = locationSlideCount;
@@ -385,7 +454,7 @@ const Location: FC<Props> = ({ tag, title }) => {
     if (!apiKey) return;
 
     let cancelled = false;
-    const items = LOCATION_BY_CITY[citySlug];
+    const items = apiLocations ?? LOCATION_BY_CITY[citySlug];
 
     const run = async () => {
       try {
@@ -401,10 +470,19 @@ const Location: FC<Props> = ({ tag, title }) => {
       ymaps.ready(() => {
         if (cancelled || !mapContainerRef.current) return;
 
+        const itemsWithCoords = items.filter(
+          (item): item is LocationItemData & { coords: readonly [number, number] } =>
+            item.coords !== undefined
+        );
+
+        if (!itemsWithCoords.length) {
+          return;
+        }
+
         const map: YMapInstance = new ymaps.Map(
           mapContainerRef.current,
           {
-            center: [items[0].coords[0], items[0].coords[1]],
+            center: [itemsWithCoords[0].coords[0], itemsWithCoords[0].coords[1]],
             zoom: 11,
             controls: ["zoomControl"],
           },
@@ -416,7 +494,7 @@ const Location: FC<Props> = ({ tag, title }) => {
 
         mapInstanceRef.current = map;
 
-        items.forEach((item) => {
+        itemsWithCoords.forEach((item) => {
           const placemark = new ymaps.Placemark(
             [item.coords[0], item.coords[1]],
             {
@@ -457,7 +535,7 @@ const Location: FC<Props> = ({ tag, title }) => {
       mapInstanceRef.current?.destroy();
       mapInstanceRef.current = null;
     };
-  }, [citySlug]);
+  }, [citySlug, apiLocations]);
 
   return (
     <section id="location" className="home-page__block home-page__location">
@@ -469,7 +547,7 @@ const Location: FC<Props> = ({ tag, title }) => {
           </div>
 
           <div className="home-page__location-body">
-            <p className="home-page__location-body--title">{CITY_DISPLAY_NAME[citySlug]}</p>
+            <p className="home-page__location-body--title">{cityDisplayName}</p>
 
             <div className="home-page__location-body-wrapper">
               {isLocationSlider ? (
