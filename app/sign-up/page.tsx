@@ -15,7 +15,7 @@ import TextInput from "@/src/components/ui/TextInput";
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { clearErrors, clearRegister, registerRequest } from "@/src/store/slices/auth";
-import { BRANCH_CRM_ID, PAGES, PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
+import { BRANCH_CRM_ID, PAGES } from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
 
 const RegisterForm = () => {
@@ -62,14 +62,6 @@ const RegisterForm = () => {
   const handleBlur = (name: keyof typeof form.values) => {
     void form.setFieldValue(name, String(form?.values?.[name])?.trim());
   };
-
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    const filtered = value.replace(PASSWORD_INPUT_STRIP_REGEX, "");
-
-    void form.setFieldValue(name, filtered);
-  };
-
   useEffect(() => {
     if (isRegisterSuccess) {
       dispatch(clearRegister());
@@ -158,7 +150,7 @@ const RegisterForm = () => {
           }
           variant="outline"
           placeholder="********"
-          onChange={handlePasswordChange}
+          onChange={handleChange}
           value={form.values.password}
           error={form.errors.password}
           className="login-page__form-input"
@@ -169,7 +161,7 @@ const RegisterForm = () => {
         <PasswordInput
           name="confirmPassword"
           label="Подтвердите пароль"
-          onChange={handlePasswordChange}
+          onChange={handleChange}
           value={form.values.confirmPassword}
           error={form.errors.confirmPassword}
           className="login-page__form-input"

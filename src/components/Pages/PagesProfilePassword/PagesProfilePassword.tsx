@@ -16,7 +16,7 @@ import {changePasswordChildRequest, changePasswordRequest, clearPasswordChanged}
 import { showModal } from "@/src/store/slices/modalSlice";
 
 import { ModalType } from "@/src/entities/common";
-import { PAGES, PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
+import { PAGES } from "@/src/utils/constant";
 
 const PagesProfilePassword = () => {
   const router = useRouter();
@@ -56,9 +56,7 @@ const PagesProfilePassword = () => {
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const filtered = value.replace(PASSWORD_INPUT_STRIP_REGEX, "");
-
-    void form.setFieldValue(name, filtered, true);
+    void form.setFieldValue(name, value, true);
   };
 
   useEffect(() => {

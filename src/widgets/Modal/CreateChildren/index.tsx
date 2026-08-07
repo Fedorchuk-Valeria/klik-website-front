@@ -15,8 +15,6 @@ import { ModalType } from "@/src/entities/common";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { clearChildVerificationPending, createChildRequest } from "@/src/store/slices/auth";
 import { showModal, hideModal } from "@/src/store/slices/modalSlice";
-import { PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
-
 type PropTypes = {
   isVisible: boolean;
   className?: string;
@@ -67,9 +65,7 @@ const WidgetModalCreateChildren: FC<PropTypes> = ({ className, isVisible }) => {
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const filtered = value.replace(PASSWORD_INPUT_STRIP_REGEX, "");
-
-    void form.setFieldValue(name, filtered);
+    void form.setFieldValue(name, value);
   };
 
   useEffect(() => {

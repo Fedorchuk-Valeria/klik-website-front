@@ -46,6 +46,20 @@ const buildCoursesQuery = (page: number, scope: string, categories: string[]): s
     [QUERY_PARAMS.CATEGORIES]: categories.join(","),
   });
 
+const CATEGORY_FILTER_DEBOUNCE_MS = 1000;
+
+/** Empty and full category lists are equivalent for the API (no filter). */
+const toApiCategories = (categoryIds: string[], allCategoryIds: string[]): string[] => {
+  if (
+    categoryIds.length === 0 ||
+    (allCategoryIds.length > 0 && categoryIds.length === allCategoryIds.length)
+  ) {
+    return [];
+  }
+
+  return categoryIds;
+};
+
 const PagesCourses = ({
   initialCourses = [],
   initialMeta = {
@@ -66,15 +80,19 @@ const PagesCourses = ({
     name: "Все курсы",
   });
   const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
+  const [appliedCategories, setAppliedCategories] = useState<string[]>([]);
   const [hasRequested, setHasRequested] = useState<boolean>(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const isLoadingRef = useRef(isLoading);
   const prevFiltersKeyRef = useRef<string | null>(null);
+  const categoryDebounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const filtersKey = useMemo(
-    () => `${selectedFilter.id}:${selectedCategory.join(",")}`,
-    [selectedFilter.id, selectedCategory]
-  );
+  const clearCategoryDebounce = useCallback(() => {
+    if (categoryDebounceTimerRef.current) {
+      clearTimeout(categoryDebounceTimerRef.current);
+      categoryDebounceTimerRef.current = null;
+    }
+  }, []);
 
   const allCategories = useMemo(() => {
     const seenCategoryIds = new Set<number>();
@@ -112,6 +130,18 @@ const PagesCourses = ({
     [allCategories]
   );
 
+  const allCategoryIds = useMemo(() => categoryOptions.map((item) => item.id), [categoryOptions]);
+
+  const apiCategories = useMemo(
+    () => toApiCategories(appliedCategories, allCategoryIds),
+    [appliedCategories, allCategoryIds]
+  );
+
+  const filtersKey = useMemo(
+    () => `${selectedFilter.id}:${apiCategories.join(",")}`,
+    [selectedFilter.id, apiCategories]
+  );
+
   const selectedCategoryOptions = useMemo(
     () => categoryOptions.filter((item) => selectedCategory.includes(item.id)),
     [categoryOptions, selectedCategory]
@@ -119,7 +149,7 @@ const PagesCourses = ({
 
   const fetchCourses = useCallback(
     (page: number, append = false) => {
-      const query = buildCoursesQuery(page, selectedFilter.id, selectedCategory);
+      const query = buildCoursesQuery(page, selectedFilter.id, apiCategories);
 
       dispatch(
         getCoursesRequest({
@@ -128,7 +158,7 @@ const PagesCourses = ({
         })
       );
     },
-    [dispatch, selectedCategory, selectedFilter.id]
+    [dispatch, apiCategories, selectedFilter.id]
   );
 
   const loadMore = useCallback(() => {
@@ -153,31 +183,48 @@ const PagesCourses = ({
     dispatch,
   ]);
 
-  const handleSelectCategory = (slug: string) => () => {
-    setSelectedCategory((prev) => {
-      if (prev.includes(slug)) {
-        return prev.filter((item) => item !== slug);
-      }
-
-      return [...prev, slug];
-    });
-  };
-
   const handleSelectFilter = (option: { id: string; name: string }) => () => {
+    clearCategoryDebounce();
     setSelectedFilter(option);
     setSelectedCategory([]);
+    setAppliedCategories([]);
   };
 
-  const handleSelectCategories = (options: { id: string; name: string }[]) => {
-    setSelectedCategory(options.map((item) => item.id));
+  const handleSelectCategories = (nextOptions: { id: string; name: string }[]) => {
+    const categoryIds = nextOptions.map((item) => item.id);
+    const nextApiCategories = toApiCategories(categoryIds, allCategoryIds);
+    const isSameApiCategories =
+      nextApiCategories.length === apiCategories.length &&
+      nextApiCategories.every((id) => apiCategories.includes(id));
+
+    setSelectedCategory(categoryIds);
+    clearCategoryDebounce();
+
+    // [] and "all categories" map to the same API request — update UI only, skip fetch.
+    if (isSameApiCategories) {
+      return;
+    }
+
+    categoryDebounceTimerRef.current = setTimeout(() => {
+      setAppliedCategories(nextApiCategories);
+    }, CATEGORY_FILTER_DEBOUNCE_MS);
   };
 
+  // Clear the category filter debounce timer on unmount.
+  useEffect(() => {
+    return () => {
+      clearCategoryDebounce();
+    };
+  }, [clearCategoryDebounce]);
+
+  // Mark the client as hydrated after the first paint.
   useEffect(() => {
     queueMicrotask(() => {
       setIsHydrated(true);
     });
   }, []);
 
+  // Persist admin auth tokens from the URL hash and reload without the hash.
   useEffect(() => {
     if (typeof window !== "undefined") {
       const hash = window.location.hash.slice(1);
@@ -205,16 +252,19 @@ const PagesCourses = ({
     }
   }, []);
 
+  // Keep a ref of isLoading for the IntersectionObserver callback.
   useEffect(() => {
     isLoadingRef.current = isLoading;
   }, [isLoading]);
 
+  // Log SSR/initial errors to the console.
   useEffect(() => {
     if (initialErrors) {
       console.error(initialErrors);
     }
   }, [initialErrors]);
 
+  // Refetch page 1 when filters change; skip the default SSR state on first run.
   useEffect(() => {
     if (prevFiltersKeyRef.current === filtersKey) {
       return;
@@ -223,7 +273,7 @@ const PagesCourses = ({
     const previousKey = prevFiltersKeyRef.current;
     prevFiltersKeyRef.current = filtersKey;
 
-    if (previousKey === null && selectedCategory.length === 0 && selectedFilter.id === "all") {
+    if (previousKey === null && apiCategories.length === 0 && selectedFilter.id === "all") {
       return;
     }
 
@@ -232,8 +282,9 @@ const PagesCourses = ({
     queueMicrotask(() => {
       setHasRequested(true);
     });
-  }, [filtersKey, fetchCourses, selectedCategory.length, selectedFilter.id]);
+  }, [filtersKey, fetchCourses, apiCategories.length, selectedFilter.id]);
 
+  // Hydrate scope/category filters from the URL search params.
   useEffect(() => {
     if (typeof window !== "undefined" && window.location.search) {
       const query = QueryHelper.getFromQueryString(window.location.search);
@@ -251,12 +302,20 @@ const PagesCourses = ({
 
       if (query[QUERY_PARAMS.CATEGORIES]) {
         queueMicrotask(() => {
-          setSelectedCategory(query[QUERY_PARAMS.CATEGORIES].split(","));
+          const categoriesFromQuery = query[QUERY_PARAMS.CATEGORIES].split(",").filter(Boolean);
+          const nextApiCategories = toApiCategories(
+            categoriesFromQuery,
+            categoryOptions.map((item) => item.id)
+          );
+
+          setSelectedCategory(categoriesFromQuery);
+          setAppliedCategories(nextApiCategories);
         });
       }
     }
-  }, [options]);
+  }, [options, categoryOptions]);
 
+  // Infinite scroll: load the next page when the sentinel enters the viewport.
   useEffect(() => {
     const sentinel = loadMoreRef.current;
 
@@ -281,7 +340,7 @@ const PagesCourses = ({
     return () => {
       observer.disconnect();
     };
-  }, [hasMore, loadMore, courses.length]);
+  }, [hasMore, loadMore, courses?.length]);
 
   return (
     <div className="page-courses">
@@ -376,6 +435,7 @@ const PagesCourses = ({
             icon="document"
             options={categoryOptions}
             allOptionName="Все категории"
+            placeholder="Выбор категории"
             onChange={handleSelectCategories}
             selectedOptions={selectedCategoryOptions}
             className="courses-headline__select-categories"

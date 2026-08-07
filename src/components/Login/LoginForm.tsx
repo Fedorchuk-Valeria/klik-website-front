@@ -11,18 +11,20 @@ import PasswordInput from "@/src/components/ui/PasswordInput";
 import PhoneInput from "@/src/components/ui/PhoneInput";
 import Tabs from "@/src/components/ui/Tabs";
 
+import { ModalType } from "@/src/entities/common";
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { clearErrors, loginRequest } from "@/src/store/slices/auth";
+import { showModal } from "@/src/store/slices/modalSlice";
 import { PAGES } from "@/src/utils/constant";
 import { AuthRedirectHelper } from "@/src/utils/helpers";
-import {showModal} from "@/src/store/slices/modalSlice";
-import {ModalType} from "@/src/entities/common";
 
 const LoginForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isLoading, errors, isLoggedIn, user_profile } = useAppSelector((state: RootStore) => state.auth);
+  const { isLoading, errors, isLoggedIn, user_profile } = useAppSelector(
+    (state: RootStore) => state.auth
+  );
   const form = useFormik({
     initialValues: {
       phone: "",
