@@ -64,6 +64,11 @@
         min-height: 24px;
       }
 
+      .select__current-label {
+        @include text-line-clamp(1);
+        text-align: left;
+      }
+
       &.select__current-button {
         @include center;
         @include icon(40px);
@@ -124,6 +129,19 @@
     }
   }
 
+  &.select--multiple {
+    .select__item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .select__item-checkbox {
+      pointer-events: none;
+      flex-shrink: 0;
+    }
+  }
+
   &.select--absolute {
     min-height: 54px;
 
@@ -143,6 +161,7 @@
 
         .select__current-text {
           padding-bottom: 3px;
+          margin-right: 4px;
         }
       }
 

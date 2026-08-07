@@ -119,6 +119,7 @@
 
     .courses-headline__select-categories {
       min-width: 379px;
+      max-width: 379px;
       border-radius: 27px;
       transition: border-radius 0.3s ease-in-out;
 
@@ -478,11 +479,26 @@
 
       .courses-headline__select-categories {
         min-width: 353px;
+        max-width: 353px;
+
+        .select__current-button {
+          @include icon(36px);
+          min-width: 36px;
+          min-height: 36px;
+        }
+
+        .select__current {
+          max-height: 50px;
+        }
       }
 
       .courses-headline__buttons {
         gap: 16px;
-        font-size: 16px;
+
+        .button {
+          font-size: 16px;
+          min-height: 50px;
+        }
       }
     }
 
@@ -642,10 +658,26 @@
 
       .courses-headline__select-categories {
         min-width: 309px;
+        max-width: 309px;
+
+        .select__current-button {
+          @include icon(30px);
+          min-width: 30px;
+          min-height: 30px;
+        }
+
+        .select__current {
+          max-height: 44px;
+        }
       }
 
       .courses-headline__buttons {
         gap: 10px;
+
+        .button {
+          font-size: 16px;
+          min-height: 40px;
+        }
 
         .courses-headline__button {
           padding: 8px 24px;
@@ -800,14 +832,33 @@
 
     .courses-headline {
       margin-top: 30px;
-      gap: 30px;
+      gap: 20px;
 
       .courses-headline__select-categories {
-        min-width: calc(50% - 20px);
+        min-width: calc(50% - 10px);
+        max-width: 100%;
+
+        .select__current-button {
+          @include icon(36px);
+          min-width: 36px;
+          min-height: 36px;
+        }
+
+        .select__current {
+          max-height: 50px;
+        }
       }
 
       .courses-headline__buttons {
         gap: 12px;
+        width: 100%;
+
+        .button {
+          @include center;
+          width: 100%;
+          font-size: 16px;
+          min-height: 50px;
+        }
 
         .courses-headline__button {
           padding: 12px 20px;
@@ -968,6 +1019,17 @@
 
       .courses-headline__select-categories {
         min-width: 100%;
+        max-width: 100%;
+
+        .select__current-button {
+          @include icon(40px);
+          min-width: 40px;
+          min-height: 40px;
+        }
+
+        .select__current {
+          max-height: 54px;
+        }
       }
 
       .courses-headline__buttons {
@@ -978,6 +1040,7 @@
           @include center;
           font-size: 18px;
           width: 100%;
+          min-height: 54px;
         }
       }
     }
@@ -1152,14 +1215,30 @@
     .courses__title {
       font-size: 28px;
       margin-top: 80px;
+      padding: 0 10px;
     }
 
     .courses__text {
       font-size: 16px;
+      padding: 0 10px;
     }
 
     .courses-headline {
       gap: 20px;
+      padding: 0 10px;
+      margin-top: 20px;
+
+      .courses-headline__select-categories {
+        .select__current-button {
+          @include icon(36px);
+          min-width: 36px;
+          min-height: 36px;
+        }
+
+        .select__current {
+          max-height: 50px;
+        }
+      }
 
       .courses-headline__buttons {
         gap: 10px;
@@ -1167,6 +1246,7 @@
         .courses-headline__button {
           padding: 10px 20px;
           font-size: 16px;
+          min-height: 46px;
         }
       }
     }
