@@ -1,9 +1,11 @@
 import * as Yup from "yup";
 
+import { phoneFieldSchema } from "@/src/utils/validation/phoneSchema";
+
 export const validationSchema = Yup.object().shape({
   parent: Yup.string().required("Пожалуйста, заполните поле"),
   child: Yup.string().required("Пожалуйста, заполните поле"),
-  phone: Yup.string().required("Пожалуйста, заполните поле").min(19, "Пожалуйста, заполните поле"),
+  phone: phoneFieldSchema,
   date: Yup.string().required("Пожалуйста, заполните поле").min(10, "Пожалуйста, заполните поле"),
   agreedment: Yup.boolean().required("Пожалуйста, заполните поле"),
 });

@@ -34,7 +34,7 @@ const LoginForm = () => {
     onSubmit: (values) => {
       dispatch(
         loginRequest({
-          phone: values.phone.replace(/[\s()]/g, ""),
+          phone: values.phone,
           password: values.password,
         })
       );
@@ -115,7 +115,6 @@ const LoginForm = () => {
           value={form.values.phone}
           error={form.errors.phone}
           onChange={handleChange}
-          placeholder="+375 (29) 123-45-67"
           className="login-page__form-input"
           variant="outline"
           disabled={isLoading}

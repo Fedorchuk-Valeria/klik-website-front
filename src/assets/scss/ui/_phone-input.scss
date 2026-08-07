@@ -1,3 +1,138 @@
 .phone-input {
   width: 100%;
+
+  .phone-input__control-wrapper {
+    position: relative;
+  }
+
+  .phone-input__field {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 5px;
+    background: var(--input-bg);
+  }
+
+  .phone-input__country-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 16px;
+    border: none;
+    border-radius: 100px;
+    background: rgba(93, 36, 53, 0.1);
+    cursor: pointer;
+    color: inherit;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    &:focus-visible {
+      outline: 1px solid var(--main-orange);
+      outline-offset: 1px;
+    }
+  }
+
+  .phone-input__flag {
+    @include icon(24px);
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .phone-input__chevron {
+    @include icon(20px);
+    transition: transform 0.2s ease;
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+
+  .phone-input__number {
+    @include fonts(16px, 400, "Manrope");
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    margin: 0;
+    border: none;
+    color: var(--main-burgundy);
+    outline: none;
+
+    &::placeholder {
+      color: var(--secondary-burgundy-40);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+    }
+  }
+
+  .phone-input__dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 2px;
+    right: 2px;
+    z-index: 20;
+    margin: 0;
+    list-style: none;
+    border-radius: 25px;
+    background: var(--input-bg);
+  }
+
+  .phone-input__option {
+    @include fonts(16px, 500, "Manrope");
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin: 0;
+    padding: 13px 20px;
+    border: none;
+    border-radius: 100px;
+    background: transparent;
+    color: var(--main-black);
+    cursor: pointer;
+    text-align: left;
+
+    &:hover,
+    &--active {
+      background: rgba(93, 36, 53, 0.1);
+    }
+
+    &:focus-visible {
+      outline: 1px solid var(--main-orange);
+      outline-offset: 1px;
+    }
+  }
+
+  .phone-input__option-label {
+    flex: 1;
+  }
+
+  &.text-input--error .phone-input__field {
+    background: #f9d1d1;
+    outline: 1px solid var(--error-color);
+  }
+
+  &.text-input--filled .phone-input__field {
+    background: var(--input-bg);
+    outline: none;
+  }
+
+  &.text-input--outline .phone-input__field {
+    background: var(--secondary-white-80);
+    outline: 1px solid var(--border-color);
+  }
+
+  .phone-input__field:focus-within {
+    outline: 1px solid var(--main-orange);
+    outline-offset: 1px;
+  }
 }

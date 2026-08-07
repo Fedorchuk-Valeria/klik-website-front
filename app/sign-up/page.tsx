@@ -108,7 +108,6 @@ const RegisterForm = () => {
           value={form.values.phone}
           error={form.errors.phone}
           onChange={handleChange}
-          placeholder="+375 (29) 123-45-67"
           className="login-page__form-input"
           disabled={isLoading}
         />
