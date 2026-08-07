@@ -31,7 +31,7 @@ export const setNewPasswordValidationSchema = Yup.object().shape({
 });
 
 export const resetPasswordValidationSchema = Yup.object().shape({
-  phone: Yup.string().required("Пожалуйста, заполните поле"),
+  email: Yup.string().email("Введите корректный email").required("Пожалуйста, заполните поле"),
 });
 
 export const confirmCodeValidationSchema = Yup.object().shape({

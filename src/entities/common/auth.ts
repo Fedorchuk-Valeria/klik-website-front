@@ -34,7 +34,7 @@ export type AuthResendCodeRequest = {
 };
 
 export type AuthForgotPasswordRequest = {
-  phone: string;
+  email: string;
 };
 
 export type AuthChangePasswordRequest = {
