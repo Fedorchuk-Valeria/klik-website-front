@@ -1,138 +1,147 @@
-/** National subscriber digits after +375 (2 + 3 + 2 + 2 = 9). */
-export const PHONE_NATIONAL_DIGIT_COUNT = 9;
+import {
+  formatIncompletePhoneNumber,
+  getCountryCallingCode,
+  getExampleNumber,
+  isValidPhoneNumber,
+  parsePhoneNumberFromString,
+  type CountryCode,
+} from "libphonenumber-js";
+import examples from "libphonenumber-js/mobile/examples";
 
-/**
- * Parses pasted or typed text into up to 9 national digits after +375.
- * Accepts formats with +375, leading 375, or national 80… prefix.
- */
-export function extractNationalDigits(input: string): string {
-  let d = input.replace(/\D/g, "");
-  if (d.startsWith("375")) {
-    d = d.slice(3);
-  } else if (d.startsWith("80")) {
-    d = d.slice(2);
-  }
-  return d.slice(0, PHONE_NATIONAL_DIGIT_COUNT);
+export function getCallingCodePrefix(country: CountryCode): string {
+  return `+${getCountryCallingCode(country)}`;
 }
 
-/** `+375 (XX) XXX XX XX` — only typed digits; empty string if none. */
-export function formatMaskedPhone(digits: string): string {
-  const d = digits.replace(/\D/g, "").slice(0, PHONE_NATIONAL_DIGIT_COUNT);
+export function getMaxNationalDigits(country: CountryCode): number {
+  return getExampleNumber(country, examples)?.nationalNumber.length ?? 15;
+}
+
+const PLACEHOLDERS: Partial<Record<CountryCode, string>> = {
+  BY: "+375 (29) 123 45 67",
+  KZ: "+7 771 000 99 98",
+  RU: "+7 912 345 67 89",
+  UZ: "+998 91 234 56 78",
+};
+
+export function getExamplePlaceholder(country: CountryCode): string {
+  const fixed = PLACEHOLDERS[country];
+  if (fixed) return fixed;
+
+  const example = getExampleNumber(country, examples);
+  if (!example) {
+    return getCallingCodePrefix(country);
+  }
+  return adaptDisplayFormat(country, example.formatInternational());
+}
+
+/** National subscriber digits only (no calling code). */
+export function extractNationalDigits(input: string, country: CountryCode): string {
+  const max = getMaxNationalDigits(country);
+  const prefixDigits = getCountryCallingCode(country);
+  let d = input.replace(/\D/g, "");
+
+  if (d.startsWith(prefixDigits)) {
+    d = d.slice(prefixDigits.length);
+  } else if (country === "BY" && d.startsWith("80")) {
+    d = d.slice(2);
+  } else if ((country === "RU" || country === "KZ") && d.startsWith("8") && d.length > 1) {
+    d = d.slice(1);
+  }
+
+  return d.slice(0, max);
+}
+
+export function parsePastedNationalDigits(text: string, country: CountryCode): string {
+  const trimmed = text.trim();
+  const parsed = parsePhoneNumberFromString(trimmed, country);
+  if (parsed?.nationalNumber) {
+    return parsed.nationalNumber.slice(0, getMaxNationalDigits(country));
+  }
+  return extractNationalDigits(trimmed, country);
+}
+
+/**
+ * Display string for national digits. Empty → "".
+ * BY follows design parentheses: `+375 (29) 123 45 67`.
+ */
+export function formatDisplayPhone(nationalDigits: string, country: CountryCode): string {
+  const d = nationalDigits.replace(/\D/g, "").slice(0, getMaxNationalDigits(country));
   if (d.length === 0) return "";
 
-  if (d.length <= 2) {
-    return "+375 (" + d + (d.length === 2 ? ") " : "");
-  }
-
-  let out = "+375 (" + d.slice(0, 2) + ") " + d.slice(2, Math.min(5, d.length));
-  if (d.length <= 5) {
-    return out;
-  }
-  out += " " + d.slice(5, Math.min(7, d.length));
-  if (d.length <= 7) {
-    return out;
-  }
-  return out + " " + d.slice(7, 9);
+  const incomplete = `${getCallingCodePrefix(country)}${d}`;
+  const formatted = formatIncompletePhoneNumber(incomplete, country);
+  return adaptDisplayFormat(country, formatted);
 }
 
-export function parsePastedToNationalDigits(text: string): string {
-  return extractNationalDigits(text.trim());
+/** BY design uses parentheses around the operator code. */
+function adaptDisplayFormat(country: CountryCode, formatted: string): string {
+  if (country !== "BY") return formatted;
+
+  // `+375 29 123 45 67` → `+375 (29) 123 45 67`
+  // `+375 2` → `+375 (2`
+  return formatted.replace(/^\+375\s(\d{1,2})(.*)$/, (_, code: string, rest: string) => {
+    if (code.length < 2) {
+      return `+375 (${code}${rest}`;
+    }
+    return `+375 (${code})${rest}`;
+  });
 }
 
-/**
- * Character indices in `masked` (from {@link formatMaskedPhone}) that belong to national
- * digits, in order. Used to map the caret to digit deletion (mask literals are skipped).
- */
+export function toE164(nationalDigits: string, country: CountryCode): string {
+  const d = nationalDigits.replace(/\D/g, "").slice(0, getMaxNationalDigits(country));
+  if (d.length === 0) return "";
+  return `${getCallingCodePrefix(country)}${d}`;
+}
+
+export function isPhoneComplete(value: string): boolean {
+  if (!value) return false;
+  return isValidPhoneNumber(value);
+}
+
 export function nationalDigitPositions(masked: string, nationalDigits: string): number[] {
-  const d = nationalDigits.replace(/\D/g, "").slice(0, PHONE_NATIONAL_DIGIT_COUNT);
+  const d = nationalDigits.replace(/\D/g, "");
   const positions: number[] = [];
-  const prefix = "+375 (";
-  if (!masked.startsWith(prefix)) {
-    return positions;
+  let from = 0;
+  for (let k = 0; k < d.length; k++) {
+    const idx = masked.indexOf(d[k], from);
+    if (idx === -1) break;
+    positions.push(idx);
+    from = idx + 1;
   }
-
-  let from = prefix.length;
-  let k = 0;
-
-  function findDigit(fromIdx: number, ch: string): number {
-    for (let j = fromIdx; j < masked.length; j++) {
-      if (masked[j] === ch) return j;
-    }
-    return -1;
-  }
-
-  while (k < d.length && k < 2) {
-    const found = findDigit(from, d[k]);
-    if (found === -1) return positions;
-    positions.push(found);
-    from = found + 1;
-    k++;
-  }
-
-  if (k === 2) {
-    const closeIdx = masked.indexOf(")", from - 1);
-    if (closeIdx !== -1) {
-      from = closeIdx + 1;
-      if (masked[from] === " ") from += 1;
-    }
-  }
-
-  while (k < d.length) {
-    const found = findDigit(from, d[k]);
-    if (found === -1) return positions;
-    positions.push(found);
-    from = found + 1;
-    k++;
-  }
-
   return positions;
-}
-
-/** True when all 9 digits after +375 are present. */
-export function isPhoneComplete(nationalDigits: string): boolean {
-  return extractNationalDigits(nationalDigits).length === PHONE_NATIONAL_DIGIT_COUNT;
-}
-
-/** True when digits were inserted into the immutable +375 prefix (e.g. "+3754 (29) …"). */
-export function hasPrefixCorruption(raw: string): boolean {
-  const parenIdx = raw.indexOf("(");
-  if (parenIdx === -1) {
-    return raw.replace(/\D/g, "").length > 3;
-  }
-  return raw.slice(0, parenIdx).replace(/\D/g, "").length > 3;
 }
 
 export function editableCaretBounds(
   nationalDigits: string,
   focused: boolean,
-  focusEmptyPrefix: string
+  prefix: string,
+  country: CountryCode
 ): { min: number; max: number } {
   const d = nationalDigits.replace(/\D/g, "");
   if (d.length === 0) {
     if (focused) {
-      const len = focusEmptyPrefix.length;
+      const len = prefix.length;
       return { min: len, max: len };
     }
     return { min: 0, max: 0 };
   }
 
-  const masked = formatMaskedPhone(d);
+  const masked = formatDisplayPhone(d, country);
   const positions = nationalDigitPositions(masked, d);
   if (positions.length === 0) {
-    return { min: 0, max: masked.length };
+    return { min: prefix.length, max: masked.length };
   }
   return { min: positions[0], max: masked.length };
 }
 
-/** Maps caret position to national digit index for insertion (0 … PHONE_NATIONAL_DIGIT_COUNT). */
 export function digitInsertIndexFromCaret(
   caret: number,
   masked: string,
   nationalDigits: string,
-  focusEmptyPrefixLen: number
+  prefixLen: number
 ): number {
   const d = nationalDigits.replace(/\D/g, "");
-  if (d.length === 0 && caret <= focusEmptyPrefixLen) {
+  if (d.length === 0 && caret <= prefixLen) {
     return 0;
   }
 
@@ -143,7 +152,7 @@ export function digitInsertIndexFromCaret(
 
   for (let i = positions.length - 1; i >= 0; i--) {
     if (caret > positions[i]) {
-      return Math.min(i + 1, PHONE_NATIONAL_DIGIT_COUNT);
+      return Math.min(i + 1, d.length + 1);
     }
   }
 
@@ -154,12 +163,12 @@ export function caretAfterDigitIndex(
   masked: string,
   nationalDigits: string,
   digitIndex: number,
-  focusEmptyPrefixLen: number,
+  prefixLen: number,
   focused: boolean
 ): number {
   const d = nationalDigits.replace(/\D/g, "");
   if (d.length === 0 && focused) {
-    return focusEmptyPrefixLen;
+    return prefixLen;
   }
 
   const positions = nationalDigitPositions(masked, d);
@@ -168,4 +177,34 @@ export function caretAfterDigitIndex(
   }
 
   return masked.length;
+}
+
+export function resolveCountryFromE164(
+  value: string,
+  fallback: CountryCode,
+  allowed: CountryCode[]
+): CountryCode {
+  // Prefer fallback for ambiguous calling codes (RU/KZ both +7).
+  if (allowed.includes(fallback)) {
+    const withFallback = parsePhoneNumberFromString(value, fallback);
+    if (withFallback?.countryCallingCode === getCountryCallingCode(fallback)) {
+      return fallback;
+    }
+  }
+
+  const parsed = parsePhoneNumberFromString(value);
+  if (parsed?.country && allowed.includes(parsed.country)) {
+    return parsed.country;
+  }
+
+  return allowed.includes(fallback) ? fallback : (allowed[0] ?? fallback);
+}
+
+export function nationalDigitsFromE164(value: string, country: CountryCode): string {
+  if (!value) return "";
+  const parsed = parsePhoneNumberFromString(value, country);
+  if (parsed?.nationalNumber) {
+    return parsed.nationalNumber.slice(0, getMaxNationalDigits(country));
+  }
+  return extractNationalDigits(value, country);
 }

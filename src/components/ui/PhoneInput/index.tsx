@@ -1,6 +1,7 @@
 "use client";
 
 import classNames from "classnames";
+import type { CountryCode } from "libphonenumber-js";
 import type {
   ChangeEvent,
   ClipboardEvent,
@@ -8,21 +9,34 @@ import type {
   KeyboardEvent,
   SyntheticEvent,
 } from "react";
-import { forwardRef, useRef, useState } from "react";
+import { forwardRef, useId, useRef, useState } from "react";
 
-import TextInput from "../TextInput";
+import Icon from "@/src/components/ui/Icon/Icon";
+import useClickOutside from "@/src/hooks/useClickOutside";
+
+import CountryFlag from "./CountryFlag";
+import {
+  DEFAULT_PHONE_COUNTRIES,
+  DEFAULT_PHONE_COUNTRY,
+  formatCountryOptionLabel,
+  getPhoneCountry,
+  type PhoneCountry,
+} from "./phoneCountries";
 import type { PhoneInputProps } from "./index.type";
-
 import {
   caretAfterDigitIndex,
   digitInsertIndexFromCaret,
   editableCaretBounds,
   extractNationalDigits,
-  formatMaskedPhone,
-  hasPrefixCorruption,
+  formatDisplayPhone,
+  getCallingCodePrefix,
+  getExamplePlaceholder,
+  getMaxNationalDigits,
   nationalDigitPositions,
-  parsePastedToNationalDigits,
-  PHONE_NATIONAL_DIGIT_COUNT,
+  nationalDigitsFromE164,
+  parsePastedNationalDigits,
+  resolveCountryFromE164,
+  toE164,
 } from "./phoneMask";
 
 const ACCEPT_KEYS = new Set([
@@ -39,14 +53,15 @@ const ACCEPT_KEYS = new Set([
   "End",
 ]);
 
-const MASK_PLACEHOLDER = "+375 (XX) XXX XX XX";
-const FOCUS_EMPTY_PREFIX = "+375";
-
-function resolveDisplayValue(digits: string, focused: boolean): string {
+function resolveDisplayValue(
+  digits: string,
+  focused: boolean,
+  country: CountryCode
+): string {
   if (digits.length === 0) {
-    return focused ? FOCUS_EMPTY_PREFIX : "";
+    return focused ? getCallingCodePrefix(country) : "";
   }
-  return formatMaskedPhone(digits);
+  return formatDisplayPhone(digits, country);
 }
 
 function inputSnapshot(el: HTMLInputElement, value: string): HTMLInputElement {
@@ -63,9 +78,13 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
   {
     value: valueProp,
     defaultValue,
-    placeholder,
     label,
+    error,
     className,
+    required,
+    id: idProp,
+    defaultCountry = DEFAULT_PHONE_COUNTRY,
+    countries = DEFAULT_PHONE_COUNTRIES,
     onChange,
     onPaste,
     onKeyDown,
@@ -73,34 +92,71 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     onBlur,
     onBeforeInput: onBeforeInputProp,
     inputMode,
+    disabled,
+    name,
+    variant = "filled",
     ...rest
   },
   ref
 ) {
+  const generatedId = useId();
+  const id = idProp ?? generatedId;
+  const errorId = `${id}-error`;
+  const listboxId = `${id}-countries`;
+
   const isControlled = valueProp !== undefined;
+  const allowedCodes = countries.map((c) => c.code);
 
   const [focused, setFocused] = useState(false);
+  const [countryOpen, setCountryOpen] = useState(false);
+  const [country, setCountry] = useState<CountryCode>(() => {
+    const initial = String(valueProp ?? defaultValue ?? "");
+    if (initial) {
+      return resolveCountryFromE164(initial, defaultCountry, allowedCodes);
+    }
+    return defaultCountry;
+  });
 
   const [fallbackDigits, setFallbackDigits] = useState(() =>
-    extractNationalDigits(String(defaultValue ?? ""))
+    nationalDigitsFromE164(String(defaultValue ?? ""), defaultCountry)
   );
 
-  const digitsFromControl = extractNationalDigits(String(valueProp ?? ""));
-
+  const digitsFromControl = nationalDigitsFromE164(String(valueProp ?? ""), country);
   const digits = isControlled ? digitsFromControl : fallbackDigits;
 
   const digitsRef = useRef(digits);
   digitsRef.current = digits;
-
+  const countryRef = useRef(country);
+  countryRef.current = country;
   const pendingKeyInsertRef = useRef<string | null>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const displayValue = resolveDisplayValue(digits, focused);
-
+  const displayValue = resolveDisplayValue(digits, focused, country);
   const resolvedPlaceholder =
-    focused && digits.length === 0 ? (placeholder ?? MASK_PLACEHOLDER) : placeholder;
+    !focused && digits.length === 0 ? getExamplePlaceholder(country) : undefined;
+
+  const selectedCountry: PhoneCountry =
+    getPhoneCountry(country, countries) ?? countries[0] ?? { code: "BY", name: "Беларусь" };
+
+  useClickOutside(rootRef, () => setCountryOpen(false));
+
+  const setInputRef = (node: HTMLInputElement | null) => {
+    inputRef.current = node;
+    if (typeof ref === "function") {
+      ref(node);
+    } else if (ref) {
+      ref.current = node;
+    }
+  };
 
   const clampCaret = (el: HTMLInputElement) => {
-    const { min, max } = editableCaretBounds(digitsRef.current, focused, FOCUS_EMPTY_PREFIX);
+    const { min, max } = editableCaretBounds(
+      digitsRef.current,
+      focused,
+      getCallingCodePrefix(countryRef.current),
+      countryRef.current
+    );
     const start = el.selectionStart ?? 0;
     const end = el.selectionEnd ?? 0;
     const newStart = Math.min(Math.max(start, min), max);
@@ -116,22 +172,52 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     });
   };
 
+  const emitE164 = (
+    nextDigits: string,
+    inp: HTMLInputElement,
+    nextCountry: CountryCode = countryRef.current,
+    base?: ChangeEvent<HTMLInputElement>
+  ) => {
+    digitsRef.current = nextDigits;
+    if (!isControlled) {
+      setFallbackDigits(nextDigits);
+    }
+    const e164 = toE164(nextDigits, nextCountry);
+    const snap = inputSnapshot(inp, e164);
+    if (base) {
+      onChange?.({ ...base, target: snap, currentTarget: snap } as ChangeEvent<HTMLInputElement>);
+    } else {
+      onChange?.({
+        target: snap,
+        currentTarget: snap,
+      } as ChangeEvent<HTMLInputElement>);
+    }
+  };
+
   const insertDigitsAtCaret = (el: HTMLInputElement | null, text: string) => {
     if (!el) return;
 
     const typedDigits = text.replace(/\D/g, "");
     if (typedDigits.length === 0) return;
 
+    const currentCountry = countryRef.current;
+    const max = getMaxNationalDigits(currentCountry);
     const currentDigits = digitsRef.current;
-    const { min, max } = editableCaretBounds(currentDigits, focused, FOCUS_EMPTY_PREFIX);
-    const start = Math.min(Math.max(el.selectionStart ?? 0, min), max);
-    const end = Math.min(Math.max(el.selectionEnd ?? 0, min), max);
+    const currentPrefix = getCallingCodePrefix(currentCountry);
+    const { min, max: caretMax } = editableCaretBounds(
+      currentDigits,
+      focused,
+      currentPrefix,
+      currentCountry
+    );
+    const start = Math.min(Math.max(el.selectionStart ?? 0, min), caretMax);
+    const end = Math.min(Math.max(el.selectionEnd ?? 0, min), caretMax);
 
     let workingDigits = currentDigits;
     let insertAt: number;
 
     if (start !== end) {
-      const masked = formatMaskedPhone(workingDigits);
+      const masked = formatDisplayPhone(workingDigits, currentCountry);
       const positions = nationalDigitPositions(masked, workingDigits);
       const toRemove = new Set<number>();
       for (let di = 0; di < positions.length; di++) {
@@ -148,23 +234,23 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
           ? Math.min(...toRemove)
           : digitInsertIndexFromCaret(
               start,
-              formatMaskedPhone(workingDigits),
+              formatDisplayPhone(workingDigits, currentCountry),
               workingDigits,
-              FOCUS_EMPTY_PREFIX.length
+              currentPrefix.length
             );
     } else {
       insertAt = digitInsertIndexFromCaret(
         start,
-        formatMaskedPhone(workingDigits),
+        formatDisplayPhone(workingDigits, currentCountry),
         workingDigits,
-        FOCUS_EMPTY_PREFIX.length
+        currentPrefix.length
       );
     }
 
     let nextDigits = workingDigits;
     let insertedCount = 0;
     for (const ch of typedDigits) {
-      if (nextDigits.length >= PHONE_NATIONAL_DIGIT_COUNT) break;
+      if (nextDigits.length >= max) break;
       nextDigits =
         nextDigits.slice(0, insertAt + insertedCount) +
         ch +
@@ -174,15 +260,15 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
 
     if (insertedCount === 0) return;
 
-    emitMasked(nextDigits, el);
+    emitE164(nextDigits, el, currentCountry);
 
-    const newMasked = formatMaskedPhone(nextDigits);
+    const newMasked = formatDisplayPhone(nextDigits, currentCountry);
     const lastInsertedIndex = insertAt + insertedCount - 1;
     const caret = caretAfterDigitIndex(
       newMasked,
       nextDigits,
       lastInsertedIndex,
-      FOCUS_EMPTY_PREFIX.length,
+      currentPrefix.length,
       focused
     );
 
@@ -191,45 +277,23 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     });
   };
 
-  const emitMasked = (
-    nextDigits: string,
-    inp: HTMLInputElement,
-    base?: ChangeEvent<HTMLInputElement>
-  ) => {
-    digitsRef.current = nextDigits;
-    const maskedVal = formatMaskedPhone(nextDigits);
-    if (!isControlled) {
-      setFallbackDigits(nextDigits);
-    }
-    const snap = inputSnapshot(inp, maskedVal);
-    if (base) {
-      onChange?.({ ...base, target: snap, currentTarget: snap } as ChangeEvent<HTMLInputElement>);
-    } else {
-      onChange?.({
-        target: snap,
-        currentTarget: snap,
-      } as ChangeEvent<HTMLInputElement>);
-    }
-  };
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (hasPrefixCorruption(e.target.value)) {
-      scheduleClampCaret(e.currentTarget);
-      return;
-    }
-
-    const next = extractNationalDigits(e.target.value);
+    const currentCountry = countryRef.current;
+    const next = extractNationalDigits(e.target.value, currentCountry);
     if (next.length === 0 && digits.length === 0) {
       scheduleClampCaret(e.currentTarget);
       return;
     }
-    emitMasked(next, e.currentTarget, e);
+    emitE164(next, e.currentTarget, currentCountry, e);
   };
 
   const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const nextDigits = parsePastedToNationalDigits(e.clipboardData?.getData("text/plain") ?? "");
-    emitMasked(nextDigits, e.currentTarget);
+    const nextDigits = parsePastedNationalDigits(
+      e.clipboardData?.getData("text/plain") ?? "",
+      countryRef.current
+    );
+    emitE164(nextDigits, e.currentTarget);
     onPaste?.(e);
   };
 
@@ -240,21 +304,23 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
   ) => {
     if (indicesToRemove.size === 0) return;
 
+    const currentCountry = countryRef.current;
+    const currentPrefix = getCallingCodePrefix(currentCountry);
     const sortedAsc = [...indicesToRemove].sort((a, b) => a - b);
     let nextDigits = digitsRef.current;
     for (let i = sortedAsc.length - 1; i >= 0; i--) {
       const ri = sortedAsc[i];
       nextDigits = nextDigits.slice(0, ri) + nextDigits.slice(ri + 1);
     }
-    emitMasked(nextDigits, el);
+    emitE164(nextDigits, el, currentCountry);
 
-    const newMasked = formatMaskedPhone(nextDigits);
-    const renderedValue = resolveDisplayValue(nextDigits, focused);
+    const newMasked = formatDisplayPhone(nextDigits, currentCountry);
+    const renderedValue = resolveDisplayValue(nextDigits, focused, currentCountry);
     const newPositions = nationalDigitPositions(newMasked, nextDigits);
 
     let caret: number;
     if (newPositions.length === 0) {
-      caret = focused ? FOCUS_EMPTY_PREFIX.length : 0;
+      caret = focused ? currentPrefix.length : 0;
     } else if (sortedAsc.length > 1) {
       caret = Math.min(caretHint, newMasked.length);
     } else {
@@ -272,21 +338,29 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     onKeyDown?.(ev);
     if (ev.defaultPrevented) return;
 
+    if (ev.key === "Escape" && countryOpen) {
+      ev.preventDefault();
+      setCountryOpen(false);
+      return;
+    }
+
+    const currentCountry = countryRef.current;
+    const currentPrefix = getCallingCodePrefix(currentCountry);
+
     if (ev.key === "Backspace" || ev.key === "Delete") {
       const el = ev.currentTarget;
 
       if (digitsRef.current.length === 0 && focused) {
         ev.preventDefault();
         requestAnimationFrame(() => {
-          const caret = FOCUS_EMPTY_PREFIX.length;
-          el?.setSelectionRange(caret, caret);
+          el?.setSelectionRange(currentPrefix.length, currentPrefix.length);
         });
         return;
       }
 
       const start = el.selectionStart ?? 0;
       const end = el.selectionEnd ?? 0;
-      const masked = formatMaskedPhone(digitsRef.current);
+      const masked = formatDisplayPhone(digitsRef.current, currentCountry);
       const positions = nationalDigitPositions(masked, digitsRef.current);
 
       if (start !== end) {
@@ -300,12 +374,17 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
         if (toRemove.size > 0) {
           ev.preventDefault();
           applyDigitRemovalAndCaret(el, toRemove, start);
+        } else {
+          ev.preventDefault();
         }
         return;
       }
 
       if (ev.key === "Backspace") {
-        if (start === 0) return;
+        if (start <= currentPrefix.length && digitsRef.current.length === 0) {
+          ev.preventDefault();
+          return;
+        }
 
         let removeIndex = -1;
         const atDigit = positions.indexOf(start);
@@ -323,11 +402,12 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
         if (removeIndex !== -1) {
           ev.preventDefault();
           applyDigitRemovalAndCaret(el, new Set([removeIndex]), start);
+        } else {
+          ev.preventDefault();
         }
         return;
       }
 
-      /* Delete (forward) */
       let removeIndex = -1;
       const at = positions.indexOf(start);
       if (at !== -1) {
@@ -343,13 +423,20 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
       if (removeIndex !== -1) {
         ev.preventDefault();
         applyDigitRemovalAndCaret(el, new Set([removeIndex]), start);
+      } else {
+        ev.preventDefault();
       }
       return;
     }
 
     if (ev.key === "Home") {
       ev.preventDefault();
-      const { min } = editableCaretBounds(digitsRef.current, focused, FOCUS_EMPTY_PREFIX);
+      const { min } = editableCaretBounds(
+        digitsRef.current,
+        focused,
+        currentPrefix,
+        currentCountry
+      );
       ev.currentTarget.setSelectionRange(min, min);
       return;
     }
@@ -412,7 +499,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     onFocus?.(e);
 
     if (digits.length === 0) {
-      const caret = FOCUS_EMPTY_PREFIX.length;
+      const caret = getCallingCodePrefix(country).length;
       requestAnimationFrame(() => {
         e?.currentTarget?.setSelectionRange(caret, caret);
       });
@@ -424,27 +511,140 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     onBlur?.(e);
   };
 
+  const handleSelectCountry = (next: PhoneCountry) => {
+    setCountryOpen(false);
+    if (next.code === country) return;
+
+    setCountry(next.code);
+    countryRef.current = next.code;
+    digitsRef.current = "";
+    if (!isControlled) {
+      setFallbackDigits("");
+    }
+
+    const el = inputRef.current;
+    if (el) {
+      emitE164("", el, next.code);
+      requestAnimationFrame(() => {
+        el.focus();
+        const caret = getCallingCodePrefix(next.code).length;
+        el.setSelectionRange(caret, caret);
+      });
+    } else {
+      onChange?.({
+        target: { value: "", name: name ?? "" },
+        currentTarget: { value: "", name: name ?? "" },
+      } as ChangeEvent<HTMLInputElement>);
+    }
+  };
+
+  const isFilled = displayValue.length > 0;
+
   return (
-    <TextInput
-      {...rest}
-      ref={ref}
-      label={label}
-      className={classNames("phone-input", className)}
-      type="text"
-      autoComplete="tel"
-      spellCheck={false}
-      inputMode={inputMode ?? "tel"}
-      placeholder={resolvedPlaceholder}
-      value={displayValue}
-      onChange={handleChange}
-      onPaste={handlePaste}
-      onKeyDown={handleKeyDown}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      onClick={handleCaretGuard}
-      onSelect={handleCaretGuard}
-      onBeforeInput={handleBeforeInput}
-    />
+    <div
+      ref={rootRef}
+      className={classNames("text-input", "phone-input", className, {
+        "text-input--error": !!error,
+        "text-input--outline": variant === "outline",
+        "text-input--filled": variant === "filled",
+        "phone-input--open": countryOpen,
+      })}
+    >
+      {label ? (
+        <label className="text-input__label" htmlFor={id}>
+          {label}
+          {required ? (
+            <span className="text-input__required" aria-hidden>
+              {" "}
+              *
+            </span>
+          ) : null}
+        </label>
+      ) : null}
+
+      <div className="text-input__control-wrapper phone-input__control-wrapper">
+        <div
+          className={classNames("phone-input__field", "text-input__control", {
+            "text-input__control--filled": isFilled && !error,
+          })}
+        >
+          <button
+            type="button"
+            className="phone-input__country-btn"
+            aria-label="Выбор страны"
+            aria-haspopup="listbox"
+            aria-expanded={countryOpen}
+            aria-controls={listboxId}
+            disabled={disabled}
+            onClick={() => setCountryOpen((open) => !open)}
+          >
+            <CountryFlag code={selectedCountry.code} className="phone-input__flag" />
+            <Icon
+              name="arrow"
+              className={classNames("phone-input__chevron", {
+                "phone-input__chevron--open": countryOpen,
+              })}
+            />
+          </button>
+
+          <input
+            {...rest}
+            ref={setInputRef}
+            id={id}
+            name={name}
+            type="text"
+            autoComplete="tel"
+            spellCheck={false}
+            inputMode={inputMode ?? "tel"}
+            disabled={disabled}
+            placeholder={resolvedPlaceholder}
+            value={displayValue}
+            className="phone-input__number"
+            aria-invalid={!!error ? true : undefined}
+            aria-describedby={error ? errorId : undefined}
+            onChange={handleChange}
+            onPaste={handlePaste}
+            onKeyDown={handleKeyDown}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onClick={handleCaretGuard}
+            onSelect={handleCaretGuard}
+            onBeforeInput={handleBeforeInput}
+          />
+        </div>
+
+        {countryOpen ? (
+          <ul id={listboxId} className="phone-input__dropdown" role="listbox">
+            {countries.map((option) => {
+              const active = option.code === country;
+              return (
+                <li key={option.code} role="option" aria-selected={active}>
+                  <button
+                    type="button"
+                    className={classNames("phone-input__option", {
+                      "phone-input__option--active": active,
+                    })}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => handleSelectCountry(option)}
+                  >
+                    <CountryFlag code={option.code} className="phone-input__flag" />
+                    <span className="phone-input__option-label">
+                      {formatCountryOptionLabel(option)}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
+      </div>
+
+      {!!error && (
+        <p className="text-input__error" id={errorId} role="alert">
+          {error}
+        </p>
+      )}
+    </div>
   );
 });
 
