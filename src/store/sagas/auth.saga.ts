@@ -9,6 +9,7 @@ import {
   AuthResetPasswordRequest,
   AuthSignInRequest,
   AuthVerifyCodeRequest,
+  AuthVerifyPhoneResponse,
   CreateChildRequest,
   CreateChildResponse,
 } from "@/src/entities/common/auth";
@@ -133,9 +134,41 @@ function* watchAuthForgotPassword() {
 
 function* workerAuthVerifyCode({ payload }: { payload: AuthVerifyCodeRequest }) {
   try {
-    yield call(UsersApi.verifyCode, payload);
+    const response: { data: AuthVerifyPhoneResponse } = yield call(
+      UsersApi.verifyCode,
+      payload
+    );
+    const data = response?.data;
 
-    yield put(verifyCodeSuccess());
+    if (data?.access) {
+      CookieHelper.setCookie(TOKEN_KEY, data.access, {
+        path: "/",
+        expires: new Date(Date.now() + MAX_AGE),
+      });
+    }
+
+    if (data?.refresh) {
+      CookieHelper.setCookie(REFRESH_TOKEN_KEY, data.refresh, {
+        path: "/",
+        expires: new Date(Date.now() + MAX_AGE),
+      });
+    }
+
+    if (data?.access && data?.refresh) {
+      const profileResponse: { data: UserProfile } = yield call(UsersApi.me);
+      const profile: UserProfile = {
+        ...profileResponse.data,
+        account_data_notification:
+          data.account_data_notification ?? profileResponse.data.account_data_notification,
+        course_access_notification:
+          data.course_access_notification ?? profileResponse.data.course_access_notification,
+      };
+
+      localStorage.setStorageItem(USER, profile.profile);
+      yield put(loginSuccess(profile));
+    }
+
+    yield put(verifyCodeSuccess(data ?? null));
   } catch (error) {
     yield put(setErrors(error as Record<string, string> | null));
   }
@@ -285,9 +318,11 @@ function* watchCreateChild() {
 
 function* workerVerifyChildCode({ payload }: { payload: AuthVerifyCodeRequest }) {
   try {
-    const response: { data: CreateChildResponse } = yield call(UsersApi.verifyCode, payload);
+    const response: { data: AuthVerifyPhoneResponse } = yield call(UsersApi.verifyCode, payload);
 
-    yield put(createChildSuccess(response.data.child));
+    if (response.data.child) {
+      yield put(createChildSuccess(response.data.child));
+    }
   } catch (error) {
     yield put(setErrors(error as Record<string, string> | null));
   }

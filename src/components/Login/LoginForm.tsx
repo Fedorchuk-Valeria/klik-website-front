@@ -66,15 +66,27 @@ const LoginForm = () => {
       return;
     }
 
-    const notification = user_profile?.account_data_notification;
+    const courseAccess = user_profile?.course_access_notification;
+    const accountData = user_profile?.account_data_notification;
 
-    if (notification?.show && user_profile?.profile?.full_name) {
+    if (courseAccess?.show) {
+      dispatch(
+        showModal({
+          modalType: ModalType.NOTICE,
+          modalProps: {
+            title: courseAccess.title,
+            description: courseAccess.message,
+            autoCloseDelayMs: 5000,
+          },
+        })
+      );
+    } else if (accountData?.show) {
       dispatch(
         showModal({
           modalType: ModalType.ACCOUNT_DATA,
           modalProps: {
-            name: user_profile?.profile?.full_name,
-            children: user_profile?.children,
+            name: accountData.parent_full_name,
+            children: accountData.children,
           },
         })
       );

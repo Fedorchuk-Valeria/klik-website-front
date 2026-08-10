@@ -19,6 +19,23 @@ export type AuthVerifyCodeRequest = {
   code: string;
 };
 
+export type CourseAccessNotification = {
+  show: boolean;
+  title: string;
+  message: string;
+  course_id: number;
+  course_title: string;
+};
+
+export type AccountDataNotification = {
+  show: boolean;
+  parent_full_name: string;
+  children: {
+    id: number;
+    full_name: string;
+  }[];
+};
+
 export type AuthResetPasswordRequest = {
   session_token: string;
   password: string;
@@ -66,4 +83,15 @@ export type CreateChildResponse = {
     birth_date: string;
     marketing_consent: boolean;
   };
+};
+
+export type AuthVerifyPhoneResponse = {
+  flow: string;
+  role?: UserProfileRole;
+  access?: string;
+  refresh?: string;
+  course_access_notification?: CourseAccessNotification | null;
+  account_data_notification?: AccountDataNotification | null;
+  detail?: string;
+  child?: CreateChildResponse["child"];
 };

@@ -9,6 +9,7 @@ import {
   AuthResetPasswordRequest,
   AuthSignInRequest,
   AuthVerifyCodeRequest,
+  AuthVerifyPhoneResponse,
   CreateChildRequest,
 } from "@/src/entities/common/auth";
 
@@ -23,6 +24,7 @@ type AuthState = {
   isRegisterSuccess: boolean;
   isCodeSent: boolean;
   isCodeCorrect: boolean;
+  verifyPhoneResponse: AuthVerifyPhoneResponse | null;
   isLoading: boolean;
   isLogoutLoading: false;
   isResetPasswordSuccess: boolean;
@@ -45,6 +47,7 @@ const initialState: AuthState = {
   isRegisterSuccess: false,
   isCodeSent: false,
   isCodeCorrect: false,
+  verifyPhoneResponse: null,
   isLoading: false,
   isLogoutLoading: false,
   isResetPasswordSuccess: false,
@@ -109,9 +112,10 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.isCodeSent = true;
     },
-    verifyCodeSuccess(state) {
+    verifyCodeSuccess(state, action: { payload: AuthVerifyPhoneResponse | null }) {
       state.isLoading = false;
       state.isCodeCorrect = true;
+      state.verifyPhoneResponse = action.payload;
     },
     resetPasswordSuccess(state) {
       state.isLoading = false;
@@ -200,7 +204,11 @@ const authSlice = createSlice({
       state.isCodeCorrect = false;
       state.isCodeSent = false;
       state.isResetPasswordSuccess = false;
+      state.verifyPhoneResponse = null;
       state.errors = null;
+    },
+    clearVerifyPhoneResponse(state) {
+      state.verifyPhoneResponse = null;
     },
     clearPersonalAccountChanged(state) {
       state.isPersonalAccountChanged = false;
@@ -266,6 +274,7 @@ export const {
   clearErrors,
   clearRegister,
   clearResetPassword,
+  clearVerifyPhoneResponse,
   clearPasswordChanged,
   clearChildSuccessfullyCreated,
 

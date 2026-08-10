@@ -182,7 +182,15 @@ const ChildrenDetailsPage = () => {
               <TextInput
                 variant="outline"
                 label="ФИО"
-                value={currentChild?.profile?.full_name}
+                value={currentChild?.profile?.full_name ?? ""}
+                className="login-page__form-input"
+                disabled={true}
+              />
+
+              <TextInput
+                variant="outline"
+                label="E-mail"
+                value={currentChild?.profile?.email ?? ""}
                 className="login-page__form-input"
                 disabled={true}
               />
@@ -190,7 +198,7 @@ const ChildrenDetailsPage = () => {
               <PhoneInput
                 variant="outline"
                 label="Телефон"
-                value={currentChild?.profile?.phone}
+                value={currentChild?.profile?.phone ?? ""}
                 className="login-page__form-input"
                 disabled={true}
               />

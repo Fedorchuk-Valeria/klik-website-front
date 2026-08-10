@@ -1,4 +1,8 @@
 import { Partner } from "@/src/store/slices/profile";
+import type {
+  AccountDataNotification,
+  CourseAccessNotification,
+} from "@/src/entities/common/auth";
 
 export enum ModalType {
   NOTICE = "notice",
@@ -46,24 +50,18 @@ export type UserProfile = {
   })[];
   offline_groups: Group[];
   offline_training_payment_notification: {
-    amount: string | null,
-    currency: string,
-    message: string,
-    paid_at: string,
-    payment_id: string | null,
-    program_title: string | null,
-    show: boolean,
-    status: string | null,
-    title: string | null,
-  },
-  account_data_notification: {
-    show: boolean,
-    parent_full_name: string,
-    children : [
-      id: number,
-      full_name: string,
-    ],
-  },
+    amount: string | null;
+    currency: string;
+    message: string;
+    paid_at: string;
+    payment_id: string | null;
+    program_title: string | null;
+    show: boolean;
+    status: string | null;
+    title: string | null;
+  };
+  account_data_notification?: AccountDataNotification | null;
+  course_access_notification?: CourseAccessNotification | null;
 };
 
 export type UserProfileRole = "parent" | "child" | "admin";

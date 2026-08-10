@@ -119,21 +119,26 @@ const PagesProfile = ({ settings }: PropTypes) => {
                 <TextInput
                   variant="outline"
                   label="ФИО"
-                  value={user_profile?.profile?.full_name}
+                  value={user_profile?.profile?.full_name ?? ""}
                   className="login-page__form-input"
                   disabled={true}
                 />
 
-                {isParent ||
-                  (isAdmin && (
-                    <PhoneInput
-                      variant="outline"
-                      label="Телефон"
-                      value={user_profile?.profile?.phone}
-                      className="login-page__form-input"
-                      disabled={true}
-                    />
-                  ))}
+                <TextInput
+                  variant="outline"
+                  label="E-mail"
+                  value={user_profile?.profile?.email ?? ""}
+                  className="login-page__form-input"
+                  disabled={true}
+                />
+
+                <PhoneInput
+                  variant="outline"
+                  label="Телефон"
+                  value={user_profile?.profile?.phone ?? ""}
+                  className="login-page__form-input"
+                  disabled={true}
+                />
               </div>
             </div>
 

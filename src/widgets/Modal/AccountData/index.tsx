@@ -12,12 +12,10 @@ import { useRouter } from "next/navigation";
 
 type PropTypes = {
   name?: string;
-  children?: [
-    {
-      id: number;
-      full_name: string;
-    },
-  ];
+  children?: {
+    id: number;
+    full_name: string;
+  }[];
   className?: string;
   isVisible: boolean;
   autoCloseDelayMs?: number;

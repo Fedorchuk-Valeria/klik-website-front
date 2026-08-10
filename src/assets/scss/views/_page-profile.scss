@@ -126,23 +126,30 @@
   }
 
   &__form {
-    max-width: 700px;
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    flex-wrap: wrap;
+    column-gap: 50px;
+    row-gap: 20px;
     width: 100%;
 
     .text-input {
-      &__control {
-        padding: 19px 30px;
+      width: calc(50% - 25px);
 
+      @media screen and (max-width: $desktop) {
+        width: calc(50% - 10px);
+      }
+
+      @media screen and (max-width: $desktop-compact) {
+        width: calc(50% - 8px);
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        width: 100%;
+      }
+
+      &__control {
         @media screen and (max-width: $desktop) {
           font-size: 16px;
-          padding: 22px 30px;
-        }
-
-        @media screen and (max-width: $desktop-compact) {
-          padding: 16px 30px;
         }
 
         @media screen and (max-width: $landscape-tablet-size) {
@@ -151,11 +158,6 @@
 
         @media screen and (max-width: $tablet-size) {
           font-size: 16px;
-          padding: 21px 30px;
-        }
-
-        @media screen and (max-width: $mobile-size) {
-          padding: 17px 30px;
         }
       }
     }
@@ -172,11 +174,15 @@
     }
 
     @media screen and (max-width: $desktop) {
-      max-width: 600px;
+      gap: 20px;
+    }
+
+    @media screen and (max-width: $desktop-compact) {
+      gap: 16px;
     }
 
     @media screen and (max-width: $landscape-tablet-size) {
-      max-width: 392px;
+      max-width: 500px;
 
       button {
         padding: 16px 30px;
@@ -186,6 +192,7 @@
 
     @media screen and (max-width: $tablet-size) {
       max-width: 100%;
+      gap: 20px;
 
       button {
         padding: 20px 30px;
@@ -1448,7 +1455,6 @@
         padding: 20px;
       }
 
-
       @media screen and (max-width: $mobile-size) {
         font-size: 16px;
         padding: 16px;
@@ -2152,7 +2158,6 @@
       }
 
       .button__arrow {
-
         @media screen and (max-width: $desktop-compact) {
           @include icon(36px);
         }
@@ -2179,7 +2184,6 @@
           }
         }
       }
-
     }
   }
 

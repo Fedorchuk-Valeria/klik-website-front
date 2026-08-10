@@ -9,19 +9,26 @@ import { confirmCodeValidationSchema } from "@/src/components/Login/validationSc
 import Button from "@/src/components/ui/Button/Button";
 import CodeInput from "@/src/components/ui/CodeInput";
 
+import { ModalType } from "@/src/entities/common";
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import { resendCodeRequest, verifyCodeRequest } from "@/src/store/slices/auth";
+import {
+  clearVerifyPhoneResponse,
+  resendCodeRequest,
+  verifyCodeRequest,
+} from "@/src/store/slices/auth";
+import { showModal } from "@/src/store/slices/modalSlice";
 
 import { PAGES, QUERY_PARAMS, TOKEN_KEY } from "@/src/utils/constant";
-import { CookieHelper } from "@/src/utils/helpers";
+import { AuthRedirectHelper, CookieHelper } from "@/src/utils/helpers";
 
 const ConfirmCodeContent = () => {
   const codeInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
-  const { isCodeCorrect, isLoading, errors } = useAppSelector((state: RootStore) => state.auth);
+  const { isCodeCorrect, isLoading, errors, isLoggedIn, user_profile, verifyPhoneResponse } =
+    useAppSelector((state: RootStore) => state.auth);
   const form = useFormik({
     initialValues: {
       code: "",
@@ -71,16 +78,62 @@ const ConfirmCodeContent = () => {
   }, [errors]);
 
   useEffect(() => {
-    if (isCodeCorrect) {
-      if (searchParams.get(QUERY_PARAMS.IS_RESET_PASSWORD)) {
-        router.push(PAGES.SET_NEW_PASSWORD);
-      } else {
-        router.push(PAGES.LOGIN);
-
-        CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
-      }
+    if (!isCodeCorrect) {
+      return;
     }
-  }, [isCodeCorrect, searchParams]);
+
+    if (searchParams.get(QUERY_PARAMS.IS_RESET_PASSWORD)) {
+      router.push(PAGES.SET_NEW_PASSWORD);
+      return;
+    }
+
+    const courseAccess =
+      verifyPhoneResponse?.course_access_notification ?? user_profile?.course_access_notification;
+    const accountData =
+      verifyPhoneResponse?.account_data_notification ?? user_profile?.account_data_notification;
+
+    if (courseAccess?.show) {
+      dispatch(
+        showModal({
+          modalType: ModalType.NOTICE,
+          modalProps: {
+            title: courseAccess.title,
+            description: courseAccess.message,
+            autoCloseDelayMs: 5000,
+          },
+        })
+      );
+    } else if (accountData?.show) {
+      dispatch(
+        showModal({
+          modalType: ModalType.ACCOUNT_DATA,
+          modalProps: {
+            name: accountData.parent_full_name,
+            children: accountData.children,
+          },
+        })
+      );
+    }
+
+    dispatch(clearVerifyPhoneResponse());
+
+    if (isLoggedIn) {
+      const returnTo = AuthRedirectHelper.consumeAuthReturnTo();
+      router.push(returnTo ?? PAGES.COURSES);
+      return;
+    }
+
+    router.push(PAGES.LOGIN);
+    CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
+  }, [
+    dispatch,
+    isCodeCorrect,
+    isLoggedIn,
+    router,
+    searchParams,
+    user_profile,
+    verifyPhoneResponse,
+  ]);
 
   useEffect(() => {
     if (codeInputRef.current) {

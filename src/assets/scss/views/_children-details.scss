@@ -46,9 +46,15 @@
     }
 
     .children-details-page__user-info_form {
-      @include flex-list(20px);
-      max-width: 700px;
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 50px;
+      row-gap: 20px;
       width: 100%;
+
+      .login-page__form-input {
+        width: calc(50% - 25px);
+      }
     }
   }
 
@@ -577,7 +583,11 @@
       margin-bottom: 20px;
 
       .children-details-page__user-info_form {
-        max-width: 600px;
+        gap: 20px;
+
+        .login-page__form-input {
+          width: calc(50% - 10px);
+        }
       }
     }
 
@@ -846,7 +856,10 @@
 
       .children-details-page__user-info_form {
         gap: 16px;
-        max-width: 600px;
+
+        .login-page__form-input {
+          width: calc(50% - 8px);
+        }
       }
     }
 
@@ -1141,8 +1154,12 @@
       }
 
       .children-details-page__user-info_form {
-        gap: 16px;
         max-width: 500px;
+        gap: 16px;
+
+        .login-page__form-input {
+          width: 100%;
+        }
       }
     }
 
@@ -2083,7 +2100,7 @@
       }
 
       .children-details-page__user-info_form {
-        gap: 12px;
+        gap: 20px;
       }
     }
 
