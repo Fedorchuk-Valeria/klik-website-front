@@ -1,18 +1,17 @@
+import { Group } from "@/src/entities/common";
 import { FC } from "react";
-import {Group} from "@/src/entities/common";
 
 type PropTypes = {
   data: Group[] | null;
 };
 
 export const ActiveGroups: FC<PropTypes> = ({ data }) => {
-
   return (
     <div className="page-profile__groups">
       <div className="page-profile__groups-title">Офлайн-занятия в группе</div>
       <div className="page-profile__groups-list">
-        {data?.map((item) => (
-          <div className="page-profile__group">
+        {data?.map((item, index) => (
+          <div key={index} className="page-profile__group">
             <div className="page-profile__group-title">{item.title}</div>
             <div className="page-profile__group-list">
               <div className="page-profile__group-item">

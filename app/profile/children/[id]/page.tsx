@@ -370,7 +370,7 @@ const ChildrenDetailsPage = () => {
                         >
                           <span>{info.title}</span>
                           {!!info.link ? (
-                            <a href={info.value} target="_blank" rel="noopener noreferrer">
+                            <a href={info.link} target="_blank" rel="noopener noreferrer">
                               <p>{info.value}</p>
                             </a>
                           ) : (

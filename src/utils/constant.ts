@@ -5,6 +5,7 @@ export const PENDING_HOME_ANCHOR_KEY = "klick_pending_home_anchor";
 export const SET_ACTIVE_ANCHOR_EVENT = "klick:set-active-anchor";
 
 export const AUTH_RETURN_TO_KEY = "return_to";
+export const AUTH_REFERRER_KEY = "auth_referrer";
 
 export const PLACE_STORAGE_KEY = "place";
 export const COOKIE_CONSENT_STORAGE_KEY = "cookie_policy_accepted";
