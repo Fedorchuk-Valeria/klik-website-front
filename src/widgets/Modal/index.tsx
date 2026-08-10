@@ -61,6 +61,9 @@ const WidgetModal = () => {
           <WidgetModalConfirmChildrenEmail
             isVisible={active}
             sessionToken={(modalProps as { sessionToken: string }).sessionToken}
+            flow={
+              (modalProps as { flow?: "create_child" | "email_change" }).flow ?? "create_child"
+            }
             {...modalProps}
           />
         );

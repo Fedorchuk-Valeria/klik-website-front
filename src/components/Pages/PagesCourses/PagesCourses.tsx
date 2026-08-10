@@ -185,6 +185,26 @@ const PagesCourses = ({
 
   const handleSelectFilter = (option: { id: string; name: string }) => () => {
     clearCategoryDebounce();
+
+    if (typeof window !== "undefined") {
+      const searchParams = new URLSearchParams(window.location.search);
+
+      if (searchParams.has(QUERY_PARAMS.SCOPE)) {
+        if (option.id === "all") {
+          searchParams.delete(QUERY_PARAMS.SCOPE);
+        } else {
+          searchParams.set(QUERY_PARAMS.SCOPE, option.id);
+        }
+
+        const search = searchParams.toString();
+        window.history.replaceState(
+          null,
+          "",
+          `${window.location.pathname}${search ? `?${search}` : ""}`
+        );
+      }
+    }
+
     setSelectedFilter(option);
     setSelectedCategory([]);
     setAppliedCategories([]);

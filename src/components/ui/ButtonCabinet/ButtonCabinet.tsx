@@ -5,16 +5,10 @@ import { useRouter } from "next/navigation";
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 
-import {BRANCH_CRM_ID, PAGES} from "@/src/utils/constant";
+import { PAGES } from "@/src/utils/constant";
 import { useAuth } from "@/src/utils/useAuth";
-import cookie from "@/src/utils/helpers/cookie";
-import {CookieHelper} from "@/src/utils/helpers";
 
-type Props = {
-  city: string;
-};
-
-export default function ButtonCabinet({city}: Props) {
+export default function ButtonCabinet() {
   const router = useRouter();
 
   const { isAuthenticated } = useAuth();
@@ -23,24 +17,6 @@ export default function ButtonCabinet({city}: Props) {
     if (isAuthenticated) {
       router.push(PAGES.PROFILE);
     } else {
-      let branch = '5';
-
-      switch (city) {
-        case "minsk":
-          branch = '1';
-          break;
-        case "baranovichi":
-          branch = '2';
-          break;
-        case "borisov":
-          branch =  '3';
-          break;
-        case "novopolotsk":
-          branch = '4';
-          break;
-      }
-
-      CookieHelper.setCookie(BRANCH_CRM_ID, branch);
       router.push(PAGES.LOGIN);
     }
   };

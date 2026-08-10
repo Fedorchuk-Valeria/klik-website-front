@@ -91,6 +91,19 @@ const profileSlice = createSlice({
       state.currentChild = null;
       state.errors = null;
     },
+    updateCurrentChildEmail(state, action: { payload: string }) {
+      if (!state.currentChild) {
+        return;
+      }
+
+      state.currentChild = {
+        ...state.currentChild,
+        profile: {
+          ...state.currentChild.profile,
+          email: action.payload,
+        },
+      };
+    },
     clearPartners(state) {
       state.partners = null;
       state.errors = null;
@@ -141,6 +154,7 @@ export const {
   getCurrentChildFailure,
   clearPartners,
   clearCurrentChild,
+  updateCurrentChildEmail,
   getPaymentHistoryRequest,
   getPaymentHistorySuccess,
   getPaymentHistoryFailure,

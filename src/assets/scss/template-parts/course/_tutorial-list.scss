@@ -159,7 +159,19 @@
 
   @media screen and (max-width: $desktop-compact) {
     .course-tutorial__list-item {
+      &:not(:last-child) {
+        .course-tutorial__list-item--status {
+          .course-tutorial__list-item--status-line {
+            @include icon(50px);
+            bottom: -90%;
+          }
+        }
+      }
+
       .course-tutorial__list-item--status {
+        @include icon(70px);
+        min-width: 70px;
+
         svg {
           @include icon(34px);
         }
@@ -183,9 +195,9 @@
       }
 
       .course-tutorial__list-item--status {
-        @include icon(50px);
+        @include icon(60px);
         font-size: 12px;
-        min-width: 50px;
+        min-width: 60px;
 
         &:not(:has(.course-tutorial__list-item--status-icon)) {
           padding-top: 4px;
@@ -235,6 +247,15 @@
 
   @media screen and (max-width: $small-landscape-tablet-size) {
     .course-tutorial__list-item {
+      &:not(:last-child) {
+        .course-tutorial__list-item--status {
+          .course-tutorial__list-item--status-line {
+            @include icon(29px);
+            bottom: -60%;
+          }
+        }
+      }
+
       .course-tutorial__list-item--status {
         svg {
           @include icon(30px);

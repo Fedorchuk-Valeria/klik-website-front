@@ -74,7 +74,19 @@
 
       .course-page__content-timing {
         .course-page__content-timing_item {
+          .course-page__content-timing_item-content {
+            p {
+              font-size: 34px;
+            }
+
+            span {
+              font-size: 14px;
+            }
+          }
+
           .course-page__content-timing_item-icon {
+            @include icon(70px);
+
             svg {
               @include icon(34px);
             }
@@ -120,6 +132,14 @@
   @media screen and (max-width: $small-landscape-tablet-size) {
     .course-page__content {
       max-width: 900px;
+
+      .course-page__content-timing {
+        .course-page__content-timing_item {
+          .course-page__content-timing_item-icon {
+            @include icon(60px);
+          }
+        }
+      }
     }
   }
 

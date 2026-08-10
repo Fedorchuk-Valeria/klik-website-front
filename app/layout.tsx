@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 import AnchorScroll from "@/src/components/AnchorScroll/AnchorScroll";
+import AuthReferrerTracker from "@/src/components/AuthReferrerTracker";
 import CookiePolicyListener from "@/src/components/template-parts/CookiePolicyListener";
-import PlaceListener from "@/src/components/template-parts/PlaceListener";
 
 import WidgetModal from "@/src/widgets/Modal";
 
@@ -28,6 +28,7 @@ export default function RootLayout({
     <html lang="ru">
       <body>
         <StoreProvider>
+          <AuthReferrerTracker />
           <AnchorScroll />
           {children}
           <WidgetModal />

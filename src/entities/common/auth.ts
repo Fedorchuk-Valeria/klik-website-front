@@ -93,5 +93,17 @@ export type AuthVerifyPhoneResponse = {
   course_access_notification?: CourseAccessNotification | null;
   account_data_notification?: AccountDataNotification | null;
   detail?: string;
+  email?: string;
   child?: CreateChildResponse["child"];
+};
+
+export type EmailChangeRequest = {
+  email: string;
+  childId?: number;
+};
+
+export type EmailChangeResponse = {
+  detail: string;
+  session_token: string;
+  flow: "email_change" | string;
 };

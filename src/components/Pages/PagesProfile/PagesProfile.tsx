@@ -15,6 +15,7 @@ import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
 import Loader from "@/src/components/ui/Loader/Loader";
 import { Partners } from "@/src/components/ui/Partners";
+import EditableEmailField from "@/src/components/ui/EditableEmailField";
 import PhoneInput from "@/src/components/ui/PhoneInput";
 import Popover from "@/src/components/ui/Popover";
 import { ProfileBLock } from "@/src/components/ui/ProfileBlock";
@@ -124,21 +125,32 @@ const PagesProfile = ({ settings }: PropTypes) => {
                   disabled={true}
                 />
 
-                <TextInput
-                  variant="outline"
-                  label="E-mail"
-                  value={user_profile?.profile?.email ?? ""}
-                  className="login-page__form-input"
-                  disabled={true}
-                />
+                {(isParent || isAdmin) && (
+                  <>
+                    {isParent ? (
+                      <EditableEmailField
+                        value={user_profile?.profile?.email ?? ""}
+                        className="login-page__form-input"
+                      />
+                    ) : (
+                      <TextInput
+                        variant="outline"
+                        label="E-mail"
+                        value={user_profile?.profile?.email ?? ""}
+                        className="login-page__form-input"
+                        disabled={true}
+                      />
+                    )}
 
-                <PhoneInput
-                  variant="outline"
-                  label="Телефон"
-                  value={user_profile?.profile?.phone ?? ""}
-                  className="login-page__form-input"
-                  disabled={true}
-                />
+                    <PhoneInput
+                      variant="outline"
+                      label="Телефон"
+                      value={user_profile?.profile?.phone ?? ""}
+                      className="login-page__form-input"
+                      disabled={true}
+                    />
+                  </>
+                )}
               </div>
             </div>
 

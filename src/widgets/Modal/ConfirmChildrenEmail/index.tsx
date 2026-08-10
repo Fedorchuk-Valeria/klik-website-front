@@ -11,6 +11,7 @@ import { ModalType } from "@/src/entities/common";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import {
   clearChildSuccessfullyCreated,
+  clearEmailChangeSuccess,
   clearErrors,
   resendChildCodeRequest,
   verifyChildCodeRequest,
@@ -20,17 +21,27 @@ import { showModal } from "@/src/store/slices/modalSlice";
 type PropTypes = {
   isVisible: boolean;
   sessionToken: string;
+  flow?: "create_child" | "email_change";
   className?: string;
 };
 
-const WidgetModalConfirmChildrenEmail: FC<PropTypes> = ({ className, isVisible, sessionToken }) => {
+const WidgetModalConfirmChildrenEmail: FC<PropTypes> = ({
+  className,
+  isVisible,
+  sessionToken,
+  flow = "create_child",
+}) => {
   const codeInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
   const {
     isCreateChildLoading,
+    isEmailChangeLoading,
     isChildSuccessfullyCreated,
+    isEmailChangeSuccess,
     errors: childErrors,
   } = useAppSelector((state) => state.auth);
+
+  const isBusy = isCreateChildLoading || isEmailChangeLoading;
 
   const form = useFormik({
     initialValues: {
@@ -90,6 +101,25 @@ const WidgetModalConfirmChildrenEmail: FC<PropTypes> = ({ className, isVisible, 
   }, [isChildSuccessfullyCreated, dispatch]);
 
   useEffect(() => {
+    if (!isEmailChangeSuccess || flow !== "email_change") {
+      return;
+    }
+
+    dispatch(clearEmailChangeSuccess());
+    dispatch(
+      showModal({
+        modalType: ModalType.SUCCESSFULLY,
+        modalProps: {
+          autoCloseDelayMs: 3000,
+          type: "success",
+          icon: "success-circle",
+          text: "Email успешно изменён.",
+        },
+      })
+    );
+  }, [isEmailChangeSuccess, flow, dispatch]);
+
+  useEffect(() => {
     if (isVisible) {
       form.resetForm();
       dispatch(clearErrors());
@@ -122,7 +152,7 @@ const WidgetModalConfirmChildrenEmail: FC<PropTypes> = ({ className, isVisible, 
             error={form.errors.code}
             onChange={handleChange}
             className="modal-children__code-input"
-            disabled={isCreateChildLoading}
+            disabled={isBusy}
             ref={codeInputRef}
           />
 
@@ -131,7 +161,7 @@ const WidgetModalConfirmChildrenEmail: FC<PropTypes> = ({ className, isVisible, 
             type="submit"
             variant="main-green-dark"
             className="modal-children__submit"
-            disabled={isCreateChildLoading}
+            disabled={isBusy}
           >
             Отправить код
           </Button>

@@ -89,8 +89,18 @@
   }
 
   @media (max-width: $desktop-compact) {
+    .text-input__control-wrapper {
+      .text-input__icon {
+        right: 20px;
+      }
+    }
+
     .text-input__control {
       font-size: 16px;
+
+      &.text-input__control--addon-after {
+        padding-right: 50px;
+      }
     }
   }
 
@@ -110,13 +120,35 @@
       font-size: 16px;
     }
 
+    .text-input__control-wrapper {
+      .text-input__icon {
+        right: 30px;
+      }
+    }
+
     .text-input__control {
       padding: 21px 30px 22px;
       font-size: 16px;
+
+      &.text-input__control--addon-after {
+        padding-right: 60px;
+      }
     }
   }
 
   @media (max-width: $mobile-size) {
+    .text-input__control-wrapper {
+      .text-input__icon {
+        right: 16px;
+        min-width: 22px;
+        min-height: 22px;
+
+        svg {
+          @include icon(22px);
+        }
+      }
+    }
+
     .text-input__label {
       font-size: 14px;
       margin-left: 20px;
@@ -124,6 +156,10 @@
 
     .text-input__control {
       padding: 16px 30px;
+
+      &.text-input__control--addon-after {
+        padding-right: 46px;
+      }
     }
   }
 }
