@@ -1,4 +1,4 @@
-import { call, fork, put, takeLatest } from "redux-saga/effects";
+import { call, fork, put, select, takeLatest } from "redux-saga/effects";
 
 import { UserProfile } from "@/src/entities/common";
 import {
@@ -12,8 +12,11 @@ import {
   AuthVerifyPhoneResponse,
   CreateChildRequest,
   CreateChildResponse,
+  EmailChangeRequest,
+  EmailChangeResponse,
 } from "@/src/entities/common/auth";
 import { UsersApi } from "@/src/services/http";
+import { RootStore } from "@/src/store";
 import {
   changePasswordChildRequest,
   changePasswordChildSuccess,
@@ -22,6 +25,8 @@ import {
   createChildRequest,
   createChildSuccess,
   createChildVerificationPending,
+  emailChangeRequest,
+  emailChangeSuccess,
   forgotPasswordRequest,
   forgotPasswordSuccess,
   loginRequest,
@@ -38,10 +43,12 @@ import {
   resetPasswordRequest,
   resetPasswordSuccess,
   setErrors,
+  updateProfileEmail,
   verifyChildCodeRequest,
   verifyCodeRequest,
   verifyCodeSuccess,
 } from "@/src/store/slices/auth";
+import { updateCurrentChildEmail } from "@/src/store/slices/profile";
 import { PAGES, REFRESH_TOKEN_KEY, TOKEN_KEY, USER } from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
 import localStorage from "@/src/utils/helpers/localStorage";
@@ -319,13 +326,70 @@ function* watchCreateChild() {
 function* workerVerifyChildCode({ payload }: { payload: AuthVerifyCodeRequest }) {
   try {
     const response: { data: AuthVerifyPhoneResponse } = yield call(UsersApi.verifyCode, payload);
+    const data = response.data;
 
-    if (response.data.child) {
-      yield put(createChildSuccess(response.data.child));
+    if (data.flow === "email_change" && data.email) {
+      const emailChangeChildId: number | null = yield select(
+        (state: RootStore) => state.auth.emailChangeChildId
+      );
+
+      yield put(
+        updateProfileEmail({
+          email: data.email,
+          childId: emailChangeChildId ?? undefined,
+        })
+      );
+
+      if (emailChangeChildId != null) {
+        yield put(updateCurrentChildEmail(data.email));
+      } else {
+        const userProfile: UserProfile | null = yield select(
+          (state: RootStore) => state.auth.user_profile
+        );
+
+        if (userProfile?.profile) {
+          localStorage.setStorageItem(USER, {
+            ...userProfile.profile,
+            email: data.email,
+          });
+        }
+      }
+
+      return;
+    }
+
+    if (data.child) {
+      yield put(createChildSuccess(data.child));
     }
   } catch (error) {
     yield put(setErrors(error as Record<string, string> | null));
   }
+}
+
+function* workerEmailChange({ payload }: { payload: EmailChangeRequest }) {
+  try {
+    const response: { data: EmailChangeResponse } =
+      payload.childId != null
+        ? yield call(UsersApi.changeChildEmail, payload.childId, { email: payload.email })
+        : yield call(UsersApi.changeMyEmail, { email: payload.email });
+
+    yield put(
+      emailChangeSuccess({
+        session_token: response.data.session_token,
+        target: payload.childId != null ? "child" : "me",
+        childId: payload.childId,
+      })
+    );
+  } catch (error) {
+    yield put(setErrors(error as Record<string, string> | null));
+  }
+}
+
+function* watchEmailChange() {
+  yield takeLatest(
+    emailChangeRequest.type as unknown as Parameters<typeof takeLatest>[0],
+    workerEmailChange
+  );
 }
 
 function* watchVerifyChildCode() {
@@ -383,4 +447,5 @@ export const authWatchers = [
   fork(watchVerifyChildCode),
   fork(watchResendChildCode),
   fork(watchChangePasswordChild),
+  fork(watchEmailChange),
 ];

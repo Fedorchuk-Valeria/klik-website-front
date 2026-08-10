@@ -1,0 +1,44 @@
+.editable-email-field {
+  .text-input__control {
+    &:read-only {
+      opacity: 0.6;
+      cursor: default;
+    }
+  }
+
+  .editable-email-field__action {
+    @include icon(24px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--main-green-dark);
+    cursor: pointer;
+    opacity: 1;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    &--disabled,
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    .editable-email-field__action {
+      @include icon(20px);
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    .editable-email-field__action {
+      @include icon(24px);
+    }
+  }
+}

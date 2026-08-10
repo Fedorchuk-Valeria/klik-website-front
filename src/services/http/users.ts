@@ -7,6 +7,7 @@ import {
   AuthSignInRequest,
   AuthVerifyCodeRequest,
   CreateChildRequest,
+  EmailChangeRequest,
 } from "@/src/entities/common/auth";
 import { GET, POST } from "@/src/utils/http";
 import {PurchaseOfflinePayload, PurchaseOfflinePreviewPayload} from "@/src/store/sagas/courses.saga";
@@ -103,6 +104,12 @@ export const getPaymentHistory = (query?: QueryParams) => {
 
 export const changeChildPassword = (childId: string | undefined, data: AuthChangePasswordRequest) =>
   POST(`${baseUrl}/children/${childId}/change-password/`, data);
+
+export const changeMyEmail = (data: Pick<EmailChangeRequest, "email">) =>
+  POST(`${baseUrl}/me/email-change/`, data);
+
+export const changeChildEmail = (childId: number, data: Pick<EmailChangeRequest, "email">) =>
+  POST(`${baseUrl}/children/${childId}/email-change/`, data);
 
 export const purchaseOfflinePreview = (data: PurchaseOfflinePreviewPayload) =>
   GET(`${baseUrl}/offline-training-payments/preview/`, {

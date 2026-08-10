@@ -11,6 +11,7 @@ import {
   AuthVerifyCodeRequest,
   AuthVerifyPhoneResponse,
   CreateChildRequest,
+  EmailChangeRequest,
 } from "@/src/entities/common/auth";
 
 import { REFRESH_TOKEN_KEY, TOKEN_KEY, USER } from "@/src/utils/constant";
@@ -35,6 +36,11 @@ type AuthState = {
   isLoggedIn: boolean;
   isPasswordChanged: boolean;
   isChildSuccessfullyCreated: boolean;
+  isEmailChangeLoading: boolean;
+  isEmailChangeSuccess: boolean;
+  emailChangeSessionToken: string | null;
+  emailChangeTarget: "me" | "child" | null;
+  emailChangeChildId: number | null;
 };
 
 const initialState: AuthState = {
@@ -55,6 +61,11 @@ const initialState: AuthState = {
   isLoggedIn: !!CookieHelper.getCookie(TOKEN_KEY) && !!CookieHelper.getCookie(REFRESH_TOKEN_KEY),
   isPasswordChanged: false,
   isChildSuccessfullyCreated: false,
+  isEmailChangeLoading: false,
+  isEmailChangeSuccess: false,
+  emailChangeSessionToken: null,
+  emailChangeTarget: null,
+  emailChangeChildId: null,
 };
 
 const authSlice = createSlice({
@@ -188,6 +199,7 @@ const authSlice = createSlice({
       state.errors = action.payload;
       state.isLoading = false;
       state.isCreateChildLoading = false;
+      state.isEmailChangeLoading = false;
     },
     setLoggedIn(state, action: { payload: boolean }) {
       state.isLoggedIn = action.payload;
@@ -218,6 +230,66 @@ const authSlice = createSlice({
     },
     clearChildSuccessfullyCreated(state) {
       state.isChildSuccessfullyCreated = false;
+    },
+
+    emailChangeRequest(state, action: { payload: EmailChangeRequest }) {
+      void action.payload;
+      state.isEmailChangeLoading = true;
+      state.errors = null;
+      state.isEmailChangeSuccess = false;
+    },
+    emailChangeSuccess(
+      state,
+      action: {
+        payload: {
+          session_token: string;
+          target: "me" | "child";
+          childId?: number;
+        };
+      }
+    ) {
+      state.isEmailChangeLoading = false;
+      state.emailChangeSessionToken = action.payload.session_token;
+      state.emailChangeTarget = action.payload.target;
+      state.emailChangeChildId = action.payload.childId ?? null;
+      state.errors = null;
+    },
+    clearEmailChangeSessionToken(state) {
+      // Keep target/childId until verify completes
+      state.emailChangeSessionToken = null;
+    },
+    updateProfileEmail(state, action: { payload: { email: string; childId?: number } }) {
+      state.isEmailChangeLoading = false;
+      state.isCreateChildLoading = false;
+      state.isEmailChangeSuccess = true;
+      state.emailChangeSessionToken = null;
+
+      const { email, childId } = action.payload;
+
+      if (state.user_profile) {
+        if (childId != null) {
+          state.user_profile = {
+            ...state.user_profile,
+            children: state.user_profile.children?.map((child) =>
+              child.id === childId ? { ...child, email } : child
+            ),
+          };
+        } else {
+          state.user_profile = {
+            ...state.user_profile,
+            profile: {
+              ...state.user_profile.profile,
+              email,
+            },
+          };
+        }
+      }
+
+      state.emailChangeTarget = null;
+      state.emailChangeChildId = null;
+    },
+    clearEmailChangeSuccess(state) {
+      state.isEmailChangeSuccess = false;
     },
 
     changePasswordRequest(state, action: { payload: AuthChangePasswordRequest }) {
@@ -269,6 +341,12 @@ export const {
   resendChildCodeRequest,
   resendChildCodeSuccess,
   clearChildVerificationPending,
+
+  emailChangeRequest,
+  emailChangeSuccess,
+  clearEmailChangeSessionToken,
+  updateProfileEmail,
+  clearEmailChangeSuccess,
 
   clearPersonalAccountChanged,
   clearErrors,

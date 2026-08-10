@@ -13,6 +13,7 @@ import FormatsCoursesExtra from "@/src/components/Pages/PagesProfile/FormatsCour
 import PartnerAccordionItem from "@/src/components/Pages/PagesProfile/PartnerAccordionItem";
 import PartnersExtra from "@/src/components/Pages/PagesProfile/PartnersExtra";
 import Button from "@/src/components/ui/Button/Button";
+import EditableEmailField from "@/src/components/ui/EditableEmailField";
 import Icon from "@/src/components/ui/Icon/Icon";
 import Loader from "@/src/components/ui/Loader/Loader";
 import PhoneInput from "@/src/components/ui/PhoneInput";
@@ -187,12 +188,10 @@ const ChildrenDetailsPage = () => {
                 disabled={true}
               />
 
-              <TextInput
-                variant="outline"
-                label="E-mail"
+              <EditableEmailField
                 value={currentChild?.profile?.email ?? ""}
+                childId={Number(id)}
                 className="login-page__form-input"
-                disabled={true}
               />
 
               <PhoneInput
