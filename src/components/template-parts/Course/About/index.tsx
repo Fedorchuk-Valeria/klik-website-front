@@ -92,20 +92,18 @@ const CourseAbout: FC<PropTypes> = ({
         </div>
       </div>
 
-      <div
-        className={classNames("course-about__info", {
-          "course-about__info--child": isChild,
-        })}
-      >
+      <div className={classNames("course-about__info")}>
         <p className="course-about__info-title">{title}</p>
         <p className="course-about__info-description">{description}</p>
 
-        <p className="course-about__info-price">
-          <span>{price?.toLocaleString("ru-RU")}</span>
-          <Icon name="ruble" />
-        </p>
+        {!isChild && (
+          <p className="course-about__info-price">
+            <span>{price?.toLocaleString("ru-RU")}</span>
+            <Icon name="ruble" />
+          </p>
+        )}
 
-        {!isChild && !isParentLookAtChild && (
+        {((isChild && isPayment) || !isChild) && (
           <Button
             className="course-about__info-button"
             variant="main-green-dark"
@@ -116,7 +114,7 @@ const CourseAbout: FC<PropTypes> = ({
           </Button>
         )}
 
-        {!!infoList && (
+        {(!!infoList && !isChild) && (
           <ul className="course-about__info-list">
             {infoList.map((item) => (
               <li key={item}>
