@@ -34,6 +34,7 @@ const WidgetModalAccountData: FC<PropTypes> = ({
   const router = useRouter();
 
   const handleProfile = () => {
+    dispatch(hideModal());
     router.push(PAGES.PROFILE);
   };
 
