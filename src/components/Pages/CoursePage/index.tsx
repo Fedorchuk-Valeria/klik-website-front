@@ -32,9 +32,6 @@ const CoursePage: FC<PropTypes> = ({ data, errors, settings }) => {
   const isChild = isMounted && isAuthenticated && user_profile?.role === "child";
   const isParentLookAtChild = !!isParent && !!searchParams.get(QUERY_PARAMS.CHILD_ID);
 
-  console.log("isChild=", isChild);
-  console.log("isParentLookAtChild=", isParentLookAtChild);
-
   console.log(data);
 
   if (errors) {
