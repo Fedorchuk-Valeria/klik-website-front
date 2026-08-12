@@ -16,11 +16,13 @@ import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { clearErrors, clearRegister, registerRequest } from "@/src/store/slices/auth";
 import { BRANCH_CRM_ID, PAGES } from "@/src/utils/constant";
-import { CookieHelper } from "@/src/utils/helpers";
+import { AuthRedirectHelper, CookieHelper } from "@/src/utils/helpers";
 
 const RegisterForm = () => {
   const dispatch = useAppDispatch();
-  const { isRegisterSuccess, isLoading, errors } = useAppSelector((state: RootStore) => state.auth);
+  const { isRegisterSuccess, isLoading, errors, isLoggedIn } = useAppSelector(
+    (state: RootStore) => state.auth
+  );
   const router = useRouter();
   const form = useFormik({
     initialValues: {
@@ -69,6 +71,14 @@ const RegisterForm = () => {
       router.push(PAGES.CONFIRM_CODE);
     }
   }, [isRegisterSuccess, dispatch]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      const returnTo = AuthRedirectHelper.consumeAuthReturnTo();
+
+      router.push(returnTo ?? PAGES.PROFILE);
+    }
+  }, [isLoggedIn, router]);
 
   useEffect(() => {
     if (errors) {
