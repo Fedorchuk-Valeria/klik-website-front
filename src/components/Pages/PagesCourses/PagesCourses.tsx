@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import image from "@/src/assets/images/view/courses/boy.png";
 
-import { Meta } from "@/src/entities/common";
+import { Meta, ModalType } from "@/src/entities/common";
 import { Course } from "@/src/lib/getCourses";
 import {
   COURSES_PAGE_SIZE,
@@ -30,6 +30,7 @@ import Select from "@/src/components/ui/Select";
 
 import { getPlural } from "@/src/helper/getPlural";
 import { MAX_AGE } from "@/src/store/sagas/auth.saga";
+import { showModal } from "@/src/store/slices/modalSlice";
 
 type Props = {
   initialCourses?: Course[];
@@ -73,7 +74,7 @@ const PagesCourses = ({
 }: Props) => {
   const dispatch = useAppDispatch();
   const { data, meta, isLoading } = useAppSelector((state: RootStore) => state.courses);
-  const { isLoggedIn } = useAppSelector((state: RootStore) => state.auth);
+  const { isLoggedIn, user_profile } = useAppSelector((state: RootStore) => state.auth);
   const [isHydrated, setIsHydrated] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<{ id: string; name: string }>({
     id: "all",
@@ -86,7 +87,6 @@ const PagesCourses = ({
   const isLoadingRef = useRef(isLoading);
   const prevFiltersKeyRef = useRef<string | null>(null);
   const categoryDebounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   const clearCategoryDebounce = useCallback(() => {
     if (categoryDebounceTimerRef.current) {
       clearTimeout(categoryDebounceTimerRef.current);
@@ -361,6 +361,49 @@ const PagesCourses = ({
       observer.disconnect();
     };
   }, [hasMore, loadMore, courses?.length]);
+
+  useEffect(() => {
+    if (!user_profile) {
+      return;
+    }
+
+    const timer = 5000;
+
+    const courseAccess = user_profile.course_access_notification;
+    const accountData = user_profile.account_data_notification;
+
+    if (courseAccess?.show) {
+      dispatch(
+        showModal({
+          modalType: ModalType.NOTICE,
+          modalProps: {
+            title: courseAccess.title,
+            description: courseAccess.message,
+            autoCloseDelayMs: timer,
+          },
+        })
+      );
+    }
+
+    if (accountData?.show) {
+      const timeoutId = window.setTimeout(
+        () => {
+          dispatch(
+            showModal({
+              modalType: ModalType.ACCOUNT_DATA,
+              modalProps: {
+                name: accountData.parent_full_name,
+                children: accountData.children,
+              },
+            })
+          );
+        },
+        courseAccess?.show ? timer + 100 : 0
+      );
+
+      return () => window.clearTimeout(timeoutId);
+    }
+  }, [dispatch, user_profile]);
 
   return (
     <div className="page-courses">
