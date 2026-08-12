@@ -27,6 +27,6 @@ jobs:
             git pull --ff-only
             export $(cat .env.prod | xargs)
             docker network inspect klick-network-prod >/dev/null 2>&1 || docker network create klick-network-prod
-            docker compose -p klick-front-prod --env-file=.env.prod down --remove-orphans
-            docker compose -p klick-front-prod --env-file=.env.prod build
-            docker compose -p klick-front-prod --env-file=.env.prod up -d
+            docker compose -p klick2026edtech-front --env-file=.env.prod down --remove-orphans
+            docker compose -p klick2026edtech-front --env-file=.env.prod build
+            docker compose -p klick2026edtech-front --env-file=.env.prod up -d
