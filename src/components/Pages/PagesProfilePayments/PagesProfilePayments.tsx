@@ -9,12 +9,12 @@ import Icon from "@/src/components/ui/Icon/Icon";
 import DateRangePicker from "@/src/components/ui/DateRangePicker";
 import {useEffect, useState} from "react";
 import Loader from "@/src/components/ui/Loader/Loader";
-import {getPaymentHistoryCalendarRequest, getPaymentHistoryRequest} from "@/src/store/slices/profile";
+import {getPaymentHistoryRequest} from "@/src/store/slices/profile";
 
 const PagesProfilePayments = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { paymentHistory, availableDates, isLoading } = useAppSelector((store) => store.profile);
+  const { paymentHistory, isLoading } = useAppSelector((store) => store.profile);
   const [dateFrom, setDateFrom] = useState<Date | null>(null);
   const [dateTo, setDateTo] = useState<Date | null>(null);
 
@@ -33,21 +33,19 @@ const PagesProfilePayments = () => {
     dispatch(getPaymentHistoryRequest());
   };
 
-  const formatDate = (date: Date | null) => date?.toISOString().slice(0, 10);
+  const formatDate = (date: Date | null) => {
+    if (!date) return undefined;
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
 
   useEffect(() => {
     dispatch(getPaymentHistoryRequest());
-    dispatch(getPaymentHistoryCalendarRequest());
   }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(
-      getPaymentHistoryCalendarRequest({
-        date_from: formatDate(dateFrom),
-        date_to: formatDate(dateTo),
-      })
-    );
-  }, [dateFrom, dateTo]);
 
   if (isLoading || !paymentHistory) {
     return <Loader />;
@@ -64,7 +62,6 @@ const PagesProfilePayments = () => {
           />
           <div className="page-profile__header">
             <h1>История платежей</h1>
-            {paymentHistory.length > 0 && (
             <div className="page-profile__header-actions">
               {(dateFrom || dateTo) && (
                 <button
@@ -91,7 +88,7 @@ const PagesProfilePayments = () => {
               >
                 Отфильтровать
               </Button>
-            </div>)}
+            </div>
           </div>
           {paymentHistory.length === 0 ? (
             <div className="page-profile__table-wrapper empty">

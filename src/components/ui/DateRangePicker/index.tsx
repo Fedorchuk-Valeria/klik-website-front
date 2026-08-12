@@ -24,7 +24,7 @@ const DateRangeInput: FC<PropsDateRangeInput> = ({
    active
  }) => {
   return (
-    <div className={classNames("date-range__input", className, {"active": active})} onClick={onClick}>
+    <div className={classNames("date-range__input", className, {"active": active, 'has-value': value})} onClick={onClick}>
       <Icon name="calendar" className="date-range__input-icon calendar" />
       <div className="date-range__input-body">
         <div className="date-range__input-label">{label}</div>
@@ -52,20 +52,6 @@ const DateRangePicker: FC<DateRangePickerProps> = ({ className, onChange, valueT
   const [activeInput, setActiveInput] = useState<"from" | "to" | null>(null);
 
   const ref = useRef<HTMLDivElement>(null);
-
-  const { availableDates } = useAppSelector((s) => s.profile);
-
-  const availableSet = useMemo(() => {
-    return new Set(availableDates);
-  }, [availableDates]);
-
-  const formatKey = (date: Date) => {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, "0");
-    const d = String(date.getDate()).padStart(2, "0");
-
-    return `${y}-${m}-${d}`;
-  };
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -100,6 +86,16 @@ const DateRangePicker: FC<DateRangePickerProps> = ({ className, onChange, valueT
     setActiveInput(null);
   };
 
+  const handleInputClick = (input: "from" | "to") => {
+    if (activeInput === input) {
+      setOpen(false);
+      setActiveInput(null);
+      return;
+    }
+    setActiveInput(input);
+    setOpen(true);
+  };
+
   return (
     <div className={classNames("date-range", className)} ref={ref}>
       <div className="date-range__inputs">
@@ -107,10 +103,7 @@ const DateRangePicker: FC<DateRangePickerProps> = ({ className, onChange, valueT
           label="Дата начала"
           value={valueFrom?.toLocaleDateString() || ""}
           placeholder="Выбрать дату"
-          onClick={() => {
-            setActiveInput("from");
-            setOpen(true);
-          }}
+          onClick={() => handleInputClick("from")}
           active={activeInput === "from"}
         />
 
@@ -118,10 +111,7 @@ const DateRangePicker: FC<DateRangePickerProps> = ({ className, onChange, valueT
           label="Дата конца"
           value={valueTo?.toLocaleDateString() || ""}
           placeholder="Выбрать дату"
-          onClick={() => {
-            setActiveInput("to");
-            setOpen(true);
-          }}
+          onClick={() => handleInputClick("to")}
           active={activeInput === "to"}
         />
       </div>
@@ -131,38 +121,41 @@ const DateRangePicker: FC<DateRangePickerProps> = ({ className, onChange, valueT
           <Calendar
             value={activeInput === "from" ? valueFrom : valueTo}
             onClickDay={handleSelect}
-            minDate={activeInput === "to" ? valueFrom ?? undefined : undefined}
-            maxDate={activeInput === "from" ? valueTo ?? undefined : undefined}
+            minDate={activeInput === "to" ? (valueFrom ?? undefined) : undefined}
+            maxDate={activeInput === "from" ? (valueTo ?? undefined) : undefined}
             tileClassName={({ date, view }) => {
               if (view !== "month") return null;
 
               const current = new Date(date).setHours(0, 0, 0, 0);
-
-              const from = valueFrom
-                ? new Date(valueFrom).setHours(0, 0, 0, 0)
-                : null;
-
-              const to = valueTo
-                ? new Date(valueTo).setHours(0, 0, 0, 0)
-                : null;
-
+              const from = valueFrom ? new Date(valueFrom).setHours(0, 0, 0, 0) : null;
+              const to = valueTo ? new Date(valueTo).setHours(0, 0, 0, 0) : null;
               const today = new Date().setHours(0, 0, 0, 0);
 
-              if (from && current === from) {
-                return "from";
+              if (from !== null && current === from) {
+                return "selected";
+              }
+              if (to !== null && current === to) {
+                return "selected";
               }
 
-              if (to && current === to) {
-                return "to";
+              if (from !== null && to !== null) {
+                if (current < from || current > to) {
+                  return "past";
+                }
+              } else if (from !== null) {
+                if (current < from) {
+                  return "past";
+                }
+              } else if (to !== null) {
+                if (current > to) {
+                  return "past";
+                }
               }
 
-              const key = formatKey(date);
-
-              if (availableSet.has(key)) {
-                return "has-payment";
+              if (current === today) {
+                return "today";
               }
-
-                return "past";
+              return null;
             }}
             formatMonthYear={(locale, date) => {
               const month = date
