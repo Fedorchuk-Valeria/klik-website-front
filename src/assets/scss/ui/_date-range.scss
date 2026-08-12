@@ -108,22 +108,29 @@
               @include fonts(14px, 300, "Manrope");
               color: var(--main-black);
               transition: 0.3s all;
+              border-radius: 100%;
 
               &.past {
                 opacity: 0.5;
               }
 
-              &.from {
-                border-radius: 100%;
+              &.selected {
+                background-color: rgba(1, 82, 76, 0.10);
+                color: var(--main-green-dark);
+                font-weight: 600;
+              }
+
+              &.today {
                 background-color: var(--main-blue);
                 color: var(--main-green-dark);
                 font-weight: 600;
               }
 
-              &.to {
-                border-radius: 100%;
-                background-color: rgba(238, 108, 77, 0.20);
+              &:hover {
+                opacity: 1;
                 font-weight: 600;
+                color: var(--main-black);
+                background-color: rgb(238 108 77 / 0.2);
               }
             }
           }
@@ -166,6 +173,15 @@
       width: auto;
       padding: 5px 10px;
       border-radius: 16px;
+    }
+
+    &.has-value {
+      border-color: rgba(1, 82, 76, 0.50);
+      background: rgba(1, 82, 76, 0.10);
+
+      .calendar {
+        fill: var(--main-green-dark);
+      }
     }
 
     &.active {

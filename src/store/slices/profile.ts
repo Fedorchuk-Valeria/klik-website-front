@@ -44,7 +44,6 @@ type ProfileState = {
   currentChild: UserProfileChilds | null;
   errors: Record<string, string> | null;
   paymentHistory: PaymentHistory[] | null;
-  availableDates: string[] | null;
 };
 
 const initialState: ProfileState = {
@@ -53,7 +52,6 @@ const initialState: ProfileState = {
   errors: null,
   currentChild: null,
   paymentHistory: null,
-  availableDates: null
 };
 
 const profileSlice = createSlice({
@@ -112,23 +110,6 @@ const profileSlice = createSlice({
       state.errors = action.payload;
       state.isLoading = false;
     },
-    getPaymentHistoryCalendarRequest(state, action: PayloadAction<PaymentHistoryQuery | undefined>) {
-      state.isLoading = true;
-      state.errors = null;
-    },
-
-    getPaymentHistoryCalendarSuccess(state, action: { payload: string[] }) {
-      state.availableDates = action.payload;
-      state.isLoading = false;
-    },
-
-    getPaymentHistoryCalendarFailure(
-      state,
-      action: { payload: Record<string, string> | null }
-    ) {
-      state.errors = action.payload;
-      state.isLoading = false;
-    },
   },
 });
 
@@ -143,9 +124,6 @@ export const {
   clearCurrentChild,
   getPaymentHistoryRequest,
   getPaymentHistorySuccess,
-  getPaymentHistoryFailure,
-  getPaymentHistoryCalendarRequest,
-  getPaymentHistoryCalendarSuccess,
-  getPaymentHistoryCalendarFailure
+  getPaymentHistoryFailure
 } = profileSlice.actions;
 export default profileSlice.reducer;
