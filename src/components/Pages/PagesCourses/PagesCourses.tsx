@@ -367,41 +367,38 @@ const PagesCourses = ({
       return;
     }
 
-    const timer = 5000;
-
     const courseAccess = user_profile.course_access_notification;
     const accountData = user_profile.account_data_notification;
+
+    const showAccountDataModal = () => {
+      if (!accountData?.show) {
+        return;
+      }
+
+      dispatch(
+        showModal({
+          modalType: ModalType.ACCOUNT_DATA,
+          modalProps: {
+            name: accountData.parent_full_name,
+            children: accountData.children,
+          },
+        })
+      );
+    };
 
     if (courseAccess?.show) {
       dispatch(
         showModal({
-          modalType: ModalType.NOTICE,
+          modalType: ModalType.NOTIFICATION_FREE_COURSE,
           modalProps: {
-            title: courseAccess.title,
-            description: courseAccess.message,
-            autoCloseDelayMs: timer,
+            course_title: courseAccess.course_title,
+            name: courseAccess.parent_full_name,
+            onClose: () => showAccountDataModal(),
           },
         })
       );
-    }
-
-    if (accountData?.show) {
-      const timeoutId = window.setTimeout(
-        () => {
-          dispatch(
-            showModal({
-              modalType: ModalType.ACCOUNT_DATA,
-              modalProps: {
-                name: accountData.parent_full_name,
-                children: accountData.children,
-              },
-            })
-          );
-        },
-        courseAccess?.show ? timer + 100 : 0
-      );
-
-      return () => window.clearTimeout(timeoutId);
+    } else {
+      showAccountDataModal();
     }
   }, [dispatch, user_profile]);
 

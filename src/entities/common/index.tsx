@@ -15,6 +15,7 @@ export enum ModalType {
   CONFIRM_CHILDREN_EMAIL = "confirm_children_email",
   PAYMENT_CHILDREN = "payment_children",
   ACCOUNT_DATA = "account_data",
+  NOTIFICATION_FREE_COURSE = "notification_free_course",
 }
 
 export enum HttpStatus {

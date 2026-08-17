@@ -38,6 +38,10 @@
     display: block;
     margin-top: 30px;
     color: var(--main-black);
+
+    &.center {
+      text-align: center;
+    }
   }
 
   .modal-account-data__list {
