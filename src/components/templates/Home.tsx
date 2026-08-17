@@ -18,6 +18,7 @@ import WhatWeLearn from "@/src/components/template-parts/WhatWeLearn";
 import WhyWeAre from "@/src/components/template-parts/WhyWeAre";
 
 import { Page } from "@/src/lib/content/types";
+import { homeBanner } from "@/src/content/homeBanner";
 
 type Props = {
   page: Page;
@@ -46,11 +47,13 @@ export default function Home({ page }: Props) {
       <section id="header" className="home-page__header">
         <div className="header__container">
           <div className="home-page__header-wrapper">
-            <h1>{page.seo.h1}</h1>
+            <h1>{homeBanner.h1}</h1>
 
             {header ? (
               <div className="home-page__header-body">
-                {header?.text && <div className="home-page__header-text">{header?.text}</div>}
+                {homeBanner?.headerText && (
+                  <div className="home-page__header-text">{homeBanner?.headerText}</div>
+                )}
                 {header.button?.title && header.button?.url && (
                   <a
                     href={"https://klik-holiday.by"}
