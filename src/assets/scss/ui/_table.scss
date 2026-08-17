@@ -355,9 +355,9 @@
 
     span {
       @media screen and (max-width: $mobile-size) {
-        max-width: 160px;
+        /*max-width: 160px;*/
         white-space: wrap;
-        text-align: right;
+        /*text-align: right;*/
       }
     }
 
@@ -442,6 +442,11 @@
       @media screen and (max-width: $tablet-size) {
         border-bottom: 1px solid var(--main-blue) !important;
         padding-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        overflow: visible;
+        white-space: wrap;
       }
 
       &.without-border {
