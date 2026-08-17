@@ -25,6 +25,7 @@ export type CourseAccessNotification = {
   message: string;
   course_id: number;
   course_title: string;
+  parent_full_name: string;
 };
 
 export type AccountDataNotification = {

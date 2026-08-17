@@ -21,6 +21,7 @@ import WidgetModalPaymentChildren from "@/src/widgets/Modal/PaymentChildren";
 import WidgetModalPaymentStatus from "@/src/widgets/Modal/PaymentStatus";
 import WidgetModalPlace from "@/src/widgets/Modal/Place";
 import WidgetModalSuccessfully from "@/src/widgets/Modal/Successfully";
+import WidgetModalNotificationFreeCourse from "@/src/widgets/Modal/NotificationFreeCourse";
 
 const WidgetModal = () => {
   const dispatch = useAppDispatch();
@@ -61,9 +62,7 @@ const WidgetModal = () => {
           <WidgetModalConfirmChildrenEmail
             isVisible={active}
             sessionToken={(modalProps as { sessionToken: string }).sessionToken}
-            flow={
-              (modalProps as { flow?: "create_child" | "email_change" }).flow ?? "create_child"
-            }
+            flow={(modalProps as { flow?: "create_child" | "email_change" }).flow ?? "create_child"}
             {...modalProps}
           />
         );
@@ -71,6 +70,8 @@ const WidgetModal = () => {
         return <WidgetModalPaymentChildren isVisible={active} {...modalProps} />;
       case ModalType.ACCOUNT_DATA:
         return <WidgetModalAccountData isVisible={active} {...modalProps} />;
+      case ModalType.NOTIFICATION_FREE_COURSE:
+        return <WidgetModalNotificationFreeCourse isVisible={active} {...modalProps} />;
       default:
         return null;
     }
