@@ -32,7 +32,6 @@ const WidgetModalNotificationFreeCourse: FC<PropTypes> = ({
   return (
     <Modal
       isClose
-      isCloseBg
       isVisible={isVisible}
       className={classNames("modal-account-data", className)}
     >
