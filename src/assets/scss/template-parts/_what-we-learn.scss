@@ -108,10 +108,21 @@
 
         .home-page__what-we-learn-tags {
           margin-top: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
 
           li {
             @include fonts(18px, 400, "Manrope");
             color: var(--main-black);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            img {
+              width: 20px;
+              height: auto;
+            }
           }
         }
       }

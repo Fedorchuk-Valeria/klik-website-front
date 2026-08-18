@@ -43,7 +43,10 @@ export type WhatWeLearnProps = {
     title: string;
     text: string;
     key: string;
-    items: string[];
+    items: {
+      text: string;
+      icon?: string;
+    }[];
   }[];
 };
 
@@ -190,7 +193,7 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
               <ul className="home-page__what-we-learn-list">
                 {(items || [])?.map((item, index) => (
                   <WhatWeLearnAccordionItem
-                    key={item.key || index}
+                    key={index}
                     item={item}
                     index={index}
                     isOpen={openIndex === index}

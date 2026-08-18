@@ -23,6 +23,7 @@ import { getHomeLocations } from "@/src/lib/getLocations";
 import { getHomePrices } from "@/src/lib/getPrices";
 import { getHomeTutors } from "@/src/lib/getTutors";
 import { homeBanner } from "@/src/content/homeBanner";
+import { getHomeWhatWeLearn } from "@/src/lib/getDirections";
 
 type Props = {
   page: Page;
@@ -37,7 +38,6 @@ export default async function Home({ page }: Props) {
   const faq = page.content.faq;
   const formats = page.content.formats;
   const programs = page.content.programs;
-  const whatWeLearn = page.content.what_we_learn;
   const whyWeAre = page.content.why_we_are;
   const tutors = await getHomeTutors(page.content.our_tutors);
   const howSignUp = page.content.how_sign_up;
@@ -46,6 +46,7 @@ export default async function Home({ page }: Props) {
   const selectTraining = page.content.select_training;
   const location = await getHomeLocations(page.content.location);
   const prices = await getHomePrices(page.content.prices);
+  const whatWeLearn = await getHomeWhatWeLearn(page.content.what_we_learn);
 
   return (
     <main className="main home-page">

@@ -79,7 +79,13 @@ const WhatWeLearnAccordionItem: FC<WhatWeLearnAccordionItemProps> = ({
           {!!item?.items?.length && (
             <ul className="home-page__what-we-learn-tags">
               {(item?.items || [])?.map((tag, tagIndex) => (
-                <li key={tagIndex}>{tag}</li>
+                <li key={tagIndex}>
+                  {tag.icon && (
+                    <img src={tag.icon} alt="" className="home-page__what-we-learn-tag-icon" />
+                  )}
+
+                  <span>{tag.text}</span>
+                </li>
               ))}
             </ul>
           )}
