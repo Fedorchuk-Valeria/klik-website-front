@@ -53,7 +53,7 @@ export default function Home({ page }: Props) {
                 {header?.text && <div className="home-page__header-text">{header?.text}</div>}
                 {header.button?.title && header.button?.url && (
                   <a
-                    href={"https://klik-holiday.by"}
+                    href={"#select-training"}
                     className="home-page__header-button-link"
                     target="_blank"
                     rel="noopener noreferrer"
