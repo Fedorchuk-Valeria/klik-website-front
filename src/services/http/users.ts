@@ -11,6 +11,7 @@ import {
 } from "@/src/entities/common/auth";
 import { GET, POST } from "@/src/utils/http";
 import {PurchaseOfflinePayload, PurchaseOfflinePreviewPayload} from "@/src/store/sagas/courses.saga";
+import { ProgramPageBaseContentItem } from "@/src/lib/content/types";
 
 const baseUrl = "/users";
 
@@ -83,6 +84,15 @@ export type UsersDirectionsResponse = {
   results: UsersDirectionsResult[];
 };
 
+export type ProgramModulesResult = {
+  program_type: string;
+  program_type_name: string;
+  modules: ProgramPageBaseContentItem[];
+};
+
+export type ProgramModulesResponse = {
+  results: ProgramModulesResult[];
+};
 export const signIn = (data: AuthSignInRequest) => POST(`${baseUrl}/login/`, data);
 
 export const register = (data: AuthRegisterRequest) => POST(`${baseUrl}/register/`, data);
