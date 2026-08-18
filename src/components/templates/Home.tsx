@@ -61,7 +61,7 @@ export default async function Home({ page }: Props) {
                 )}
                 {header.button?.title && header.button?.url && (
                   <a
-                    href={"https://klik-holiday.by"}
+                    href={"#select-training"}
                     className="home-page__header-button-link"
                     target="_blank"
                     rel="noopener noreferrer"
