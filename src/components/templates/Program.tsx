@@ -8,7 +8,6 @@ import CreatorsSvg from "@/src/assets/images/templates/programPage/creators.svg"
 import imgClickers from "@/src/assets/images/templates/programPage/clickers.jpg";
 import imgCoders from "@/src/assets/images/templates/programPage/coders.jpg";
 import imgCreators from "@/src/assets/images/templates/programPage/creators.jpg";
-import lessonImage from "@/src/assets/images/templates/programPage/girl.jpg";
 
 import HomePageForm from "@/src/components/template-parts/Form";
 import ProgramLessonsBlocks from "@/src/components/templates/ProgramLessonsBlocks";
@@ -82,7 +81,7 @@ export default function ProgramView({ page }: ProgramViewProps) {
           <p className="program-view__lessons-title">Основные блоки</p>
 
           <div className="program-view__lessons-items">
-            <ProgramLessonsBlocks items={page.content.items} lessonImageSrc={lessonImage.src} />
+            <ProgramLessonsBlocks items={page.content.items} />
 
             <div className="program-view__lessons-form">
               <p className="program-view__lessons-form_title">

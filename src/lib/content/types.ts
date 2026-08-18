@@ -221,11 +221,10 @@ export type ProgramPageContent = {
   items: ProgramPageBaseContentItem[];
 };
 
-type ProgramPageBaseContentItem = {
+export type ProgramPageBaseContentItem = {
   title: string;
-  text: string;
-  number: string;
-  image?: string;
+  description: string;
+  photo?: string;
 };
 
 export type HomePage = {
