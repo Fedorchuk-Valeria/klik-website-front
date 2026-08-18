@@ -40,11 +40,14 @@ export type ProgramContentItem = {
   id?: string;
 };
 
-type WhatWeLearnContentItem = {
+export type WhatWeLearnContentItem = {
   title: string;
   key: string;
   text: string;
-  items: string[];
+  items: {
+    text: string;
+    icon?: string;
+  }[];
 };
 
 type WhyWeAreContentItem = {

@@ -63,6 +63,26 @@ export type UsersMentorsResponse = {
   results: UsersMentorResult[];
 };
 
+export type UsersDirectionsItem = {
+  id: number;
+  text: string;
+  icon: string;
+  sort_order: number;
+};
+
+export type UsersDirectionsResult = {
+  id: number;
+  title: string;
+  description: string;
+  photo: string;
+  sort_order: number;
+  items: UsersDirectionsItem[];
+};
+
+export type UsersDirectionsResponse = {
+  results: UsersDirectionsResult[];
+};
+
 export const signIn = (data: AuthSignInRequest) => POST(`${baseUrl}/login/`, data);
 
 export const register = (data: AuthRegisterRequest) => POST(`${baseUrl}/register/`, data);
