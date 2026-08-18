@@ -5,19 +5,19 @@
     padding-top: 140px;
 
     @media screen and (max-width: $desktop) {
-      padding-top: 66px;
+      padding-top: 102px;
     }
 
-    @media screen and (max-width: $desktop-compact) {
+    /*@media screen and (max-width: $desktop-compact) {
       padding-top: 76px;
-    }
+    }*/
 
-    @media screen and (max-width: $landscape-tablet-size) {
+    /*@media screen and (max-width: $landscape-tablet-size) {
       padding-top: 60px;
-    }
+    }*/
 
     @media screen and (max-width: $tablet-size) {
-      padding-top: 70px;
+      padding-top: 102px;
     }
 
     @media screen and (max-width: $mobile-size) {
