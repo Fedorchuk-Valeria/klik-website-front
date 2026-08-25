@@ -71,6 +71,7 @@
         .home-page__what-we-learn-trigger-icon {
           @include icon(58px);
           @include center;
+          min-width: 58px;
           border-radius: 50%;
           background: var(--main-orange);
           transition: 0.3s all;
@@ -346,6 +347,7 @@
 
             .home-page__what-we-learn-trigger-icon {
               @include icon(50px);
+              min-width: 50px;
             }
           }
 
@@ -448,6 +450,7 @@
 
             .home-page__what-we-learn-trigger-icon {
               @include icon(50px);
+              min-width: 50px;
             }
           }
 
@@ -550,6 +553,7 @@
 
             .home-page__what-we-learn-trigger-icon {
               @include icon(50px);
+              min-width: 50px;
 
               svg {
                 @include icon(21px);
@@ -642,6 +646,7 @@
 
             .home-page__what-we-learn-trigger-icon {
               @include icon(58px);
+              min-width: 58px;
             }
           }
 
@@ -731,6 +736,7 @@
 
             .home-page__what-we-learn-trigger-icon {
               @include icon(44px);
+              min-width: 44px;
 
               svg {
                 @include icon(18px);

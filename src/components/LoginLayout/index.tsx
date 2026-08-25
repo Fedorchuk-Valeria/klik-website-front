@@ -9,6 +9,7 @@ import login1920 from "@/src/assets/images/view/login/log_in_1920.jpg";
 import login800 from "@/src/assets/images/view/login/log_in_800.jpg";
 
 import RegistrationBranchSync from "@/src/components/RegistrationBranchSync";
+import AuthReturnToSync from "@/src/components/AuthReturnToSync";
 
 import { PAGES } from "@/src/utils/constant";
 
@@ -20,6 +21,7 @@ export default function LoginLayout({
   return (
     <div className="login-page">
       <RegistrationBranchSync />
+      <AuthReturnToSync />
 
       <div className="login-page__content">
         <header className="login-page__header">

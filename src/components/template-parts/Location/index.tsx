@@ -13,7 +13,7 @@ import { CITY_DISPLAY_NAME, MAP_API_KEY } from "@/src/utils/constant";
 import { loadYandexMaps } from "@/src/utils/loadYandexMaps";
 
 import LocationCardContent, { LocationItemData } from "./Card";
-import { parseCoordsFromMapUrl, parseYandexMapUrl } from "./parseMapUrl";
+import { parseCoordsFromMapUrl, parseYandexMapUrl, resolveLocationCoords } from "./parseMapUrl";
 import type { LocationProps, YMapInstance } from "./types";
 import { YANDEX_MAP_PIN_ICON } from "./yandexPinIcon";
 
@@ -23,6 +23,30 @@ import "swiper/css/pagination";
 export const LOCATION_AUTOPLAY_DELAY_MS = 5_000;
 export const LOCATION_IDLE_RESUME_MS = 10_000;
 export const LOCATION_MAP_MAX_ZOOM = 16;
+
+async function geocodeWithYmaps(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ymaps: any,
+  query: string
+): Promise<readonly [number, number] | undefined> {
+  try {
+    const res = await ymaps.geocode(query, { results: 1 });
+    const coords = res.geoObjects.get(0)?.geometry?.getCoordinates?.();
+    if (!Array.isArray(coords) || coords.length < 2) {
+      return undefined;
+    }
+
+    const lat = Number(coords[0]);
+    const lon = Number(coords[1]);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+      return undefined;
+    }
+
+    return [lat, lon];
+  } catch {
+    return undefined;
+  }
+}
 
 const Location: FC<LocationProps> = ({
   tag,
@@ -47,6 +71,9 @@ const Location: FC<LocationProps> = ({
 
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<YMapInstance | null>(null);
+  const [resolvedCoordsByUrl, setResolvedCoordsByUrl] = useState<
+    Record<string, readonly [number, number]>
+  >({});
 
   const apiLocations = useMemo<LocationItemData[] | null>(() => {
     if (!results?.length) {
@@ -65,7 +92,16 @@ const Location: FC<LocationProps> = ({
     });
   }, [results, city, citySlug]);
 
-  const locations = apiLocations;
+  const locations = useMemo(() => {
+    if (!apiLocations) {
+      return null;
+    }
+
+    return apiLocations.map((item) => {
+      const resolved = item.map_url ? resolvedCoordsByUrl[item.map_url] : undefined;
+      return resolved ? { ...item, coords: resolved } : item;
+    });
+  }, [apiLocations, resolvedCoordsByUrl]);
   const cityDisplayName = city_name ?? CITY_DISPLAY_NAME[citySlug];
   const locationSlideCount = locations?.length ?? 0;
 
@@ -322,69 +358,96 @@ const Location: FC<LocationProps> = ({
       const ymaps = window.ymaps as any;
 
       ymaps.ready(() => {
-        if (cancelled || !mapContainerRef.current) return;
+        void (async () => {
+          if (cancelled || !mapContainerRef.current) return;
 
-        const itemsWithCoords = items?.filter(
-          (item): item is LocationItemData & { coords: readonly [number, number] } =>
-            item.coords !== undefined
-        );
+          const resolvedItems = await Promise.all(
+            (items ?? []).map(async (item) => {
+              const coords = item.map_url
+                ? await resolveLocationCoords({
+                    url: item.map_url,
+                    address: item.location,
+                    city: cityDisplayName,
+                    geocode: (query) => geocodeWithYmaps(ymaps, query),
+                  })
+                : item.coords;
 
-        if (!itemsWithCoords?.length) {
-          return;
-        }
-
-        const cityMapView = city_map_url
-          ? parseYandexMapUrl(city_map_url, LOCATION_MAP_MAX_ZOOM)
-          : null;
-
-        const map: YMapInstance = new ymaps.Map(
-          mapContainerRef.current,
-          {
-            center: cityMapView
-              ? [cityMapView.center[0], cityMapView.center[1]]
-              : [itemsWithCoords[0].coords[0], itemsWithCoords[0].coords[1]],
-            zoom: cityMapView?.zoom ?? 11,
-            controls: ["zoomControl"],
-          },
-          {
-            suppressMapOpenBlock: true,
-            suppressObsoleteBrowserNotifier: true,
-          }
-        );
-
-        mapInstanceRef.current = map;
-
-        itemsWithCoords.forEach((item) => {
-          const placemark = new ymaps.Placemark(
-            [item.coords[0], item.coords[1]],
-            {
-              balloonContentHeader: item.title,
-              balloonContentBody: item.location,
-            },
-            { ...YANDEX_MAP_PIN_ICON }
+              return { ...item, coords };
+            })
           );
-          placemark.events.add("click", () => {
-            map.setCenter([item.coords[0], item.coords[1]], LOCATION_MAP_MAX_ZOOM, {
-              duration: 300,
-            });
-          });
-          map.geoObjects.add(placemark);
-        });
 
-        const bounds = map.geoObjects.getBounds();
-        if (bounds && !cityMapView) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const fit = (map as any).setBounds(bounds, {
-            checkZoomRange: true,
-            zoomMargin: 48,
-          }) as PromiseLike<unknown>;
-          void Promise.resolve(fit).then(() => {
-            if (cancelled) return;
-            if (map.getZoom() > LOCATION_MAP_MAX_ZOOM) {
-              map.setZoom(LOCATION_MAP_MAX_ZOOM, { duration: 0 });
+          if (cancelled || !mapContainerRef.current) return;
+
+          const nextByUrl: Record<string, readonly [number, number]> = {};
+          for (const item of resolvedItems) {
+            if (item.map_url && item.coords) {
+              nextByUrl[item.map_url] = item.coords;
             }
+          }
+          setResolvedCoordsByUrl(nextByUrl);
+
+          const itemsWithCoords = resolvedItems.filter(
+            (item): item is LocationItemData & { coords: readonly [number, number] } =>
+              item.coords !== undefined
+          );
+
+          if (!itemsWithCoords.length) {
+            return;
+          }
+
+          const cityMapView = city_map_url
+            ? parseYandexMapUrl(city_map_url, LOCATION_MAP_MAX_ZOOM)
+            : null;
+
+          const map: YMapInstance = new ymaps.Map(
+            mapContainerRef.current,
+            {
+              center: cityMapView
+                ? [cityMapView.center[0], cityMapView.center[1]]
+                : [itemsWithCoords[0].coords[0], itemsWithCoords[0].coords[1]],
+              zoom: cityMapView?.zoom ?? 11,
+              controls: ["zoomControl"],
+            },
+            {
+              suppressMapOpenBlock: true,
+              suppressObsoleteBrowserNotifier: true,
+            }
+          );
+
+          mapInstanceRef.current = map;
+
+          itemsWithCoords.forEach((item) => {
+            const placemark = new ymaps.Placemark(
+              [item.coords[0], item.coords[1]],
+              {
+                balloonContentHeader: item.title,
+                balloonContentBody: item.location,
+              },
+              { ...YANDEX_MAP_PIN_ICON }
+            );
+            placemark.events.add("click", () => {
+              map.setCenter([item.coords[0], item.coords[1]], LOCATION_MAP_MAX_ZOOM, {
+                duration: 300,
+              });
+            });
+            map.geoObjects.add(placemark);
           });
-        }
+
+          const bounds = map.geoObjects.getBounds();
+          if (bounds && !cityMapView) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const fit = (map as any).setBounds(bounds, {
+              checkZoomRange: true,
+              zoomMargin: 48,
+            }) as PromiseLike<unknown>;
+            void Promise.resolve(fit).then(() => {
+              if (cancelled) return;
+              if (map.getZoom() > LOCATION_MAP_MAX_ZOOM) {
+                map.setZoom(LOCATION_MAP_MAX_ZOOM, { duration: 0 });
+              }
+            });
+          }
+        })();
       });
     };
 
@@ -395,7 +458,7 @@ const Location: FC<LocationProps> = ({
       mapInstanceRef.current?.destroy();
       mapInstanceRef.current = null;
     };
-  }, [citySlug, apiLocations, city_map_url]);
+  }, [citySlug, apiLocations, city_map_url, cityDisplayName]);
 
   return (
     <section id="location" className="home-page__block home-page__location">

@@ -2,19 +2,14 @@
 
 import classNames from "classnames";
 import type { CountryCode } from "libphonenumber-js";
-import type {
-  ChangeEvent,
-  ClipboardEvent,
-  FocusEvent,
-  KeyboardEvent,
-  SyntheticEvent,
-} from "react";
+import type { ChangeEvent, ClipboardEvent, FocusEvent, KeyboardEvent, SyntheticEvent } from "react";
 import { forwardRef, useId, useRef, useState } from "react";
 
 import Icon from "@/src/components/ui/Icon/Icon";
 import useClickOutside from "@/src/hooks/useClickOutside";
 
 import CountryFlag from "./CountryFlag";
+import type { PhoneInputProps } from "./index.type";
 import {
   DEFAULT_PHONE_COUNTRIES,
   DEFAULT_PHONE_COUNTRY,
@@ -22,9 +17,10 @@ import {
   getPhoneCountry,
   type PhoneCountry,
 } from "./phoneCountries";
-import type { PhoneInputProps } from "./index.type";
 import {
   caretAfterDigitIndex,
+  digitIndexAtOrAfterCaret,
+  digitIndexBeforeCaret,
   digitInsertIndexFromCaret,
   editableCaretBounds,
   extractNationalDigits,
@@ -53,11 +49,7 @@ const ACCEPT_KEYS = new Set([
   "End",
 ]);
 
-function resolveDisplayValue(
-  digits: string,
-  focused: boolean,
-  country: CountryCode
-): string {
+function resolveDisplayValue(digits: string, focused: boolean, country: CountryCode): string {
   if (digits.length === 0) {
     return focused ? getCallingCodePrefix(country) : "";
   }
@@ -95,6 +87,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     disabled,
     name,
     variant = "filled",
+    isAbsoluteError = false,
     ...rest
   },
   ref
@@ -136,8 +129,8 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
   const resolvedPlaceholder =
     !focused && digits.length === 0 ? getExamplePlaceholder(country) : undefined;
 
-  const selectedCountry: PhoneCountry =
-    getPhoneCountry(country, countries) ?? countries[0] ?? { code: "BY", name: "Беларусь" };
+  const selectedCountry: PhoneCountry = getPhoneCountry(country, countries) ??
+    countries[0] ?? { code: "BY", name: "Беларусь" };
 
   useClickOutside(rootRef, () => setCountryOpen(false));
 
@@ -218,7 +211,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
 
     if (start !== end) {
       const masked = formatDisplayPhone(workingDigits, currentCountry);
-      const positions = nationalDigitPositions(masked, workingDigits);
+      const positions = nationalDigitPositions(masked, workingDigits, currentPrefix);
       const toRemove = new Set<number>();
       for (let di = 0; di < positions.length; di++) {
         const p = positions[di];
@@ -236,14 +229,14 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
               start,
               formatDisplayPhone(workingDigits, currentCountry),
               workingDigits,
-              currentPrefix.length
+              currentPrefix
             );
     } else {
       insertAt = digitInsertIndexFromCaret(
         start,
         formatDisplayPhone(workingDigits, currentCountry),
         workingDigits,
-        currentPrefix.length
+        currentPrefix
       );
     }
 
@@ -268,7 +261,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
       newMasked,
       nextDigits,
       lastInsertedIndex,
-      currentPrefix.length,
+      currentPrefix,
       focused
     );
 
@@ -316,7 +309,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
 
     const newMasked = formatDisplayPhone(nextDigits, currentCountry);
     const renderedValue = resolveDisplayValue(nextDigits, focused, currentCountry);
-    const newPositions = nationalDigitPositions(newMasked, nextDigits);
+    const newPositions = nationalDigitPositions(newMasked, nextDigits, currentPrefix);
 
     let caret: number;
     if (newPositions.length === 0) {
@@ -334,6 +327,46 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     });
   };
 
+  const applyDeleteKey = (el: HTMLInputElement, key: "Backspace" | "Delete") => {
+    const currentCountry = countryRef.current;
+    const currentPrefix = getCallingCodePrefix(currentCountry);
+
+    if (digitsRef.current.length === 0) {
+      if (focused) {
+        requestAnimationFrame(() => {
+          el?.setSelectionRange(currentPrefix.length, currentPrefix.length);
+        });
+      }
+      return;
+    }
+
+    const start = el.selectionStart ?? 0;
+    const end = el.selectionEnd ?? 0;
+    const masked = formatDisplayPhone(digitsRef.current, currentCountry);
+    const positions = nationalDigitPositions(masked, digitsRef.current, currentPrefix);
+
+    if (start !== end) {
+      const toRemove = new Set<number>();
+      for (let di = 0; di < positions.length; di++) {
+        const p = positions[di];
+        if (Math.max(start, p) < Math.min(end, p + 1)) toRemove.add(di);
+      }
+      if (toRemove.size > 0) {
+        applyDigitRemovalAndCaret(el, toRemove, start);
+      }
+      return;
+    }
+
+    const removeIndex =
+      key === "Backspace"
+        ? digitIndexBeforeCaret(start, positions)
+        : digitIndexAtOrAfterCaret(start, positions);
+
+    if (removeIndex !== -1) {
+      applyDigitRemovalAndCaret(el, new Set([removeIndex]), start);
+    }
+  };
+
   const handleKeyDown = (ev: KeyboardEvent<HTMLInputElement>) => {
     onKeyDown?.(ev);
     if (ev.defaultPrevented) return;
@@ -348,84 +381,8 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     const currentPrefix = getCallingCodePrefix(currentCountry);
 
     if (ev.key === "Backspace" || ev.key === "Delete") {
-      const el = ev.currentTarget;
-
-      if (digitsRef.current.length === 0 && focused) {
-        ev.preventDefault();
-        requestAnimationFrame(() => {
-          el?.setSelectionRange(currentPrefix.length, currentPrefix.length);
-        });
-        return;
-      }
-
-      const start = el.selectionStart ?? 0;
-      const end = el.selectionEnd ?? 0;
-      const masked = formatDisplayPhone(digitsRef.current, currentCountry);
-      const positions = nationalDigitPositions(masked, digitsRef.current);
-
-      if (start !== end) {
-        const toRemove = new Set<number>();
-        for (let di = 0; di < positions.length; di++) {
-          const p = positions[di];
-          const a = Math.max(start, p);
-          const b = Math.min(end, p + 1);
-          if (a < b) toRemove.add(di);
-        }
-        if (toRemove.size > 0) {
-          ev.preventDefault();
-          applyDigitRemovalAndCaret(el, toRemove, start);
-        } else {
-          ev.preventDefault();
-        }
-        return;
-      }
-
-      if (ev.key === "Backspace") {
-        if (start <= currentPrefix.length && digitsRef.current.length === 0) {
-          ev.preventDefault();
-          return;
-        }
-
-        let removeIndex = -1;
-        const atDigit = positions.indexOf(start);
-        if (atDigit !== -1) {
-          removeIndex = atDigit;
-        } else {
-          for (let i = positions.length - 1; i >= 0; i--) {
-            if (positions[i] < start) {
-              removeIndex = i;
-              break;
-            }
-          }
-        }
-
-        if (removeIndex !== -1) {
-          ev.preventDefault();
-          applyDigitRemovalAndCaret(el, new Set([removeIndex]), start);
-        } else {
-          ev.preventDefault();
-        }
-        return;
-      }
-
-      let removeIndex = -1;
-      const at = positions.indexOf(start);
-      if (at !== -1) {
-        removeIndex = at;
-      } else {
-        for (let i = 0; i < positions.length; i++) {
-          if (positions[i] > start) {
-            removeIndex = i;
-            break;
-          }
-        }
-      }
-      if (removeIndex !== -1) {
-        ev.preventDefault();
-        applyDigitRemovalAndCaret(el, new Set([removeIndex]), start);
-      } else {
-        ev.preventDefault();
-      }
+      ev.preventDefault();
+      applyDeleteKey(ev.currentTarget, ev.key);
       return;
     }
 
@@ -474,6 +431,16 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
 
     const src = event as unknown as { inputType?: string; data?: string | null };
     const type = src.inputType ?? "";
+    if (type === "deleteContentBackward") {
+      event.preventDefault();
+      applyDeleteKey(event.currentTarget as HTMLInputElement, "Backspace");
+      return;
+    }
+    if (type === "deleteContentForward") {
+      event.preventDefault();
+      applyDeleteKey(event.currentTarget as HTMLInputElement, "Delete");
+      return;
+    }
     if (type === "insertFromPaste" || type === "insertFromDrop") return;
     if (!type.startsWith("insert")) return;
 
@@ -544,10 +511,10 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     <div
       ref={rootRef}
       className={classNames("text-input", "phone-input", className, {
-        "text-input--error": !!error,
         "text-input--outline": variant === "outline",
         "text-input--filled": variant === "filled",
         "phone-input--open": countryOpen,
+        "text-input--error": !!error,
       })}
     >
       {label ? (
@@ -640,7 +607,13 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
       </div>
 
       {!!error && (
-        <p className="text-input__error" id={errorId} role="alert">
+        <p
+          className={classNames("text-input__error", {
+            "text-input__error--absolute": isAbsoluteError,
+          })}
+          id={errorId}
+          role="alert"
+        >
           {error}
         </p>
       )}

@@ -4,6 +4,7 @@ import { ComponentPropsWithoutRef, forwardRef, ReactNode, useId } from "react";
 export type TextInputProps = {
   label: ReactNode;
   error?: string | boolean;
+  isAbsoluteError?: boolean;
   addonAfter?: React.ReactNode;
   variant?: "outline" | "filled";
 } & ComponentPropsWithoutRef<"input">;
@@ -20,6 +21,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(function TextInpu
     variant = "filled",
     "aria-describedby": ariaDescribedByProp,
     "aria-invalid": ariaInvalidProp,
+    isAbsoluteError = false,
     ...inputProps
   },
   ref
@@ -70,7 +72,13 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(function TextInpu
       </div>
 
       {!!error && (
-        <p className="text-input__error" id={errorId} role="alert">
+        <p
+          className={classNames("text-input__error", {
+            "text-input__error--absolute": isAbsoluteError,
+          })}
+          id={errorId}
+          role="alert"
+        >
           {error}
         </p>
       )}

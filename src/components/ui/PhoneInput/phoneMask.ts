@@ -98,17 +98,43 @@ export function isPhoneComplete(value: string): boolean {
   return isValidPhoneNumber(value);
 }
 
-export function nationalDigitPositions(masked: string, nationalDigits: string): number[] {
+/**
+ * Character indexes of national digits in the formatted string.
+ * Skips the calling-code prefix so digits like 3/7/5 in `+375` are not matched.
+ */
+export function nationalDigitPositions(
+  masked: string,
+  nationalDigits: string,
+  prefix: string
+): number[] {
   const d = nationalDigits.replace(/\D/g, "");
+  const start = masked.startsWith(prefix) ? prefix.length : 0;
   const positions: number[] = [];
-  let from = 0;
-  for (let k = 0; k < d.length; k++) {
-    const idx = masked.indexOf(d[k], from);
-    if (idx === -1) break;
-    positions.push(idx);
-    from = idx + 1;
+  let remaining = d.length;
+  for (let i = start; i < masked.length && remaining > 0; i++) {
+    const ch = masked[i];
+    if (ch >= "0" && ch <= "9") {
+      positions.push(i);
+      remaining--;
+    }
   }
   return positions;
+}
+
+/** National digit to the left of the caret (Backspace). */
+export function digitIndexBeforeCaret(caret: number, positions: readonly number[]): number {
+  for (let i = positions.length - 1; i >= 0; i--) {
+    if (positions[i] < caret) return i;
+  }
+  return -1;
+}
+
+/** National digit at or to the right of the caret (Delete). */
+export function digitIndexAtOrAfterCaret(caret: number, positions: readonly number[]): number {
+  for (let i = 0; i < positions.length; i++) {
+    if (positions[i] >= caret) return i;
+  }
+  return -1;
 }
 
 export function editableCaretBounds(
@@ -127,7 +153,7 @@ export function editableCaretBounds(
   }
 
   const masked = formatDisplayPhone(d, country);
-  const positions = nationalDigitPositions(masked, d);
+  const positions = nationalDigitPositions(masked, d, prefix);
   if (positions.length === 0) {
     return { min: prefix.length, max: masked.length };
   }
@@ -138,14 +164,14 @@ export function digitInsertIndexFromCaret(
   caret: number,
   masked: string,
   nationalDigits: string,
-  prefixLen: number
+  prefix: string
 ): number {
   const d = nationalDigits.replace(/\D/g, "");
-  if (d.length === 0 && caret <= prefixLen) {
+  if (d.length === 0 && caret <= prefix.length) {
     return 0;
   }
 
-  const positions = nationalDigitPositions(masked, d);
+  const positions = nationalDigitPositions(masked, d, prefix);
   if (positions.length === 0) {
     return 0;
   }
@@ -163,15 +189,15 @@ export function caretAfterDigitIndex(
   masked: string,
   nationalDigits: string,
   digitIndex: number,
-  prefixLen: number,
+  prefix: string,
   focused: boolean
 ): number {
   const d = nationalDigits.replace(/\D/g, "");
   if (d.length === 0 && focused) {
-    return prefixLen;
+    return prefix.length;
   }
 
-  const positions = nationalDigitPositions(masked, d);
+  const positions = nationalDigitPositions(masked, d, prefix);
   if (digitIndex >= 0 && digitIndex < positions.length) {
     return positions[digitIndex] + 1;
   }

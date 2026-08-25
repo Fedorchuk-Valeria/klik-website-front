@@ -18,12 +18,12 @@ import Tutors from "@/src/components/template-parts/Tutors";
 import WhatWeLearn from "@/src/components/template-parts/WhatWeLearn";
 import WhyWeAre from "@/src/components/template-parts/WhyWeAre";
 
+import { homeBanner } from "@/src/content/homeBanner";
 import { Page } from "@/src/lib/content/types";
+import { getHomeWhatWeLearn } from "@/src/lib/getDirections";
 import { getHomeLocations } from "@/src/lib/getLocations";
 import { getHomePrices } from "@/src/lib/getPrices";
 import { getHomeTutors } from "@/src/lib/getTutors";
-import { homeBanner } from "@/src/content/homeBanner";
-import { getHomeWhatWeLearn } from "@/src/lib/getDirections";
 
 type Props = {
   page: Page;

@@ -22,11 +22,13 @@ import { AuthRedirectHelper, CookieHelper } from "@/src/utils/helpers";
 
 const ConfirmCodeContent = () => {
   const codeInputRef = useRef<HTMLInputElement>(null);
+  const hasRedirectedRef = useRef(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
-  const { isCodeCorrect, isLoading, errors, isLoggedIn, verifyPhoneResponse } =
-    useAppSelector((state: RootStore) => state.auth);
+  const { isCodeCorrect, isLoading, errors, isLoggedIn } = useAppSelector(
+    (state: RootStore) => state.auth
+  );
   const form = useFormik({
     initialValues: {
       code: "",
@@ -76,31 +78,27 @@ const ConfirmCodeContent = () => {
   }, [errors]);
 
   useEffect(() => {
-    if (!isCodeCorrect) {
+    if (!isCodeCorrect || hasRedirectedRef.current) {
       return;
     }
 
     if (searchParams.get(QUERY_PARAMS.IS_RESET_PASSWORD)) {
+      hasRedirectedRef.current = true;
       router.push(PAGES.SET_NEW_PASSWORD);
       return;
     }
 
-    dispatch(clearVerifyPhoneResponse());
-
-    if (isLoggedIn) {
-      const returnTo = AuthRedirectHelper.consumeAuthReturnTo();
-      router.push(returnTo ?? PAGES.COURSES);
+    if (!isLoggedIn) {
+      CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
       return;
     }
-    CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
-  }, [
-    dispatch,
-    isCodeCorrect,
-    isLoggedIn,
-    router,
-    searchParams,
-    verifyPhoneResponse,
-  ]);
+
+    hasRedirectedRef.current = true;
+    dispatch(clearVerifyPhoneResponse());
+
+    const returnTo = AuthRedirectHelper.consumeAuthReturnTo();
+    router.push(returnTo ?? PAGES.COURSES);
+  }, [dispatch, isCodeCorrect, isLoggedIn, router, searchParams]);
 
   useEffect(() => {
     if (codeInputRef.current) {
