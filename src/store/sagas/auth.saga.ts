@@ -10,6 +10,7 @@ import {
   AuthSignInRequest,
   AuthVerifyCodeRequest,
   AuthVerifyPhoneResponse,
+  CourseAccessNotification,
   CreateChildRequest,
   CreateChildResponse,
   EmailChangeRequest,
@@ -79,7 +80,13 @@ function* workerAuthLogin({ payload }: { payload: AuthSignInRequest }): unknown 
 
     localStorage.setStorageItem(USER, user);
 
-    yield put(loginSuccess(profileResponse?.data ?? null));
+    yield put(
+      loginSuccess({
+        ...profileResponse?.data,
+        course_access_notification: response?.data
+          ?.course_access_notification as CourseAccessNotification,
+      })
+    );
   } catch (error) {
     yield put(setErrors(error as Record<string, string> | null));
   }
@@ -141,10 +148,7 @@ function* watchAuthForgotPassword() {
 
 function* workerAuthVerifyCode({ payload }: { payload: AuthVerifyCodeRequest }) {
   try {
-    const response: { data: AuthVerifyPhoneResponse } = yield call(
-      UsersApi.verifyCode,
-      payload
-    );
+    const response: { data: AuthVerifyPhoneResponse } = yield call(UsersApi.verifyCode, payload);
     const data = response?.data;
 
     if (data?.access) {

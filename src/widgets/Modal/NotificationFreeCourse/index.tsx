@@ -30,12 +30,8 @@ const WidgetModalNotificationFreeCourse: FC<PropTypes> = ({
   };
 
   return (
-    <Modal
-      isClose
-      isVisible={isVisible}
-      className={classNames("modal-account-data", className)}
-    >
-      <p className={"modal-account-data__title"}>Привет, {name}!</p>
+    <Modal isClose isVisible={isVisible} className={classNames("modal-account-data", className)}>
+      {!!name && <p className={"modal-account-data__title"}>Привет, {name}!</p>}
 
       <span className="modal-account-data__description center">
         Добро пожаловать на платформу!
