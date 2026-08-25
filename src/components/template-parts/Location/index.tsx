@@ -7,11 +7,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import Icon from "@/src/components/ui/Icon/Icon";
 
+import LocationColas from "@/src/assets/images/templates/homepage/locations/colas.png";
 import LocationEmotion from "@/src/assets/images/templates/homepage/locations/emotion.svg";
 import LocationFoot from "@/src/assets/images/templates/homepage/locations/foot.svg";
 import LocationHockey from "@/src/assets/images/templates/homepage/locations/hockey.svg";
 import LocationMir from "@/src/assets/images/templates/homepage/locations/mir.svg";
 import LocationScience from "@/src/assets/images/templates/homepage/locations/science.svg";
+import LocationSoviet from "@/src/assets/images/templates/homepage/locations/soviet.png";
 import LocationStar from "@/src/assets/images/templates/homepage/locations/star.svg";
 import LocationStone from "@/src/assets/images/templates/homepage/locations/stone.svg";
 import LocationSunrise from "@/src/assets/images/templates/homepage/locations/sunrise.svg";
@@ -89,6 +91,14 @@ const LOCATION_BY_CITY = {
       coords: [53.928535, 27.654304],
       icon: <LocationScience />,
     },
+    {
+      image: LocationColas.src,
+      title: "Колас",
+      location: "ул. Веры Хоружей, 4, 3 этаж",
+      metro: "Якуба Коласа",
+      coords: [53.917782, 27.58128],
+      icon: <LocationScience />,
+    },
   ],
   borisov: [
     {
@@ -115,6 +125,14 @@ const LOCATION_BY_CITY = {
       location: "ул. Тельмана, 64, ТЦ Радужный, 2-й этаж",
       metro: "",
       coords: [53.131866, 26.056075],
+      icon: <LocationSunrise />,
+    },
+    {
+      image: LocationSoviet.src,
+      title: "Савецкая",
+      location: "ул. Советская, 59, 2 этаж",
+      metro: "",
+      coords: [53.134437, 26.01513],
       icon: <LocationSunrise />,
     },
   ],
