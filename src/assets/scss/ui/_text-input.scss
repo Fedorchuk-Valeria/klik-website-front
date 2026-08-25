@@ -81,14 +81,14 @@
 
   &.text-input--error .text-input__control {
     background: var(--error-bg);
-    outline: 1px solid var(--error-color);
+    outline: 1px solid var(--error-bg);
   }
 
   .text-input__error {
     @include fonts(14px, 500, "Manrope");
     margin: 0;
     margin-right: 30px;
-    color: var(--error-color);
+    color: var(--main-orange);
     text-align: right;
 
     &.text-input__error--absolute {
@@ -100,6 +100,10 @@
   }
 
   @media (max-width: $desktop-compact) {
+    .text-input__label {
+      font-size: 14px;
+    }
+
     .text-input__control-wrapper {
       .text-input__icon {
         right: 20px;
@@ -108,21 +112,40 @@
 
     .text-input__control {
       font-size: 16px;
+      padding: 15px 30px;
 
       &.text-input__control--addon-after {
         padding-right: 50px;
       }
     }
+
+    .text-input__error {
+      font-size: 12px;
+
+      &.text-input__error--absolute {
+        bottom: -28px;
+      }
+    }
   }
 
   @media (max-width: $landscape-tablet-size) {
-    .text-input__label {
-      font-size: 14px;
-    }
-
     .text-input__control {
       padding: 16px 30px;
       font-size: 14px;
+    }
+
+    .text-input__error {
+      &.text-input__error--absolute {
+        bottom: -24px;
+      }
+    }
+  }
+
+  @media (max-width: $small-landscape-tablet-size) {
+    .text-input__error {
+      &.text-input__error--absolute {
+        bottom: -20px;
+      }
     }
   }
 
@@ -170,6 +193,15 @@
 
       &.text-input__control--addon-after {
         padding-right: 46px;
+      }
+    }
+
+    .text-input__error {
+      font-size: 10px;
+      margin-right: 20px;
+
+      &.text-input__error--absolute {
+        bottom: -23px;
       }
     }
   }

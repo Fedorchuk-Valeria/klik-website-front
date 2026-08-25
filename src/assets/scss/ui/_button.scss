@@ -7,11 +7,10 @@
   padding: 20px;
 
   &__arrow {
+    @include icon(45px);
     position: absolute;
     right: 0;
     bottom: 0;
-    width: 45px;
-    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,8 +20,7 @@
     transition: transform 0.3s ease;
 
     svg {
-      width: 27px;
-      height: 27px;
+      @include icon(27px);
       transform: rotate(-30deg);
     }
   }
@@ -180,5 +178,47 @@
   &:disabled {
     opacity: 0.5;
     pointer-events: none;
+  }
+
+  @media screen and (max-width: $desktop-compact) {
+    padding: 15px;
+    font-size: 16px;
+
+    &__arrow {
+      @include icon(36px);
+      right: 7px;
+
+      svg {
+        @include icon(22px);
+      }
+    }
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    padding: 20px;
+    font-size: 18px;
+
+    &__arrow {
+      @include icon(36px);
+      right: 0px;
+
+      svg {
+        @include icon(27px);
+      }
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    padding: 15px;
+    font-size: 16px;
+
+    &__arrow {
+      @include icon(36px);
+      right: 7px;
+
+      svg {
+        @include icon(22px);
+      }
+    }
   }
 }

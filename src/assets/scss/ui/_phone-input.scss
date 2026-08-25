@@ -128,7 +128,7 @@
 
   &.text-input--error .phone-input__field {
     background: var(--error-bg);
-    outline: 1px solid var(--error-color);
+    outline: 1px solid var(--error-bg);
 
     .phone-input__number {
       background: var(--error-bg);
@@ -138,5 +138,47 @@
   .phone-input__field:focus-within {
     outline: 1px solid var(--main-orange);
     outline-offset: 1px;
+  }
+
+  @media screen and (max-width: $desktop) {
+    .phone-input__flag {
+      @include icon(20px);
+    }
+  }
+
+  @media screen and (max-width: $desktop-compact) {
+    .phone-input__flag {
+      @include icon(17px);
+    }
+
+    .phone-input__country-btn {
+      padding: 9px 13px;
+    }
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    .phone-input__country-btn {
+      padding: 11px 12px;
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    .phone-input__flag {
+      @include icon(24px);
+    }
+
+    .phone-input__country-btn {
+      padding: 16px 18px;
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    .phone-input__field {
+      padding: 3px;
+    }
+
+    .phone-input__country-btn {
+      padding: 12px 14px;
+    }
   }
 }
