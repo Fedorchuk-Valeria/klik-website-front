@@ -116,11 +116,6 @@
     flex: 1;
   }
 
-  &.text-input--error .phone-input__field {
-    background: #f9d1d1;
-    outline: 1px solid var(--error-color);
-  }
-
   &.text-input--filled .phone-input__field {
     background: var(--input-bg);
     outline: none;
@@ -129,6 +124,15 @@
   &.text-input--outline .phone-input__field {
     background: var(--secondary-white-80);
     outline: 1px solid var(--border-color);
+  }
+
+  &.text-input--error .phone-input__field {
+    background: var(--error-bg);
+    outline: 1px solid var(--error-color);
+
+    .phone-input__number {
+      background: var(--error-bg);
+    }
   }
 
   .phone-input__field:focus-within {

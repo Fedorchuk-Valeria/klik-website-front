@@ -3,7 +3,7 @@
 import { useFormik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent, useEffect, useRef } from "react";
 
 import { validationSchema } from "@/src/components/Login/validationSchema";
 import Button from "@/src/components/ui/Button/Button";
@@ -18,6 +18,7 @@ import { PAGES } from "@/src/utils/constant";
 import { AuthRedirectHelper } from "@/src/utils/helpers";
 
 const LoginForm = () => {
+  const hasRedirectedRef = useRef(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { isLoading, errors, isLoggedIn } = useAppSelector(
@@ -44,7 +45,7 @@ const LoginForm = () => {
 
   const handleChangeTab = (tab: string) => {
     dispatch(clearErrors());
-    router.push(tab);
+    router.push(AuthRedirectHelper.withReturnToQuery(tab));
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -60,11 +61,14 @@ const LoginForm = () => {
   }, [errors]);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      const returnTo = AuthRedirectHelper.consumeAuthReturnTo();
-
-      router.push(returnTo ?? PAGES.COURSES);
+    if (!isLoggedIn || hasRedirectedRef.current) {
+      return;
     }
+
+    hasRedirectedRef.current = true;
+    const returnTo = AuthRedirectHelper.consumeAuthReturnTo();
+
+    router.push(returnTo ?? PAGES.COURSES);
   }, [isLoggedIn, router]);
 
   useEffect(() => {

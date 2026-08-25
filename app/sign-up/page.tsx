@@ -2,7 +2,7 @@
 
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent, useEffect, useRef } from "react";
 
 import { registerValidationSchema } from "@/src/components/Login/validationSchema";
 import Button from "@/src/components/ui/Button/Button";
@@ -19,6 +19,7 @@ import { BRANCH_CRM_ID, PAGES } from "@/src/utils/constant";
 import { AuthRedirectHelper, CookieHelper } from "@/src/utils/helpers";
 
 const RegisterForm = () => {
+  const hasRedirectedRef = useRef(false);
   const dispatch = useAppDispatch();
   const { isRegisterSuccess, isLoading, errors, isLoggedIn } = useAppSelector(
     (state: RootStore) => state.auth
@@ -53,7 +54,7 @@ const RegisterForm = () => {
 
   const handleChangeTab = (tab: string) => {
     dispatch(clearErrors());
-    router.push(tab);
+    router.push(AuthRedirectHelper.withReturnToQuery(tab));
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -73,11 +74,14 @@ const RegisterForm = () => {
   }, [isRegisterSuccess, dispatch]);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      const returnTo = AuthRedirectHelper.consumeAuthReturnTo();
-
-      router.push(returnTo ?? PAGES.PROFILE);
+    if (!isLoggedIn || hasRedirectedRef.current) {
+      return;
     }
+
+    hasRedirectedRef.current = true;
+    const returnTo = AuthRedirectHelper.consumeAuthReturnTo();
+
+    router.push(returnTo ?? PAGES.PROFILE);
   }, [isLoggedIn, router]);
 
   useEffect(() => {
@@ -120,6 +124,7 @@ const RegisterForm = () => {
           onChange={handleChange}
           className="login-page__form-input"
           disabled={isLoading}
+          isAbsoluteError
         />
 
         <TextInput
@@ -133,6 +138,7 @@ const RegisterForm = () => {
           onBlur={() => handleBlur("email")}
           disabled={isLoading}
           maxLength={100}
+          isAbsoluteError
         />
 
         <TextInput
@@ -147,6 +153,7 @@ const RegisterForm = () => {
           onBlur={() => handleBlur("name")}
           disabled={isLoading}
           maxLength={100}
+          isAbsoluteError
         />
 
         <PasswordInput
@@ -165,6 +172,7 @@ const RegisterForm = () => {
           className="login-page__form-input"
           disabled={isLoading}
           maxLength={64}
+          isAbsoluteError
         />
 
         <PasswordInput
@@ -178,6 +186,7 @@ const RegisterForm = () => {
           placeholder="********"
           disabled={isLoading}
           maxLength={64}
+          isAbsoluteError
         />
 
         <Button
@@ -185,6 +194,7 @@ const RegisterForm = () => {
           type="submit"
           variant="main-green-dark"
           className="login-page__form-button"
+          style={form.errors.confirmPassword ? { marginTop: "30px" } : undefined}
           disabled={isLoading}
         >
           Получить код подтверждения

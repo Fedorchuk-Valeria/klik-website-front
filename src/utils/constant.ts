@@ -30,6 +30,7 @@ export const QUERY_PARAMS = {
 
   CHILD_ID: "child_id",
   IS_PARENT: "is_parent",
+  RETURN_TO: "return_to",
 };
 
 export const PAGES = {

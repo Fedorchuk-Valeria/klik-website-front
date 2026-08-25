@@ -3,6 +3,10 @@
   align-items: stretch;
   width: 100%;
 
+  &:has(.text-input__error--absolute) {
+    position: relative;
+  }
+
   .text-input__label {
     @include fonts(16px, 500, "Manrope");
     color: var(--main-black);
@@ -76,16 +80,23 @@
   }
 
   &.text-input--error .text-input__control {
-    background: #f9d1d1;
+    background: var(--error-bg);
     outline: 1px solid var(--error-color);
   }
 
-  &__error {
+  .text-input__error {
     @include fonts(14px, 500, "Manrope");
     margin: 0;
     margin-right: 30px;
     color: var(--error-color);
     text-align: right;
+
+    &.text-input__error--absolute {
+      position: absolute;
+      bottom: -30px;
+      right: 0;
+      z-index: 2;
+    }
   }
 
   @media (max-width: $desktop-compact) {

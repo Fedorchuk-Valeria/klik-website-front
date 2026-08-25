@@ -2,19 +2,14 @@
 
 import classNames from "classnames";
 import type { CountryCode } from "libphonenumber-js";
-import type {
-  ChangeEvent,
-  ClipboardEvent,
-  FocusEvent,
-  KeyboardEvent,
-  SyntheticEvent,
-} from "react";
+import type { ChangeEvent, ClipboardEvent, FocusEvent, KeyboardEvent, SyntheticEvent } from "react";
 import { forwardRef, useId, useRef, useState } from "react";
 
 import Icon from "@/src/components/ui/Icon/Icon";
 import useClickOutside from "@/src/hooks/useClickOutside";
 
 import CountryFlag from "./CountryFlag";
+import type { PhoneInputProps } from "./index.type";
 import {
   DEFAULT_PHONE_COUNTRIES,
   DEFAULT_PHONE_COUNTRY,
@@ -22,7 +17,6 @@ import {
   getPhoneCountry,
   type PhoneCountry,
 } from "./phoneCountries";
-import type { PhoneInputProps } from "./index.type";
 import {
   caretAfterDigitIndex,
   digitInsertIndexFromCaret,
@@ -53,11 +47,7 @@ const ACCEPT_KEYS = new Set([
   "End",
 ]);
 
-function resolveDisplayValue(
-  digits: string,
-  focused: boolean,
-  country: CountryCode
-): string {
+function resolveDisplayValue(digits: string, focused: boolean, country: CountryCode): string {
   if (digits.length === 0) {
     return focused ? getCallingCodePrefix(country) : "";
   }
@@ -95,6 +85,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     disabled,
     name,
     variant = "filled",
+    isAbsoluteError = false,
     ...rest
   },
   ref
@@ -136,8 +127,8 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
   const resolvedPlaceholder =
     !focused && digits.length === 0 ? getExamplePlaceholder(country) : undefined;
 
-  const selectedCountry: PhoneCountry =
-    getPhoneCountry(country, countries) ?? countries[0] ?? { code: "BY", name: "Беларусь" };
+  const selectedCountry: PhoneCountry = getPhoneCountry(country, countries) ??
+    countries[0] ?? { code: "BY", name: "Беларусь" };
 
   useClickOutside(rootRef, () => setCountryOpen(false));
 
@@ -544,10 +535,10 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     <div
       ref={rootRef}
       className={classNames("text-input", "phone-input", className, {
-        "text-input--error": !!error,
         "text-input--outline": variant === "outline",
         "text-input--filled": variant === "filled",
         "phone-input--open": countryOpen,
+        "text-input--error": !!error,
       })}
     >
       {label ? (
@@ -640,7 +631,13 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
       </div>
 
       {!!error && (
-        <p className="text-input__error" id={errorId} role="alert">
+        <p
+          className={classNames("text-input__error", {
+            "text-input__error--absolute": isAbsoluteError,
+          })}
+          id={errorId}
+          role="alert"
+        >
           {error}
         </p>
       )}

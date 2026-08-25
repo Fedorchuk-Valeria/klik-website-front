@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { FC, memo } from "react";
+import { FC, memo, MouseEvent, useMemo } from "react";
 
 import Button from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
@@ -10,7 +10,7 @@ import { PAGES, QUERY_PARAMS } from "@/src/utils/constant";
 import { AuthRedirectHelper, DateHelper, QueryHelper } from "@/src/utils/helpers";
 
 import { CourseCategory, Purchase } from "@/src/lib/getCourses";
-import { useAuth } from "@/src/utils/useAuth";
+import { checkIsAuthenticated } from "@/src/utils/useAuth";
 
 type PropTypes = {
   title: string;
@@ -42,19 +42,22 @@ const CourseAbout: FC<PropTypes> = ({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { isAuthenticated, isMounted } = useAuth();
 
-  const handleClick = () => {
-    if (!isMounted) return;
+  const returnTo = useMemo(() => {
+    const query = searchParams.toString();
 
-    if (!isAuthenticated) {
-      const query = searchParams.toString();
-      const returnTo = `${pathname}${query ? `?${query}` : ""}`;
+    return `${pathname}${query ? `?${query}` : ""}`;
+  }, [pathname, searchParams]);
 
+  const loginHref = useMemo(() => AuthRedirectHelper.buildLoginUrl(returnTo), [returnTo]);
+
+  const handleClick = (event: MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
+    if (!checkIsAuthenticated()) {
       AuthRedirectHelper.saveAuthReturnTo(returnTo);
-      router.push(PAGES.LOGIN);
       return;
     }
+
+    event.preventDefault();
 
     if (isPayment) {
       router.push(
@@ -107,6 +110,7 @@ const CourseAbout: FC<PropTypes> = ({
           <Button
             className="course-about__info-button"
             variant="main-green-dark"
+            href={!isPayment ? loginHref : undefined}
             onClick={handleClick}
             withArrow
           >
