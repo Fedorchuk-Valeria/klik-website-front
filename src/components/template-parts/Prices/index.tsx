@@ -6,6 +6,7 @@ import { FC } from "react";
 
 import PricesBg from "@/src/assets/images/templates/homepage/prices/bg.svg";
 import pricesImage from "@/src/assets/images/templates/homepage/prices/prices.jpg";
+import { PAGE_ANCHORS } from "@/src/utils/constant";
 import Button from "../../ui/Button/Button";
 import Icon from "../../ui/Icon/Icon";
 
@@ -18,6 +19,18 @@ type PropTypes = {
 };
 
 const Prices: FC<PropTypes> = ({ tag, title, card_text, price, list }) => {
+  const handleClick = () => {
+    const el = document.getElementById(PAGE_ANCHORS.SIGN_UP_FREE_LESSON);
+
+    if (el) {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "start",
+      });
+    }
+  };
+
   return (
     <section id="prices">
       <div className={classNames("home-page__block", "home-page__prices")}>
@@ -55,7 +68,12 @@ const Prices: FC<PropTypes> = ({ tag, title, card_text, price, list }) => {
                 ))}
               </ul>
 
-              <Button className="home-page__prices-card_button" variant="main-green-dark" withArrow>
+              <Button
+                onClick={handleClick}
+                className="home-page__prices-card_button"
+                variant="main-green-dark"
+                withArrow
+              >
                 Оставить заявку
               </Button>
             </div>

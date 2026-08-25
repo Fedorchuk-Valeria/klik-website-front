@@ -494,6 +494,7 @@
           margin-top: 14px;
           padding: 16px 30px;
           font-size: 16px;
+          max-width: 100%;
 
           .button__arrow {
             @include icon(36px);

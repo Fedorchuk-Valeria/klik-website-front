@@ -49,5 +49,7 @@ export async function getHomePrices(cmsPrices?: HomePrices): Promise<HomePrices 
   return {
     ...cmsPrices,
     ...apiPrices,
+    title: "Стоимость обучения",
+    card_text: apiPrices?.title,
   };
 }
