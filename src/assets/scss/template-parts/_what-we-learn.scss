@@ -74,6 +74,7 @@
           border-radius: 50%;
           background: var(--main-orange);
           transition: 0.3s all;
+          flex-shrink: 0;
 
           svg {
             @include icon(24px);

@@ -159,6 +159,7 @@ export type HomePageContent = {
     tag?: string;
     title?: string;
     text?: string;
+    image?: string;
     items?: WhatWeLearnContentItem[];
   };
   why_we_are?: {
