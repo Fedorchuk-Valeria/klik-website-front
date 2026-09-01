@@ -1,16 +1,21 @@
 "use client";
 import Button from "@/src/components/ui/Button/Button";
-import HomeAnchorLink from "@/src/components/ui/HomeAnchorLink/HomeAnchorLink";
-import { PAGE_ANCHORS } from "@/src/utils/constant";
 import Icon from "@/src/components/ui/Icon/Icon";
 
-export default function ButtonCall({ onClose }: { onClose?: () => void }) {
+type Props = {
+  href?: string;
+  onClose?: () => void;
+};
+
+export default function ButtonCall({ href, onClose }: Props) {
+  if (!href) return null;
+
   return (
-    <HomeAnchorLink anchor={PAGE_ANCHORS.SELECT_TRAINING} onClick={onClose}>
+    <a href={href} target="_blank" rel="noopener noreferrer" onClick={onClose}>
       <Button className="header__call-btn" variant="main-light">
         <Icon className="header__call-icon" name="calendar" />
         <span>Онлайн-запись</span>
       </Button>
-    </HomeAnchorLink>
+    </a>
   );
 }

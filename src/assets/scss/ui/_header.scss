@@ -38,14 +38,14 @@
     display: grid;
 
     grid-template-columns:
-    auto
-    auto
-    1fr
-    auto;
+      auto
+      auto
+      1fr
+      auto;
 
     grid-template-areas:
-    "brand city socials cabinet"
-    "menu menu phone call";
+      "brand city socials cabinet"
+      "menu menu phone call";
 
     align-items: center;
     gap: 20px;
@@ -78,7 +78,7 @@
 
   &__city {
     grid-area: city;
-    width: fit-content ;
+    width: fit-content;
   }
 
   &__socials {
@@ -256,7 +256,6 @@
   }
 
   .header__call {
-
     &-icon {
       display: none;
     }
@@ -460,8 +459,8 @@
         30px;
 
       grid-template-areas:
-    "brand city socials socials cabinet"
-    "menu  menu  phone   call    call";
+        "brand city socials socials cabinet"
+        "menu  menu  phone   call    call";
     }
 
     .header__right:not(.last) {
@@ -706,8 +705,8 @@
     .header__wrapper {
       grid-template-columns: auto auto;
       grid-template-areas:
-      "brand phone"
-      "mobile mobile";
+        "brand phone"
+        "mobile mobile";
 
       padding: 20px 30px 20px 30px;
       row-gap: 0;
@@ -910,7 +909,6 @@
           @media screen and (max-width: $mobile-size) {
             @include icon(27px);
           }
-
         }
 
         .city-switcher__icon {
@@ -1138,11 +1136,9 @@
 
   &--scrolled {
     .header__wrapper {
-
       grid-template-columns: auto auto 1fr auto auto auto;
 
-      grid-template-areas:
-      "brand city menu phone call cabinet";
+      grid-template-areas: "brand city menu phone call cabinet";
 
       grid-template-rows: auto;
 
@@ -1155,7 +1151,7 @@
 
       @media screen and (max-width: $tablet-size) {
         grid-template-columns: auto auto;
-        grid-template-areas: "brand phone""mobile mobile";
+        grid-template-areas: "brand phone" "mobile mobile";
         gap: 0;
       }
 
@@ -1193,8 +1189,7 @@
         }
       }
 
-      .header__mobile  {
-
+      .header__mobile {
         .header__call-btn {
           @media screen and (max-width: $tablet-size) {
             padding: 20px;
@@ -1244,10 +1239,14 @@
       .header__call-icon {
         display: none;
 
-        @media screen and (max-width: $landscape-tablet-size) {
+        @media screen and (max-width: 1124px) {
+          @include icon(18px);
           display: block;
-          @include icon(15px);
           fill: var(--main-green-dark);
+        }
+
+        @media screen and (max-width: $landscape-tablet-size) {
+          @include icon(15px);
         }
 
         @media screen and (max-width: $small-landscape-tablet-size) {
@@ -1256,9 +1255,14 @@
       }
 
       .header__call-btn {
-        @media screen and (max-width: $landscape-tablet-size) {
+        @media screen and (max-width: 1124px) {
+          @include icon(42px);
+          min-width: 42px;
           font-size: 0;
           padding: 0;
+        }
+
+        @media screen and (max-width: $landscape-tablet-size) {
           @include icon(30px);
           min-width: 30px;
         }
@@ -1269,7 +1273,7 @@
         }
 
         .button__text {
-          @media screen and (max-width: $landscape-tablet-size) {
+          @media screen and (max-width: 1124px) {
             gap: 0;
           }
         }
