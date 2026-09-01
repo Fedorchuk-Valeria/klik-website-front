@@ -1,6 +1,6 @@
 import { call, fork, put, select, takeLatest } from "redux-saga/effects";
 
-import { UserProfile } from "@/src/entities/common";
+import { ModalType, UserProfile } from "@/src/entities/common";
 import {
   AuthChangePasswordRequest,
   AuthForgotPasswordRequest,
@@ -50,9 +50,16 @@ import {
   verifyCodeSuccess,
 } from "@/src/store/slices/auth";
 import { updateCurrentChildEmail } from "@/src/store/slices/profile";
-import { PAGES, REFRESH_TOKEN_KEY, TOKEN_KEY, USER } from "@/src/utils/constant";
-import { CookieHelper } from "@/src/utils/helpers";
+import {
+  PAGES,
+  PENDING_ADMIN_REVIEW_STATUS,
+  REFRESH_TOKEN_KEY,
+  TOKEN_KEY,
+  USER,
+} from "@/src/utils/constant";
+import { AuthRedirectHelper, CookieHelper } from "@/src/utils/helpers";
 import localStorage from "@/src/utils/helpers/localStorage";
+import { showModal } from "../slices/modalSlice";
 
 export const MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 
@@ -177,6 +184,17 @@ function* workerAuthVerifyCode({ payload }: { payload: AuthVerifyCodeRequest }) 
 
       localStorage.setStorageItem(USER, profile.profile);
       yield put(loginSuccess(profile));
+    } else if (data?.status === PENDING_ADMIN_REVIEW_STATUS) {
+      AuthRedirectHelper.consumeAuthReturnTo();
+
+      yield put(
+        showModal({
+          modalType: ModalType.NOTICE,
+          modalProps: {
+            title: data?.detail,
+          },
+        })
+      );
     }
 
     yield put(verifyCodeSuccess(data ?? null));

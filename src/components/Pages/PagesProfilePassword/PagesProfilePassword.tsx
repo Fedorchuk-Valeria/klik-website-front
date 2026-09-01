@@ -1,8 +1,8 @@
 "use client";
 
 import { useFormik } from "formik";
-import {useParams, useRouter} from "next/navigation";
-import { ChangeEvent, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { ChangeEvent, useCallback, useEffect } from "react";
 
 import { setNewPasswordValidationSchema } from "@/src/components/Login/validationSchema";
 import Button from "@/src/components/ui/Button/Button";
@@ -12,11 +12,16 @@ import PopoverPassword from "@/src/components/ui/Popovers/PopoverPassword";
 
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import {changePasswordChildRequest, changePasswordRequest, clearPasswordChanged} from "@/src/store/slices/auth";
+import {
+  changePasswordChildRequest,
+  changePasswordRequest,
+  clearPasswordChanged,
+} from "@/src/store/slices/auth";
 import { showModal } from "@/src/store/slices/modalSlice";
 
 import { ModalType } from "@/src/entities/common";
 import { PAGES } from "@/src/utils/constant";
+import classNames from "classnames";
 
 const PagesProfilePassword = () => {
   const router = useRouter();
@@ -39,15 +44,10 @@ const PagesProfilePassword = () => {
       };
 
       if (id) {
-        dispatch(
-          changePasswordChildRequest(payload)
-        );
+        dispatch(changePasswordChildRequest(payload));
       } else {
-        dispatch(
-          changePasswordRequest(payload)
-        );
+        dispatch(changePasswordRequest(payload));
       }
-
     },
     validateOnChange: false,
     validateOnBlur: false,
@@ -58,6 +58,14 @@ const PagesProfilePassword = () => {
     const { name, value } = e.target;
     void form.setFieldValue(name, value, true);
   };
+
+  const handleBack = useCallback(() => {
+    if (id) {
+      router.push(PAGES.PROFILE_CHILDREN_DETAILS.replace(":id", String(id)));
+    } else {
+      router.push(PAGES.PROFILE);
+    }
+  }, [id, router]);
 
   useEffect(() => {
     if (errors) {
@@ -90,18 +98,10 @@ const PagesProfilePassword = () => {
 
       handleBack();
     }
-  }, [isPasswordChanged, dispatch, router]);
-
-  const handleBack = () => {
-    if (id) {
-      router.push(PAGES.PROFILE_CHILDREN_DETAILS.replace(":id", String(id)));
-    } else {
-      router.push(PAGES.PROFILE);
-    }
-  };
+  }, [isPasswordChanged, dispatch, router, handleBack]);
 
   return (
-    <div className="page-profile">
+    <div className={classNames("page-profile", "change-password")}>
       <div className="platform-layout__container">
         <div className="page-profile__content">
           <ButtonBack
@@ -109,10 +109,15 @@ const PagesProfilePassword = () => {
             className="page-profile__back"
             onClick={handleBack}
           />
+
           <div className="page-profile__header">
             <h1>{id ? "Изменить пароль ребенка" : "Изменить пароль"}</h1>
           </div>
-          <form className="page-profile__form password" onSubmit={form.handleSubmit}>
+
+          <form
+            className={classNames("page-profile__form", "password", "change-password__form")}
+            onSubmit={form.handleSubmit}
+          >
             <PasswordInput
               name="password"
               variant="outline"
@@ -144,18 +149,22 @@ const PagesProfilePassword = () => {
               maxLength={64}
             />
 
-            <div className="page-profile__row-form">
+            <div className="change-password__buttons">
               <Button
                 withArrow
                 type="submit"
                 variant="main-green-dark"
-                className="page-profile__button"
+                className="change-password__button"
                 disabled={isLoading}
               >
                 Сохранить изменения
               </Button>
 
-              <Button variant="outline-green-dark" onClick={handleBack}>
+              <Button
+                className="change-password__button"
+                variant="outline-green-dark"
+                onClick={handleBack}
+              >
                 Отмена
               </Button>
             </div>

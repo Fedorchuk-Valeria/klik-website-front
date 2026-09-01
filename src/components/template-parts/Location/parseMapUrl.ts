@@ -1,11 +1,12 @@
 import type { YandexMapView } from "./types";
 
 const YANDEX_MAPS_HOST_PATTERN = /(^|\.)yandex\.(ru|by|com|kz|uz|com\.tr)$/i;
-const YANDEX_OBJECT_PATH_PATTERN = /\/(house|org|geo|biz)(\/|$)/i;
 const LON_LAT_PAIR_PATTERN = /^(-?\d+(?:\.\d+)?)[, ](-?\d+(?:\.\d+)?)/;
 const GOOGLE_COORDS_PATTERN = /@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/;
-/** Zoom is unused for pin coords; keep a sane cap for `parseYandexMapUrl`. */
+const GOOGLE_ZOOM_PATTERN = /@-?\d+(?:\.\d+)?,-?\d+(?:\.\d+)?,(\d+(?:\.\d+)?)z/;
 const COORDS_PARSE_MAX_ZOOM = 21;
+const ZOOM_MIN = 1;
+const LOCATION_PIN_DEFAULT_ZOOM = 16;
 
 function isYandexMapsUrl(url: string): boolean {
   try {
@@ -22,6 +23,23 @@ function getSearchParam(url: string, name: string): string | null {
   } catch {
     return null;
   }
+}
+
+function clampZoom(zoom: number, maxZoom = COORDS_PARSE_MAX_ZOOM): number {
+  return Math.min(Math.max(zoom, ZOOM_MIN), maxZoom);
+}
+
+function parseNumericZoom(value: string | null | undefined): number | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  const zoom = Math.round(Number(value));
+  if (!Number.isFinite(zoom)) {
+    return undefined;
+  }
+
+  return clampZoom(zoom);
 }
 
 function parseLonLatValue(value: string | null | undefined): readonly [number, number] | undefined {
@@ -69,14 +87,6 @@ function parseExplicitPinCoords(url: string): readonly [number, number] | undefi
   );
 }
 
-function isYandexObjectPageUrl(url: string): boolean {
-  try {
-    return isYandexMapsUrl(url) && YANDEX_OBJECT_PATH_PATTERN.test(new URL(url).pathname);
-  } catch {
-    return false;
-  }
-}
-
 export function parseYandexMapUrl(url: string, maxZoom: number): YandexMapView | null {
   if (!isYandexMapsUrl(url)) {
     return null;
@@ -87,16 +97,26 @@ export function parseYandexMapUrl(url: string, maxZoom: number): YandexMapView |
     return null;
   }
 
-  const zRaw = getSearchParam(url, "z");
-  const zoom = zRaw ? Math.round(Number(zRaw)) : 11;
-  if (!Number.isFinite(zoom)) {
-    return null;
-  }
+  const zoom = parseNumericZoom(getSearchParam(url, "z")) ?? 11;
 
   return {
     center,
-    zoom: Math.min(Math.max(zoom, 1), maxZoom),
+    zoom: clampZoom(zoom, maxZoom),
   };
+}
+
+export function parseZoomFromMapUrl(
+  url: string,
+  fallback = LOCATION_PIN_DEFAULT_ZOOM
+): number {
+  const googleZoom = url.match(GOOGLE_ZOOM_PATTERN)?.[1];
+
+  return (
+    parseNumericZoom(getSearchParam(url, "z")) ??
+    parseNumericZoom(getSearchParam(url, "whatshere[zoom]")) ??
+    parseNumericZoom(googleZoom) ??
+    fallback
+  );
 }
 
 export function parseCoordsFromMapUrl(url: string): readonly [number, number] | undefined {
@@ -105,28 +125,4 @@ export function parseCoordsFromMapUrl(url: string): readonly [number, number] | 
     parseExplicitPinCoords(url) ??
     parseYandexMapUrl(url, COORDS_PARSE_MAX_ZOOM)?.center
   );
-}
-
-export type MapGeocodeFn = (query: string) => Promise<readonly [number, number] | undefined>;
-
-export async function resolveLocationCoords(input: {
-  url: string;
-  address?: string;
-  city?: string;
-  geocode?: MapGeocodeFn;
-}): Promise<readonly [number, number] | undefined> {
-  const explicit = parseGoogleCoords(input.url) ?? parseExplicitPinCoords(input.url);
-  if (explicit) {
-    return explicit;
-  }
-
-  if (isYandexObjectPageUrl(input.url) && input.geocode && input.address) {
-    const query = [input.city, input.address].filter(Boolean).join(", ");
-    const geocoded = await input.geocode(query);
-    if (geocoded) {
-      return geocoded;
-    }
-  }
-
-  return parseCoordsFromMapUrl(input.url);
 }

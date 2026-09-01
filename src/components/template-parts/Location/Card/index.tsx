@@ -12,6 +12,7 @@ export type LocationItemData = {
   location: string;
   metro: string;
   coords?: readonly [number, number];
+  zoom?: number;
   map_url?: string;
   icon?: React.ReactNode;
   iconPlacement?: "top" | "bottom" | "middle";
@@ -19,7 +20,7 @@ export type LocationItemData = {
 
 const LocationCardContent: FC<{
   item: LocationItemData;
-  onShowOnMap: (coords: readonly [number, number]) => void;
+  onShowOnMap: (coords: readonly [number, number], zoom?: number) => void;
 }> = ({ item, onShowOnMap }) => (
   <>
     {item?.image && (
@@ -61,7 +62,7 @@ const LocationCardContent: FC<{
         type="button"
         onClick={() => {
           if (item.coords) {
-            onShowOnMap(item.coords);
+            onShowOnMap(item.coords, item.zoom);
             return;
           }
 

@@ -17,7 +17,7 @@ import {
   verifyCodeRequest,
 } from "@/src/store/slices/auth";
 
-import { PAGES, QUERY_PARAMS, TOKEN_KEY } from "@/src/utils/constant";
+import { PAGES, PENDING_ADMIN_REVIEW_STATUS, QUERY_PARAMS, TOKEN_KEY } from "@/src/utils/constant";
 import { AuthRedirectHelper, CookieHelper } from "@/src/utils/helpers";
 
 const ConfirmCodeContent = () => {
@@ -26,7 +26,7 @@ const ConfirmCodeContent = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
-  const { isCodeCorrect, isLoading, errors, isLoggedIn } = useAppSelector(
+  const { isCodeCorrect, isLoading, errors, isLoggedIn, verifyPhoneResponse } = useAppSelector(
     (state: RootStore) => state.auth
   );
   const form = useFormik({
@@ -88,6 +88,14 @@ const ConfirmCodeContent = () => {
       return;
     }
 
+    if (verifyPhoneResponse?.status === PENDING_ADMIN_REVIEW_STATUS) {
+      hasRedirectedRef.current = true;
+      CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
+      dispatch(clearVerifyPhoneResponse());
+      router.push(PAGES.LOGIN);
+      return;
+    }
+
     if (!isLoggedIn) {
       CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
       return;
@@ -98,7 +106,7 @@ const ConfirmCodeContent = () => {
 
     const returnTo = AuthRedirectHelper.consumeAuthReturnTo();
     router.push(returnTo ?? PAGES.COURSES);
-  }, [dispatch, isCodeCorrect, isLoggedIn, router, searchParams]);
+  }, [dispatch, isCodeCorrect, isLoggedIn, router, searchParams, verifyPhoneResponse]);
 
   useEffect(() => {
     if (codeInputRef.current) {

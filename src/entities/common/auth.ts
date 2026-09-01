@@ -1,3 +1,4 @@
+import { PENDING_ADMIN_REVIEW_STATUS } from "@/src/utils/constant";
 import { UserProfileRole } from ".";
 
 export type AuthSignInRequest = {
@@ -96,6 +97,8 @@ export type AuthVerifyPhoneResponse = {
   detail?: string;
   email?: string;
   child?: CreateChildResponse["child"];
+  crm_id?: string;
+  status?: typeof PENDING_ADMIN_REVIEW_STATUS;
 };
 
 export type EmailChangeRequest = {

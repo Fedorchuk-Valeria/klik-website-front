@@ -17,6 +17,8 @@ export const USER = "user_data";
 export const BRANCH_CRM_ID = "branch_id";
 export const COURSES_PAGE_SIZE = 12;
 
+export const PENDING_ADMIN_REVIEW_STATUS = "pending_admin_review";
+
 export const QUERY_PARAMS = {
   PAGE: "page",
   PAGE_SIZE: "page_size",
