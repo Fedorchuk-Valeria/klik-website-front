@@ -163,8 +163,19 @@
         .course-tutorial__list-item--status {
           .course-tutorial__list-item--status-line {
             @include icon(50px);
-            bottom: -90%;
+            bottom: -78%;
           }
+        }
+      }
+
+      .course-tutorial__list-item_content {
+        .course-tutorial__list-item_content-title {
+          font-size: 18px;
+        }
+
+        .course-tutorial__list-item_content-duration {
+          font-size: 16px;
+          margin-top: 8px;
         }
       }
 
@@ -195,9 +206,9 @@
       }
 
       .course-tutorial__list-item--status {
-        @include icon(60px);
+        @include icon(50px);
         font-size: 12px;
-        min-width: 60px;
+        min-width: 50px;
 
         &:not(:has(.course-tutorial__list-item--status-icon)) {
           padding-top: 4px;
@@ -251,7 +262,7 @@
         .course-tutorial__list-item--status {
           .course-tutorial__list-item--status-line {
             @include icon(29px);
-            bottom: -60%;
+            bottom: -80%;
           }
         }
       }
@@ -276,7 +287,7 @@
             @include icon(36px);
             display: flex;
             position: absolute;
-            bottom: -60%;
+            bottom: -54%;
           }
         }
       }
