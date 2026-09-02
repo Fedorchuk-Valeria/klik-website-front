@@ -115,7 +115,7 @@
 
   .courses-headline {
     @include center-between;
-    margin-top: 80px;
+    margin-top: 50px;
 
     .courses-headline__select-categories {
       min-width: 379px;
@@ -199,7 +199,7 @@
           border-radius: 100px;
           background: var(--main-green-neon);
           color: var(--main-green-dark);
-          padding: 10px 20px;
+          padding: 10px 20px 10px 10px;
           z-index: 1;
 
           svg {
@@ -269,6 +269,7 @@
           gap: 6px;
           align-items: center;
           flex-wrap: wrap;
+          margin-top: auto;
         }
 
         .courses-list__item-price-icon {
@@ -473,6 +474,11 @@
       margin-top: 100px;
     }
 
+    .courses__text {
+      font-size: 18px;
+      margin-top: 16px;
+    }
+
     .courses-headline {
       margin-top: 40px;
       gap: 50px;
@@ -506,6 +512,7 @@
       grid-template-columns: repeat(3, minmax(0, 376px));
       gap: 16px;
       padding-bottom: 120px;
+      padding-top: 40px;
 
       .courses-list__item {
         border-radius: 30px;
@@ -517,6 +524,8 @@
           border-radius: 20px;
 
           .courses-list__item-categories {
+            gap: 5px;
+
             .courses-list__item-category {
               font-size: 12px;
               padding: 6px 16px;
@@ -638,8 +647,8 @@
     }
 
     .courses__container {
-      max-width: 940px;
-      padding: 0 30px;
+      max-width: 100%;
+      padding: 0 40px;
     }
 
     .courses__title {
@@ -821,13 +830,13 @@
     }
 
     .courses__title {
-      font-size: 40px;
-      margin-top: 100px;
+      font-size: 46px;
+      margin-top: 90px;
     }
 
     .courses__text {
-      font-size: 16px;
-      margin-top: 12px;
+      font-size: 18px;
+      margin-top: 5px;
     }
 
     .courses-headline {
@@ -879,7 +888,7 @@
         max-height: 631px;
 
         .courses-list__item-image {
-          height: 235px;
+          height: 271px;
           border-radius: 20px;
 
           .courses-list__item-purchased {
@@ -1005,6 +1014,7 @@
 
     .courses__title {
       font-size: 50px;
+      margin-top: 100px;
     }
 
     .courses__text {
@@ -1221,6 +1231,7 @@
     .courses__text {
       font-size: 16px;
       padding: 0 10px;
+      margin-top: 12px;
     }
 
     .courses-headline {

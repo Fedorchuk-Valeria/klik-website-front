@@ -134,7 +134,7 @@
 
         .home-page__tutors-detail__position {
           @include fonts(20px);
-          @include text-line-clamp(2);
+          @include text-line-clamp(4);
           line-height: 1.25;
           white-space: pre-wrap;
           margin-bottom: 6px;
