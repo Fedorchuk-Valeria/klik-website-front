@@ -10,6 +10,7 @@ import { StoreProvider } from "@/src/store/StoreProvider";
 
 import "@/src/assets/scss/index.scss";
 import GetUserListener from "@/src/components/template-parts/GetUserListener";
+import ProfileNotificationListener from "@/src/components/template-parts/ProfileNotificationListener";
 
 export const metadata: Metadata = {
   title: "Онлайн школа",
@@ -36,6 +37,7 @@ export default function RootLayout({
           <CookiePolicyListener />
           {/*<PlaceListener />*/}
           <GetUserListener />
+          <ProfileNotificationListener />
         </StoreProvider>
       </body>
     </html>

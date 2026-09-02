@@ -103,13 +103,21 @@
         gap: 40px;
 
         .home-page__tutors-detail__name {
-          @include fonts(50px, 500);
-          @include text-line-clamp(2);
-          line-height: 1.2;
-          color: var(--main-orange);
           margin: 0;
-          white-space: pre-wrap;
           position: relative;
+          width: min-content;
+
+          span {
+            @include fonts(50px, 500);
+            // ломает прижатие позиции к тайтлу
+            // @include text-line-clamp(2);
+            color: var(--main-orange);
+            line-height: 1.2;
+            white-space: pre-wrap;
+            max-height: 120px;
+            display: block;
+            overflow: hidden;
+          }
 
           &::after {
             content: "";
@@ -126,7 +134,7 @@
 
         .home-page__tutors-detail__position {
           @include fonts(20px);
-          @include text-line-clamp(3);
+          @include text-line-clamp(2);
           line-height: 1.25;
           white-space: pre-wrap;
           margin-bottom: 6px;
@@ -134,8 +142,10 @@
       }
 
       .home-page__tutors-detail__description {
-        @include fonts(20px, 400, "Manrope");
-        @include text-line-clamp(2);
+        span {
+          @include fonts(20px, 400, "Manrope");
+          @include text-line-clamp(2);
+        }
       }
 
       .home-page__tutors-detail__location {
@@ -334,11 +344,19 @@
         gap: 10px;
         min-height: 190px;
 
+        .home-page__tutors-detail__layers .home-page__tutors-detail__layer {
+          gap: 12px;
+          min-height: 198px;
+        }
+
         .home-page__tutors-detail__text {
           gap: 30px;
 
           .home-page__tutors-detail__name {
-            font-size: 34px;
+            span {
+              font-size: 34px;
+              max-height: 80px;
+            }
 
             &::after {
               right: -15px;
@@ -354,7 +372,9 @@
         }
 
         .home-page__tutors-detail__description {
-          font-size: 16px;
+          span {
+            font-size: 16px;
+          }
         }
 
         .home-page__tutors-detail__location {
@@ -367,6 +387,7 @@
         .home-page__tutors-detail__nav {
           gap: 5px;
           right: 0;
+          bottom: 0;
 
           .home-page__tutors-nav {
             @include icon(50px);
@@ -446,10 +467,12 @@
           gap: 20px;
 
           .home-page__tutors-detail__name {
-            font-size: 32px;
-            width: min-content;
-            max-width: 100%;
-            flex-shrink: 0;
+            span {
+              font-size: 32px;
+              width: min-content;
+              max-width: 100%;
+              flex-shrink: 0;
+            }
 
             &::after {
               right: -10px;
@@ -544,8 +567,10 @@
           gap: 30px;
 
           .home-page__tutors-detail__name {
-            font-size: 30px;
-            width: max-content;
+            span {
+              font-size: 30px;
+              max-height: none;
+            }
 
             &::after {
               height: 31px;
@@ -560,7 +585,10 @@
         }
 
         .home-page__tutors-detail__description {
-          font-size: 14px;
+          span {
+            font-size: 14px;
+            -webkit-line-clamp: 5;
+          }
         }
 
         .home-page__tutors-detail__location {
@@ -662,7 +690,9 @@
           gap: 40px;
 
           .home-page__tutors-detail__name {
-            font-size: 28px;
+            span {
+              font-size: 28px;
+            }
 
             &::after {
               right: -20px;
@@ -703,6 +733,7 @@
 
           .home-page__tutors-detail__position {
             font-size: 12px;
+            display: block;
           }
         }
       }
@@ -747,7 +778,10 @@
           gap: 10px;
 
           .home-page__tutors-detail__name {
-            font-size: 34px;
+            span {
+              @include text-line-clamp(3);
+              font-size: 34px;
+            }
 
             &::after {
               display: none;
@@ -761,8 +795,11 @@
         }
 
         .home-page__tutors-detail__description {
-          font-size: 16px;
           margin-top: auto;
+
+          span {
+            font-size: 16px;
+          }
         }
 
         .home-page__tutors-detail__location {
@@ -821,7 +858,7 @@
     }
   }
 
-  @media screen and (max-width: $mobile-size) {
+  @media screen and (max-width: 700px) {
     max-width: 100%;
 
     .home-page__tutors-top {
@@ -866,11 +903,21 @@
 
         .home-page__tutors-detail__text {
           gap: 10px;
+
+          .home-page__tutors-detail__name {
+            span {
+              width: calc(100vw - 120px);
+            }
+          }
         }
 
         .home-page__tutors-detail__description {
           margin-top: 30px;
           position: relative;
+
+          span {
+            @include text-line-clamp(5);
+          }
 
           &::before {
             content: "";
@@ -918,5 +965,16 @@
         padding: 6px 20px;
       }
     }
+  }
+}
+
+@media screen and (max-width: $mobile-size) {
+  .home-page__tutors
+    .home-page__tutors-detail
+    .home-page__tutors-detail__inner
+    .home-page__tutors-detail__text
+    .home-page__tutors-detail__name
+    span {
+    width: calc(100vw - 80px);
   }
 }

@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import image from "@/src/assets/images/view/courses/boy.png";
 
-import { Meta, ModalType } from "@/src/entities/common";
+import { Meta } from "@/src/entities/common";
 import { Course } from "@/src/lib/getCourses";
 import {
   COURSES_PAGE_SIZE,
@@ -30,7 +30,6 @@ import Select from "@/src/components/ui/Select";
 
 import { getPlural } from "@/src/helper/getPlural";
 import { MAX_AGE } from "@/src/store/sagas/auth.saga";
-import { showModal } from "@/src/store/slices/modalSlice";
 
 type Props = {
   initialCourses?: Course[];
@@ -74,7 +73,7 @@ const PagesCourses = ({
 }: Props) => {
   const dispatch = useAppDispatch();
   const { data, meta, isLoading } = useAppSelector((state: RootStore) => state.courses);
-  const { isLoggedIn, user_profile } = useAppSelector((state: RootStore) => state.auth);
+  const { isLoggedIn } = useAppSelector((state: RootStore) => state.auth);
   const [isHydrated, setIsHydrated] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<{ id: string; name: string }>({
     id: "all",
@@ -361,46 +360,6 @@ const PagesCourses = ({
       observer.disconnect();
     };
   }, [hasMore, loadMore, courses?.length]);
-
-  useEffect(() => {
-    if (!user_profile) {
-      return;
-    }
-
-    const courseAccess = user_profile.course_access_notification;
-    const accountData = user_profile.account_data_notification;
-
-    const showAccountDataModal = () => {
-      if (!accountData?.show) {
-        return;
-      }
-
-      dispatch(
-        showModal({
-          modalType: ModalType.ACCOUNT_DATA,
-          modalProps: {
-            name: accountData.parent_full_name,
-            children: accountData.children,
-          },
-        })
-      );
-    };
-
-    if (courseAccess?.show) {
-      dispatch(
-        showModal({
-          modalType: ModalType.NOTIFICATION_FREE_COURSE,
-          modalProps: {
-            course_title: courseAccess.course_title,
-            name: courseAccess.parent_full_name,
-            onClose: () => showAccountDataModal(),
-          },
-        })
-      );
-    } else {
-      showAccountDataModal();
-    }
-  }, [dispatch, user_profile]);
 
   return (
     <div className="page-courses">
