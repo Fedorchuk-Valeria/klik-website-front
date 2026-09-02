@@ -21,6 +21,12 @@
     }
   }
 
+  .city-switcher__dropdown {
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      border-radius: 18px;
+    }
+  }
+
   .place-select-modal__title {
     @include fonts(30px, 700);
     color: var(--main-green-dark);
