@@ -15,6 +15,7 @@ function mapApiDirections(data: UsersDirectionsResponse): Pick<HomeWhatWeLearn, 
       title: direction.title,
       key: String(direction.id),
       text: direction.description,
+      image: direction.photo,
       items: [...direction.items]
         .sort((a, b) => a.sort_order - b.sort_order)
         .map((item) => ({
