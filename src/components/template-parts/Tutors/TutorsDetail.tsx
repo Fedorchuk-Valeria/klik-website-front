@@ -19,11 +19,15 @@ type PropTypes = {
 const TutorsDetailContent: FC<{ item: TutorItem }> = ({ item }) => (
   <>
     <div className="home-page__tutors-detail__text">
-      <h3 className="home-page__tutors-detail__name">{item.name}</h3>
+      <h3 className="home-page__tutors-detail__name">
+        <span>{item.name}</span>
+      </h3>
       <p className="home-page__tutors-detail__position">{item.position}</p>
     </div>
 
-    <p className="home-page__tutors-detail__description">{item.text}</p>
+    <p className="home-page__tutors-detail__description">
+      <span>{item.text}</span>
+    </p>
 
     <div className="home-page__tutors-detail__location">
       <Icon name="pin" />
