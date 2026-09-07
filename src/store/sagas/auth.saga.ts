@@ -187,14 +187,14 @@ function* workerAuthVerifyCode({ payload }: { payload: AuthVerifyCodeRequest }) 
     } else if (data?.status === PENDING_ADMIN_REVIEW_STATUS) {
       AuthRedirectHelper.consumeAuthReturnTo();
 
-      yield put(
+      /*yield put(
         showModal({
           modalType: ModalType.NOTICE,
           modalProps: {
             title: data?.detail,
           },
         })
-      );
+      );*/
     }
 
     yield put(verifyCodeSuccess(data ?? null));
