@@ -244,7 +244,7 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
                     <SwiperSlide key={item.key || index} className="home-page__what-we-learn-slide">
                       <div
                         className="home-page__what-we-learn-slide-frame"
-                        style={{ height: '450px' }}
+                        style={{ height: '568px' }}
                       >
                         {src ? (
                           <>

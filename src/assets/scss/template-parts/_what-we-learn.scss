@@ -192,6 +192,7 @@
       background: var(--main-green-neon);
       color: var(--main-green-dark);
       display: none;
+      max-width: calc(100% - 72px);
     }
 
     .home-page__what-we-learn-slide-img {
