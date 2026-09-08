@@ -118,7 +118,10 @@ const ConfirmCodeContent = () => {
     <div className="login-page__form-content confirm-code-page">
       <p className="login-page__form-title--red">Подтверждение номера</p>
 
-      <span className="login-page__text">Введите код из SMS. Он действителен 2 минуты.</span>
+      <span className="login-page__text">
+        Введите код, отправленный вам на E-mail, указанный при регистрации. Код действителен 2
+        минуты.
+      </span>
 
       <form className="login-page__form" onSubmit={form.handleSubmit}>
         <CodeInput
