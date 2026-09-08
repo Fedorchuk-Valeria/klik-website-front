@@ -336,9 +336,9 @@
         margin-top: 50px;
       }
 
-      .phone-input {
+     /* .phone-input {
         grid-column: 1 / -1;
-      }
+      }*/
 
       .login-page__form-input {
         max-width: 100%;
@@ -407,7 +407,7 @@
         @include center;
         font-size: 14px;
         margin-left: 0;
-        min-width: 100%;
+        min-width: 0;
       }
     }
   }

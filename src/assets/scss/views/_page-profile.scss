@@ -145,6 +145,14 @@
 
       @media screen and (max-width: $landscape-tablet-size) {
         width: 100%;
+
+        &:nth-child(2) {
+          order: 3;
+        }
+
+        &:nth-child(3) {
+          order: 2;
+        }
       }
 
       &__control {
