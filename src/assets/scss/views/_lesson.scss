@@ -401,11 +401,19 @@
     }
   }
 
+  @media screen and (max-width: $desktop-compact) {
+    .lesson-page__container {
+      max-width: 1260px;
+      padding: 0 50px;
+    }
+  }
+
   @media screen and (max-width: $landscape-tablet-size) {
     margin-bottom: 100px;
 
     .lesson-page__container {
       max-width: 964px;
+      padding: 0 10px;
     }
 
     .lesson-page__back-button {
@@ -588,11 +596,18 @@
     }
   }
 
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    .lesson-page__container {
+      padding: 0 40px;
+    }
+  }
+
   @media screen and (max-width: $tablet-size) {
     margin-bottom: 120px;
 
     .lesson-page__container {
       max-width: 740px;
+      padding: 0 10px;
     }
 
     .lesson-page__lesson {
