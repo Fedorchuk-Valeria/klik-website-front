@@ -13,7 +13,9 @@ import { CITY_DISPLAY_NAME, MAP_API_KEY } from "@/src/utils/constant";
 import { loadYandexMaps } from "@/src/utils/loadYandexMaps";
 
 import LocationCardContent, { LocationItemData } from "./Card";
-import { parseCoordsFromMapUrl, parseYandexMapUrl, parseZoomFromMapUrl } from "./parseMapUrl";
+import {
+  LOCATION_PIN_DEFAULT_ZOOM
+} from "./parseMapUrl";
 import type { LocationProps, YMapInstance } from "./types";
 import { YANDEX_MAP_PIN_ICON } from "./yandexPinIcon";
 
@@ -54,13 +56,14 @@ const Location: FC<LocationProps> = ({
     }
 
     return results.map((item) => {
+      const [latitude, longitude] = item.map_url.split(",").map((value) => Number(value.trim()));
       return {
         image: item.photo,
         title: item.name,
         location: item.address,
         metro: item.metro_station,
-        coords: parseCoordsFromMapUrl(item.map_url),
-        zoom: parseZoomFromMapUrl(item.map_url),
+        coords: [latitude, longitude] as [number, number],
+        zoom: LOCATION_PIN_DEFAULT_ZOOM,
         map_url: item.map_url,
       };
     });
@@ -335,17 +338,11 @@ const Location: FC<LocationProps> = ({
           return;
         }
 
-        const cityMapView = city_map_url
-          ? parseYandexMapUrl(city_map_url, LOCATION_MAP_MAX_ZOOM)
-          : null;
-
         const map: YMapInstance = new ymaps.Map(
           mapContainerRef.current,
           {
-            center: cityMapView
-              ? [cityMapView.center[0], cityMapView.center[1]]
-              : [itemsWithCoords[0].coords[0], itemsWithCoords[0].coords[1]],
-            zoom: cityMapView?.zoom ?? 11,
+            center: [0, 0],
+            zoom: 10,
             controls: ["zoomControl"],
           },
           {
@@ -365,26 +362,23 @@ const Location: FC<LocationProps> = ({
             },
             { ...YANDEX_MAP_PIN_ICON }
           );
-          placemark.events.add("click", () => {
-            map.setCenter([item.coords[0], item.coords[1]], item.zoom ?? LOCATION_MAP_MAX_ZOOM, {
-              duration: 300,
-            });
-          });
+
           map.geoObjects.add(placemark);
         });
 
         const bounds = map.geoObjects.getBounds();
-        if (bounds && !cityMapView) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const fit = (map as any).setBounds(bounds, {
-            checkZoomRange: true,
-            zoomMargin: 48,
-          }) as PromiseLike<unknown>;
-          void Promise.resolve(fit).then(() => {
-            if (cancelled) return;
-            if (map.getZoom() > LOCATION_MAP_MAX_ZOOM) {
-              map.setZoom(LOCATION_MAP_MAX_ZOOM, { duration: 0 });
-            }
+
+        if (!bounds) {
+          return;
+        }
+        // @ts-ignore
+        map.setBounds(bounds, {
+          checkZoomRange: true,
+          zoomMargin: 60,
+        });
+        if (map.getZoom() > LOCATION_MAP_MAX_ZOOM) {
+          map.setZoom(LOCATION_MAP_MAX_ZOOM, {
+            duration: 0,
           });
         }
       });
