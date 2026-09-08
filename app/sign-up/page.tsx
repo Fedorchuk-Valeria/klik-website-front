@@ -122,7 +122,7 @@ const RegisterForm = () => {
           value={form.values.phone}
           error={form.errors.phone}
           onChange={handleChange}
-          className="login-page__form-input"
+          className="login-page__form-input full"
           disabled={isLoading}
           isAbsoluteError
         />
