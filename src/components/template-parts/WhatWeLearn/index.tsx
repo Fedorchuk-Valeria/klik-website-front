@@ -141,10 +141,6 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
       <div className="home-page__block home-page__what-we-learn">
         <span className="home-page__what-we-learn-line">
           <LineSvg />
-
-          <span className="home-page__what-we-learn-line-message">
-            <MessageSvg />
-          </span>
         </span>
 
         <div className="home-page__container">
@@ -186,88 +182,95 @@ const WhatWeLearn: FC<WhatWeLearnProps> = ({ tag, title, text, items = [] }) => 
                 ))}
               </ul>
             </div>
+            <div className="home-page__what-we-learn-left">
+              <div ref={galleryRef} className="home-page__what-we-learn-gallery">
+                <Swiper
+                  className="home-page__what-we-learn-swiper"
+                  effect="coverflow"
+                  speed={SLIDE_TRANSITION_MS}
+                  allowTouchMove={false}
+                  simulateTouch={false}
+                  centeredSlides
+                  slidesPerView="auto"
+                  initialSlide={0}
+                  loop={true}
+                  observer
+                  observeSlideChildren
+                  resizeObserver
+                  onSwiper={onSwiper}
+                  onSlideChangeTransitionEnd={onSlideChangeTransitionEnd}
+                  modules={[EffectCoverflow]}
+                  breakpoints={{
+                    1920: {
+                      coverflowEffect: {
+                        rotate: 15,
+                        stretch: 211,
+                        depth: 100,
+                        scale: 0.95,
+                        modifier: 1,
+                        slideShadows: false,
+                      },
+                    },
+                    1440: {
+                      coverflowEffect: {
+                        rotate: 15,
+                        stretch: 278,
+                        depth: 100,
+                        scale: 0.95,
+                        modifier: 1,
+                        slideShadows: false,
+                      },
+                    },
+                    1280: {
+                      coverflowEffect: {
+                        rotate: 15,
+                        stretch: 236,
+                        depth: 100,
+                        scale: 0.95,
+                        modifier: 1,
+                        slideShadows: false,
+                      },
+                    },
+                  }}
+                >
+                  {items.map((item, index) => {
+                    const src = item.image;
 
-            <div ref={galleryRef} className="home-page__what-we-learn-gallery">
-              <Swiper
-                className="home-page__what-we-learn-swiper"
-                effect="coverflow"
-                speed={SLIDE_TRANSITION_MS}
-                allowTouchMove={false}
-                simulateTouch={false}
-                centeredSlides
-                slidesPerView="auto"
-                initialSlide={0}
-                loop={true}
-                observer
-                observeSlideChildren
-                resizeObserver
-                onSwiper={onSwiper}
-                onSlideChangeTransitionEnd={onSlideChangeTransitionEnd}
-                modules={[EffectCoverflow]}
-                breakpoints={{
-                  1920: {
-                    coverflowEffect: {
-                      rotate: 15,
-                      stretch: 211,
-                      depth: 100,
-                      scale: 0.95,
-                      modifier: 1,
-                      slideShadows: false,
-                    },
-                  },
-                  1440: {
-                    coverflowEffect: {
-                      rotate: 15,
-                      stretch: 278,
-                      depth: 100,
-                      scale: 0.95,
-                      modifier: 1,
-                      slideShadows: false,
-                    },
-                  },
-                  1280: {
-                    coverflowEffect: {
-                      rotate: 15,
-                      stretch: 236,
-                      depth: 100,
-                      scale: 0.95,
-                      modifier: 1,
-                      slideShadows: false,
-                    },
-                  },
-                }}
-              >
-                {items.map((item, index) => {
-                  const src = item.image;
-
-                  return (
-                    <SwiperSlide key={item.key || index} className="home-page__what-we-learn-slide">
-                      <div
-                        className="home-page__what-we-learn-slide-frame"
-                        style={{ height: '568px' }}
+                    return (
+                      <SwiperSlide
+                        key={item.key || index}
+                        className="home-page__what-we-learn-slide"
                       >
-                        {src ? (
-                          <>
-                            <span className="home-page__what-we-learn-slide-tag">
-                              {item.title.toLowerCase()}
-                            </span>
+                        <div
+                          className="home-page__what-we-learn-slide-frame"
+                          style={{ height: "568px" }}
+                        >
+                          {src ? (
+                            <>
+                              <span className="home-page__what-we-learn-slide-tag">
+                                {item.title.toLowerCase()}
+                              </span>
 
-                            <Image
-                              className="home-page__what-we-learn-slide-img"
-                              src={src}
-                              alt={item.title}
-                              unoptimized
-                              fill
-                              priority={index === 0}
-                              loading={index === 0 ? undefined : "lazy"}
-                            />
-                          </>
-                        ) : null}
-                      </div>
-                    </SwiperSlide>
-                  );
-                })}
-              </Swiper>
+                              <Image
+                                className="home-page__what-we-learn-slide-img"
+                                src={src}
+                                alt={item.title}
+                                unoptimized
+                                fill
+                                priority={index === 0}
+                                loading={index === 0 ? undefined : "lazy"}
+                              />
+                            </>
+                          ) : null}
+                        </div>
+                      </SwiperSlide>
+                    );
+                  })}
+                </Swiper>
+              </div>
+              <span className="home-page__what-we-learn-line-message">
+                <MessageSvg />
+              </span>
             </div>
           </div>
         </div>
