@@ -41,6 +41,14 @@
     }
   }
 
+  @media screen and (max-width: $desktop-compact) {
+    margin-top: 50px;
+
+    .course-tutorial__list {
+      gap: 20px;
+    }
+  }
+
   @media screen and (max-width: $landscape-tablet-size) {
     margin-top: 50px;
     max-width: 504px;
@@ -64,9 +72,12 @@
     }
   }
 
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    max-width: 100%;
+  }
+
   @media screen and (max-width: $tablet-size) {
     margin-top: 100px;
-    max-width: 100%;
 
     .course-tutorial__content {
       margin-top: 50px;

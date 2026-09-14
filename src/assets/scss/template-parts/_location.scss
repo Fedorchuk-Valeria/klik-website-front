@@ -1,7 +1,23 @@
 .home-page__location {
   .home-page__location-title {
     white-space: pre-wrap;
+  }
+
+  .home-page__location-top {
     margin-bottom: 50px;
+
+    .home-page__location-top-content {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      width: 100%;
+      gap: 20px;
+
+      button {
+        padding: 20px 80px;
+        margin-bottom: 13px;
+      }
+    }
   }
 
   .home-page__location-body {
@@ -152,6 +168,8 @@
 
       .home-page__location-body-item-info--title {
         @include fonts(24px, 500);
+        @include text-line-clamp(2);
+        line-height: 110%;
         color: var(--main-green-dark);
         margin-bottom: 20px;
       }
@@ -173,6 +191,7 @@
 
         span {
           @include fonts(16px, 500, "Manrope");
+          @include text-line-clamp(2);
           line-height: 120%;
           color: var(--main-black);
         }
@@ -195,6 +214,7 @@
 
         span {
           @include fonts(16px, 500, "Manrope");
+          @include text-line-clamp(1);
           color: var(--main-black);
         }
       }
@@ -326,6 +346,16 @@
       font-size: 34px;
     }
 
+    .home-page__location-top {
+      .home-page__location-top-content {
+        button {
+          font-size: 16px;
+          padding: 16px 60px;
+          margin-bottom: 9px;
+        }
+      }
+    }
+
     .home-page__location-body-wrapper {
       gap: 5px;
 
@@ -424,7 +454,17 @@
   @media screen and (max-width: $landscape-tablet-size) {
     .home-page__location-title {
       white-space: pre-wrap;
-      margin-bottom: 50px;
+    }
+
+    .home-page__location-top {
+      margin-bottom: 30px;
+
+      .home-page__location-top-content {
+        button {
+          padding: 12px 50px;
+          margin-bottom: 8px;
+        }
+      }
     }
 
     .home-page__location-body {
@@ -532,7 +572,6 @@
   @media screen and (max-width: $small-landscape-tablet-size) {
     .home-page__location-title {
       font-size: 44px;
-      margin-bottom: 30px;
     }
 
     .home-page__location-body .home-page__location-body--title {
@@ -606,7 +645,29 @@
   @media screen and (max-width: $tablet-size) {
     .home-page__location-title {
       font-size: 50px;
-      margin-bottom: 30px;
+    }
+
+    .home-page__location-top {
+      margin-bottom: 50px;
+
+      .home-page__location-top-content {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: 100%;
+        gap: 30px;
+
+        a {
+          width: 100%;
+        }
+
+        button {
+          @include center;
+          width: 100%;
+          padding: 20px;
+          margin-bottom: 0;
+        }
+      }
     }
 
     .home-page__location-body {
@@ -711,8 +772,19 @@
 
   @media screen and (max-width: $mobile-size) {
     .home-page__location-title {
-      margin-bottom: 20px;
       font-size: 28px;
+    }
+
+    .home-page__location-top {
+      margin-bottom: 40px;
+
+      .home-page__location-top-content {
+        gap: 20px;
+
+        button {
+          padding: 16px;
+        }
+      }
     }
 
     .home-page__location-body {

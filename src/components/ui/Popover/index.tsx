@@ -7,308 +7,270 @@ import {
   SyntheticEvent,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
 
-export type XPositionType =
-  | "left"
-  | "content-start"
-  | "content-end"
-  | "middle-left"
-  | "middle"
-  | "middle-right"
-  | "right";
-export type YPositionType = "top" | "middle" | "bottom" | "bottom-start" | "bottom-end";
-
-type PropTypes = {
+type Props = {
   children: ReactElement;
-  className?: string;
   content: ReactNode;
-  id: string;
-  isStaticPosition?: boolean;
-  isTablet?: boolean;
-  onStateChange?: (isVisibile: boolean) => void;
+  className?: string;
   popoverClassName?: string;
-  positionX?: XPositionType;
-  positionY?: YPositionType;
   variant?: "click" | "hover" | "none";
-} & Omit<
-  React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>,
-  "children" | "content"
->;
+  positionX?: "left" | "middle" | "right";
+  positionY?: "top" | "bottom";
+};
 
-const Popover: FC<PropTypes> = ({
-  id,
-  content,
+type Pos = { x: number; y: number };
+
+type Bounds = { left: number; top: number; right: number; bottom: number };
+
+const VIEWPORT_PADDING = 8;
+
+const Popover: FC<Props> = ({
   children,
+  content,
   className,
-  variant = "hover",
-  positionY = "top",
-  positionX = "middle",
   popoverClassName,
-  onStateChange,
-  isStaticPosition,
-  ...props
+  variant = "hover",
+  positionX = "middle",
+  positionY = "bottom",
 }) => {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const leaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [isVisible, setVisible] = useState(false);
-  const [contentPosition, setContentPosition] = useState({ x: 0, y: 0 });
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLDivElement | null>(null);
+  const popoverRef = useRef<HTMLDivElement | null>(null);
 
-  const renderId = `popover-${id}`;
+  const [open, setOpen] = useState(false);
+  const [pos, setPos] = useState<Pos>({ x: 0, y: 0 });
+  const [isPositioned, setIsPositioned] = useState(false);
+  const [inDialog, setInDialog] = useState(false);
+  const [portalTarget, setPortalTarget] = useState<Element | null>(null);
 
-  const clearLeaveTimer = useCallback(() => {
-    if (leaveTimerRef.current !== null) {
-      clearTimeout(leaveTimerRef.current);
-      leaveTimerRef.current = null;
-    }
-  }, []);
+  const timer = useRef<number | null>(null);
+  const positionFrame = useRef<number | null>(null);
+  const posRef = useRef<Pos>({ x: 0, y: 0 });
+  const isPositionedRef = useRef(false);
 
-  const handleHideImmediate = useCallback(() => {
-    clearLeaveTimer();
-    setVisible(false);
-  }, [clearLeaveTimer]);
-
-  const scheduleLeaveHide = useCallback(() => {
-    clearLeaveTimer();
-    leaveTimerRef.current = setTimeout(() => {
-      leaveTimerRef.current = null;
-      setVisible(false);
-    }, 150);
-  }, [clearLeaveTimer]);
-
-  const handleShow = useCallback(
-    (event: SyntheticEvent) => {
-      event.stopPropagation();
-      clearLeaveTimer();
-      setVisible(true);
-    },
-    [clearLeaveTimer]
-  );
-
-  const toggleVisibility = (event: SyntheticEvent) => {
-    event.stopPropagation();
-    event.preventDefault();
-
-    clearLeaveTimer();
-    setVisible((prevState) => !prevState);
+  const clearTimer = () => {
+    if (timer.current) window.clearTimeout(timer.current);
+    timer.current = null;
   };
 
-  const updateContentPosition = useCallback(() => {
-    if (ref.current) {
-      const rect = ref.current.getBoundingClientRect();
-      const contentRect = document.body
-        .querySelector(`#popover-content-${id}`)
-        ?.getBoundingClientRect();
-      const controlRect = ref.current
-        ?.querySelector(`#popover-control-${id}`)
-        ?.getBoundingClientRect();
+  const resetPositioned = () => {
+    isPositionedRef.current = false;
+    setIsPositioned(false);
+  };
 
-      const scroller = document?.getElementsByClassName("fc-scroller fc-scroller-liquid-absolute");
-      const container = scroller[scroller.length - 1] as HTMLElement;
+  const markPositioned = () => {
+    if (isPositionedRef.current) return;
 
-      const scrollX = container ? container.scrollLeft : window.scrollX;
-      const scrollY = container ? container.scrollTop : window.scrollY;
+    isPositionedRef.current = true;
+    setIsPositioned(true);
+  };
 
-      setContentPosition({
-        x: getXPosition(positionX, rect, contentRect, controlRect, scrollX, isStaticPosition),
-        y: getYPosition(positionY, rect, contentRect, controlRect, isStaticPosition, scrollY),
-      });
+  const applyPosition = (next: Pos) => {
+    if (next.x === posRef.current.x && next.y === posRef.current.y) return;
+
+    posRef.current = next;
+    setPos(next);
+  };
+
+  const prepareOpen = () => {
+    clearTimer();
+    resetPositioned();
+  };
+
+  const closePopover = () => {
+    resetPositioned();
+    setOpen(false);
+  };
+
+  const handleLeave = () => {
+    clearTimer();
+
+    timer.current = window.setTimeout(closePopover, 120);
+  };
+
+  const syncPortalContext = () => {
+    const dialog = wrapperRef.current?.closest("dialog") ?? null;
+
+    setInDialog(!!dialog);
+    setPortalTarget(dialog ?? (typeof document !== "undefined" ? document.body : null));
+  };
+
+  const clearPositionFrame = () => {
+    if (positionFrame.current !== null) {
+      cancelAnimationFrame(positionFrame.current);
+      positionFrame.current = null;
     }
-  }, [id, positionX, positionY, isStaticPosition]);
+  };
+
+  const updatePosition = useCallback((): boolean => {
+    if (!triggerRef.current || !popoverRef.current) return false;
+
+    const rect = triggerRef.current.getBoundingClientRect();
+    const dialog = triggerRef.current.closest("dialog");
+    const { x, y } = getAnchorPosition(rect, positionX, positionY, dialog);
+
+    const popover = popoverRef.current;
+    const width = popover.offsetWidth;
+    const height = popover.offsetHeight;
+
+    if (!width || !height) return false;
+
+    applyPosition(clampToBounds(x, y, width, height, getBounds(dialog)));
+    markPositioned();
+
+    return true;
+  }, [positionX, positionY]);
+
+  const schedulePositionUpdate = useCallback(() => {
+    clearPositionFrame();
+
+    const run = () => {
+      if (updatePosition()) return;
+
+      positionFrame.current = requestAnimationFrame(run);
+    };
+
+    run();
+  }, [updatePosition]);
+
+  useLayoutEffect(() => {
+    if (!open) {
+      clearPositionFrame();
+      return;
+    }
+
+    syncPortalContext();
+    schedulePositionUpdate();
+
+    return clearPositionFrame;
+  }, [open, schedulePositionUpdate]);
 
   useEffect(() => {
-    updateContentPosition();
-  }, [updateContentPosition]);
+    if (!open) return;
 
-  useEffect(() => {
-    const scroller = document?.getElementsByClassName("fc-scroller fc-scroller-liquid-absolute");
-    const container = scroller[scroller.length - 1] as HTMLElement;
+    const handleUpdate = () => schedulePositionUpdate();
 
-    if (isVisible) {
-      updateContentPosition();
-
-      container?.addEventListener("scroll", updateContentPosition);
-      window.addEventListener("scroll", updateContentPosition);
-      window.addEventListener("resize", updateContentPosition);
-    }
-
-    if (onStateChange) onStateChange(isVisible);
+    window.addEventListener("resize", handleUpdate);
+    window.addEventListener("scroll", handleUpdate, true);
 
     return () => {
-      container?.removeEventListener("scroll", updateContentPosition);
-      window.removeEventListener("scroll", updateContentPosition);
-      window.removeEventListener("resize", updateContentPosition);
+      window.removeEventListener("resize", handleUpdate);
+      window.removeEventListener("scroll", handleUpdate, true);
     };
-  }, [isVisible, updateContentPosition, onStateChange]);
+  }, [open, schedulePositionUpdate]);
 
-  useEffect(() => {
-    return () => clearLeaveTimer();
-  }, [clearLeaveTimer]);
+  const show = () => {
+    prepareOpen();
+    setOpen(true);
+  };
 
-  useEffect(() => {
-    function onDocumentClick(e: MouseEvent) {
-      const target = e.target as Node;
-      if (ref.current?.contains(target)) return;
-      const portalEl = document.getElementById(`popover-content-${id}`);
-      if (portalEl?.contains(target)) return;
-      handleHideImmediate();
+  const hide = () => {
+    clearTimer();
+    setOpen(false);
+  };
+
+  const toggle = (e: SyntheticEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (open) {
+      setOpen(false);
+      return;
     }
 
-    document.addEventListener("click", onDocumentClick, true);
-
-    return () => {
-      document.removeEventListener("click", onDocumentClick, true);
-    };
-  }, [id, handleHideImmediate]);
+    prepareOpen();
+    setOpen(true);
+  };
 
   return (
-    <div
-      id={renderId}
-      className={classNames("popover", className)}
-      ref={ref}
-      onMouseDown={(e) => e.preventDefault()}
-      {...(variant === "click" && { onClick: toggleVisibility })}
-      {...(variant === "hover" && {
-        onMouseEnter: handleShow,
-        onTouchStart: handleShow,
-      })}
-      {...(variant !== "none" && {
-        onMouseLeave: variant === "hover" ? scheduleLeaveHide : handleHideImmediate,
-      })}
-      {...props}
-    >
+    <div ref={wrapperRef} className={classNames("popover", className)}>
       <div
-        aria-haspopup="true"
-        aria-expanded={isVisible}
-        id={`popover-control-${id}`}
-        aria-controls={renderId}
-        className={"popover__trigger"}
+        ref={triggerRef}
+        className="popover__trigger"
+        onMouseEnter={show}
+        onMouseLeave={handleLeave}
+        onClick={variant === "click" ? toggle : undefined}
       >
         {children}
       </div>
 
-      {isVisible &&
+      {open &&
+        portalTarget &&
         createPortal(
           <div
-            role="dialog"
-            aria-modal="true"
-            id={`popover-content-${id}`}
             className={classNames(
               "popover__content",
-              `popover__content__x-${positionX}`,
-              `popover__content__y-${positionY}`,
+              inDialog ? "popover--absolute" : "popover--fixed",
               popoverClassName
             )}
             style={{
-              top: contentPosition.y,
-              left: contentPosition.x,
+              left: pos.x,
+              top: pos.y,
+              position: inDialog ? "absolute" : "fixed",
+              visibility: isPositioned ? "visible" : "hidden",
             }}
-            {...(variant === "hover" && {
-              onMouseEnter: clearLeaveTimer,
-              onMouseLeave: scheduleLeaveHide,
-            })}
+            ref={popoverRef}
+            onMouseEnter={clearTimer}
+            onMouseLeave={handleLeave}
           >
             {content}
           </div>,
-          document.querySelector("body") as Element
+          portalTarget
         )}
     </div>
   );
 };
 
-export function getXPosition(
-  positionX: XPositionType,
-  rect: DOMRect,
-  contentRect: DOMRect | undefined,
-  controlRect: DOMRect | undefined,
-  scrollX: number = window.scrollX,
-  isStaticPosition?: boolean
-) {
-  let result = isStaticPosition ? rect.left + scrollX : rect.left;
-
-  if (positionX === "left") {
-    result -= Math.floor((contentRect?.width || 0) + 4);
-  }
-  if (positionX === "middle-left") {
-    result -= Math.floor((contentRect?.width || 0) - 8);
-  }
-  if (positionX === "middle") {
-    result -= Math.floor(contentRect?.width || 0) / 2 - Math.floor(controlRect?.width || 0) / 2;
-  }
-  if (positionX === "middle-right") {
-    result += Math.floor((controlRect?.width || 0) + 5) / 2;
-  }
-  if (positionX === "right") {
-    result += Math.floor((controlRect?.width || 0) + 5);
-  }
-  if (positionX === "content-end") {
-    result =
-      rect.left - (Math.floor(contentRect?.width || 0) - Math.floor(controlRect?.width || 0));
-  }
-
-  if (isStaticPosition) {
-    if (result < scrollX) result = scrollX;
-    if (window.innerWidth + scrollX < result + (contentRect?.width || 0)) {
-      result = window.innerWidth + scrollX - (contentRect?.width || 0);
-    }
-  } else {
-    if (result < 0) result = 0;
-    if (window.innerWidth < result + (contentRect?.width || 0)) {
-      result = window.innerWidth - (contentRect?.width || 0);
-    }
-  }
-
-  return result;
+function clampToBounds(x: number, y: number, width: number, height: number, bounds: Bounds) {
+  return {
+    x: Math.min(Math.max(x, bounds.left), Math.max(bounds.left, bounds.right - width)),
+    y: Math.min(Math.max(y, bounds.top), Math.max(bounds.top, bounds.bottom - height)),
+  };
 }
 
-export function getYPosition(
-  positionY: YPositionType,
+function getBounds(dialog: Element | null): Bounds {
+  const width = dialog ? dialog.clientWidth : window.innerWidth;
+  const height = dialog ? dialog.clientHeight : window.innerHeight;
+
+  return {
+    left: VIEWPORT_PADDING,
+    top: VIEWPORT_PADDING,
+    right: width - VIEWPORT_PADDING,
+    bottom: height - VIEWPORT_PADDING,
+  };
+}
+
+function getAnchorPosition(
   rect: DOMRect,
-  contentRect: DOMRect | undefined,
-  controlRect: DOMRect | undefined,
-  isStaticPosition?: boolean,
-  scrollY: number = window.scrollY
+  positionX: Props["positionX"],
+  positionY: Props["positionY"],
+  dialog: Element | null
 ) {
-  const isTopPositionY = positionY === "top";
-  const isBottomPositionY = positionY === "bottom";
-  const isBottomStartPositionY = positionY === "bottom-start";
-  const isBottomEndPositionY = positionY === "bottom-end";
-  const isMiddlePositionY = positionY === "middle";
+  let x = rect.left;
+  let y = rect.bottom;
 
-  let result = isStaticPosition ? rect.top + scrollY : rect.top;
-
-  if (isTopPositionY) {
-    result -= Math.floor((contentRect?.height || 0) - 4);
-  }
-  if (isMiddlePositionY) {
-    result -= Math.floor(contentRect?.height || 0) / 2 - Math.floor(controlRect?.height || 0) / 2;
-  }
-  if (isBottomPositionY) {
-    result += Math.floor((controlRect?.height || 0) + 4);
-  }
-  if (isBottomStartPositionY) {
-    result += Math.floor((controlRect?.height || 0) - (contentRect?.height || 0) - 4);
-  }
-  if (isBottomEndPositionY) {
-    result += 0;
+  if (positionX === "middle") {
+    x = rect.left + rect.width / 2;
+  } else if (positionX === "right") {
+    x = rect.right;
   }
 
-  if (isStaticPosition) {
-    if (result < scrollY) result = scrollY;
-    if (window.innerHeight + scrollY < result + (contentRect?.height || 0)) {
-      result = window.innerHeight + scrollY - (contentRect?.height || 0);
-    }
-  } else {
-    if (result < 0) result = 0;
-    if (window.innerHeight < result + (contentRect?.height || 0)) {
-      result = window.innerHeight - (contentRect?.height || 0);
-    }
+  if (positionY === "top") {
+    y = rect.top;
   }
 
-  return result;
+  if (dialog) {
+    const d = dialog.getBoundingClientRect();
+    x -= d.left;
+    y -= d.top;
+  }
+
+  return { x, y };
 }
 
 export default memo(Popover);

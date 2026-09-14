@@ -8,6 +8,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -18,11 +19,13 @@ jobs:
           host: ${{ secrets.NEW_SERVER_HOST }}
           username: ${{ secrets.NEW_SERVER_USER }}
           key: ${{ secrets.NEW_SERVER_KEY }}
+          command_timeout: 30m
           script: |
             cd /home/ontid/Klick2026Edtech-front
             git fetch origin
             git checkout -B main origin/main
             git pull --ff-only
+            docker network inspect klick-network-prod >/dev/null 2>&1 || docker network create klick-network-prod
             docker compose -p klick-front-prod --env-file=.env.prod down --remove-orphans
-            docker compose -p klick-front-prod --env-file=.env.prod build --no-cache
+            docker compose -p klick-front-prod --env-file=.env.prod build
             docker compose -p klick-front-prod --env-file=.env.prod up -d

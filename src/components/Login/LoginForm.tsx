@@ -3,7 +3,7 @@
 import { useFormik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent, useEffect, useRef } from "react";
 
 import { validationSchema } from "@/src/components/Login/validationSchema";
 import Button from "@/src/components/ui/Button/Button";
@@ -15,11 +15,15 @@ import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { clearErrors, loginRequest } from "@/src/store/slices/auth";
 import { PAGES } from "@/src/utils/constant";
+import { AuthRedirectHelper } from "@/src/utils/helpers";
 
 const LoginForm = () => {
+  const hasRedirectedRef = useRef(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isLoading, errors, isLoggedIn } = useAppSelector((state: RootStore) => state.auth);
+  const { isLoading, errors, isLoggedIn } = useAppSelector(
+    (state: RootStore) => state.auth
+  );
   const form = useFormik({
     initialValues: {
       phone: "",
@@ -29,7 +33,7 @@ const LoginForm = () => {
     onSubmit: (values) => {
       dispatch(
         loginRequest({
-          phone: values.phone.replace(/[\s()]/g, ""),
+          phone: values.phone,
           password: values.password,
         })
       );
@@ -41,7 +45,7 @@ const LoginForm = () => {
 
   const handleChangeTab = (tab: string) => {
     dispatch(clearErrors());
-    router.push(tab);
+    router.push(AuthRedirectHelper.withReturnToQuery(tab));
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -57,10 +61,15 @@ const LoginForm = () => {
   }, [errors]);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      router.push(PAGES.COURSES);
+    if (!isLoggedIn || hasRedirectedRef.current) {
+      return;
     }
-  }, [isLoggedIn]);
+
+    hasRedirectedRef.current = true;
+    const returnTo = AuthRedirectHelper.consumeAuthReturnTo();
+
+    router.push(returnTo ?? PAGES.COURSES);
+  }, [isLoggedIn, router]);
 
   useEffect(() => {
     return () => {
@@ -88,7 +97,6 @@ const LoginForm = () => {
           value={form.values.phone}
           error={form.errors.phone}
           onChange={handleChange}
-          placeholder="+375 (29) 123-45-67"
           className="login-page__form-input"
           variant="outline"
           disabled={isLoading}

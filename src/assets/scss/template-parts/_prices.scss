@@ -1,0 +1,511 @@
+.home-page__prices {
+  .home-page__tutors-body {
+    display: flex;
+    align-items: stretch;
+    gap: 20px;
+    margin-top: 100px;
+
+    .home-page__prices-image {
+      max-width: 850px;
+      width: 100%;
+      height: 672px;
+      position: relative;
+
+      img {
+        @include perfect-img;
+        @include icon(100%);
+        border-radius: 50px;
+      }
+    }
+
+    .home-page__prices-card {
+      @include flex-list(50px);
+      width: 100%;
+      background: var(--main-green-neon);
+      border-radius: 50px;
+      padding: 50px;
+      position: relative;
+      overflow: hidden;
+      max-width: 850px;
+
+      .home-page__prices-card_svg {
+        position: absolute;
+        top: -10px;
+        right: 0;
+        z-index: 0;
+        width: 380px;
+        color: var(--secondary-green-neon-50);
+      }
+
+      .home-page__prices-card_text {
+        @include fonts(40px, 500);
+        line-height: 120%;
+        color: var(--main-green-dark);
+        z-index: 1;
+      }
+
+      .home-page__prices-card_price {
+        color: var(--main-orange);
+        z-index: 1;
+
+        .home-page__prices-card_price-text {
+          @include fonts(50px, 500);
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          svg {
+            width: 37px;
+            height: 39px;
+          }
+        }
+
+        .home-page__prices-card_price-description {
+          @include fonts(36px, 500);
+          z-index: 1;
+        }
+      }
+
+      .home-page__prices-card_list {
+        @include flex-list(20px);
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        z-index: 1;
+
+        li {
+          @include fonts(22px, 400, "Manrope");
+          color: var(--main-black);
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        svg {
+          @include icon(40px);
+          aspect-ratio: 1;
+          color: var(--main-pink);
+        }
+      }
+
+      .home-page__prices-card_button {
+        @include center;
+        z-index: 1;
+      }
+    }
+  }
+
+  @media (max-width: $desktop) {
+    .home-page__tutors-body {
+      margin-top: 50px;
+
+      .home-page__prices-image {
+        max-width: 630px;
+        height: 512px;
+
+        img {
+          border-radius: 40px;
+        }
+      }
+
+      .home-page__prices-card {
+        max-width: 630px;
+        gap: 30px;
+        border-radius: 40px;
+        padding: 40px;
+
+        .home-page__prices-card_svg {
+          top: -10px;
+          width: 300px;
+        }
+
+        .home-page__prices-card_text {
+          font-size: 30px;
+        }
+
+        .home-page__prices-card_price {
+          .home-page__prices-card_price-text {
+            font-size: 40px;
+            gap: 8px;
+
+            svg {
+              width: 28px;
+              height: 30px;
+            }
+          }
+
+          .home-page__prices-card_price-description {
+            font-size: 26px;
+          }
+        }
+
+        .home-page__prices-card_list {
+          gap: 10px;
+
+          li {
+            font-size: 18px;
+            gap: 12px;
+          }
+
+          svg {
+            @include icon(32px);
+          }
+        }
+
+        .home-page__prices-card_button {
+          margin-top: 20px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: $desktop-compact) {
+    .home-page__tutors-body {
+      .home-page__prices-image {
+        max-width: 570px;
+        height: 445px;
+
+        img {
+          border-radius: 40px;
+        }
+      }
+
+      .home-page__prices-card {
+        max-width: 570px;
+        gap: 24px;
+        border-radius: 40px;
+        padding: 40px;
+
+        .home-page__prices-card_svg {
+          top: -10px;
+          width: 250px;
+        }
+
+        .home-page__prices-card_text {
+          font-size: 28px;
+        }
+
+        .home-page__prices-card_price {
+          color: var(--main-orange);
+          z-index: 1;
+
+          .home-page__prices-card_price-text {
+            font-size: 36px;
+            gap: 8px;
+
+            svg {
+              width: 28px;
+              height: 30px;
+            }
+          }
+
+          .home-page__prices-card_price-description {
+            font-size: 22px;
+          }
+        }
+
+        .home-page__prices-card_list {
+          gap: 10px;
+
+          li {
+            font-size: 16px;
+            gap: 12px;
+          }
+
+          svg {
+            @include icon(28px);
+          }
+        }
+
+        .home-page__prices-card_button {
+          margin-top: 6px;
+          padding: 16px 30px;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: $landscape-tablet-size) {
+    .home-page__tutors-body {
+      margin-top: 30px;
+      gap: 16px;
+
+      .home-page__prices-image {
+        max-width: 464px;
+        height: 419px;
+
+        img {
+          border-radius: 30px;
+        }
+      }
+
+      .home-page__prices-card {
+        max-width: 464px;
+        gap: 20px;
+        border-radius: 30px;
+        padding: 40px;
+
+        .home-page__prices-card_svg {
+          top: 10px;
+          right: -130px;
+          width: 280px;
+        }
+
+        .home-page__prices-card_text {
+          font-size: 28px;
+        }
+
+        .home-page__prices-card_price {
+          .home-page__prices-card_price-text {
+            font-size: 30px;
+            gap: 8px;
+
+            svg {
+              width: 20px;
+              height: 22px;
+            }
+          }
+
+          .home-page__prices-card_price-description {
+            font-size: 16px;
+          }
+        }
+
+        .home-page__prices-card_list {
+          gap: 10px;
+
+          li {
+            font-size: 14px;
+            gap: 12px;
+          }
+
+          svg {
+            @include icon(26px);
+          }
+        }
+
+        .home-page__prices-card_button {
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: $small-landscape-tablet-size) {
+    .home-page__tutors-body {
+      margin-top: 30px;
+      gap: 16px;
+
+      .home-page__prices-image {
+        max-width: 432px;
+        height: 380px;
+
+        img {
+          border-radius: 30px;
+        }
+      }
+
+      .home-page__prices-card {
+        max-width: 432px;
+        gap: 16px;
+        border-radius: 30px;
+        padding: 30px;
+
+        .home-page__prices-card_svg {
+          top: 0px;
+          right: 0px;
+          width: 210px;
+        }
+
+        .home-page__prices-card_text {
+          font-size: 26px;
+        }
+
+        .home-page__prices-card_price {
+          .home-page__prices-card_price-text {
+            font-size: 28px;
+            gap: 8px;
+
+            svg {
+              width: 20px;
+              height: 22px;
+            }
+          }
+
+          .home-page__prices-card_price-description {
+            font-size: 14px;
+          }
+        }
+
+        .home-page__prices-card_list {
+          gap: 10px;
+
+          li {
+            font-size: 14px;
+            gap: 12px;
+          }
+
+          svg {
+            @include icon(26px);
+          }
+        }
+
+        .home-page__prices-card_button {
+          margin-top: 14px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: $tablet-size) {
+    .home-page__tutors-body {
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 30px;
+
+      .home-page__prices-image {
+        max-width: 100%;
+        width: 100%;
+        height: 456px;
+
+        img {
+          border-radius: 30px;
+        }
+      }
+
+      .home-page__prices-card {
+        max-width: 100%;
+        gap: 30px;
+        border-radius: 30px;
+        padding: 30px;
+
+        .home-page__prices-card_svg {
+          top: -30px;
+          right: 0;
+          width: 290px;
+        }
+
+        .home-page__prices-card_text {
+          font-size: 30px;
+        }
+
+        .home-page__prices-card_price {
+          .home-page__prices-card_price-text {
+            font-size: 40px;
+            gap: 8px;
+
+            svg {
+              width: 28px;
+              height: 30px;
+            }
+          }
+
+          .home-page__prices-card_price-description {
+            font-size: 26px;
+          }
+        }
+
+        .home-page__prices-card_list {
+          gap: 10px;
+
+          li {
+            font-size: 18px;
+            gap: 12px;
+          }
+
+          svg {
+            @include icon(32px);
+            color: var(--main-pink);
+          }
+        }
+
+        .home-page__prices-card_button {
+          margin-top: 20px;
+          padding: 20px;
+          font-size: 18px;
+          max-width: calc(100% - 17px);
+        }
+      }
+    }
+  }
+
+  @media (max-width: $mobile-size) {
+    .home-page__tag,
+    .home-page__prices-title {
+      margin-left: 10px;
+    }
+
+    .home-page__tutors-body {
+      gap: 12px;
+      margin-top: 30px;
+
+      .home-page__prices-image {
+        height: 355px;
+
+        img {
+          border-radius: 20px;
+        }
+      }
+
+      .home-page__prices-card {
+        gap: 16px;
+        border-radius: 20px;
+        padding: 20px;
+
+        .home-page__prices-card_svg {
+          display: none;
+        }
+
+        .home-page__prices-card_text {
+          font-size: 24px;
+        }
+
+        .home-page__prices-card_price {
+          .home-page__prices-card_price-text {
+            font-size: 30px;
+            gap: 8px;
+
+            svg {
+              width: 22px;
+              height: 24px;
+            }
+          }
+
+          .home-page__prices-card_price-description {
+            font-size: 16px;
+          }
+        }
+
+        .home-page__prices-card_list {
+          gap: 10px;
+
+          li {
+            font-size: 16px;
+            gap: 12px;
+          }
+
+          svg {
+            @include icon(24px);
+          }
+        }
+
+        .home-page__prices-card_button {
+          margin-top: 14px;
+          padding: 16px 30px;
+          font-size: 16px;
+          max-width: 100%;
+
+          .button__arrow {
+            @include icon(36px);
+            right: 7px;
+
+            svg {
+              @include icon(22px);
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,3 +1,9 @@
+import { Partner } from "@/src/store/slices/profile";
+import type {
+  AccountDataNotification,
+  CourseAccessNotification,
+} from "@/src/entities/common/auth";
+
 export enum ModalType {
   NOTICE = "notice",
   COOKIE_POLICY = "cookie_policy",
@@ -5,6 +11,11 @@ export enum ModalType {
   SUCCESSFULLY = "successfully",
   PAYMENT = "payment",
   PAYMENT_STATUS = "payment_status",
+  CREATE_CHILDREN = "create_children",
+  CONFIRM_CHILDREN_EMAIL = "confirm_children_email",
+  PAYMENT_CHILDREN = "payment_children",
+  ACCOUNT_DATA = "account_data",
+  NOTIFICATION_FREE_COURSE = "notification_free_course",
 }
 
 export enum HttpStatus {
@@ -25,10 +36,74 @@ export enum HttpStatus {
 }
 
 export type UserProfile = {
+  role: UserProfileRole;
+  profile: UserProfileProfile;
+  support_phone: string;
+  partners: Partner[];
+  metrics?: Metrics;
+  self_study?: SelfStudy;
+  children?: (Omit<UserProfileChilds, "profile"> & {
+    id: number;
+    role: UserProfileRole;
+    full_name: string;
+    phone: string;
+    email: string | null;
+  })[];
+  offline_groups: Group[];
+  offline_training_payment_notification: {
+    amount: string | null;
+    currency: string;
+    message: string;
+    paid_at: string;
+    payment_id: string | null;
+    program_title: string | null;
+    show: boolean;
+    status: string | null;
+    title: string | null;
+  };
+  account_data_notification?: AccountDataNotification | null;
+  course_access_notification?: CourseAccessNotification | null;
+};
+
+export type UserProfileRole = "parent" | "child" | "admin";
+
+export type UserProfileProfile = {
   id: number;
-  role: string;
+  role: UserProfileRole;
   full_name: string;
   phone: string;
+  email: string | null;
+};
+
+export type UserProfileChilds = {
+  role: UserProfileRole;
+  profile: UserProfileProfile;
+  metrics: Metrics;
+  self_study: SelfStudy;
+  offline_groups: [];
+  partners: Partner[];
+};
+
+export type Metrics = {
+  klikcoins: number;
+  balance: string;
+  paid_lessons_count: number;
+  is_loaded: boolean;
+};
+
+export type SelfStudy = {
+  has_available_courses: boolean;
+  available_courses_count: number;
+  courses: Course[];
+};
+
+export type Course = {
+  id: number;
+  title: string;
+  purchased_at: string;
+  expires_at: string;
+  date_range: string;
+  is_active: boolean;
 };
 
 export type Meta = {
@@ -36,4 +111,18 @@ export type Meta = {
   page_size: number;
   total_count: number;
   total_pages: number;
+};
+
+export type Group = {
+  title: string;
+  telegram_chat_url: string;
+  location: string;
+  manager_url: string;
+  subscription: string;
+  subscription_price: string;
+  discount_percent: string;
+  lessons_count: string;
+  crm_group_id: string;
+  day_and_time: string;
+  next_lesson_topic: string;
 };

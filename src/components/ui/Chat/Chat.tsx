@@ -124,7 +124,7 @@ export default function Chat() {
       )}
 
       <button className="chat__button" onClick={() => setIsOpen((prev) => !prev)}>
-        <Icon className="chat__button-icon" name="chat" />
+        <Icon className="chat__button-icon" name="ai-bot" />
       </button>
     </div>
   );

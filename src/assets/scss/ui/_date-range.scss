@@ -1,0 +1,297 @@
+.date-range {
+  position: relative;
+
+  &__inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__calendar {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 15px);
+    width: 100%;
+    background-color: var(--main-bg);
+    border-radius: 20px;
+    border: 1.5px solid var(--main-orange);
+    z-index: 2;
+    padding: 20px 19px;
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      left: auto;
+      right: 0;
+      max-width: 444px;
+    }
+
+    &-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--main-orange);
+    }
+
+    .react-calendar {
+
+      &__navigation {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+
+        &__label {
+          @include fonts(16px, 600, "Manrope");
+          margin-left: auto;
+          margin-right: auto;
+          color: var(--main-green-dark);
+        }
+
+        &__arrow {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 24px;
+          height: 24px;
+          transition: 0.3s all;
+        }
+
+        &__prev2-button {
+          margin-right: 10px;
+        }
+
+        &__prev-button {
+          transform: rotate(90deg);
+        }
+
+        &__next2-button {
+          margin-left: 10px;
+          transform: scaleX(-1);
+        }
+
+        &__next-button {
+          transform: rotate(-90deg);
+        }
+      }
+
+      &__month {
+
+        &-view {
+          &__weekdays {
+            column-gap: 16px;
+
+            &__weekday {
+              padding: 12px 0 13px 0;
+              width: 44px;
+              max-width: 44px;
+              height: 44px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              @include fonts(16px, 400, "Manrope");
+
+              abbr {
+                text-decoration: none;
+              }
+            }
+          }
+
+          &__days {
+            column-gap: 16px;
+            row-gap: 6px;
+
+            &__day {
+              padding: 12px 0 13px 0;
+              width: 44px;
+              max-width: 44px;
+              height: 44px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              @include fonts(14px, 300, "Manrope");
+              color: var(--main-black);
+              transition: 0.3s all;
+              border-radius: 100%;
+
+              &.past {
+                opacity: 0.5;
+              }
+
+              &.selected {
+                background-color: rgba(1, 82, 76, 0.10);
+                color: var(--main-green-dark);
+                font-weight: 600;
+              }
+
+              &.today {
+                background-color: var(--main-blue);
+                color: var(--main-green-dark);
+                font-weight: 600;
+              }
+
+              &:hover {
+                opacity: 1;
+                font-weight: 600;
+                color: var(--main-black);
+                background-color: rgb(238 108 77 / 0.2);
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
+
+
+  &__input {
+    padding: 5px 20px;
+    border-radius: 20px;
+    border: 1.5px solid rgba(28, 26, 28, 0.20);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    @media screen and (max-width: $desktop) {
+      padding: 3px 16px;
+      border-radius: 16px;
+    }
+
+    @media screen and (max-width: $landscape-tablet-size) {
+      padding: 1px 12px;
+      border-radius: 12px;
+    }
+
+    @media screen and (max-width: $small-landscape-tablet-size) {
+      padding: 4px 17px;
+      border-radius: 12px;
+      width: 245px;
+    }
+
+    @media screen and (max-width: $tablet-size) {
+      width: 176px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      width: auto;
+      padding: 5px 10px;
+      border-radius: 16px;
+    }
+
+    &.has-value {
+      border-color: rgba(1, 82, 76, 0.50);
+      background: rgba(1, 82, 76, 0.10);
+
+      .calendar {
+        fill: var(--main-green-dark);
+      }
+    }
+
+    &.active {
+      border-color: rgba(238, 108, 77, 0.50);
+      background: rgba(238, 108, 77, 0.10);
+
+      .calendar {
+        fill: var(--main-orange);
+        opacity: 0.5;
+      }
+
+      .arrow {
+        transform: rotate(180deg);
+      }
+    }
+
+    &-icon {
+      width: 24px;
+      height: 24px;
+      transition: 0.3s all;
+
+      @media screen and (max-width: $desktop) {
+        width: 20px;
+        height: 20px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        width: 16px;
+        height: 16px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        width: 20px;
+        height: 20px;
+      }
+
+      &.arrow {
+        margin-left: 12px;
+
+        @media screen and (max-width: $desktop) {
+          margin-left: 0;
+        }
+
+        @media screen and (max-width: $small-landscape-tablet-size) {
+          margin-left: auto;
+        }
+      }
+    }
+
+    &-label {
+      color: var(--main-black);
+      opacity: 0.5;
+      margin-bottom: 2px;
+      @include fonts(14px, 500, "Manrope");
+
+      @media screen and (max-width: $desktop) {
+        @include fonts(12px, 500, "Manrope");
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        @include fonts(10px, 500, "Manrope");
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        @include fonts(14px, 500, "Manrope");
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        @include fonts(12px, 500, "Manrope");
+      }
+    }
+
+    input {
+      background-color: transparent;
+      border: none;
+      outline: none;
+      @include fonts(14px, 500, "Manrope");
+      width: 95px;
+      color: var(--main-green-dark);
+
+      @media screen and (max-width: $desktop) {
+        font-size: 12px;
+        width: 84px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        font-size: 10px;
+        width: 70px;
+      }
+
+      @media screen and (max-width: $small-landscape-tablet-size) {
+        font-size: 14px;
+        width: 100%;
+      }
+
+      @media screen and (max-width: $tablet-size) {
+        font-size: 12px;
+      }
+
+      &::-webkit-input-placeholder {
+        color: var(--main-green-dark);
+      }
+
+      &::-moz-placeholder {
+        color: var(--main-green-dark);
+      }
+
+      &:-ms-input-placeholder {
+        color: var(--main-green-dark);
+      }
+    }
+  }
+}

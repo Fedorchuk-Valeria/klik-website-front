@@ -29,6 +29,7 @@ type Props = {
   cities: City[];
   socials?: SocialItem[];
   menuItems: MenuItem[];
+  onlineRegistrationUrl?: string;
 };
 
 export default function HeaderMobileMenu({
@@ -37,6 +38,7 @@ export default function HeaderMobileMenu({
   cities,
   socials = [],
   menuItems = [],
+  onlineRegistrationUrl,
 }: Props) {
   const pathname = usePathname();
   const { isOpen, closeMenu, toggleMenu } = useHeaderMobileMenu()!;
@@ -102,7 +104,7 @@ export default function HeaderMobileMenu({
               </div>
             )}
 
-            <ButtonCall onClose={isHomePage ? undefined : closeMenu} />
+            <ButtonCall href={onlineRegistrationUrl} onClose={closeMenu} />
           </div>
         </div>
       )}

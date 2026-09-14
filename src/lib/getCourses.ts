@@ -8,15 +8,28 @@ import {
   PAYMENT_STATUS_FAILED,
   PAYMENT_STATUS_SUCCESSFULL,
   QUERY_PARAMS,
-  TOKEN_KEY
+  TOKEN_KEY,
 } from "@/src/utils/constant";
 import { QueryHelper } from "@/src/utils/helpers";
 import { normalizeToken } from "@/src/utils/http";
 import { normalizeCoursesResponse } from "@/src/utils/normalizeCoursesPayload";
 
-export type CoursePaymentStatus =
-  | typeof PAYMENT_STATUS_SUCCESSFULL
-  | typeof PAYMENT_STATUS_FAILED;
+function serializeFetchError(error: unknown): string {
+  if (!(error instanceof Error)) {
+    return String(error);
+  }
+
+  const cause =
+    error.cause instanceof Error
+      ? error.cause.message
+      : error.cause != null
+        ? String(error.cause)
+        : "";
+
+  return cause ? `${error.message} (cause: ${cause})` : error.message;
+}
+
+export type CoursePaymentStatus = typeof PAYMENT_STATUS_SUCCESSFULL | typeof PAYMENT_STATUS_FAILED;
 
 export type CoursePayment = {
   download_url: string;
@@ -46,6 +59,14 @@ export type Course = {
   title: string;
   updated_at: string;
   payment: CoursePayment | null;
+  purchase: Purchase | null;
+};
+
+export type Purchase = {
+  purchased_at: string;
+  expires_at: string;
+  date_range: string;
+  is_active: boolean;
 };
 
 export type LessonTestResult = {
@@ -123,6 +144,23 @@ export type LessonFetchResult = {
   code?: number | null;
 };
 
+export type LessonTestFetchResult = {
+  data:
+    | (PassedTest & {
+        completed_lessons_count: number;
+        has_test: boolean;
+        is_test_passed: boolean;
+        test_result: {
+          correct_answers: number;
+          total_questions: number;
+          percent: number;
+        };
+      })
+    | null;
+  errors: Record<string, string> | null;
+  code?: number | null;
+};
+
 export type LessonTest = {
   status: "not_passed" | "passed";
   can_start: boolean;
@@ -167,13 +205,18 @@ export type PassedTest = {
 };
 
 export async function getCourses(query = ""): Promise<CoursesFetchResult> {
+  const configuredBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? "";
   const apiUrl = buildApiUrl(`/courses/${query}`);
 
   if (!apiUrl) {
+    console.error("[getCourses] API URL is not configured");
     return {
       data: [],
       meta: { page: 1, page_size: COURSES_PAGE_SIZE, total_count: 0, total_pages: 0 },
-      errors: { detail: "API URL is not configured" },
+      errors: {
+        detail: "API URL is not configured",
+        configuredBaseUrl,
+      },
     };
   }
 
@@ -197,6 +240,7 @@ export async function getCourses(query = ""): Promise<CoursesFetchResult> {
 
     if (!response.ok) {
       const errorBody = (await response.json().catch(() => null)) as Record<string, string> | null;
+      console.error("[getCourses] HTTP error", { apiUrl, status: response.status, errorBody });
       return {
         data: [],
         meta: { page: 1, page_size: COURSES_PAGE_SIZE, total_count: 0, total_pages: 0 },
@@ -213,19 +257,47 @@ export async function getCourses(query = ""): Promise<CoursesFetchResult> {
 
     return { data, meta, errors: null };
   } catch (error) {
+    const detail = serializeFetchError(error);
+
+    console.error("[getCourses] fetch failed", {
+      apiUrl,
+      configuredBaseUrl,
+      detail,
+      error,
+    });
+
     return {
       data: [],
       meta: { page: 1, page_size: COURSES_PAGE_SIZE, total_count: 0, total_pages: 0 },
-      errors: { detail: `Failed to fetch courses: ${error}` },
+      errors: {
+        detail: `Failed to fetch courses: ${detail}`,
+        apiUrl,
+        configuredBaseUrl,
+      },
     };
   }
 }
 
-export async function getCurrentCourse(courseId: number | string): Promise<CourseFetchResult> {
-  const apiUrl = buildApiUrl(`/courses/${courseId}/`);
+export async function getCurrentCourse(
+  courseId: number | string,
+  childId?: string
+): Promise<CourseFetchResult> {
+  const configuredBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? "";
+  const apiUrl = buildApiUrl(
+    `/courses/${courseId}/${childId ? `?${QUERY_PARAMS.CHILD_ID}=${childId}` : ""}`
+  );
 
   if (!apiUrl) {
-    return { data: null, errors: { detail: "API URL is not configured" } };
+    console.error("[getCurrentCourse] API URL is not configured");
+    return {
+      data: null,
+      errors: {
+        detail: "API URL is not configured",
+        configuredBaseUrl,
+        courseId: String(courseId),
+        childId: childId ?? "",
+      },
+    };
   }
 
   const cookieStore = await cookies();
@@ -248,6 +320,13 @@ export async function getCurrentCourse(courseId: number | string): Promise<Cours
 
     if (!response.ok) {
       const errorBody = (await response.json().catch(() => null)) as Record<string, string> | null;
+      console.error("[getCurrentCourse] HTTP error", {
+        apiUrl,
+        courseId,
+        childId: childId ?? null,
+        status: response.status,
+        errorBody,
+      });
       return { data: null, errors: errorBody };
     }
 
@@ -255,7 +334,27 @@ export async function getCurrentCourse(courseId: number | string): Promise<Cours
 
     return { data: payload, errors: null };
   } catch (error) {
-    return { data: null, errors: { detail: `Failed to fetch course: ${error}` } };
+    const detail = serializeFetchError(error);
+
+    console.error("[getCurrentCourse] fetch failed", {
+      apiUrl,
+      configuredBaseUrl,
+      courseId,
+      childId: childId ?? null,
+      detail,
+      error,
+    });
+
+    return {
+      data: null,
+      errors: {
+        detail: `Failed to fetch course: ${detail}`,
+        apiUrl,
+        configuredBaseUrl,
+        courseId: String(courseId),
+        childId: childId ?? "",
+      },
+    };
   }
 }
 
@@ -293,6 +392,52 @@ export async function getLesson(
     }
 
     const payload = (await response.json()) as Lesson;
+
+    return { data: payload, errors: null, code: response.status };
+  } catch (error) {
+    return { data: null, errors: { detail: `Failed to fetch lesson: ${error}` }, code: null };
+  }
+}
+
+export async function getTest(
+  courseId: number | string,
+  lessonId: number | string,
+  userId?: number | string
+): Promise<LessonTestFetchResult> {
+  console.log("getTest", courseId, lessonId, userId);
+
+  const apiUrl = buildApiUrl(
+    `/courses/${courseId}/lessons/${lessonId}/test/?${QUERY_PARAMS.CHILD_ID}=${userId}`
+  );
+
+  if (!apiUrl) {
+    return { data: null, errors: { detail: "API URL is not configured" } };
+  }
+
+  const cookieStore = await cookies();
+  const token = cookieStore.get(TOKEN_KEY)?.value;
+  const cookieHeader = cookieStore
+    .getAll()
+    .map(({ name, value }) => `${name}=${value}`)
+    .join("; ");
+
+  try {
+    const response = await fetch(apiUrl, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...(cookieHeader ? { Cookie: cookieHeader } : {}),
+        ...(token ? { Authorization: normalizeToken(token) } : {}),
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      const errorBody = (await response.json().catch(() => null)) as Record<string, string> | null;
+      return { data: null, errors: errorBody, code: response.status };
+    }
+
+    const payload = (await response.json()) as LessonTestFetchResult["data"];
 
     return { data: payload, errors: null };
   } catch (error) {

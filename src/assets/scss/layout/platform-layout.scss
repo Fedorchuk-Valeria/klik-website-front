@@ -2,10 +2,26 @@
 
 .platform-layout {
   &__content {
-    padding-top: 135px;
+    padding-top: 140px;
 
-    @media screen and (max-width: $landscape-tablet-size) {
-      padding-top: 140px;
+    @media screen and (max-width: $desktop) {
+      padding-top: 110px;
+    }
+
+    /*@media screen and (max-width: $desktop-compact) {
+      padding-top: 76px;
+    }*/
+
+    /*@media screen and (max-width: $landscape-tablet-size) {
+      padding-top: 60px;
+    }*/
+
+    @media screen and (max-width: $tablet-size) {
+      padding-top: 102px;
+    }
+
+    @media screen and (max-width: $mobile-size) {
+      padding-top: 70px;
     }
   }
 
@@ -124,7 +140,7 @@
     }
 
     @media screen and (max-width: $mobile-size) {
-      padding: 0 20px;
+      padding: 0 10px;
     }
   }
 }

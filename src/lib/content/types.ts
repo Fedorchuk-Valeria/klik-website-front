@@ -1,3 +1,5 @@
+import type { UsersLocationResult } from "@/src/services/http/users";
+
 export type PageType = "home" | "page" | "program";
 
 export type PageSeo = {
@@ -38,11 +40,14 @@ export type ProgramContentItem = {
   id?: string;
 };
 
-type WhatWeLearnContentItem = {
+export type WhatWeLearnContentItem = {
   title: string;
   key: string;
   text: string;
-  items: string[];
+  items: {
+    text: string;
+    icon?: string;
+  }[];
 };
 
 type WhyWeAreContentItem = {
@@ -93,9 +98,21 @@ type SignUpFreeLessonContentItem = {
 
 /** Поля `content` для главной (`home.json`). Секции опциональны — зависят от CMS. */
 export type HomePageContent = {
+  prices?: {
+    tag?: string;
+    title?: string;
+    card_text?: string;
+    price?: string;
+    list?: string[];
+  };
   location?: {
     tag?: string;
     title?: string;
+    city?: string;
+    city_name?: string;
+    city_map_url?: string;
+    online_registration_url?: string;
+    results?: UsersLocationResult[];
   };
   select_training?: {
     tag?: string;
@@ -142,6 +159,7 @@ export type HomePageContent = {
     tag?: string;
     title?: string;
     text?: string;
+    image?: string;
     items?: WhatWeLearnContentItem[];
   };
   why_we_are?: {
@@ -204,11 +222,10 @@ export type ProgramPageContent = {
   items: ProgramPageBaseContentItem[];
 };
 
-type ProgramPageBaseContentItem = {
+export type ProgramPageBaseContentItem = {
   title: string;
-  text: string;
-  number: string;
-  image?: string;
+  description: string;
+  photo?: string;
 };
 
 export type HomePage = {

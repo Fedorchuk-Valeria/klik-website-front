@@ -21,11 +21,6 @@ import { validationSchema } from "./validationSchema";
 
 const MAX_TEXT_FIELD_LENGTH = 100;
 
-function normalizePhoneForApi(phone: string): string {
-  const digits = phone.replace(/\D/g, "");
-  return digits ? `+${digits}` : "";
-}
-
 const HomePageForm = ({ className }: { className?: string }) => {
   const dispatch = useAppDispatch();
   const [isLoading, setLoading] = useState(false);
@@ -56,7 +51,7 @@ const HomePageForm = ({ className }: { className?: string }) => {
           body: JSON.stringify({
             legal_name: values.parent,
             name: values.child,
-            phone: normalizePhoneForApi(values.phone),
+            phone: values.phone,
             dob: values.date,
           }),
         })
@@ -148,7 +143,6 @@ const HomePageForm = ({ className }: { className?: string }) => {
         value={form.values.phone}
         error={form.errors.phone}
         onChange={handleChange}
-        placeholder="+375 (29) 123-45-67"
         className="home-page__form-input"
         disabled={isLoading}
       />

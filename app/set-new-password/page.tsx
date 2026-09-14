@@ -13,7 +13,7 @@ import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { clearResetPassword, resetPasswordRequest } from "@/src/store/slices/auth";
 import { showModal } from "@/src/store/slices/modalSlice";
-import { PAGES, PASSWORD_INPUT_STRIP_REGEX, TOKEN_KEY } from "@/src/utils/constant";
+import { PAGES, TOKEN_KEY } from "@/src/utils/constant";
 import { CookieHelper } from "@/src/utils/helpers";
 
 const SetNewPasswordForm = () => {
@@ -47,11 +47,9 @@ const SetNewPasswordForm = () => {
     validateOnMount: false,
   });
 
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const filtered = value.replace(PASSWORD_INPUT_STRIP_REGEX, "");
-
-    void form.setFieldValue(name, filtered);
+    void form.setFieldValue(name, value);
   };
 
   useEffect(() => {
@@ -91,7 +89,7 @@ const SetNewPasswordForm = () => {
           variant="outline"
           label="Новый пароль"
           placeholder="********"
-          onChange={handlePasswordChange}
+          onChange={handleChange}
           value={form.values.password}
           error={form.errors.password}
           className="login-page__form-input"
@@ -104,7 +102,7 @@ const SetNewPasswordForm = () => {
           name="confirmPassword"
           placeholder="********"
           label="Подтвердите пароль"
-          onChange={handlePasswordChange}
+          onChange={handleChange}
           value={form.values.confirmPassword}
           error={form.errors.confirmPassword}
           className="login-page__form-input"

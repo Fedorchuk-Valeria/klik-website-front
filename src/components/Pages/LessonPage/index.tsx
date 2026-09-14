@@ -43,6 +43,8 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
     review,
     data: lessonData,
   } = useAppSelector((state) => state.lesson);
+  const { user_profile } = useAppSelector((state) => state.auth);
+  const isParent = user_profile?.role === "parent";
 
   const nextLesson = useMemo(() => {
     if (!data?.lessons?.length) return null;
@@ -211,6 +213,7 @@ const LessonPage: FC<PropTypes> = ({ id, lessonId, data }) => {
                 courseId={id}
                 onClick={handleUrlClick}
                 currentLessonId={Number(lessonId)}
+                isParent={isParent}
                 list={
                   (data?.lessons || [])?.map((lesson) => ({
                     id: lesson.id,

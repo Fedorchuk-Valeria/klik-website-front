@@ -1,0 +1,212 @@
+.modal-account-data {
+  dialog {
+    width: 100%;
+    max-width: 685px;
+    padding: 50px 40px;
+    border-radius: 50px;
+    background: var(--main-light);
+    border: 2px solid var(--main-green-dark);
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      width: 8px;
+      border: 1px solid rgba(1, 82, 76, 0.5);
+      border-radius: 9999px;
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      width: 8px;
+      background: var(--main-green-dark);
+      border-radius: 9999px;
+    }
+  }
+
+  .modal-account-data__title {
+    @include fonts(30px, 700);
+    width: 100%;
+    text-align: center;
+    color: var(--main-green-dark);
+  }
+
+  .modal-account-data__description {
+    @include fonts(18px, 400, "Manrope");
+    display: block;
+    margin-top: 30px;
+    color: var(--main-black);
+
+    &.center {
+      text-align: center;
+    }
+  }
+
+  .modal-account-data__list {
+    @include flex-list(16px);
+    margin-top: 20px;
+
+    li {
+      @include fonts(18px, 500);
+      display: flex;
+      gap: 12px;
+      color: var(--main-orange);
+    }
+
+    svg {
+      @include icon(25px);
+      aspect-ratio: 1;
+      color: var(--main-pink);
+    }
+  }
+
+  .modal-account-data__actions {
+    @include flex-list(10px);
+    margin-top: 50px;
+    margin-left: -10px;
+    margin-right: -10px;
+    width: calc(100% + 20px);
+
+    button {
+      @include center;
+      @include fonts(18px, 600, "Manrope");
+    }
+
+    .modal-account-data__actions-button {
+      border: 2px solid var(--main-green-dark);
+      background: var(--main-light);
+      color: var(--main-green-dark);
+
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          background: var(--main-green-dark);
+          color: var(--main-light);
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    dialog {
+      max-width: 540px;
+      padding: 40px 30px;
+      border-radius: 40px;
+    }
+
+    .modal-account-data__title {
+      font-size: 26px;
+    }
+
+    .modal-account-data__description {
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    .modal-account-data__list {
+      gap: 12px;
+
+      li {
+        font-size: 16px;
+      }
+
+      svg {
+        @include icon(22px);
+      }
+    }
+
+    .modal-account-data__actions {
+      gap: 16px;
+      margin-top: 30px;
+      margin-left: 0;
+      margin-right: 0;
+      width: 100%;
+
+      button {
+        font-size: 16px;
+        padding: 16px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $tablet-size) {
+    dialog {
+      max-width: 484px;
+      padding: 30px;
+      border-radius: 40px;
+    }
+
+    .modal-account-data__title {
+      font-size: 30px;
+      margin-bottom: 20px;
+    }
+
+    .modal-account-data__description {
+      font-size: 18px;
+      margin-top: 16px;
+    }
+
+    .modal-account-data__list {
+      gap: 12px;
+
+      li {
+        font-size: 18px;
+      }
+
+      svg {
+        @include icon(25px);
+      }
+    }
+
+    .modal-account-data__actions {
+      gap: 10px;
+      margin-top: 30px;
+
+      button {
+        font-size: 18px;
+        padding: 20px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    dialog {
+      max-width: 354px;
+      padding: 20px;
+      border-radius: 30px;
+    }
+
+    .modal-account-data__title {
+      font-size: 24px;
+      margin-bottom: 0;
+    }
+
+    .modal-account-data__description {
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .modal-account-data__list {
+      gap: 10px;
+
+      li {
+        font-size: 14px;
+        gap: 8px;
+      }
+
+      svg {
+        @include icon(18px);
+      }
+    }
+
+    .modal-account-data__actions {
+      margin-top: 20px;
+
+      button {
+        font-size: 16px;
+        padding: 16px;
+      }
+    }
+  }
+}

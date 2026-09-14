@@ -46,6 +46,20 @@ const buildCoursesQuery = (page: number, scope: string, categories: string[]): s
     [QUERY_PARAMS.CATEGORIES]: categories.join(","),
   });
 
+const CATEGORY_FILTER_DEBOUNCE_MS = 1000;
+
+/** Empty and full category lists are equivalent for the API (no filter). */
+const toApiCategories = (categoryIds: string[], allCategoryIds: string[]): string[] => {
+  if (
+    categoryIds.length === 0 ||
+    (allCategoryIds.length > 0 && categoryIds.length === allCategoryIds.length)
+  ) {
+    return [];
+  }
+
+  return categoryIds;
+};
+
 const PagesCourses = ({
   initialCourses = [],
   initialMeta = {
@@ -66,26 +80,31 @@ const PagesCourses = ({
     name: "Все курсы",
   });
   const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
+  const [appliedCategories, setAppliedCategories] = useState<string[]>([]);
   const [hasRequested, setHasRequested] = useState<boolean>(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const isLoadingRef = useRef(isLoading);
   const prevFiltersKeyRef = useRef<string | null>(null);
-
-  const filtersKey = useMemo(
-    () => `${selectedFilter.id}:${selectedCategory.join(",")}`,
-    [selectedFilter.id, selectedCategory]
-  );
+  const categoryDebounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clearCategoryDebounce = useCallback(() => {
+    if (categoryDebounceTimerRef.current) {
+      clearTimeout(categoryDebounceTimerRef.current);
+      categoryDebounceTimerRef.current = null;
+    }
+  }, []);
 
   const allCategories = useMemo(() => {
     const seenCategoryIds = new Set<number>();
 
-    return (initialCourses?.flatMap((item) => item.categories) ?? []).filter((category) => {
+    return (
+      (!!data?.length ? data : initialCourses)?.flatMap((item) => item.categories) ?? []
+    ).filter((category) => {
       if (seenCategoryIds.has(category.id)) return false;
 
       seenCategoryIds.add(category.id);
       return true;
     });
-  }, [initialCourses]);
+  }, [data, initialCourses]);
 
   const activeMeta = hasRequested ? meta : initialMeta;
 
@@ -110,6 +129,18 @@ const PagesCourses = ({
     [allCategories]
   );
 
+  const allCategoryIds = useMemo(() => categoryOptions.map((item) => item.id), [categoryOptions]);
+
+  const apiCategories = useMemo(
+    () => toApiCategories(appliedCategories, allCategoryIds),
+    [appliedCategories, allCategoryIds]
+  );
+
+  const filtersKey = useMemo(
+    () => `${selectedFilter.id}:${apiCategories.join(",")}`,
+    [selectedFilter.id, apiCategories]
+  );
+
   const selectedCategoryOptions = useMemo(
     () => categoryOptions.filter((item) => selectedCategory.includes(item.id)),
     [categoryOptions, selectedCategory]
@@ -117,14 +148,16 @@ const PagesCourses = ({
 
   const fetchCourses = useCallback(
     (page: number, append = false) => {
+      const query = buildCoursesQuery(page, selectedFilter.id, apiCategories);
+
       dispatch(
         getCoursesRequest({
-          query: buildCoursesQuery(page, selectedFilter.id, selectedCategory),
+          query,
           append,
         })
       );
     },
-    [dispatch, selectedCategory, selectedFilter.id]
+    [dispatch, apiCategories, selectedFilter.id]
   );
 
   const loadMore = useCallback(() => {
@@ -149,31 +182,68 @@ const PagesCourses = ({
     dispatch,
   ]);
 
-  const handleSelectCategory = (slug: string) => () => {
-    setSelectedCategory((prev) => {
-      if (prev.includes(slug)) {
-        return prev.filter((item) => item !== slug);
+  const handleSelectFilter = (option: { id: string; name: string }) => () => {
+    clearCategoryDebounce();
+
+    if (typeof window !== "undefined") {
+      const searchParams = new URLSearchParams(window.location.search);
+
+      if (searchParams.has(QUERY_PARAMS.SCOPE)) {
+        if (option.id === "all") {
+          searchParams.delete(QUERY_PARAMS.SCOPE);
+        } else {
+          searchParams.set(QUERY_PARAMS.SCOPE, option.id);
+        }
+
+        const search = searchParams.toString();
+        window.history.replaceState(
+          null,
+          "",
+          `${window.location.pathname}${search ? `?${search}` : ""}`
+        );
       }
+    }
 
-      return [...prev, slug];
-    });
-  };
-
-  const handleSelectFilter = (option: { id: string; name: string }) => {
     setSelectedFilter(option);
     setSelectedCategory([]);
+    setAppliedCategories([]);
   };
 
-  const handleSelectCategories = (options: { id: string; name: string }[]) => {
-    setSelectedCategory(options.map((item) => item.id));
+  const handleSelectCategories = (nextOptions: { id: string; name: string }[]) => {
+    const categoryIds = nextOptions.map((item) => item.id);
+    const nextApiCategories = toApiCategories(categoryIds, allCategoryIds);
+    const isSameApiCategories =
+      nextApiCategories.length === apiCategories.length &&
+      nextApiCategories.every((id) => apiCategories.includes(id));
+
+    setSelectedCategory(categoryIds);
+    clearCategoryDebounce();
+
+    // [] and "all categories" map to the same API request — update UI only, skip fetch.
+    if (isSameApiCategories) {
+      return;
+    }
+
+    categoryDebounceTimerRef.current = setTimeout(() => {
+      setAppliedCategories(nextApiCategories);
+    }, CATEGORY_FILTER_DEBOUNCE_MS);
   };
 
+  // Clear the category filter debounce timer on unmount.
+  useEffect(() => {
+    return () => {
+      clearCategoryDebounce();
+    };
+  }, [clearCategoryDebounce]);
+
+  // Mark the client as hydrated after the first paint.
   useEffect(() => {
     queueMicrotask(() => {
       setIsHydrated(true);
     });
   }, []);
 
+  // Persist admin auth tokens from the URL hash and reload without the hash.
   useEffect(() => {
     if (typeof window !== "undefined") {
       const hash = window.location.hash.slice(1);
@@ -201,16 +271,19 @@ const PagesCourses = ({
     }
   }, []);
 
+  // Keep a ref of isLoading for the IntersectionObserver callback.
   useEffect(() => {
     isLoadingRef.current = isLoading;
   }, [isLoading]);
 
+  // Log SSR/initial errors to the console.
   useEffect(() => {
     if (initialErrors) {
       console.error(initialErrors);
     }
   }, [initialErrors]);
 
+  // Refetch page 1 when filters change; skip the default SSR state on first run.
   useEffect(() => {
     if (prevFiltersKeyRef.current === filtersKey) {
       return;
@@ -219,7 +292,7 @@ const PagesCourses = ({
     const previousKey = prevFiltersKeyRef.current;
     prevFiltersKeyRef.current = filtersKey;
 
-    if (previousKey === null && selectedCategory.length === 0 && selectedFilter.id === "all") {
+    if (previousKey === null && apiCategories.length === 0 && selectedFilter.id === "all") {
       return;
     }
 
@@ -228,8 +301,9 @@ const PagesCourses = ({
     queueMicrotask(() => {
       setHasRequested(true);
     });
-  }, [filtersKey, fetchCourses, selectedCategory.length, selectedFilter.id]);
+  }, [filtersKey, fetchCourses, apiCategories.length, selectedFilter.id]);
 
+  // Hydrate scope/category filters from the URL search params.
   useEffect(() => {
     if (typeof window !== "undefined" && window.location.search) {
       const query = QueryHelper.getFromQueryString(window.location.search);
@@ -247,12 +321,20 @@ const PagesCourses = ({
 
       if (query[QUERY_PARAMS.CATEGORIES]) {
         queueMicrotask(() => {
-          setSelectedCategory(query[QUERY_PARAMS.CATEGORIES].split(","));
+          const categoriesFromQuery = query[QUERY_PARAMS.CATEGORIES].split(",").filter(Boolean);
+          const nextApiCategories = toApiCategories(
+            categoriesFromQuery,
+            categoryOptions.map((item) => item.id)
+          );
+
+          setSelectedCategory(categoriesFromQuery);
+          setAppliedCategories(nextApiCategories);
         });
       }
     }
-  }, [options]);
+  }, [options, categoryOptions]);
 
+  // Infinite scroll: load the next page when the sentinel enters the viewport.
   useEffect(() => {
     const sentinel = loadMoreRef.current;
 
@@ -277,7 +359,7 @@ const PagesCourses = ({
     return () => {
       observer.disconnect();
     };
-  }, [hasMore, loadMore, courses.length]);
+  }, [hasMore, loadMore, courses?.length]);
 
   return (
     <div className="page-courses">
@@ -290,6 +372,7 @@ const PagesCourses = ({
                   Самостоятельное обучение на платформе
                   <br />с ИИ помощником
                 </h1>
+
                 <p className="page-courses__header-text">
                   {`Онлайн-платформа, где ребёнок развивается в своём темпе с ИИ-помощником, а родитель спокоен за его занятость.`}
                 </p>
@@ -349,39 +432,33 @@ const PagesCourses = ({
         <p className="courses__text">Выберите курс для начала обучения</p>
 
         <div className="courses-headline">
-          <Select
-            icon="document"
-            options={options}
-            onChange={handleSelectFilter}
-            selectedOption={selectedFilter}
-            className="courses-headline__select"
-          />
-
-          <div className="courses-headline__filters">
-            {allCategories.map((item) => (
+          <div className="courses-headline__buttons">
+            {options.map((item) => (
               <Button
                 key={item.id}
-                variant="outline-green-dark"
-                className={classNames("courses-headline__filter", {
-                  "courses-headline__filter--active": selectedCategory.includes(item.slug),
+                variant={selectedFilter.id === item.id ? "orange" : "outline-orange"}
+                className={classNames("courses-headline__button", {
+                  "courses-headline__button--non-active": selectedFilter.id !== item.id,
                 })}
-                onClick={handleSelectCategory(item.slug)}
+                onClick={handleSelectFilter(item)}
               >
                 {item.name}
               </Button>
             ))}
-
-            <Select
-              multiple
-              color="green"
-              icon="document"
-              options={categoryOptions}
-              allOptionName="Все направления"
-              onChange={handleSelectCategories}
-              selectedOptions={selectedCategoryOptions}
-              className="courses-headline__select-categories"
-            />
           </div>
+
+          <Select
+            multiple
+            isAbsolute
+            color="green"
+            icon="document"
+            options={categoryOptions}
+            allOptionName="Все категории"
+            placeholder="Выбор категории"
+            onChange={handleSelectCategories}
+            selectedOptions={selectedCategoryOptions}
+            className="courses-headline__select-categories"
+          />
         </div>
 
         <div className="courses-list">
@@ -394,46 +471,46 @@ const PagesCourses = ({
                 "courses-list__item--purchased": item.is_purchased,
               })}
             >
-                <div className="courses-list__item-image">
-                  <Image src={item.image} alt={item.title} fill />
+              <div className="courses-list__item-image">
+                <Image src={item.image} alt={item.title} fill />
 
-                  {item.is_purchased && (
-                    <span className="courses-list__item-purchased">
-                      <Icon name="success-circle" /> Куплен
-                    </span>
-                  )}
-
-                  {item.categories && (
-                    <div className="courses-list__item-categories">
-                      {item.categories.map((category) => (
-                        <span key={category.id} className="courses-list__item-category">
-                          {category.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <div className="courses-list__item-content">
-                  <p className="courses-list__item-title">{item.title}</p>
-                  <p className="courses-list__item-description">{item.description}</p>
-
-                  <span className="courses-list__item-duration">
-                    <Icon name="clock" /> {item.duration_months}{" "}
-                    {getPlural(item.duration_months, ["месяц", "месяца", "месяцев"])}
+                {item.is_purchased && (
+                  <span className="courses-list__item-purchased">
+                    <Icon name="success-circle" /> Куплен
                   </span>
+                )}
 
-                  <p className="courses-list__item-price">
-                    {item?.price?.toLocaleString("ru-RU")}{" "}
-                    <Icon name="ruble" className="courses-list__item-price-icon" />
-                  </p>
+                {item.categories && (
+                  <div className="courses-list__item-categories">
+                    {item.categories.map((category) => (
+                      <span key={category.id} className="courses-list__item-category">
+                        {category.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="courses-list__item-content">
+                <p className="courses-list__item-title">{item.title}</p>
+                <p className="courses-list__item-description">{item.description}</p>
 
-                  <Button
-                    className="courses-list__item-button"
-                    variant={item.is_purchased ? "main-green-dark" : "outline-green-dark"}
-                  >
-                    {item.is_purchased ? "Открыть" : "Подробнее"}
-                  </Button>
-                </div>
+                <span className="courses-list__item-duration">
+                  <Icon name="clock" /> {item.duration_months}{" "}
+                  {getPlural(item.duration_months, ["месяц", "месяца", "месяцев"])}
+                </span>
+
+                <p className="courses-list__item-price">
+                  {item?.price?.toLocaleString("ru-RU")}{" "}
+                  <Icon name="ruble" className="courses-list__item-price-icon" />
+                </p>
+
+                <Button
+                  className="courses-list__item-button"
+                  variant={item.is_purchased ? "main-green-dark" : "outline-green-dark"}
+                >
+                  {item.is_purchased ? "Открыть" : "Подробнее"}
+                </Button>
+              </div>
             </Link>
           ))}
         </div>

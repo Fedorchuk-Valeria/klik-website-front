@@ -27,3 +27,18 @@ export const TUTOR_IMAGES: Record<string, StaticImageData> = {
   "11": tutorImg11,
   "12": tutorImg12,
 };
+
+export function hasTutorImage(item: { id: string; photo?: string }): boolean {
+  return Boolean(item.photo || TUTOR_IMAGES[item.id]);
+}
+
+export function resolveTutorImage(item: {
+  id: string;
+  photo?: string;
+}): StaticImageData | string | undefined {
+  if (item.photo) {
+    return item.photo;
+  }
+
+  return TUTOR_IMAGES[item.id];
+}

@@ -12,18 +12,19 @@ import Socials from "@/src/components/ui/Socials/Socials";
 
 import { getCities } from "@/src/lib/getCities";
 import { getCitySettings } from "@/src/lib/getCitySettings";
+import { getHomeLocations } from "@/src/lib/getLocations";
 import { phoneToLink } from "@/src/lib/utils/phoneLink";
 import { PAGE_ANCHORS } from "@/src/utils/constant";
 import HeaderScroll from "@/src/components/ui/HeaderScroll";
 
 export default async function Header() {
-  const cities = await getCities();
-
-  const headersList = await headers();
+  const cities = getCities();
+  const [location, headersList] = await Promise.all([getHomeLocations(), headers()]);
   const slug = headersList.get("x-city") ?? "minsk";
 
   const currentCity = cities.find((city) => city.slug === slug) || cities[0];
   const settings = getCitySettings(currentCity.slug);
+  const onlineRegistrationUrl = location?.online_registration_url;
 
   const menuItems = [
     {
@@ -98,7 +99,7 @@ export default async function Header() {
             )}
 
             <div className="header__call">
-              <ButtonCall />
+              <ButtonCall href={onlineRegistrationUrl} />
             </div>
 
             <HeaderMobileMenu
@@ -107,6 +108,7 @@ export default async function Header() {
               cities={cities}
               socials={settings.socials ?? []}
               menuItems={menuItems}
+              onlineRegistrationUrl={onlineRegistrationUrl}
             />
           </div>
         </HeaderMobileMenuProvider>

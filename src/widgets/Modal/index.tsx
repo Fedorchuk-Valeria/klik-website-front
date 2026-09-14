@@ -9,13 +9,19 @@ import { RootStore } from "@/src/store";
 import { useAppDispatch } from "@/src/store/hooks";
 import { hideModal } from "@/src/store/slices/modalSlice";
 
-import WidgetModalCookiePolicy from "./CookiePolicy";
-import WidgetModalNotice from "./Notice";
-import WidgetModalPlace from "./Place";
-import WidgetModalSuccessfully from "./Successfully";
+import { Course } from "@/src/lib/getCourses";
+
+import WidgetModalAccountData from "@/src/widgets/Modal/AccountData";
+import WidgetModalCookiePolicy from "@/src/widgets/Modal/CookiePolicy";
+import WidgetModalConfirmChildrenEmail from "@/src/widgets/Modal/ConfirmChildrenEmail";
+import WidgetModalCreateChildren from "@/src/widgets/Modal/CreateChildren";
+import WidgetModalNotice from "@/src/widgets/Modal/Notice";
 import WidgetModalPayment from "@/src/widgets/Modal/Payment";
-import {Course} from "@/src/lib/getCourses";
-import WidgetModalPaymentStatus from "./PaymentStatus";
+import WidgetModalPaymentChildren from "@/src/widgets/Modal/PaymentChildren";
+import WidgetModalPaymentStatus from "@/src/widgets/Modal/PaymentStatus";
+import WidgetModalPlace from "@/src/widgets/Modal/Place";
+import WidgetModalSuccessfully from "@/src/widgets/Modal/Successfully";
+import WidgetModalNotificationFreeCourse from "@/src/widgets/Modal/NotificationFreeCourse";
 
 const WidgetModal = () => {
   const dispatch = useAppDispatch();
@@ -46,9 +52,26 @@ const WidgetModal = () => {
       case ModalType.SUCCESSFULLY:
         return <WidgetModalSuccessfully isVisible={active} {...modalProps} />;
       case ModalType.PAYMENT:
-        return <WidgetModalPayment isVisible={active}  {...(modalProps as { course: Course })} />;
+        return <WidgetModalPayment isVisible={active} {...(modalProps as { course: Course })} />;
       case ModalType.PAYMENT_STATUS:
-        return <WidgetModalPaymentStatus isVisible={active}  {...modalProps} />;
+        return <WidgetModalPaymentStatus isVisible={active} {...modalProps} />;
+      case ModalType.CREATE_CHILDREN:
+        return <WidgetModalCreateChildren isVisible={active} {...modalProps} />;
+      case ModalType.CONFIRM_CHILDREN_EMAIL:
+        return (
+          <WidgetModalConfirmChildrenEmail
+            isVisible={active}
+            sessionToken={(modalProps as { sessionToken: string }).sessionToken}
+            flow={(modalProps as { flow?: "create_child" | "email_change" }).flow ?? "create_child"}
+            {...modalProps}
+          />
+        );
+      case ModalType.PAYMENT_CHILDREN:
+        return <WidgetModalPaymentChildren isVisible={active} {...modalProps} />;
+      case ModalType.ACCOUNT_DATA:
+        return <WidgetModalAccountData isVisible={active} {...modalProps} />;
+      case ModalType.NOTIFICATION_FREE_COURSE:
+        return <WidgetModalNotificationFreeCourse isVisible={active} {...modalProps} />;
       default:
         return null;
     }

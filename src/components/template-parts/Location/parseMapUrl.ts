@@ -1,0 +1,1 @@
+export const LOCATION_PIN_DEFAULT_ZOOM = 16;

@@ -115,10 +115,11 @@
 
   .courses-headline {
     @include center-between;
-    margin-top: 80px;
+    margin-top: 50px;
 
-    .courses-headline__select,
     .courses-headline__select-categories {
+      min-width: 379px;
+      max-width: 379px;
       border-radius: 27px;
       transition: border-radius 0.3s ease-in-out;
 
@@ -127,33 +128,17 @@
       }
     }
 
-    .courses-headline__select {
-      min-width: 400px;
-    }
-
-    .courses-headline__filters {
+    .courses-headline__buttons {
       display: flex;
       align-items: center;
-      flex-wrap: wrap;
       gap: 20px;
 
-      .courses-headline__select-categories {
-        display: none;
+      .courses-headline__button {
+        padding: 12px 50px;
       }
 
-      .courses-headline__filter {
-        @include fonts(18px, 400, "Manrope");
-        padding: 12px 20px 13px;
-
-        &.courses-headline__filter--active {
-          background: var(--secondary-green-neon-50);
-
-          @media (hover: hover) and (pointer: fine) {
-            &:hover {
-              color: var(--main-green-dark);
-            }
-          }
-        }
+      .courses-headline__button--non-active {
+        color: var(--main-black);
       }
     }
   }
@@ -214,7 +199,7 @@
           border-radius: 100px;
           background: var(--main-green-neon);
           color: var(--main-green-dark);
-          padding: 10px 20px;
+          padding: 10px 20px 10px 10px;
           z-index: 1;
 
           svg {
@@ -284,6 +269,7 @@
           gap: 6px;
           align-items: center;
           flex-wrap: wrap;
+          margin-top: auto;
         }
 
         .courses-list__item-price-icon {
@@ -374,8 +360,6 @@
     .courses-headline {
       margin-top: 50px;
       gap: 50px;
-      align-items: flex-start;
-      flex-direction: column;
     }
 
     .courses-list {
@@ -448,7 +432,6 @@
             margin-top: 24px;
 
             .page-courses__header-content-item {
-
               .page-courses__header-icon {
                 @include icon(70px);
 
@@ -493,19 +476,43 @@
 
     .courses__text {
       font-size: 18px;
+      margin-top: 16px;
     }
 
     .courses-headline {
-      margin-top: 50px;
+      margin-top: 40px;
       gap: 50px;
-      align-items: flex-start;
-      flex-direction: column;
+
+      .courses-headline__select-categories {
+        min-width: 353px;
+        max-width: 353px;
+
+        .select__current-button {
+          @include icon(36px);
+          min-width: 36px;
+          min-height: 36px;
+        }
+
+        .select__current {
+          max-height: 50px;
+        }
+      }
+
+      .courses-headline__buttons {
+        gap: 16px;
+
+        .button {
+          font-size: 16px;
+          min-height: 50px;
+        }
+      }
     }
 
     .courses-list {
       grid-template-columns: repeat(3, minmax(0, 376px));
       gap: 16px;
       padding-bottom: 120px;
+      padding-top: 40px;
 
       .courses-list__item {
         border-radius: 30px;
@@ -517,6 +524,8 @@
           border-radius: 20px;
 
           .courses-list__item-categories {
+            gap: 5px;
+
             .courses-list__item-category {
               font-size: 12px;
               padding: 6px 16px;
@@ -638,8 +647,8 @@
     }
 
     .courses__container {
-      max-width: 940px;
-      padding: 0 30px;
+      max-width: 100%;
+      padding: 0 40px;
     }
 
     .courses__title {
@@ -656,16 +665,31 @@
       margin-top: 30px;
       gap: 30px;
 
-      .courses-headline__select {
-        min-width: 315px;
+      .courses-headline__select-categories {
+        min-width: 309px;
+        max-width: 309px;
+
+        .select__current-button {
+          @include icon(30px);
+          min-width: 30px;
+          min-height: 30px;
+        }
+
+        .select__current {
+          max-height: 44px;
+        }
       }
 
-      .courses-headline__filters {
+      .courses-headline__buttons {
         gap: 10px;
 
-        .courses-headline__filter {
+        .button {
           font-size: 16px;
-          padding: 8px 15px;
+          min-height: 40px;
+        }
+
+        .courses-headline__button {
+          padding: 8px 24px;
         }
       }
     }
@@ -744,7 +768,6 @@
 
   @media screen and (max-width: $small-landscape-tablet-size) {
     .page-courses__header {
-
       .page-courses__header-content {
         flex-direction: column;
         gap: 40px;
@@ -793,7 +816,6 @@
           .page-courses__header-button {
             max-width: 100%;
           }
-
         }
 
         .page-courses__header-image {
@@ -808,36 +830,54 @@
     }
 
     .courses__title {
-      font-size: 40px;
-      margin-top: 100px;
+      font-size: 46px;
+      margin-top: 90px;
     }
 
     .courses__text {
-      font-size: 16px;
-      margin-top: 12px;
+      font-size: 18px;
+      margin-top: 5px;
     }
 
     .courses-headline {
       margin-top: 30px;
-      gap: 30px;
+      gap: 20px;
 
-      .courses-headline__select {
-        min-width: 315px;
+      .courses-headline__select-categories {
+        min-width: calc(50% - 10px);
+        max-width: 100%;
+
+        .select__current-button {
+          @include icon(36px);
+          min-width: 36px;
+          min-height: 36px;
+        }
+
+        .select__current {
+          max-height: 50px;
+        }
       }
 
-      .courses-headline__filters {
-        gap: 10px;
+      .courses-headline__buttons {
+        gap: 12px;
+        width: 100%;
 
-        .courses-headline__filter {
+        .button {
+          @include center;
+          width: 100%;
           font-size: 16px;
-          padding: 8px 15px;
+          min-height: 50px;
+        }
+
+        .courses-headline__button {
+          padding: 12px 20px;
         }
       }
     }
 
     .courses-list {
-      grid-template-columns: repeat(3, minmax(0, 308px));
-      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
       padding-top: 30px;
       padding-bottom: 100px;
 
@@ -848,7 +888,7 @@
         max-height: 631px;
 
         .courses-list__item-image {
-          height: 235px;
+          height: 271px;
           border-radius: 20px;
 
           .courses-list__item-purchased {
@@ -974,6 +1014,7 @@
 
     .courses__title {
       font-size: 50px;
+      margin-top: 100px;
     }
 
     .courses__text {
@@ -982,16 +1023,34 @@
     }
 
     .courses-headline {
-      .courses-headline__select {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 30px;
+
+      .courses-headline__select-categories {
         min-width: 100%;
+        max-width: 100%;
+
+        .select__current-button {
+          @include icon(40px);
+          min-width: 40px;
+          min-height: 40px;
+        }
+
+        .select__current {
+          max-height: 54px;
+        }
       }
 
-      .courses-headline__filters {
+      .courses-headline__buttons {
+        width: 100%;
         gap: 16px;
 
-        .courses-headline__filter {
+        .courses-headline__button {
+          @include center;
           font-size: 18px;
-          padding: 12px 20px 13px;
+          width: 100%;
+          min-height: 54px;
         }
       }
     }
@@ -1070,7 +1129,7 @@
       border-radius: 0px;
       padding-bottom: 0px;
       background: inherit;
-      padding-top: 0;
+      padding-top: 60px;
 
       .page-courses__header-content {
         gap: 10px;
@@ -1166,25 +1225,39 @@
     .courses__title {
       font-size: 28px;
       margin-top: 80px;
+      padding: 0 10px;
     }
 
     .courses__text {
       font-size: 16px;
+      padding: 0 10px;
+      margin-top: 12px;
     }
 
     .courses-headline {
       gap: 20px;
+      padding: 0 10px;
+      margin-top: 20px;
 
-      .courses-headline__filters {
-        width: 100%;
-
-        .courses-headline__filter {
-          display: none;
+      .courses-headline__select-categories {
+        .select__current-button {
+          @include icon(36px);
+          min-width: 36px;
+          min-height: 36px;
         }
 
-        .courses-headline__select-categories {
-          display: block;
-          width: 100%;
+        .select__current {
+          max-height: 50px;
+        }
+      }
+
+      .courses-headline__buttons {
+        gap: 10px;
+
+        .courses-headline__button {
+          padding: 10px 20px;
+          font-size: 16px;
+          min-height: 46px;
         }
       }
     }

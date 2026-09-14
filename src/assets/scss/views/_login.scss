@@ -79,7 +79,7 @@
       color: var(--secondary-burgundy-40);
       margin-left: 16px;
       margin-top: 20px;
-      max-width: 505px;
+      max-width: 550px;
     }
 
     .login-page__form {
@@ -97,6 +97,10 @@
         @include icon(22px);
         color: var(--main-orange);
       }
+    }
+
+    .password-input .text-input__control {
+      max-height: 66px;
     }
 
     .login-page__form-input {
@@ -156,24 +160,60 @@
     .login-page__main {
       padding-top: 80px;
     }
+
+    .login-page__form-content {
+      .login-page__form {
+        gap: 16px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $desktop-compact) {
+    padding: 40px;
+    gap: 110px;
+    grid-template-columns: minmax(392px, 1fr) minmax(470px, 535px);
+
+    .login-page__image {
+      aspect-ratio: 535 / 720;
+      max-height: 720px;
+
+      img {
+        border-radius: 42px;
+      }
+    }
+
+    .login-page__main {
+      padding-top: 50px;
+    }
+
+    .login-page__form-content {
+      .login-page__text {
+        margin-top: 10px;
+      }
+
+      .login-page__form-button {
+        margin-top: 14px;
+      }
+    }
   }
 
   @media screen and (max-width: $landscape-tablet-size) {
     padding: 40px;
-    gap: 40px;
-    grid-template-columns: minmax(300px, 1fr) 511px;
+    gap: 38px;
+    grid-template-columns: minmax(300px, 1fr) 397px;
 
     .login-page__image {
-      aspect-ratio: 511 / 688;
+      aspect-ratio: 397 / 524;
+      max-height: 524px;
 
       img {
-        border-radius: 40px;
+        border-radius: 31px;
       }
 
       .login-page__image-star {
-        @include icon(50px);
-        left: -21px;
-        top: 60px;
+        @include icon(38px);
+        left: -16px;
+        top: 37px;
       }
     }
 
@@ -215,6 +255,7 @@
 
       .login-page__form-button {
         margin-top: 4px;
+        max-height: 54px;
       }
 
       .login-page__form-link {
@@ -224,12 +265,27 @@
     }
   }
 
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    .login-page__form-content {
+      .login-page__form {
+        gap: 20px;
+        margin-top: 40px;
+      }
+
+      .login-page__text {
+        margin-top: 20px;
+        margin-left: 16px;
+      }
+    }
+  }
+
   @media screen and (max-width: $tablet-size) {
     gap: 50px;
     grid-template-columns: 1fr;
 
     .login-page__image {
-      aspect-ratio: 720 / 635;
+      aspect-ratio: 720 / 585;
+      max-height: 585px;
 
       img {
         border-radius: 50px;
@@ -257,7 +313,7 @@
     }
 
     .login-page__main {
-      padding-top: 80px;
+      padding-top: 50px;
     }
 
     .login-page__form-content {
@@ -277,8 +333,11 @@
       .login-page__form {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 20px;
         margin-top: 50px;
+      }
+
+      .phone-input.full {
+        grid-column: 1 / -1;
       }
 
       .login-page__form-input {
@@ -289,6 +348,7 @@
       .login-page__form-button {
         grid-column: 1 / -1;
         margin-top: 10px;
+        max-height: 65px;
       }
 
       .login-page__form-link {
@@ -346,7 +406,8 @@
       .login-page__form-link {
         @include center;
         font-size: 14px;
-        margin-left: 0;
+        min-width: 0;
+        margin: 0 auto;
       }
     }
   }

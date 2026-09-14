@@ -4,6 +4,9 @@ export const PENDING_HOME_ANCHOR_KEY = "klick_pending_home_anchor";
 /** Fired after scrolling to a home section (+ detail: { id: string }). */
 export const SET_ACTIVE_ANCHOR_EVENT = "klick:set-active-anchor";
 
+export const AUTH_RETURN_TO_KEY = "return_to";
+export const AUTH_REFERRER_KEY = "auth_referrer";
+
 export const PLACE_STORAGE_KEY = "place";
 export const COOKIE_CONSENT_STORAGE_KEY = "cookie_policy_accepted";
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -11,8 +14,10 @@ export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const TOKEN_KEY = "token";
 export const REFRESH_TOKEN_KEY = "refresh_token";
 export const USER = "user_data";
-
+export const BRANCH_CRM_ID = "branch_id";
 export const COURSES_PAGE_SIZE = 12;
+
+export const PENDING_ADMIN_REVIEW_STATUS = "pending_admin_review";
 
 export const QUERY_PARAMS = {
   PAGE: "page",
@@ -24,6 +29,10 @@ export const QUERY_PARAMS = {
   FILTER: "filter",
   SCOPE: "scope",
   CATEGORIES: "categories",
+
+  CHILD_ID: "child_id",
+  IS_PARENT: "is_parent",
+  RETURN_TO: "return_to",
 };
 
 export const PAGES = {
@@ -38,10 +47,15 @@ export const PAGES = {
 
   PROFILE: "/profile",
   PROFILE_PASSWORD: "/profile/password",
+  PROFILE_PAYMENTS: "/profile/payments",
 
   COURSES: "/courses",
   COURSE: "/courses/:id",
   LESSON: "/courses/:id/lesson/:lessonId",
+  TEST: "/courses/:id/test/:lessonId/:userId",
+
+  PROFILE_CHILDREN_DETAILS: "/profile/children/:id",
+  PROFILE_CHILDREN_PASSWORD: "/profile/children/:id/password",
 
   CONTACTS_PAGE: "/contacts",
 };
@@ -75,7 +89,7 @@ export const PASSWORD_REGEX =
 export const PASSWORD_INPUT_STRIP_REGEX = /[^a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/g;
 
 export const PUBLIC_OFFER_SOURCE_URL =
-  "https://storage.yandexcloud.net/klikcloud/%D0%9F%D1%83%D0%B1%D0%BB%D0%B8%D1%87%D0%BD%D1%8B%D0%B8%CC%86%20%D0%B4%D0%BE%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%20%D1%84%D0%BE%D1%80%D0%BC%D0%B0_15.05.26_%D0%B23.docx.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJE7vSS1qMNjwKi6cAjzNHq%2F20260623%2Fru-central1%2Fs3%2Faws4_request&X-Amz-Date=20260623T112405Z&X-Amz-Expires=2592000&X-Amz-Signature=c0e4e9aac7b644663f423e6888536eccf0f49d158d47662e8a6e4f2c1624d352&X-Amz-SignedHeaders=host&response-content-disposition=attachment";
+  "https://storage.yandexcloud.net/klikcloud/%D0%9F%D1%83%D0%B1%D0%BB%D0%B8%D1%87%D0%BD%D1%8B%D0%B8%CC%86%20%D0%B4%D0%BE%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%20%D1%84%D0%BE%D1%80%D0%BC%D0%B0_15.05.26.pdf";
 
 export const PUBLIC_OFFER_URL = "/public-offer";
 
@@ -88,3 +102,23 @@ export const VALIDATION_CLASS = "validatio-error";
 
 export const PAYMENT_STATUS_SUCCESSFULL = "paid";
 export const PAYMENT_STATUS_FAILED = "failed";
+
+export const METRICS = {
+  klikcoins: {
+    icon: "clicoins",
+    title: "Кликоины",
+    plural: ["кликоин", "кликоина", "кликоинов"] as string[],
+    info: `Кликоины — это бонусные баллы, которые ученик получает за каждое оффлайн-занятие. Накопленные кликоины можно обменять на призы и подарки в специальном «Кликмаркете». Маркет проводится два раза в год — следите за объявлениями!`,
+  },
+  balance: {
+    icon: "money",
+    title: "Баланс",
+    plural: ["белорусский рубль", "белорусских рубля", "белорусских рублей"] as string[],
+    info: "Это ваш предоплаченный баланс. Вы вносите деньги за несколько занятий вперёд, и система автоматически списывает стоимость одного урока после его проведения. Так вы можете не думать о ежемесячной оплате - просто пополняйте счёт, и занятия будут оплачиваться сами.",
+  },
+  homework: {
+    icon: "homework",
+    title: "Занятия",
+    plural: ["оплаченное занятие", "оплаченных занятия", "оплаченных занятий"] as string[],
+  },
+} as const;

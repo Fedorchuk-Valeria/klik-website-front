@@ -7,11 +7,10 @@
   padding: 20px;
 
   &__arrow {
+    @include icon(45px);
     position: absolute;
     right: 0;
     bottom: 0;
-    width: 45px;
-    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,8 +20,7 @@
     transition: transform 0.3s ease;
 
     svg {
-      width: 27px;
-      height: 27px;
+      @include icon(27px);
       transform: rotate(-30deg);
     }
   }
@@ -118,7 +116,7 @@
 
   &--outline-green-dark {
     border: 2px solid var(--main-green-dark);
-    background: var(--main-bg);
+    background: transparent;
     color: var(--main-green-dark);
     transition:
       0.3s background-color,
@@ -133,6 +131,7 @@
 
     &:active {
       background: var(--main-green-dark-active);
+      color: var(--main-light);
     }
   }
 
@@ -156,8 +155,70 @@
     }
   }
 
+  &--main-light-outline {
+    border: 1.5px solid var(--main-light);
+    background: transparent;
+    color: var(--main-light);
+    transition:
+      0.3s background-color,
+      0.3s color;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background: var(--main-orange);
+        color: var(--main-light);
+      }
+    }
+
+    &:active {
+      background: var(--main-green-dark-active);
+    }
+  }
+
   &:disabled {
     opacity: 0.5;
     pointer-events: none;
+  }
+
+  @media screen and (max-width: $desktop-compact) {
+    padding: 15px;
+    font-size: 16px;
+
+    &__arrow {
+      @include icon(36px);
+      right: 7px;
+
+      svg {
+        @include icon(22px);
+      }
+    }
+  }
+
+  @media screen and (max-width: $landscape-tablet-size) {
+    padding: 20px;
+    font-size: 18px;
+
+    &__arrow {
+      @include icon(36px);
+      right: 0px;
+
+      svg {
+        @include icon(27px);
+      }
+    }
+  }
+
+  @media screen and (max-width: $mobile-size) {
+    padding: 15px;
+    font-size: 16px;
+
+    &__arrow {
+      @include icon(36px);
+      right: 7px;
+
+      svg {
+        @include icon(22px);
+      }
+    }
   }
 }

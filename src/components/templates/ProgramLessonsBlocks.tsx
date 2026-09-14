@@ -10,10 +10,9 @@ import classNames from "classnames";
 
 type Props = {
   items: ProgramPage["content"]["items"];
-  lessonImageSrc: string;
 };
 
-export default function ProgramLessonsBlocks({ items, lessonImageSrc }: Props) {
+export default function ProgramLessonsBlocks({ items }: Props) {
   const total = items.length;
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -23,7 +22,7 @@ export default function ProgramLessonsBlocks({ items, lessonImageSrc }: Props) {
 
   const lesson = items[activeIndex];
   const showNav = total > 1;
-  const paddedTotal = total < 10 ? `0${total}` : String(total);
+  const paddedTotal = String(total).padStart(2, "0");
 
   const goPrev = () => {
     setActiveIndex((i) => (i === 0 ? total - 1 : i - 1));
@@ -37,27 +36,26 @@ export default function ProgramLessonsBlocks({ items, lessonImageSrc }: Props) {
     <>
       <ul className="program-view__lessons-list program-view__lessons-list--desktop">
         {items.map((lessonItem, index) => (
-          <li
-            key={`${lessonItem.number}-${lessonItem.title}-${index}`}
-            className="program-view__lessons-item"
-          >
-            <div className="program-view__lessons-item_image">
-              <Image
-                src={lessonImageSrc}
-                alt={lessonItem.title}
-                sizes="(max-width: 900px) 100vw, 50vw"
-                fill
-              />
-            </div>
+          <li key={`${lessonItem.title}-${index}`} className="program-view__lessons-item">
+            {lessonItem?.photo && (
+              <div className="program-view__lessons-item_image">
+                <Image
+                  src={lessonItem.photo}
+                  alt={lessonItem.title}
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                  fill
+                />
+              </div>
+            )}
 
             <div className="program-view__lessons-item_content">
               <span className="program-view__lessons-item_content-number">
-                <span>{lessonItem.number}</span>
-                <span>/{total < 10 ? `0${total}` : total}</span>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <span>/{paddedTotal}</span>
               </span>
 
               <p className="program-view__lessons-item_content-title">{lessonItem.title}</p>
-              <p className="program-view__lessons-item_content-text">{lessonItem.text}</p>
+              <p className="program-view__lessons-item_content-text">{lessonItem.description}</p>
             </div>
           </li>
         ))}
@@ -70,29 +68,33 @@ export default function ProgramLessonsBlocks({ items, lessonImageSrc }: Props) {
       >
         <div className="program-view__lessons-slide" aria-live="polite">
           <div className="program-view__lessons-slide_inner">
-            <div className="program-view__lessons-slide_image">
-              <Image
-                src={lessonImageSrc}
-                alt={lesson.title}
-                sizes="(max-width: 680px) 100vw, 320px"
-                fill
-              />
-            </div>
+            {lesson.photo && (
+              <div className="program-view__lessons-slide_image">
+                <Image
+                  src={lesson.photo}
+                  alt={lesson.title}
+                  sizes="(max-width: 680px) 100vw, 320px"
+                  fill
+                />
+              </div>
+            )}
 
             <div className="program-view__lessons-slide_body">
               <span className="program-view__lessons-slide_count program-view__lessons-slide_count--corner">
-                <span>{lesson.number}</span>
+                <span>{String(activeIndex + 1).padStart(2, "0")}</span>
                 <span>/{paddedTotal}</span>
               </span>
 
               <span className="program-view__lessons-slide_count program-view__lessons-slide_count--hero">
-                <span className="program-view__lessons-slide_count-current">{lesson.number}</span>
+                <span className="program-view__lessons-slide_count-current">
+                  {String(activeIndex + 1).padStart(2, "0")}
+                </span>
                 <span className="program-view__lessons-slide_count-sep"> / </span>
                 <span className="program-view__lessons-slide_count-total">{paddedTotal}</span>
               </span>
 
               <p className="program-view__lessons-slide_title">{lesson.title}</p>
-              <p className="program-view__lessons-slide_text">{lesson.text}</p>
+              <p className="program-view__lessons-slide_text">{lesson.description}</p>
             </div>
           </div>
         </div>

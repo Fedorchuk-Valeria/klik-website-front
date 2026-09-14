@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { getPage } from "@/src/lib/getPage";
 import { resolveTemplate } from "@/src/lib/resolveTemplate";
+import { getProgram } from "@/src/lib/getProgramModule";
 
 function slugFromParams(segments: string[] | undefined) {
   if (!segments?.length) return "home";
@@ -47,6 +48,21 @@ export default async function Page({ params }: PageProps) {
   if (!city) notFound();
 
   const page = getPage(city, slug);
+
+  if (page?.template === 'program') {
+    const programName = slug.split('/').pop();
+
+    if (!programName) {
+      notFound();
+    }
+
+    const data = await getProgram(programName);
+
+    page.content = {
+      ...page.content,
+      items: data?.modules ?? [],
+    };
+  }
 
   if (!page) notFound();
 

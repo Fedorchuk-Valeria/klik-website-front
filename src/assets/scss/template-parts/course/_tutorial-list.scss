@@ -132,18 +132,18 @@
         width: fit-content;
 
         button {
-          @include fonts(14px, 500, "Manrope");
+          @include fonts(12px, 500, "Manrope");
           display: flex;
           align-items: center;
           gap: 10px;
-          padding: 10px 20px;
+          padding: 8px 16px;
           background: var(--main-bg);
           border-radius: 100px;
           cursor: pointer;
           color: var(--main-black);
 
           svg {
-            @include icon(24px);
+            @include icon(20px);
             color: var(--main-green-dark);
           }
 
@@ -152,6 +152,39 @@
               opacity: 0.8;
             }
           }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $desktop-compact) {
+    .course-tutorial__list-item {
+      &:not(:last-child) {
+        .course-tutorial__list-item--status {
+          .course-tutorial__list-item--status-line {
+            @include icon(50px);
+            bottom: -78%;
+          }
+        }
+      }
+
+      .course-tutorial__list-item_content {
+        .course-tutorial__list-item_content-title {
+          font-size: 18px;
+        }
+
+        .course-tutorial__list-item_content-duration {
+          font-size: 16px;
+          margin-top: 8px;
+        }
+      }
+
+      .course-tutorial__list-item--status {
+        @include icon(70px);
+        min-width: 70px;
+
+        svg {
+          @include icon(34px);
         }
       }
     }
@@ -223,6 +256,25 @@
     }
   }
 
+  @media screen and (max-width: $small-landscape-tablet-size) {
+    .course-tutorial__list-item {
+      &:not(:last-child) {
+        .course-tutorial__list-item--status {
+          .course-tutorial__list-item--status-line {
+            @include icon(29px);
+            bottom: -80%;
+          }
+        }
+      }
+
+      .course-tutorial__list-item--status {
+        svg {
+          @include icon(30px);
+        }
+      }
+    }
+  }
+
   @media screen and (max-width: $tablet-size) {
     gap: 30px;
 
@@ -235,7 +287,7 @@
             @include icon(36px);
             display: flex;
             position: absolute;
-            bottom: -60%;
+            bottom: -54%;
           }
         }
       }

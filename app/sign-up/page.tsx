@@ -2,7 +2,7 @@
 
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent, useEffect, useRef } from "react";
 
 import { registerValidationSchema } from "@/src/components/Login/validationSchema";
 import Button from "@/src/components/ui/Button/Button";
@@ -15,27 +15,35 @@ import TextInput from "@/src/components/ui/TextInput";
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { clearErrors, clearRegister, registerRequest } from "@/src/store/slices/auth";
-import { PAGES, PASSWORD_INPUT_STRIP_REGEX } from "@/src/utils/constant";
+import { BRANCH_CRM_ID, PAGES } from "@/src/utils/constant";
+import { AuthRedirectHelper, CookieHelper } from "@/src/utils/helpers";
 
 const RegisterForm = () => {
+  const hasRedirectedRef = useRef(false);
   const dispatch = useAppDispatch();
-  const { isRegisterSuccess, isLoading, errors } = useAppSelector((state: RootStore) => state.auth);
+  const { isRegisterSuccess, isLoading, errors, isLoggedIn } = useAppSelector(
+    (state: RootStore) => state.auth
+  );
   const router = useRouter();
   const form = useFormik({
     initialValues: {
       name: "",
       phone: "",
+      email: "",
       password: "",
       confirmPassword: "",
+      branch_id: "",
     },
     validationSchema: registerValidationSchema,
     onSubmit: (values) => {
       dispatch(
         registerRequest({
           phone: values.phone,
+          email: values.email,
           full_name: values.name,
           password: values.password,
           confirm_password: values.confirmPassword,
+          branch_id: CookieHelper.getCookie(BRANCH_CRM_ID),
         })
       );
     },
@@ -46,7 +54,7 @@ const RegisterForm = () => {
 
   const handleChangeTab = (tab: string) => {
     dispatch(clearErrors());
-    router.push(tab);
+    router.push(AuthRedirectHelper.withReturnToQuery(tab));
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -57,14 +65,6 @@ const RegisterForm = () => {
   const handleBlur = (name: keyof typeof form.values) => {
     void form.setFieldValue(name, String(form?.values?.[name])?.trim());
   };
-
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    const filtered = value.replace(PASSWORD_INPUT_STRIP_REGEX, "");
-
-    void form.setFieldValue(name, filtered);
-  };
-
   useEffect(() => {
     if (isRegisterSuccess) {
       dispatch(clearRegister());
@@ -74,7 +74,19 @@ const RegisterForm = () => {
   }, [isRegisterSuccess, dispatch]);
 
   useEffect(() => {
+    if (!isLoggedIn || hasRedirectedRef.current) {
+      return;
+    }
+
+    hasRedirectedRef.current = true;
+    const returnTo = AuthRedirectHelper.consumeAuthReturnTo();
+
+    router.push(returnTo ?? PAGES.PROFILE);
+  }, [isLoggedIn, router]);
+
+  useEffect(() => {
     if (errors) {
+      form.setFieldError("email", errors.email);
       form.setFieldError("phone", errors.phone);
       form.setFieldError("name", errors.full_name);
       form.setFieldError("password", errors.password);
@@ -110,9 +122,23 @@ const RegisterForm = () => {
           value={form.values.phone}
           error={form.errors.phone}
           onChange={handleChange}
-          placeholder="+375 (29) 123-45-67"
-          className="login-page__form-input"
+          className="login-page__form-input full"
           disabled={isLoading}
+          isAbsoluteError
+        />
+
+        <TextInput
+          name="email"
+          label="Email"
+          variant="outline"
+          onChange={handleChange}
+          value={form.values.email}
+          error={form.errors.email}
+          placeholder="example@mail.com"
+          onBlur={() => handleBlur("email")}
+          disabled={isLoading}
+          maxLength={100}
+          isAbsoluteError
         />
 
         <TextInput
@@ -127,6 +153,7 @@ const RegisterForm = () => {
           onBlur={() => handleBlur("name")}
           disabled={isLoading}
           maxLength={100}
+          isAbsoluteError
         />
 
         <PasswordInput
@@ -139,18 +166,19 @@ const RegisterForm = () => {
           }
           variant="outline"
           placeholder="********"
-          onChange={handlePasswordChange}
+          onChange={handleChange}
           value={form.values.password}
           error={form.errors.password}
           className="login-page__form-input"
           disabled={isLoading}
           maxLength={64}
+          isAbsoluteError
         />
 
         <PasswordInput
           name="confirmPassword"
           label="Подтвердите пароль"
-          onChange={handlePasswordChange}
+          onChange={handleChange}
           value={form.values.confirmPassword}
           error={form.errors.confirmPassword}
           className="login-page__form-input"
@@ -158,6 +186,7 @@ const RegisterForm = () => {
           placeholder="********"
           disabled={isLoading}
           maxLength={64}
+          isAbsoluteError
         />
 
         <Button
@@ -165,6 +194,7 @@ const RegisterForm = () => {
           type="submit"
           variant="main-green-dark"
           className="login-page__form-button"
+          style={form.errors.confirmPassword ? { marginTop: "30px" } : undefined}
           disabled={isLoading}
         >
           Получить код подтверждения

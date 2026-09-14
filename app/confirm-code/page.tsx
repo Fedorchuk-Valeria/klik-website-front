@@ -11,17 +11,24 @@ import CodeInput from "@/src/components/ui/CodeInput";
 
 import { RootStore } from "@/src/store";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import { resendCodeRequest, verifyCodeRequest } from "@/src/store/slices/auth";
+import {
+  clearVerifyPhoneResponse,
+  resendCodeRequest,
+  verifyCodeRequest,
+} from "@/src/store/slices/auth";
 
-import { PAGES, QUERY_PARAMS, TOKEN_KEY } from "@/src/utils/constant";
-import { CookieHelper } from "@/src/utils/helpers";
+import { PAGES, PENDING_ADMIN_REVIEW_STATUS, QUERY_PARAMS, TOKEN_KEY } from "@/src/utils/constant";
+import { AuthRedirectHelper, CookieHelper } from "@/src/utils/helpers";
 
 const ConfirmCodeContent = () => {
   const codeInputRef = useRef<HTMLInputElement>(null);
+  const hasRedirectedRef = useRef(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
-  const { isCodeCorrect, isLoading, errors } = useAppSelector((state: RootStore) => state.auth);
+  const { isCodeCorrect, isLoading, errors, isLoggedIn, verifyPhoneResponse } = useAppSelector(
+    (state: RootStore) => state.auth
+  );
   const form = useFormik({
     initialValues: {
       code: "",
@@ -71,16 +78,35 @@ const ConfirmCodeContent = () => {
   }, [errors]);
 
   useEffect(() => {
-    if (isCodeCorrect) {
-      if (searchParams.get(QUERY_PARAMS.IS_RESET_PASSWORD)) {
-        router.push(PAGES.SET_NEW_PASSWORD);
-      } else {
-        router.push(PAGES.LOGIN);
-
-        CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
-      }
+    if (!isCodeCorrect || hasRedirectedRef.current) {
+      return;
     }
-  }, [isCodeCorrect, searchParams]);
+
+    if (searchParams.get(QUERY_PARAMS.IS_RESET_PASSWORD)) {
+      hasRedirectedRef.current = true;
+      router.push(PAGES.SET_NEW_PASSWORD);
+      return;
+    }
+
+    if (verifyPhoneResponse?.status === PENDING_ADMIN_REVIEW_STATUS) {
+      hasRedirectedRef.current = true;
+      CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
+      dispatch(clearVerifyPhoneResponse());
+      router.push(PAGES.LOGIN);
+      return;
+    }
+
+    if (!isLoggedIn) {
+      CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
+      return;
+    }
+
+    hasRedirectedRef.current = true;
+    dispatch(clearVerifyPhoneResponse());
+
+    const returnTo = AuthRedirectHelper.consumeAuthReturnTo();
+    router.push(returnTo ?? PAGES.COURSES);
+  }, [dispatch, isCodeCorrect, isLoggedIn, router, searchParams, verifyPhoneResponse]);
 
   useEffect(() => {
     if (codeInputRef.current) {
@@ -92,7 +118,10 @@ const ConfirmCodeContent = () => {
     <div className="login-page__form-content confirm-code-page">
       <p className="login-page__form-title--red">Подтверждение номера</p>
 
-      <span className="login-page__text">Введите код из SMS. Он действителен 2 минуты.</span>
+      <span className="login-page__text">
+        Введите код, отправленный вам на E-mail, указанный при регистрации. Код действителен 2
+        минуты.
+      </span>
 
       <form className="login-page__form" onSubmit={form.handleSubmit}>
         <CodeInput
