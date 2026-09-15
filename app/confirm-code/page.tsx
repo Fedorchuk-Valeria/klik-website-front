@@ -37,10 +37,6 @@ const ConfirmCodeContent = () => {
     onSubmit: (values) => {
       const sessionToken = CookieHelper.getCookie(TOKEN_KEY);
 
-      console.log("sessionToken=", sessionToken);
-
-      console.log("ALL cookies:", document.cookie);
-
       if (sessionToken) {
         dispatch(
           verifyCodeRequest({
@@ -101,7 +97,6 @@ const ConfirmCodeContent = () => {
     }
 
     if (!isLoggedIn) {
-      console.log("!isLoggedIn");
       CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
       return;
     }

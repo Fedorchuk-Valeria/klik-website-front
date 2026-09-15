@@ -110,15 +110,10 @@ function* workerAuthRegister({ payload }: { payload: AuthRegisterRequest }) {
   try {
     const response: { data: { session_token: string } } = yield call(UsersApi.register, payload);
 
-    console.log("response.data.session_token=", response?.data?.session_token);
-
     CookieHelper.setCookie(TOKEN_KEY, response.data.session_token, {
       path: "/",
       expires: new Date(Date.now() + MAX_AGE),
     });
-
-    console.log("SET cookie:", document.cookie);
-    console.log("GET cookie:", CookieHelper.getCookie(TOKEN_KEY));
 
     yield put(registerSuccess());
   } catch (error) {
