@@ -37,6 +37,8 @@ const ConfirmCodeContent = () => {
     onSubmit: (values) => {
       const sessionToken = CookieHelper.getCookie(TOKEN_KEY);
 
+      console.log("sessionToken=", sessionToken);
+
       if (sessionToken) {
         dispatch(
           verifyCodeRequest({
@@ -61,8 +63,6 @@ const ConfirmCodeContent = () => {
     event.stopPropagation();
 
     const sessionToken = CookieHelper.getCookie(TOKEN_KEY);
-
-    console.log("sessionToken=", sessionToken);
 
     if (sessionToken) {
       dispatch(
