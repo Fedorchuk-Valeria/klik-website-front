@@ -20,8 +20,6 @@ const WidgetModalPaymentChildren: FC<PropTypes> = ({className, isVisible, childI
   const dispatch = useAppDispatch();
   const { offlinePayment, isLoading } = useAppSelector((state) => state.courses);
 
-  console.log('offlinePayment=', offlinePayment);
-
   useEffect(() => {
     if (!isVisible) return;
 

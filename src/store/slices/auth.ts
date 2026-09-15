@@ -82,6 +82,9 @@ const authSlice = createSlice({
       void action.payload;
       state.isLoading = true;
       state.errors = null;
+      state.isCodeCorrect = false;
+      state.verifyPhoneResponse = null;
+      state.isRegisterSuccess = false;
     },
     forgotPasswordRequest(state, action: { payload: AuthForgotPasswordRequest }) {
       void action.payload;
