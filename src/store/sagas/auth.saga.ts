@@ -117,6 +117,9 @@ function* workerAuthRegister({ payload }: { payload: AuthRegisterRequest }) {
       expires: new Date(Date.now() + MAX_AGE),
     });
 
+    console.log("SET cookie:", document.cookie);
+    console.log("GET cookie:", CookieHelper.getCookie(TOKEN_KEY));
+
     yield put(registerSuccess());
   } catch (error) {
     yield put(setErrors(error as Record<string, string> | null));

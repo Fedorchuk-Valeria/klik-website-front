@@ -39,6 +39,8 @@ const ConfirmCodeContent = () => {
 
       console.log("sessionToken=", sessionToken);
 
+      console.log("ALL cookies:", document.cookie);
+
       if (sessionToken) {
         dispatch(
           verifyCodeRequest({
