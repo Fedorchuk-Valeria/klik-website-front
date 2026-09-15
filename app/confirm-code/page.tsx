@@ -102,8 +102,8 @@ const ConfirmCodeContent = () => {
 
     if (!isLoggedIn) {
       console.log("!isLoggedIn");
-      //CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
-      //return;
+      CookieHelper.deleteCookie(TOKEN_KEY, { path: "/" });
+      return;
     }
 
     hasRedirectedRef.current = true;
