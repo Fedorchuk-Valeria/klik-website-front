@@ -62,6 +62,8 @@ const ConfirmCodeContent = () => {
 
     const sessionToken = CookieHelper.getCookie(TOKEN_KEY);
 
+    console.log("sessionToken=", sessionToken);
+
     if (sessionToken) {
       dispatch(
         resendCodeRequest({
