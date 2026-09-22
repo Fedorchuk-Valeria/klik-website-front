@@ -33,7 +33,7 @@ const CourseTutorial: FC<PropTypes> = ({
 
   return (
     <div className={classNames("course-tutorial", className)}>
-      <CourseProgress progress={progress} total={total} />
+      {isPurchased && (<CourseProgress progress={progress} total={total} />)}
 
       <div className="course-tutorial__content">
         <p className="course-tutorial__content-title">Содержание курса</p>

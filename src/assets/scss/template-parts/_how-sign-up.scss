@@ -1683,4 +1683,12 @@
       }
     }
   }
+
+  @media screen and (max-width: $mobile-size) {
+    .how-sign-up-top  {
+      .how-sign-up__title {
+        font-size: 28px;
+      }
+    }
+  }
 }

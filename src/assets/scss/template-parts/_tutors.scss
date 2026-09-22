@@ -861,15 +861,21 @@
   @media screen and (max-width: 700px) {
     max-width: 100%;
 
+    .home-page__tag {
+      margin-left: 10px;
+    }
+
     .home-page__tutors-top {
       gap: 12px;
 
       .home-page__tutors-title {
         font-size: 28px;
+        padding-left: 10px;
       }
 
       .home-page__tutors-text {
         font-size: 16px;
+        padding-left: 10px;
       }
     }
 
@@ -951,9 +957,20 @@
           }
 
           &.swiper-slide-active {
-            width: 100% !important;
-            max-width: 100% !important;
+            width: calc(100% - 3px) !important;
+            max-width: calc(100% - 2px) !important;
             height: 438px !important;
+            margin-right: 1px;
+
+            .home-page__tutors-thumb__img-wrap {
+              border: 2px solid var(--main-orange);
+            }
+          }
+
+          &.swiper-slide-next {
+            .home-page__tutors-thumb__img-wrap {
+              border: 2px solid var(--main-orange);
+            }
           }
         }
       }
