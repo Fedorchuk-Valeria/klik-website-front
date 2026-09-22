@@ -36,7 +36,7 @@ export default function RootLayout({
           <WidgetModal />
 
           <CookiePolicyListener />
-          {/*<PlaceListener />*/}
+          <PlaceListener />
           <GetUserListener />
           <ProfileNotificationListener />
         </StoreProvider>
