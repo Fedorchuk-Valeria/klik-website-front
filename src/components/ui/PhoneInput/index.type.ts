@@ -9,4 +9,5 @@ export type PhoneInputProps = Omit<TextInputProps, "type" | "addonAfter" | "plac
   defaultCountry?: CountryCode;
   /** Countries shown in the select. Default: BY, KZ, RU, UZ */
   countries?: PhoneCountry[];
+  showCountrySelector?: boolean;
 };

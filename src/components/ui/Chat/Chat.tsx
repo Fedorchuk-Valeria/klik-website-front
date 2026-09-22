@@ -58,7 +58,7 @@ export default function Chat() {
           <div className="chat__header">
             <span className="chat__title">Привет, чем могу помочь?</span>
 
-            <span className="chat__text">{data?.welcome_message}</span>
+            <span className="chat__text">Давайте настроим всё за несколько быстрых шагов.</span>
 
             <button className="chat__close" onClick={() => setIsOpen(false)}>
               <Icon className="chat__close-icon" name="close" />
