@@ -83,6 +83,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
     onFocus,
     onBlur,
     onBeforeInput: onBeforeInputProp,
+    showCountrySelector = true,
     inputMode,
     disabled,
     name,
@@ -531,29 +532,31 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
 
       <div className="text-input__control-wrapper phone-input__control-wrapper">
         <div
-          className={classNames("phone-input__field", "text-input__control", {
+          className={classNames("text-input__control", {
+            "phone-input__field": showCountrySelector,
             "text-input__control--filled": isFilled && !error,
           })}
         >
-          <button
-            type="button"
-            className="phone-input__country-btn"
-            aria-label="Выбор страны"
-            aria-haspopup="listbox"
-            aria-expanded={countryOpen}
-            aria-controls={listboxId}
-            disabled={disabled}
-            onClick={() => setCountryOpen((open) => !open)}
-          >
-            <CountryFlag code={selectedCountry.code} className="phone-input__flag" />
-            <Icon
-              name="arrow"
-              className={classNames("phone-input__chevron", {
-                "phone-input__chevron--open": countryOpen,
-              })}
-            />
-          </button>
-
+          {showCountrySelector ? (
+            <button
+              type="button"
+              className="phone-input__country-btn"
+              aria-label="Выбор страны"
+              aria-haspopup="listbox"
+              aria-expanded={countryOpen}
+              aria-controls={listboxId}
+              disabled={disabled}
+              onClick={() => setCountryOpen((open) => !open)}
+            >
+              <CountryFlag code={selectedCountry.code} className="phone-input__flag" />
+              <Icon
+                name="arrow"
+                className={classNames("phone-input__chevron", {
+                  "phone-input__chevron--open": countryOpen,
+                })}
+              />
+            </button>
+          ) : null}
           <input
             {...rest}
             ref={setInputRef}
@@ -580,7 +583,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(function PhoneI
           />
         </div>
 
-        {countryOpen ? (
+        {showCountrySelector && countryOpen ? (
           <ul id={listboxId} className="phone-input__dropdown" role="listbox">
             {countries.map((option) => {
               const active = option.code === country;
