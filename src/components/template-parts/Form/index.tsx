@@ -145,6 +145,7 @@ const HomePageForm = ({ className }: { className?: string }) => {
         onChange={handleChange}
         className="home-page__form-input"
         disabled={isLoading}
+        showCountrySelector={false}
       />
 
       <DateInput

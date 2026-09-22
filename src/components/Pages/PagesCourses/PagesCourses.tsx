@@ -96,15 +96,17 @@ const PagesCourses = ({
   const allCategories = useMemo(() => {
     const seenCategoryIds = new Set<number>();
 
-    return (
-      (!!data?.length ? data : initialCourses)?.flatMap((item) => item.categories) ?? []
-    ).filter((category) => {
-      if (seenCategoryIds.has(category.id)) return false;
+    return initialCourses
+      .flatMap((item) => item.categories ?? [])
+      .filter((category) => {
+        if (seenCategoryIds.has(category.id)) {
+          return false;
+        }
 
-      seenCategoryIds.add(category.id);
-      return true;
-    });
-  }, [data, initialCourses]);
+        seenCategoryIds.add(category.id);
+        return true;
+      });
+  }, [initialCourses]);
 
   const activeMeta = hasRequested ? meta : initialMeta;
 
