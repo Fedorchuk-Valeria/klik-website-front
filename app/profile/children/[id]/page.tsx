@@ -10,8 +10,6 @@ import avatar from "@/src/assets/images/view/profile/avatar.png";
 
 import FormatsCourseItem from "@/src/components/Pages/PagesProfile/FormatsCourseItem";
 import FormatsCoursesExtra from "@/src/components/Pages/PagesProfile/FormatsCoursesExtra";
-import PartnerAccordionItem from "@/src/components/Pages/PagesProfile/PartnerAccordionItem";
-import PartnersExtra from "@/src/components/Pages/PagesProfile/PartnersExtra";
 import Button from "@/src/components/ui/Button/Button";
 import EditableEmailField from "@/src/components/ui/EditableEmailField";
 import Icon from "@/src/components/ui/Icon/Icon";
@@ -27,18 +25,13 @@ import { ModalType } from "@/src/entities/common";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { showModal } from "@/src/store/slices/modalSlice";
 import { getCurrentChildRequest } from "@/src/store/slices/profile";
+import { Partners } from "@/src/components/ui/Partners";
 
 const ChildrenDetailsPage = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
   const { currentChild, isLoading, errors } = useAppSelector((store) => store.profile);
-  const [openPartnerIndex, setOpenPartnerIndex] = useState<number | null>(null);
   const [isOpenCourses, setOpenCourses] = useState(false);
-  const [isOpenPartners, setOpenPartners] = useState(false);
-
-  const togglePartners = () => {
-    setOpenPartners((prev) => !prev);
-  };
 
   const toggleCourses = () => {
     setOpenCourses((prev) => !prev);
@@ -134,13 +127,6 @@ const ChildrenDetailsPage = () => {
   const initialCourses = courses.slice(0, 3);
   const extraCourses = courses.slice(3);
 
-  const initialPartners = currentChild?.partners?.slice(0, 6) ?? [];
-  const extraPartners = currentChild?.partners?.slice(6) ?? [];
-
-  const togglePartner = (index: number) => {
-    setOpenPartnerIndex((prev) => (prev === index ? null : index));
-  };
-
   const handleCreatePayment = (childId: number) => {
     dispatch(
       showModal({
@@ -221,57 +207,7 @@ const ChildrenDetailsPage = () => {
           </div>
 
           <div className="children-details-page__partners">
-            <div className="home-page__tag children-details-page__partners_tag">Партнеры</div>
-
-            <div className="children-details-page__partners_headline">
-              <p>Наши партнеры</p>
-              <span>Партнёрские скидки для резидентов KLiK</span>
-            </div>
-
-            {/* in future add "accent" class for some elements in description */}
-            <div
-              className={classNames("children-details-page__partners_wrapper", {
-                "is-open": isOpenPartners,
-              })}
-            >
-              <div className="children-details-page__partners_list">
-                {initialPartners.map((item, index) => (
-                  <PartnerAccordionItem
-                    key={item.id}
-                    item={{
-                      image: item.logo || (avatar as unknown as string),
-                      title: item.name || "",
-                      description: item.description || "",
-                    }}
-                    isOpen={openPartnerIndex === index}
-                    onToggle={() => togglePartner(index)}
-                  />
-                ))}
-
-                {extraPartners.length > 0 && (
-                  <PartnersExtra
-                    partners={extraPartners}
-                    isOpen={isOpenPartners}
-                    startIndex={6}
-                    openPartnerIndex={openPartnerIndex}
-                    onTogglePartner={togglePartner}
-                    fallbackImage={avatar as unknown as string}
-                  />
-                )}
-              </div>
-
-              {currentChild?.partners?.length > 6 && (
-                <button
-                  type="button"
-                  className="children-details-page__partners_more"
-                  onClick={togglePartners}
-                >
-                  <Icon name="arrow" />
-
-                  <span>{isOpenPartners ? "Скрыть" : "Показать еще"}</span>
-                </button>
-              )}
-            </div>
+            <Partners data={currentChild?.partners} />
           </div>
 
           {currentChild?.self_study?.courses?.length > 0 && (
