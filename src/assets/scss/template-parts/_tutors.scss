@@ -307,6 +307,7 @@
       position: relative;
       overflow: hidden;
       border-radius: 28px;
+      border: 2px solid var(--main-orange);
     }
 
     .home-page__tutors-thumb__img {
@@ -649,7 +650,8 @@
     }
 
     .home-page__tutors-thumb {
-      height: 100%;
+      width: calc(100% - 4px);
+      height: calc(100% - 4px);
 
       .home-page__tutors-tag {
         padding: 8px 16px;
@@ -994,4 +996,11 @@
     span {
     width: calc(100vw - 80px);
   }
+
+  .home-page__tutors {
+    .home-page__tutors-thumb {
+      width: 100%;
+    }
+  }
+
 }
