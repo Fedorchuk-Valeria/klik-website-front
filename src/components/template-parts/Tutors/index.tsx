@@ -217,6 +217,7 @@ const Tutors: FC<PropTypes> = ({ tag, title, text, items = [] }) => {
     if (!inViewportRef.current || pausedRef.current) return;
 
     const tick = () => {
+      return '';
       autoplayTimerRef.current = null;
       if (pausedRef.current) return;
       if (!inViewportRef.current) return;
