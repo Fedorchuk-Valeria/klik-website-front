@@ -794,6 +794,14 @@
     &.is-open {
       border-radius: 50px;
 
+      @media screen and (max-width: $desktop) {
+        border-radius: 40px;
+      }
+
+      @media screen and (max-width: $landscape-tablet-size) {
+        border-radius: 30px;
+      }
+
       .page-profile__partner-ico {
         transform: rotate(180deg);
       }
