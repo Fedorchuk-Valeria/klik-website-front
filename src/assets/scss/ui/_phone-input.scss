@@ -64,6 +64,7 @@
     border: none;
     color: var(--main-burgundy);
     outline: none;
+    background: transparent;
 
     &::placeholder {
       color: var(--secondary-burgundy-40);
