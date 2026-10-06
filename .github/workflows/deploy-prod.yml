@@ -27,5 +27,18 @@ jobs:
             git pull --ff-only
             docker network inspect klick-network-prod >/dev/null 2>&1 || docker network create klick-network-prod
             docker compose -p klick-front-prod --env-file=.env.prod down --remove-orphans
+            if docker container inspect klick-front-prod >/dev/null 2>&1; then
+              project="$(docker container inspect -f '{{ index .Config.Labels \"com.docker.compose.project\" }}' klick-front-prod)"
+              service="$(docker container inspect -f '{{ index .Config.Labels \"com.docker.compose.service\" }}' klick-front-prod)"
+              case "$project:$service" in
+                klick-front-prod:react-app|klick2026edtech-front:react-app)
+                  docker rm -f klick-front-prod
+                  ;;
+                *)
+                  echo "Refusing to remove klick-front-prod owned by Compose project/service: $project/$service"
+                  exit 1
+                  ;;
+              esac
+            fi
             docker compose -p klick-front-prod --env-file=.env.prod build
             docker compose -p klick-front-prod --env-file=.env.prod up -d
