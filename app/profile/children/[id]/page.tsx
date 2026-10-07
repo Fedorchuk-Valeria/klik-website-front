@@ -4,12 +4,10 @@ import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 
 import avatar from "@/src/assets/images/view/profile/avatar.png";
 
-import FormatsCourseItem from "@/src/components/Pages/PagesProfile/FormatsCourseItem";
-import FormatsCoursesExtra from "@/src/components/Pages/PagesProfile/FormatsCoursesExtra";
 import Button from "@/src/components/ui/Button/Button";
 import EditableEmailField from "@/src/components/ui/EditableEmailField";
 import Icon from "@/src/components/ui/Icon/Icon";
@@ -17,25 +15,25 @@ import Loader from "@/src/components/ui/Loader/Loader";
 import PhoneInput from "@/src/components/ui/PhoneInput";
 import TextInput from "@/src/components/ui/TextInput";
 
-import { METRICS, PAGES, QUERY_PARAMS } from "@/src/utils/constant";
-import { QueryHelper } from "@/src/utils/helpers";
+import { METRICS, PAGES } from "@/src/utils/constant";
 
 import { ProfileBLock } from "@/src/components/ui/ProfileBlock";
-import { ModalType } from "@/src/entities/common";
+import { Group, ModalType } from "@/src/entities/common";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { showModal } from "@/src/store/slices/modalSlice";
 import { getCurrentChildRequest } from "@/src/store/slices/profile";
 import { Partners } from "@/src/components/ui/Partners";
 
+type OfflineGroupField = {
+  key: keyof Group;
+  title: string;
+  isLink?: boolean;
+};
+
 const ChildrenDetailsPage = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
   const { currentChild, isLoading, errors } = useAppSelector((store) => store.profile);
-  const [isOpenCourses, setOpenCourses] = useState(false);
-
-  const toggleCourses = () => {
-    setOpenCourses((prev) => !prev);
-  };
 
   const general = useMemo(
     () => [
@@ -55,77 +53,43 @@ const ChildrenDetailsPage = () => {
     [currentChild?.metrics]
   );
 
-  const programs = [
-    {
-      title: "Программа «Креаторы»",
-      items: [
-        {
-          title: "Ссылка на чат группы в тг",
-          value: "@Klik-tg-chat",
-          link: "https://t.me/Klik-tg-chat",
-        },
-        {
-          title: "Локация",
-          value: "Арэна, г. Минск, Пр. Победителей 84, ТЦ Arena City, 2 этаж",
-        },
-        {
-          title: "Менеджер-ссылка на аккаунт в Telegram",
-          value: "@Klik-tg-manager",
-          link: "https://t.me/Klik-tg-manager",
-        },
-        {
-          title: "Абонемент (+скидка)",
-          value: "220р/4 занятия, скидка 10%",
-        },
-        {
-          title: "День и время занятия",
-          value: "пн, 16:00",
-        },
-        {
-          title: "Тема следующего занятия",
-          value: "JavaScript: основы языка",
-        },
-      ],
-    },
-    {
-      title: "Программа «Креаторы»",
-      items: [
-        {
-          title: "Ссылка на чат группы в тг",
-          value: "@Klik-tg-chat",
-          link: "https://t.me/Klik-tg-chat",
-        },
-        {
-          title: "Локация",
-          value: "Арэна, г. Минск, Пр. Победителей 84, ТЦ Arena City, 2 этаж",
-        },
-        {
-          title: "Менеджер-ссылка на аккаунт в Telegram",
-          value: "@Klik-tg-manager",
-          link: "https://t.me/Klik-tg-manager",
-        },
-        {
-          title: "Абонемент (+скидка)",
-          value: "220р/4 занятия, скидка 10%",
-        },
-        {
-          title: "День и время занятия",
-          value: "пн, 16:00",
-        },
-        {
-          title: "Тема следующего занятия",
-          value: "JavaScript: основы языка",
-        },
-      ],
-    },
-  ];
-
   const courses = useMemo(
     () => currentChild?.self_study?.courses ?? [],
     [currentChild?.self_study?.courses]
   );
-  const initialCourses = courses.slice(0, 3);
-  const extraCourses = courses.slice(3);
+
+  const offlineGroupFields: OfflineGroupField[] = [
+    {
+      key: "day_and_time",
+      title: "День и время",
+    },
+    {
+      key: "location",
+      title: "Место проведения",
+    },
+    {
+      key: "manager_url",
+      title: "Менеджер",
+      isLink: true,
+    },
+    {
+      key: "telegram_chat_url",
+      title: "Telegram",
+      isLink: true,
+    },
+    {
+      key: "next_lesson_topic",
+      title: "Тема следующего занятия",
+    },
+    {
+      key: "subscription",
+      title: "Абонемент",
+    },
+    {
+      key: "discount_percent",
+      title: "Скидка",
+    },
+  ];
 
   const handleCreatePayment = (childId: number) => {
     dispatch(
@@ -143,8 +107,6 @@ const ChildrenDetailsPage = () => {
       dispatch(getCurrentChildRequest(Number(id)));
     }
   }, [dispatch, id]);
-
-  console.log("ChildrenDetailsPage", { id, currentChild, isLoading, errors });
 
   if (isLoading || !currentChild) {
     return <Loader />;
@@ -210,67 +172,6 @@ const ChildrenDetailsPage = () => {
             <Partners data={currentChild?.partners} />
           </div>
 
-          {currentChild?.self_study?.courses?.length > 0 && (
-            <div className="children-details-page__formats">
-              <div className="home-page__tag children-details-page__formats_tag">
-                Форматы обучения
-              </div>
-
-              <p className="children-details-page__formats_text">
-                Со всеми форматами обучения школы вы можете ознакомиться на нашем{" "}
-                <Link href={PAGES.HOME}>сайте.</Link>
-              </p>
-
-              <div className="children-details-page__formats_wrapper">
-                <div className="children-details-page__formats_item">
-                  <p className="children-details-page__formats_item-title">
-                    Самостоятельное обучение
-                  </p>
-
-                  <p className="children-details-page__formats_item-text">
-                    Перейдите к обучению на платформе
-                  </p>
-
-                  <Link
-                    href={`${PAGES.COURSES}${QueryHelper.getQueryString({ [QUERY_PARAMS.SCOPE]: "my" })}`}
-                    className="children-details-page__formats_item-button"
-                  >
-                    <Button variant="main-green-dark" withArrow>
-                      Перейти к курсам
-                    </Button>
-                  </Link>
-                </div>
-
-                <ul
-                  className={classNames("children-details-page__formats_list", {
-                    "is-open": isOpenCourses,
-                  })}
-                >
-                  {initialCourses.map((item) => (
-                    <FormatsCourseItem key={item.id} item={item} childId={id?.toString()} />
-                  ))}
-
-                  {extraCourses.length > 0 && (
-                    <FormatsCoursesExtra courses={extraCourses} isOpen={isOpenCourses} />
-                  )}
-
-                  {courses.length > 3 && (
-                    <button
-                      type="button"
-                      className="children-details-page__formats_item-more"
-                      onClick={toggleCourses}
-                    >
-                      <Icon name="arrow" />
-
-                      <span>{isOpenCourses ? "Скрыть" : "Показать еще"}</span>
-                    </button>
-                  )}
-                </ul>
-              </div>
-            </div>
-          )}
-
-          {/* TODO add groups */}
           {currentChild?.offline_groups?.length > 0 && (
             <div className="children-details-page__offline">
               <div className="children-details-page__offline_headline">
@@ -294,29 +195,44 @@ const ChildrenDetailsPage = () => {
               </div>
 
               <div className="children-details-page__offline_list">
-                {programs.map((item, index) => (
-                  <div key={index} className="children-details-page__offline_list-item">
-                    <p className="children-details-page__offline_list-item-title">{item.title}</p>
+                {currentChild.offline_groups.map((group) => {
+                  const fields = offlineGroupFields.filter(({ key }) => {
+                    const value = group[key];
 
-                    <ul className="children-details-page__offline_list-item-info">
-                      {item.items.map((info, infoIndex) => (
-                        <li
-                          key={`${index}-${infoIndex}`}
-                          className="children-details-page__offline_list-item-info-item"
-                        >
-                          <span>{info.title}</span>
-                          {!!info.link ? (
-                            <a href={info.link} target="_blank" rel="noopener noreferrer">
-                              <p>{info.value}</p>
-                            </a>
-                          ) : (
-                            <p>{info.value}</p>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
+                    return value !== null && value !== undefined && String(value).trim() !== "";
+                  });
+
+                  return (
+                    <div key={group.id} className="children-details-page__offline_list-item">
+                      <p className="children-details-page__offline_list-item-title">
+                        {group.title}
+                      </p>
+
+                      <ul className="children-details-page__offline_list-item-info">
+                        {fields.map((field) => {
+                          const value = group[field.key];
+
+                          return (
+                            <li
+                              key={field.key}
+                              className="children-details-page__offline_list-item-info-item"
+                            >
+                              <span>{field.title}</span>
+
+                              {field.isLink ? (
+                                <a href={String(value)} target="_blank" rel="noopener noreferrer">
+                                  <p>{value}</p>
+                                </a>
+                              ) : (
+                                <p>{value}</p>
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
