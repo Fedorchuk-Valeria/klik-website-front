@@ -48,6 +48,7 @@ export type UserProfile = {
     full_name: string;
     phone: string;
     email: string | null;
+    offline_groups: Group[];
   })[];
   offline_groups: Group[];
   offline_training_payment_notification: {
@@ -80,7 +81,7 @@ export type UserProfileChilds = {
   profile: UserProfileProfile;
   metrics: Metrics;
   self_study: SelfStudy;
-  offline_groups: [];
+  offline_groups: Group[];
   partners: Partner[];
 };
 
@@ -114,6 +115,7 @@ export type Meta = {
 };
 
 export type Group = {
+  id: number;
   title: string;
   telegram_chat_url: string;
   location: string;

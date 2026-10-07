@@ -292,57 +292,66 @@ const PagesProfile = ({ settings }: PropTypes) => {
                         </div>
                       </div>
 
-                      <div className="page-profile__children-block">
-                        <div className="page-profile__children-title">
-                          <Icon className="page-profile__children-icon" name="book" />
-                          Самостоятельные курсы
-                        </div>
-
-                        <div className="page-profile__children-list">
-                          <div className="page-profile__children-item">
-                            <Icon className="page-profile__children-icon" name="disk" />
-                            Доступные курсы:
-                            <span>{child?.self_study?.available_courses_count || 0}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="page-profile__children-wrapper">
+                      {(child?.self_study?.available_courses_count || 0) > 0 && (
                         <div className="page-profile__children-block">
                           <div className="page-profile__children-title">
-                            <Icon className="page-profile__children-icon" name="people" />
-                            Оффлайн занятия в группе
+                            <Icon className="page-profile__children-icon" name="book" />
+                            Самостоятельные курсы
                           </div>
 
                           <div className="page-profile__children-list">
                             <div className="page-profile__children-item">
                               <Icon className="page-profile__children-icon" name="disk" />
-                              Программа «Креаторы» :
-                              <span>
-                                <a href="https://t.me/Klik-tg-chat">@Klik-tg-chat</a>
-                              </span>
-                            </div>
-
-                            <div className="page-profile__children-item">
-                              <Icon className="page-profile__children-icon" name="disk" />
-                              Программа «Лето» :
-                              <span>
-                                <a href="https://t.me/Klik-tg-chat">@Klik-tg-chat</a>
-                              </span>
+                              Доступные курсы:
+                              <span>{child?.self_study?.available_courses_count}</span>
                             </div>
                           </div>
                         </div>
+                      )}
 
-                        <Button
-                          variant="main-light-outline"
-                          className="page-profile__children-pay"
-                          onClick={() => handleCreatePayment(child.id)}
-                        >
-                          Оплатить обучение
-                        </Button>
-                      </div>
+                      {child?.offline_groups?.length > 0 && (
+                        <div className="page-profile__children-wrapper">
+                          <div className="page-profile__children-block">
+                            <div className="page-profile__children-title">
+                              <Icon className="page-profile__children-icon" name="people" />
+                              Оффлайн занятия в группе
+                            </div>
 
-                      <Link href={PAGES.PROFILE_CHILDREN_DETAILS.replace(":id", String(child?.id))}>
+                            <div className="page-profile__children-list">
+                              {child.offline_groups.map((group) => (
+                                <div className="page-profile__children-item" key={group.id}>
+                                  <Icon className="page-profile__children-icon" name="disk" />
+                                  {group.title} :
+                                  {group.telegram_chat_url && (
+                                    <span>
+                                      <a
+                                        href={group.telegram_chat_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        {group.telegram_chat_url}
+                                      </a>
+                                    </span>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <Button
+                            variant="main-light-outline"
+                            className="page-profile__children-pay"
+                            onClick={() => handleCreatePayment(child.id)}
+                          >
+                            Оплатить обучение
+                          </Button>
+                        </div>
+                      )}
+
+                      <Link
+                        className="page-profile__children-more_wrap"
+                        href={PAGES.PROFILE_CHILDREN_DETAILS.replace(":id", String(child?.id))}
+                      >
                         <Button
                           variant="main-light"
                           className="page-profile__children-more"
