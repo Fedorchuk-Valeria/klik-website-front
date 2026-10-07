@@ -138,7 +138,7 @@ const WidgetModalConfirmChildrenEmail: FC<PropTypes> = ({
       className={classNames("modal-children modal-children--confirm", className)}
       showCloseButton={true}
     >
-      <div className="modal__title">Подтверждение Email</div>
+      <div className="modal__title">Подтверждение E-mail</div>
 
       <div className="modal-children__body">
         <span className="modal-children__description">
