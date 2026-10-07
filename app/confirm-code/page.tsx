@@ -116,7 +116,7 @@ const ConfirmCodeContent = () => {
 
   return (
     <div className="login-page__form-content confirm-code-page">
-      <p className="login-page__form-title--red">Подтверждение номера</p>
+      <p className="login-page__form-title--red">Подтверждение E-mail</p>
 
       <span className="login-page__text">
         Введите код, отправленный вам на E-mail, указанный при регистрации. Код действителен 2
@@ -159,7 +159,7 @@ const ConfirmCodePage = () => (
   <Suspense
     fallback={
       <div className="login-page__form-content confirm-code-page">
-        <p className="login-page__form-title--red">Подтверждение номера</p>
+        <p className="login-page__form-title--red">Подтверждение E-mail</p>
       </div>
     }
   >
