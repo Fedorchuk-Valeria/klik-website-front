@@ -14,6 +14,14 @@
     }
   }
 
+  &__tg {
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
   h1 {
     @include fonts(24px, 500, "Etude Noire");
     color: var(--main-orange);
