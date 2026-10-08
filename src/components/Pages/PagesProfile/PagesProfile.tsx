@@ -325,11 +325,12 @@ const PagesProfile = ({ settings }: PropTypes) => {
                                   {group.telegram_chat_url && (
                                     <span>
                                       <a
+                                        className="page-profile__tg"
                                         href={group.telegram_chat_url}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
-                                        {group.telegram_chat_url}
+                                        Перейти в TG
                                       </a>
                                     </span>
                                   )}

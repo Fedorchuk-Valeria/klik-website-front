@@ -220,8 +220,8 @@ const ChildrenDetailsPage = () => {
                               <span>{field.title}</span>
 
                               {field.isLink ? (
-                                <a href={String(value)} target="_blank" rel="noopener noreferrer">
-                                  <p>{value}</p>
+                                <a className="page-profile__tg" href={String(value)} target="_blank" rel="noopener noreferrer">
+                                  <p>Перейти в TG</p>
                                 </a>
                               ) : (
                                 <p>{value}</p>
