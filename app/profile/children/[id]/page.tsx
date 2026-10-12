@@ -53,6 +53,9 @@ const ChildrenDetailsPage = () => {
     [currentChild?.metrics]
   );
 
+  console.log("currentChild=", currentChild);
+  console.log('genaral=', general);
+
   const courses = useMemo(
     () => currentChild?.self_study?.courses ?? [],
     [currentChild?.self_study?.courses]
