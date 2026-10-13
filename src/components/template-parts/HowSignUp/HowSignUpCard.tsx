@@ -13,10 +13,10 @@ type CardProps = {
   item: HowSignUpItem;
   cardIndex: number;
   totalCards: number;
-  onClick?: () => void;
+  href?: string;
 };
 
-function HowSignUpCard({ item, cardIndex, totalCards, onClick }: CardProps) {
+function HowSignUpCard({ item, cardIndex, totalCards, href }: CardProps) {
   const list = item.list;
 
   return (
@@ -91,7 +91,7 @@ function HowSignUpCard({ item, cardIndex, totalCards, onClick }: CardProps) {
           withArrow
           variant={item.button.variant as ButtonVariant}
           className="how-sign-up__card-button"
-          onClick={onClick}
+          {...(href ? { href } : null)}
         >
           {item.button.title}
         </Button>
