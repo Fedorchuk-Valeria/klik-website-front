@@ -1,15 +1,13 @@
 "use client";
 
 import classNames from "classnames";
-import { FC, useCallback } from "react";
+import { FC } from "react";
 
 import BottomSVG from "@/src/assets/images/templates/homepage/howSignUp/bottom.svg";
 import TopSVG from "@/src/assets/images/templates/homepage/howSignUp/top.svg";
 import HowSignUpCard from "@/src/components/template-parts/HowSignUp/HowSignUpCard";
 
 import { PAGE_ANCHORS } from "@/src/utils/constant";
-
-const HEADER_SCROLL_OFFSET_PX = 120;
 
 export type HowSignUpItem = {
   id: number;
@@ -40,21 +38,6 @@ type PropTypes = {
 };
 
 const HowSignUp: FC<PropTypes> = ({ tag, title, text, items }) => {
-  const handleScroll = useCallback(
-    (cardIndex: number) => () => {
-      const hash =
-        cardIndex === 0 ? `#${PAGE_ANCHORS.SIGN_UP_FREE_LESSON}` : `#${PAGE_ANCHORS.PROGRAMS}`;
-      const id = hash.slice(1);
-      const el = document.getElementById(id);
-
-      if (el) {
-        const top = el.getBoundingClientRect().top + window.scrollY - HEADER_SCROLL_OFFSET_PX;
-        window.scrollTo({ top, behavior: "smooth" });
-      }
-    },
-    []
-  );
-
   return (
     <section id="how-sign-up" className="home-page__block">
       <div className="how-sign-up">
@@ -72,15 +55,20 @@ const HowSignUp: FC<PropTypes> = ({ tag, title, text, items }) => {
         </div>
 
         <div className="how-sign-up-body">
-          {items.map((item, cardIndex, array) => (
-            <HowSignUpCard
-              key={item.id}
-              item={item}
-              cardIndex={cardIndex}
-              totalCards={array.length}
-              onClick={handleScroll(cardIndex)}
-            />
-          ))}
+          {items.map((item, cardIndex, array) => {
+            const anchor =
+              cardIndex === 0 ? PAGE_ANCHORS.SIGN_UP_FREE_LESSON : PAGE_ANCHORS.PROGRAMS;
+
+            return (
+              <HowSignUpCard
+                key={item.id}
+                item={item}
+                cardIndex={cardIndex}
+                totalCards={array.length}
+                href={`#${anchor}`}
+              />
+            );
+          })}
         </div>
 
         <div className={classNames("how-sign-up__icon", "how-sign-up__icon--top")}>
