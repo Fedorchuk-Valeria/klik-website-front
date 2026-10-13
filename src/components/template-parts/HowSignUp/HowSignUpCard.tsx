@@ -89,7 +89,7 @@ function HowSignUpCard({ item, cardIndex, totalCards, href }: CardProps) {
 
       {item.isButton && item.button ? (
         href ? (
-          <HomeAnchorLink anchor={href}>
+          <HomeAnchorLink className="how-sign-up__card-link" anchor={href}>
             <Button
               withArrow
               variant={item.button.variant as ButtonVariant}
