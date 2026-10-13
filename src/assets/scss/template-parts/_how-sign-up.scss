@@ -265,6 +265,11 @@
         }
       }
 
+      .how-sign-up__card-link {
+        width: 100%;
+        grid-column: 1 / -1;
+      }
+
       .how-sign-up__card-button {
         @include center;
         margin-top: 40px;
