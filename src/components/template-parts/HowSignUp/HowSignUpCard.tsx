@@ -8,15 +8,16 @@ import { HowSignUpItem } from "@/src/components/template-parts/HowSignUp";
 import HowSignUpDropdownItem from "@/src/components/template-parts/HowSignUp/HowSignUpDropdownItem";
 import Button, { ButtonVariant } from "@/src/components/ui/Button/Button";
 import Icon from "@/src/components/ui/Icon/Icon";
+import HomeAnchorLink from "@/src/components/ui/HomeAnchorLink/HomeAnchorLink";
 
 type CardProps = {
   item: HowSignUpItem;
   cardIndex: number;
   totalCards: number;
-  onClick?: () => void;
+  href?: string;
 };
 
-function HowSignUpCard({ item, cardIndex, totalCards, onClick }: CardProps) {
+function HowSignUpCard({ item, cardIndex, totalCards, href }: CardProps) {
   const list = item.list;
 
   return (
@@ -87,14 +88,25 @@ function HowSignUpCard({ item, cardIndex, totalCards, onClick }: CardProps) {
       ) : null}
 
       {item.isButton && item.button ? (
-        <Button
-          withArrow
-          variant={item.button.variant as ButtonVariant}
-          className="how-sign-up__card-button"
-          onClick={onClick}
-        >
-          {item.button.title}
-        </Button>
+        href ? (
+          <HomeAnchorLink className="how-sign-up__card-link" anchor={href}>
+            <Button
+              withArrow
+              variant={item.button.variant as ButtonVariant}
+              className="how-sign-up__card-button"
+            >
+              {item.button.title}
+            </Button>
+          </HomeAnchorLink>
+        ) : (
+          <Button
+            withArrow
+            variant={item.button.variant as ButtonVariant}
+            className="how-sign-up__card-button"
+          >
+            {item.button.title}
+          </Button>
+        )
       ) : null}
     </div>
   );
