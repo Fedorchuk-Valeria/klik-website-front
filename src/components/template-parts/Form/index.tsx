@@ -55,7 +55,14 @@ const HomePageForm = ({ className }: { className?: string }) => {
             dob: values.date,
           }),
         })
-          .then(() => {
+          .then((response) => {
+
+            if (!response.ok) {
+              throw new Error(`HTTP error: ${response.status}`);
+            }
+
+            window.fbq?.("track", "Lead");
+
             form.resetForm();
 
             dispatch(
