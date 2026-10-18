@@ -8,7 +8,7 @@ import LayoutPlatform from "@/src/components/Layouts/LayoutPlatform";
 import Breadcrumb from "@/src/components/ui/Breadcrumb/Breadcrumb";
 import Icon from "@/src/components/ui/Icon/Icon";
 
-import { PUBLIC_OFFER_URL } from "@/src/utils/constant";
+import { PRICES_URL, PUBLIC_OFFER_URL } from "@/src/utils/constant";
 
 const ContactsPage = () => {
   const info = [
@@ -148,6 +148,19 @@ const ContactsPage = () => {
               </a>
 
               <p>Публичный договор (файл PDF)</p>
+            </div>
+            <div className="contacts-view__payment-button">
+              <a
+                href={PRICES_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contacts-view__payment-button--download"
+                aria-label="Открыть прейскурант цен"
+              >
+                <Icon name="pdf" />
+              </a>
+
+              <p>Прейскурант (файл PDF)</p>
             </div>
           </div>
         </div>
