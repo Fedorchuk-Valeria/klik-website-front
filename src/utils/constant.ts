@@ -122,3 +122,8 @@ export const METRICS = {
     plural: ["оплаченное занятие", "оплаченных занятия", "оплаченных занятий"] as string[],
   },
 } as const;
+
+export const PRICES_SOURCE_URL =
+  "https://storage.yandexcloud.net/klikcloud/прейскурант.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJE7vSS1qMNjwKi6cAjzNHq%2F20261017%2Fru-central1%2Fs3%2F";
+
+export const PRICES_URL = "/price-current";
