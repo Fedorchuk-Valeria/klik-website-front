@@ -31,6 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
+      <meta name="facebook-domain-verification" content="uzl523877k8ffambn7t8w5eymki9nm" />
       <Script
         id="google-tag-manager"
         strategy="afterInteractive"
