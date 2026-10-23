@@ -10,7 +10,7 @@ import Button from "@/src/components/ui/Button/Button";
 
 export default function SwiperSlider(props) {
   const styles: React.CSSProperties = {
-        borderRadius: '0px 0 px 30px 30px',
+        borderRadius: '0px 0px 30px 30px',
     };
   return (
     <Swiper
