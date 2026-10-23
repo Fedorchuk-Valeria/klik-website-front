@@ -1,9 +1,4 @@
-import Image from "next/image";
-
-import bannerDesktopImg from "@/src/assets/images/templates/homepage/banner_desktop.png";
-import bannerTabletImg from "@/src/assets/images/templates/homepage/banner_tablet.png";
-
-import Button from "@/src/components/ui/Button/Button";
+import Slider from "@/src/components/ui/Header/HeaderSwiper"
 
 import AboutUs from "@/src/components/template-parts/AboutUs";
 import FAQPage from "@/src/components/template-parts/FAQ";
@@ -53,36 +48,7 @@ export default async function Home({ page }: Props) {
       <section id="header" className="home-page__header">
         <div className="header__container">
           <div className="home-page__header-wrapper">
-            <h1>{homeBanner.h1}</h1>
-
-            {header ? (
-              <div className="home-page__header-body">
-                {homeBanner?.headerText && (
-                  <div className="home-page__header-text">{homeBanner?.headerText}</div>
-                )}
-                {header.button?.title && header.button?.url && (
-                  <a
-                    href="https://it-klik-design.by/"
-                    className="home-page__header-button-link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Button className="home-page__header-button" withArrow={true}>
-                      {header.button?.title}
-                    </Button>
-                  </a>
-                )}
-              </div>
-            ) : null}
-
-            <div className="home-page__header-img">
-              <div className="home-page__header-img-layer home-page__header-img-layer--desktop">
-                <Image src={bannerDesktopImg} alt={page.seo.h1} fill />
-              </div>
-              <div className="home-page__header-img-layer home-page__header-img-layer--tablet">
-                <Image src={bannerTabletImg} alt={page.seo.h1} fill />
-              </div>
-            </div>
+            <Slider homeBanner={homeBanner} header={header} page={page}/>
           </div>
         </div>
       </section>
